@@ -34,7 +34,7 @@
 
 
             <el-form-item>
-              <el-button type="primary" @click="onSubmit">登录</el-button>
+              <el-button type="primary" @click="onSubmit">登 录</el-button>
             </el-form-item>
           </el-form>
         </el-col>
@@ -45,6 +45,7 @@
 
 <script>
   import {ACCOUNTS_LOGIN_URL} from "./../common/interface"
+  import {setCookie} from "../common/common"
 
   export default {
     data () {

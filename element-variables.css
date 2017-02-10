@@ -96,21 +96,21 @@
   --checkbox-input-fill: var(--color-white);
   --checkbox-input-border: var(--border-base);
   --checkbox-input-border-color: var(--border-color-base);
-  --checkbox-icon-color: var(--color-black);
+  --checkbox-icon-color: var(--color-extra-light-black);
 
-  --checkbox-disabled-input-border-color: var(--disabled-border-base);
-  --checkbox-disabled-input-fill: var(--disabled-fill-base);
-  --checkbox-disabled-icon-color: var(--disabled-fill-base);
+  --checkbox-disabled-input-border-color: var(--disabled-fill-base);
+  --checkbox-disabled-input-fill: var(--disabled-border-base);
+  --checkbox-disabled-icon-color: var(--color-extra-light-black);
 
-  --checkbox-disabled-checked-input-fill: var(--disabled-border-base);
+  --checkbox-disabled-checked-input-fill: var(--disabled-fill-base);
   --checkbox-disabled-checked-input-border-color: var(--disabled-border-base);
-  --checkbox-disabled-checked-icon-color: var(--color-white);
+  --checkbox-disabled-checked-icon-color: var(--color-extra-light-black);
 
-  --checkbox-checked-input-border-color: var(--color-black);
+  --checkbox-checked-input-border-color: var(--border-color-base);
   --checkbox-checked-input-fill: var(--color-white);
-  --checkbox-checked-icon-color: var(--color-black);
+  --checkbox-checked-icon-color: var(--color-extra-light-black);
 
-  --checkbox-input-border-color-hover: var(--color-black);
+  --checkbox-input-border-color-hover: var(--border-color-base);
 
   /* Radio
   -------------------------- */
@@ -327,7 +327,7 @@
   --button-border-radius: var(--border-radius-base);
   --button-paddding: 5px 20px;
   --button-padding-vertical: 10px;
-  --button-padding-horizontal: 15px;
+  --button-padding-horizontal: 20px;
 
   --button-large-font-size: 16px;
   --button-large-padding-vertical: 11px;
@@ -341,9 +341,9 @@
   --button-mini-padding-vertical: 4px;
   --button-mini-padding-horizontal: 4px;
 
-  --button-default-color: var(--color-info);
+  --button-default-color: var(--color-black);
   --button-default-fill: var(--color-white);
-  --button-default-border: var(--color-info);
+  --button-default-border: var(--color-black);
 
   --button-ghost-color: #666;
   --button-ghost-fill: transparent;

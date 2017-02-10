@@ -238,7 +238,7 @@
     cursor: pointer;
     background: #fff;
     border: 1px solid rgb(191, 203, 217);
-    color: #20a0ff;
+    color: #000;
     -webkit-appearance: none;
     text-align: center;
     box-sizing: border-box;
@@ -250,7 +250,7 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    padding: 10px 15px;
+    padding: 10px 20px;
     font-size: 14px;
     border-radius: 0;
 }

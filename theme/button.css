@@ -95,7 +95,7 @@
     cursor: pointer;
     background: #fff;
     border: 1px solid rgb(191, 203, 217);
-    color: #20a0ff;
+    color: #000;
     -webkit-appearance: none;
     text-align: center;
     box-sizing: border-box;
@@ -104,7 +104,7 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    padding: 10px 15px;
+    padding: 10px 20px;
     font-size: 14px;
     border-radius: 4px;
 }
@@ -221,7 +221,7 @@
 .el-button--primary.is-plain{
     background: #fff;
     border: 1px solid rgb(191, 203, 217);
-    color: #20a0ff;
+    color: #000;
 }
 
 .el-button--primary.is-plain:hover, .el-button--primary.is-plain:focus{
@@ -265,7 +265,7 @@
 .el-button--success.is-plain{
     background: #fff;
     border: 1px solid rgb(191, 203, 217);
-    color: #20a0ff;
+    color: #000;
 }
 
 .el-button--success.is-plain:hover, .el-button--success.is-plain:focus{
@@ -309,7 +309,7 @@
 .el-button--warning.is-plain{
     background: #fff;
     border: 1px solid rgb(191, 203, 217);
-    color: #20a0ff;
+    color: #000;
 }
 
 .el-button--warning.is-plain:hover, .el-button--warning.is-plain:focus{
@@ -353,7 +353,7 @@
 .el-button--danger.is-plain{
     background: #fff;
     border: 1px solid rgb(191, 203, 217);
-    color: #20a0ff;
+    color: #000;
 }
 
 .el-button--danger.is-plain:hover, .el-button--danger.is-plain:focus{
@@ -397,7 +397,7 @@
 .el-button--info.is-plain{
     background: #fff;
     border: 1px solid rgb(191, 203, 217);
-    color: #20a0ff;
+    color: #000;
 }
 
 .el-button--info.is-plain:hover, .el-button--info.is-plain:focus{

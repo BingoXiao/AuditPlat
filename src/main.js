@@ -11,6 +11,7 @@ import ElementUI from "element-ui"
 import "plugins/font/iconfont.css"
 import App from "App"
 import {AUTO_LOGIN_URL} from "./common/interface"
+import {getCookie} from "./common/common"
 
 // Router
 Vue.use(VueRouter)
@@ -32,10 +33,9 @@ router.beforeEach((to, from, next) => {
 
   if (to.path === "/login") {
     // 判断自动登陆
-    var name = "REMEMBER"
-    var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"))
+    var remember = getCookie("REMEMBER")
 
-    if (unescape(arr[2]) === "1") {
+    if (remember) {
       Vue.http.get(AUTO_LOGIN_URL).then(function (response) {
         if (response.data.success) {
           /*  记录状态 */
@@ -46,6 +46,8 @@ router.beforeEach((to, from, next) => {
           router.push({path: "/Setting"})
         }
       })
+    } else {
+      next()
     }
   } else {
     if (!authLogin) {

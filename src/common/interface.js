@@ -1,14 +1,20 @@
 
 const HOST_URL = "https://shopmanage-dev.jinmailife.com"
 
-// 登录post
+// 登录 post
 const ACCOUNTS_LOGIN_URL = HOST_URL + "/account-manage/login/"
-// 自动登录get
+// 自动登录 get
 const AUTO_LOGIN_URL = HOST_URL + "/account-manage/verlogin/"
+// 修改账户密码 post
+const ACCOUNTS_PASSWORD_URL = HOST_URL + "/account-manage/change-password/"
+// 用户登出 post
+const ACCOUNTS_LOGOUT_URL = HOST_URL + "/account-manage/logout/"
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
-  AUTO_LOGIN_URL
+  AUTO_LOGIN_URL,
+  ACCOUNTS_PASSWORD_URL,
+  ACCOUNTS_LOGOUT_URL
 }
 
 /* ***********基本通用资料********* */
@@ -75,16 +81,6 @@ exports = module.exports = {
  var SUBBANKS_TYPE = "get"
 
 
-
- /!* 详细页接口配置 *!/
- /!* *****************  后台审核登录(login) *********** *!/
- export default {
- /!* 修改账户密码 post *!/
- ACCOUNTS_PASSWORD_URL : HOST_URL + "/account-manage/change-password/",
-
- /!* 用户登出 ?? *!/
- ACCOUNTS_LOGOUT_URL : HOST_URL + "/account-manage/logout/"
- }
 
  /!* ************************ BD ************************** *!/
  /!* ******商家分配（BDapply）******** *!/

@@ -214,8 +214,8 @@
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
-  background: #fff;
-  border: 1px solid rgb(191, 203, 217);
+  background: #fdd405;
+  border: 1px solid transparent;
   color: #000;
   -webkit-appearance: none;
   text-align: center;
@@ -232,10 +232,7 @@
 .el-button + .el-button{
   margin-left: 10px;
 }
-.el-button:hover, .el-button:focus{
-  color: #20a0ff;
-  border-color: #20a0ff;
-}
+.el-button:hover, .el-button:focus{}
 .el-button:active{
   color: rgb(29, 144, 230);
   border-color: rgb(29, 144, 230);
@@ -299,37 +296,37 @@
 .el-button--primary{
   color: #fff;
   background-color: #000;
-  border-color: #000;
+  border-color: transparent;
 }
 .el-button--primary:hover, .el-button--primary:focus{
   background: rgb(51, 51, 51);
-  border-color: rgb(51, 51, 51);
+  border-color: rgba(255, 255, 255, 0.2);
   color: #fff;
 }
 .el-button--primary:active{
   background: rgb(0, 0, 0);
-  border-color: rgb(0, 0, 0);
+  border-color: rgba(0, 0, 0, 0.1);
   color: #fff;
   outline: none;
 }
 .el-button--primary.is-active{
   background: rgb(0, 0, 0);
-  border-color: rgb(0, 0, 0);
+  border-color: rgba(0, 0, 0, 0.1);
   color: #fff;
 }
 .el-button--primary.is-plain{
-  background: #fff;
+  background: #fdd405;
   border: 1px solid rgb(191, 203, 217);
   color: #000;
 }
 .el-button--primary.is-plain:hover, .el-button--primary.is-plain:focus{
   background: #fff;
-  border-color: #000;
+  border-color: transparent;
   color: #000;
 }
 .el-button--primary.is-plain:active{
   background: #fff;
-  border-color: rgb(0, 0, 0);
+  border-color: rgba(0, 0, 0, 0.1);
   color: rgb(0, 0, 0);
   outline: none;
 }
@@ -355,7 +352,7 @@
   color: #fff;
 }
 .el-button--success.is-plain{
-  background: #fff;
+  background: #fdd405;
   border: 1px solid rgb(191, 203, 217);
   color: #000;
 }
@@ -392,7 +389,7 @@
   color: #fff;
 }
 .el-button--warning.is-plain{
-  background: #fff;
+  background: #fdd405;
   border: 1px solid rgb(191, 203, 217);
   color: #000;
 }
@@ -429,7 +426,7 @@
   color: #fff;
 }
 .el-button--danger.is-plain{
-  background: #fff;
+  background: #fdd405;
   border: 1px solid rgb(191, 203, 217);
   color: #000;
 }
@@ -466,7 +463,7 @@
   color: #fff;
 }
 .el-button--info.is-plain{
-  background: #fff;
+  background: #fdd405;
   border: 1px solid rgb(191, 203, 217);
   color: #000;
 }

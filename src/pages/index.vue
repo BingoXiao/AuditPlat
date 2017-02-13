@@ -1,22 +1,18 @@
 <template>
-  <el-row class="panel">
-    <el-col :span="24" style="height: 100%">
-      <aside class="left-side">
-        <left-slide></left-slide>
-      </aside>
-    </el-col>
+  <div class="panel">
+    <aside class="left-side">
+      <left-slide></left-slide>
+    </aside>
 
-    <el-col :span="24" class="panel-content">
-      <section class="main-content">
-        <!--左选单对应的内容-->
-        <router-view></router-view>
-      </section>
-    </el-col>
-  </el-row>
+    <section class="main-content">
+      <!--左选单对应的内容-->
+      <router-view></router-view>
+    </section>
+  </div>
 </template>
 
 <script>
-  import leftSlide from "../components/leftSlide"
+  import leftSlide from "../components/leftSlide/index"
 
   export default{
     components: {
@@ -26,18 +22,26 @@
 </script>
 
 <style>
-  .panel{
-    height: 100%;
+  .panel {
+    height: 94%;
+    width: 100%;
+    position: relative;
+    top: 60px;
+    overflow: hidden;
   }
+
   .left-side {
     width: 180px;
     height: 100%;
     background-color: #040404;
+    position: absolute;
+    left:0;
   }
 
-  .panel-content {
+  .main-content{
+    height: 94%;
     position: absolute;
     left: 180px;
-    overflow: hidden;
+    margin-left: 20px;
   }
 </style>

@@ -1,5 +1,6 @@
 import Login from "../pages/login"
 import Index from "../pages/index"
+import EDITPWD from "../pages/editPwd"
 import Hello from "../pages/Hello"
 
 const routes = [
@@ -8,6 +9,12 @@ const routes = [
     name: "登录",
     hidden: true,
     component: Login
+  },
+  {
+    path: "/editPassword",
+    hidden: true,
+    name: "修改密码",
+    component: EDITPWD
   },
   {
     path: "/",
@@ -61,7 +68,7 @@ const routes = [
     name: "系统设置",
     component: Index,
     children: [
-      {path: "/Setting", name: "账号管理", component: Hello, iconCls: "el-icon-message"}
+      {path: "/setting", name: "账号管理", component: Hello, iconCls: "el-icon-message"}
     ]
   },
   // 路由重定向:除了路由配置的地址，全部到/login页面

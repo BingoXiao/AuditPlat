@@ -1,15 +1,15 @@
 <template>
-  <div id="app" style="width:100%">
+  <div id="app">
     <!--头部-->
     <header-menu></header-menu>
+
     <!--<transition name="bounce">-->
     <router-view></router-view>
-    <!--</transition>-->
   </div>
 </template>
 
 <script>
-  import headerMenu from "components/headerMenu"
+  import headerMenu from "./components/headerMenu/index"
 
   export default{
     components: {
@@ -19,5 +19,7 @@
 </script>
 
 <style scoped>
-
+  #app{
+    width: 100%;
+  }
 </style>

@@ -3,14 +3,14 @@
     <el-col :xs="22" :sm="18" :md="14" :lg="12" class="login">
       <el-row style="margin:30px 60px 20px 60px;">
         <h2 class="topTitle">
-          <strong>审核后台登录</strong>
+          <strong>修改密码</strong>
         </h2>
       </el-row>
 
       <el-row type="flex" justify="center">
-        <el-col :span="16">
+        <el-col :span="18">
           <!--账号-->
-          <el-form id="loginForm" label-width="50px" label-position="left">
+          <el-form id="editPwdForm" label-width="50px" label-position="left">
             <el-form-item label="账号">
               <el-input v-model="account" name="account" autofocus></el-input>
               <!--账号错误提示-->
@@ -25,10 +25,6 @@
               <i class="el-icon-circle-cross errorTips" v-if="pwdErr"> {{pwdErr}}</i>
             </el-form-item>
 
-            <!--记住-->
-            <el-form-item label="">
-              <el-checkbox label="下次自动登录" v-model="checked" :checked="checked"></el-checkbox>
-            </el-form-item>
 
             <el-form-item>
               <el-button type="primary" @click="onSubmit">登 录</el-button>
@@ -41,8 +37,7 @@
 </template>
 
 <script>
-  import {ACCOUNTS_LOGIN_URL} from "../common/interface"
-  import {setCookie} from "../common/common"
+  import {ACCOUNTS_PASSWORD_URL} from "../common/interface"
 
   export default {
     data () {
@@ -83,26 +78,16 @@
           var formData = new FormData(loginform)
 
           /*  记录登录状态 */
-          self.$http.post(ACCOUNTS_LOGIN_URL, formData)
+          self.$store.commit("AUTH_LOGIN", true)
+          this.$http.post(ACCOUNTS_PASSWORD_URL, formData)
             .then(function (response) {
               if (response.data.success) {
                 /*  记录状态 */
-                self.$store.commit("USER_NAME", self.account)
+                self.$store.commit("USER_NAME", response.data.content.account)
                 self.$store.commit("AUTH_LOGIN", true)
                 self.$store.commit("USER_DATA", response.data.content.perms)
 
-                /* 自动登录 */
-                if (self.checked) {
-                  setCookie("REMEMBER", "1", 30)
-                }
-
                 self.$router.push({path: "/setting"})
-                /*
-                 var mmm = self.$store.state.user_data
-                 for (var i in mmm) {
-                 console.log(i + ":" + mmm[i])
-                 }
-                 */
               } else {
                 self.pwdErr = response.body.error_info
               }
@@ -113,24 +98,11 @@
           return false
         }
       }
-      /*
-       keyupSubmit: function (e) {
-       // 在ff下event会做为参数传进来，ie下会在window下
-       var event = e.target || window.event
-       // e.which是ff下获取keyCode的方式，ie下使用e.keyCode获取
-       var key = event.which || event.keyCode
-       console.log(key)
-       if (key === 13) {
-       this.onSubmit()
-       }
-       }
-       */
     }
   }
 </script>
 
 
 <style scoped>
-
 
 </style>

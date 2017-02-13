@@ -113,7 +113,7 @@
   position: relative;
   margin: 0;
   padding-left: 0;
-  background-color: rgb(238, 241, 246);
+  background-color: #242424;
 }
 
 .el-menu li{
@@ -121,23 +121,25 @@
 }
 
 .el-menu--dark{
-  background-color: rgb(50, 65, 87);
+  background-color: #020202;
 }
 
 .el-menu--dark .el-menu-item, .el-menu--dark .el-submenu__title{
-  color: rgb(191, 203, 217);
+  color: #fff;
 }
 
 .el-menu--dark .el-menu-item:hover, .el-menu--dark .el-submenu__title:hover{
-  background-color: rgb(72, 87, 106);
+  background-color: #020202;
+  color: #fdd405;
 }
 
 .el-menu--dark .el-submenu .el-menu{
-  background-color: rgb(31, 45, 61);
+  background-color: #020202;
 }
 
 .el-menu--dark .el-submenu .el-menu .el-menu-item:hover{
-  background-color: rgb(72, 87, 106);
+  color: #000;
+  background-color: #fdd405;
 }
 
 .el-menu--horizontal{}
@@ -201,7 +203,7 @@
 }
 
 .el-menu--horizontal .el-menu-item:hover, .el-menu--horizontal .el-submenu__title:hover{
-  background-color: rgb(238, 241, 246);
+  background-color: #242424;
 }
 
 .el-menu--horizontal > .el-menu-item:hover, .el-menu--horizontal > .el-submenu:hover .el-submenu__title, .el-menu--horizontal > .el-submenu.is-active .el-submenu__title{
@@ -211,7 +213,7 @@
 .el-menu--horizontal.el-menu--dark{}
 
 .el-menu--horizontal.el-menu--dark .el-menu-item:hover, .el-menu--horizontal.el-menu--dark .el-submenu__title:hover{
-  background-color: rgb(50, 65, 87);
+  background-color: #020202;
 }
 
 .el-menu--horizontal.el-menu--dark .el-submenu .el-menu-item, .el-menu--horizontal.el-menu--dark .el-submenu .el-submenu-title{
@@ -244,7 +246,8 @@
 }
 
 .el-menu-item.is-active{
-  color: #20a0ff;
+  color: #000;
+  background-color: #fdd405;
 }
 
 .el-submenu [class^="el-icon-"]{
@@ -263,7 +266,8 @@
 }
 
 .el-submenu .el-menu-item:hover{
-  background-color: rgb(209, 219, 229);
+  color: #000;
+  background-color: #fdd405;
 }
 
 .el-submenu.is-opened > .el-submenu__title .el-submenu__icon-arrow{

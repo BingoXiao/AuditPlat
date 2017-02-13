@@ -342,8 +342,8 @@
   --button-mini-padding-horizontal: 4px;
 
   --button-default-color: var(--color-black);
-  --button-default-fill: var(--color-white);
-  --button-default-border: var(--color-black);
+  --button-default-fill: #fdd405;
+  --button-default-border: transparent;
 
   --button-ghost-color: #666;
   --button-ghost-fill: transparent;
@@ -353,7 +353,7 @@
   --button-disabled-fill: var(--color-extra-light-gray);
   --button-disabled-border: var(--disabled-border-base);
 
-  --button-primary-border: var(--color-black);
+  --button-primary-border: transparent;
   --button-primary-color: var(--color-white);
   --button-primary-fill: var(--color-black);
 
@@ -428,13 +428,13 @@
 
   /* Popover
  -------------------------- */
-  --popover-fill: var(--color-white);
+  --popover-fill: #393939;
   --popover-font-size: 12px;
   --popover-border-color: var(--disabled-border-base);
   --popover-arrow-size: 6px;
   --popover-padding: 10px;
   --popover-title-font-size: 13px;
-  --popover-title-color: var(--color-base-black);
+  --popover-title-color: var(--color-white);
 
   /* Tooltip
   -------------------------- */
@@ -518,14 +518,14 @@
   /* Steps
   --------------------------*/
   --menu-item-color: var(--link-color);
-  --menu-item-fill: var(--color-extra-light-gray);
+  --menu-item-fill: #242424;
   --menu-item-hover-fill: var(--disabled-border-base);
   --submenu-item-fill: var(--color-light-gray);
 
   --dark-menu-item-color: var(--link-color);
-  --dark-menu-item-fill: var(--color-light-black);
+  --dark-menu-item-fill: #020202;
   --dark-menu-item-hover-fill: var(--link-color);
-  --dark-submenu-item-fill: var(--color-base-black);
+  --dark-submenu-item-fill: #090909;
 
   /* Rate
   --------------------------*/

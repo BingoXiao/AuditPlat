@@ -2,13 +2,14 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from "vue"
 import VueRouter from "vue-router"
-import routes from "router/index"
-import store from "vuex/store"
+import routes from "./router/index"
+import store from "./vuex/store"
 import VueResource from "vue-resource"
 // import "element-ui/lib/theme-default/index.css"
 import "../theme/index.css"
 import ElementUI from "element-ui"
-import "plugins/font/iconfont.css"
+import "./plugins/font/iconfont.css"
+import "./common/style.css"
 import App from "App"
 import {AUTO_LOGIN_URL} from "./common/interface"
 import {getCookie} from "./common/common"
@@ -34,8 +35,7 @@ router.beforeEach((to, from, next) => {
   if (to.path === "/login") {
     // 判断自动登陆
     var remember = getCookie("REMEMBER")
-
-    if (remember) {
+    if (remember === "1") {
       Vue.http.get(AUTO_LOGIN_URL).then(function (response) {
         if (response.data.success) {
           /*  记录状态 */
@@ -43,7 +43,7 @@ router.beforeEach((to, from, next) => {
           store.commit("AUTH_LOGIN", true)
           store.commit("USER_DATA", response.data.content.perms)
 
-          router.push({path: "/Setting"})
+          next({path: "/setting"})
         }
       })
     } else {

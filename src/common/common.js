@@ -17,27 +17,26 @@ function setCookie (cookieName, value, days) {
 
 // 读取cookie
 function getCookie (cookieName) {
-  var result = null
-  if (document.cookie.length > 0) {
-    if (document.cookie.indexOf(cookieName + "=") !== -1) {
-      var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"))
-      if (arr) {
-        result = unescape(arr[2])
+  var acookie = document.cookie.split("; ")
+  for (var i = 0; i < acookie.length; i++) {
+    var arr = acookie[i].split("=")
+    if (cookieName === arr[0]) {
+      if (arr.length > 1) {
+        return unescape(arr[1])
       }
+    } else {
+      return null
     }
   }
-  return result
 }
 
 // 删除cookie
 function clearCookie (cookieName) {
-  if (document.cookie.length > 0) {
-    if (document.cookie.indexOf(cookieName + "=") !== -1) {
-      var date = new Date()
-      // 将date设置为 time 天以后的时间
-      date.setDate(date.getTime() - 1)
-      document.cookie = cookieName + "=" + getCookie(cookieName) + ";expires=" + date.toUTCString()
-    }
+  if (document.cookie.indexOf(cookieName + "=") !== -1) {
+    var date = new Date()
+    // 将date设置为 time 天以后的时间
+    date.setDate(date.getTime() - 1)
+    document.cookie = cookieName + "=" + "" + ";expires=" + date.toUTCString()
   }
 }
 

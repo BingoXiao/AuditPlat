@@ -42,6 +42,7 @@
     height: 94%;
     position: absolute;
     left: 180px;
+    top: 20px;
     margin-left: 20px;
   }
 </style>

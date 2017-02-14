@@ -1,36 +1,43 @@
 <template>
   <el-row type="flex" justify="center">
     <el-col :xs="22" :sm="18" :md="14" :lg="12" class="login">
-      <el-row style="margin:30px 60px 20px 60px;">
-        <h2 class="topTitle">
+      <el-row>
+        <br/>
+        <h2 class="topTitle" style="border-bottom: none">
           <strong>修改密码</strong>
         </h2>
       </el-row>
 
       <el-row type="flex" justify="center">
         <el-col :span="18">
-          <!--账号-->
-          <el-form id="editPwdForm" label-width="50px" label-position="left">
-            <el-form-item label="账号">
-              <el-input v-model="account" name="account" autofocus></el-input>
-              <!--账号错误提示-->
-              <i class="el-icon-circle-cross errorTips" v-if="accErr"> {{accErr}}</i>
+          <el-form id="pwdForm" :model="pwdForm" :rules="rules" ref="pwdForm"
+                   label-width="100px" label-position="right">
+            <!--账号-->
+            <el-form-item label="账号：">
+              <b>&nbsp;{{$store.state.user_name}}</b>
             </el-form-item>
 
-            <!--密码-->
-            <el-form-item label="密码">
-              <el-input type="password" auto-complete="off" name="password"
-                        v-model="password"></el-input>
-              <!--密码错误提示-->
-              <i class="el-icon-circle-cross errorTips" v-if="pwdErr"> {{pwdErr}}</i>
+            <!--旧密码-->
+            <el-form-item label="旧密码：" prop="oldPwd">
+              <el-input type="password" v-model="pwdForm.oldPwd" autofocus
+                        name="old_password"></el-input>
             </el-form-item>
 
+            <!--新密码-->
+            <el-form-item label="新密码：" prop="newPwd">
+              <el-input type="password" v-model="pwdForm.newPwd"
+                        name="new_password"></el-input>
+            </el-form-item>
 
-            <el-form-item>
-              <el-button type="primary" @click="onSubmit">登 录</el-button>
+            <!--确认密码-->
+            <el-form-item label="确认密码：" prop="confirmPwd">
+              <el-input type="password" v-model="pwdForm.confirmPwd"></el-input>
             </el-form-item>
           </el-form>
         </el-col>
+      </el-row>
+      <el-row type="flex" justify="center">
+        <el-button type="primary" @click="confirmEdit">&emsp;确 定&emsp;</el-button>
       </el-row>
     </el-col>
   </el-row>
@@ -38,65 +45,84 @@
 
 <script>
   import {ACCOUNTS_PASSWORD_URL} from "../common/interface"
+  import {clearCookie} from "../common/common"
 
   export default {
     data () {
+      var newPwdV = (rule, value, callback) => {
+        if (value === "") {
+          callback(new Error("请输入新密码"))
+        } else {
+          if (!(/^[\x21-\x7e]{6,63}$/.test(value))) {
+            callback(new Error("密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"))
+          } else {
+            if (value === this.pwdForm.oldPwd) {
+              callback(new Error("新密码不能与原密码相同"))
+            } else {
+              this.$refs.pwdForm.validateField("confirmPwd")
+              callback()
+            }
+          }
+        }
+      }
+      var confirmPwdV = (rule, value, callback) => {
+        if (value === "") {
+          callback(new Error("请再次输入密码"))
+        } else if (value !== this.pwdForm.newPwd) {
+          callback(new Error("两次输入密码不一致!"))
+        } else {
+          callback()
+        }
+      }
       return {
-        account: "",
-        password: "",
-        checked: true, // 下次自动登录
-        accErr: "",   // 账号验证
-        pwdErr: ""   // 密码验证
+        pwdForm: {
+          oldPwd: "",
+          newPwd: "",
+          confirmPwd: ""
+        },
+        rules: {
+          oldPwd: [
+            {required: true, message: "请输入原密码", trigger: "blur"}
+          ],
+          newPwd: [
+            {validator: newPwdV, trigger: "blur"}
+          ],
+          confirmPwd: [
+            {validator: confirmPwdV, trigger: "blur"}
+          ]
+        }
       }
     },
     methods: {
-      /* 账号验证 */
-      accountV: function () {
-        if (!(/^[\x21-\x7e._-]{2,63}$/.test(this.account))) {
-          this.accErr = "账号长度为2~63位，且只能包含数字、字母及. _ -"
-          return false
-        } else {
-          this.accErr = ""
-          return true
-        }
-      },
-      /* 密码验证 */
-      passwordV: function () {
-        if (!(/^[\x21-\x7e]{6,63}$/.test(this.password))) {
-          this.pwdErr = "密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"
-          return false
-        } else {
-          this.pwdErr = ""
-          return true
-        }
-      },
-      /* 登录提交 */
-      onSubmit: function () {
+      /* 密码修改提交 */
+      confirmEdit: function () {
         var self = this
-        if (self.accountV() && self.passwordV()) {
-          var loginform = document.getElementById("loginForm")
-          var formData = new FormData(loginform)
 
-          /*  记录登录状态 */
-          self.$store.commit("AUTH_LOGIN", true)
-          this.$http.post(ACCOUNTS_PASSWORD_URL, formData)
-            .then(function (response) {
-              if (response.data.success) {
-                /*  记录状态 */
-                self.$store.commit("USER_NAME", response.data.content.account)
-                self.$store.commit("AUTH_LOGIN", true)
-                self.$store.commit("USER_DATA", response.data.content.perms)
+        this.$refs.pwdForm.validate((valid) => {
+          if (valid) {
+            var form = document.getElementById("pwdForm")
+            var formData = new FormData(form)
+            formData.append("id", self.$store.state.user_id)
+            this.$http.post(ACCOUNTS_PASSWORD_URL, formData)
+              .then(function (response) {
+                if (response.data.success) {
+                  self.$store.commit("AUTH_LOGIN", false)
+                  clearCookie("REMEMBER")
 
-                self.$router.push({path: "/setting"})
-              } else {
-                self.pwdErr = response.body.error_info
-              }
-            }, function (response) {
-              alert("无法连接，请稍后再试！")
-            })
-        } else {
-          return false
-        }
+                  self.$message({
+                    message: "请重新登录！",
+                    type: "warning"
+                  })
+
+                  self.$router.push({path: "/login"})
+                } else {
+                  self.$message.error(response.data.error_info)
+                }
+              }, function (response) {
+                self.$message.error("无法连接，请稍后再试！")
+              })
+          }
+        })
       }
     }
   }

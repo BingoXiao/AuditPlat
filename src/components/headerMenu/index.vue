@@ -64,13 +64,9 @@
             .then(function (response) {
               if (response.data.success) {
                 self.$store.commit("AUTH_LOGIN", false)
-                self.$store.commit("USER_NAME", "")
-                self.$store.commit("USER_DATA", "")
                 clearCookie("REMEMBER")
 
                 self.$router.push("/login")
-              } else {
-
               }
             }, function (response) {
               alert("无法连接，请稍后再试！")

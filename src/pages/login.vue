@@ -1,7 +1,7 @@
 <template>
   <el-row type="flex" justify="center">
     <el-col :xs="22" :sm="18" :md="14" :lg="12" class="login">
-      <el-row style="margin:30px 60px 20px 60px;">
+      <el-row style="margin:20px 60px 20px 60px;">
         <h2 class="topTitle">
           <strong>审核后台登录</strong>
         </h2>
@@ -12,9 +12,9 @@
           <!--账号-->
           <el-form id="loginForm" label-width="50px" label-position="left">
             <el-form-item label="账号">
-              <el-input v-model="account" name="account" autofocus></el-input>
+              <el-input id="accountDiv" v-model="account" name="account" autofocus></el-input>
               <!--账号错误提示-->
-              <i class="el-icon-circle-cross errorTips" v-if="accErr"> {{accErr}}</i>
+              <i class="el-icon-circle-close errorTips" v-if="accErr"> {{accErr}}</i>
             </el-form-item>
 
             <!--密码-->
@@ -22,7 +22,7 @@
               <el-input type="password" auto-complete="off" name="password"
                         v-model="password"></el-input>
               <!--密码错误提示-->
-              <i class="el-icon-circle-cross errorTips" v-if="pwdErr"> {{pwdErr}}</i>
+              <i class="el-icon-circle-close errorTips" v-if="pwdErr"> {{pwdErr}}</i>
             </el-form-item>
 
             <!--记住-->
@@ -59,9 +59,11 @@
       accountV: function () {
         if (!(/^[\x21-\x7e._-]{2,63}$/.test(this.account))) {
           this.accErr = "账号长度为2~63位，且只能包含数字、字母及. _ -"
+          document.getElementsByName("account")[0].style.borderColor = "#ff4949"
           return false
         } else {
           this.accErr = ""
+          document.getElementsByName("account")[0].style.borderColor = "rgb(191, 203, 217)"
           return true
         }
       },
@@ -69,9 +71,11 @@
       passwordV: function () {
         if (!(/^[\x21-\x7e]{6,63}$/.test(this.password))) {
           this.pwdErr = "密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"
+          document.getElementsByName("password")[0].style.borderColor = "#ff4949"
           return false
         } else {
           this.pwdErr = ""
+          document.getElementsByName("password")[0].style.borderColor = "rgb(191, 203, 217)"
           return true
         }
       },
@@ -97,17 +101,11 @@
                 }
 
                 self.$router.push({path: "/setting"})
-                /*
-                 var mmm = self.$store.state.user_data
-                 for (var i in mmm) {
-                 console.log(i + ":" + mmm[i])
-                 }
-                 */
               } else {
                 self.pwdErr = response.body.error_info
               }
             }, function (response) {
-              alert("无法连接，请稍后再试！")
+              self.$message.error("无法连接，请稍后再试！")
             })
         } else {
           return false

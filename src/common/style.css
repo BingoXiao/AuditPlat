@@ -5,19 +5,19 @@
   color: #000000;
   margin-top: 160px;
   padding: 20px 0 30px 0;
-  border: 1px solid #d9d9d9;
+  border: 1px solid #e1e1e1;
 }
 
 .topTitle {
   padding-bottom: 20px;
   text-align: center;
   border: 1px solid transparent;
-  border-bottom-color: #d9d9d9;
+  border-bottom-color: #e8e8e8;
 }
 
 .errorTips {
   position: absolute;
   top: 42px;
   font-size: 13px;
-  color: #b50000;
+  color: #ff4949;
 }

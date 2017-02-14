@@ -5,6 +5,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    // 账号ID
+    user_id: "",
     // 账号名称
     user_name: "",
     // 判断是否登录
@@ -13,6 +15,9 @@ const store = new Vuex.Store({
     user_data: {}
   },
   mutations: {
+    USER_ID (state, status) {
+      state.user_id = status
+    },
     USER_NAME (state, status) {
       state.user_name = status
     },

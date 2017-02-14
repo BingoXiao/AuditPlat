@@ -33,12 +33,13 @@ router.beforeEach((to, from, next) => {
   var authLogin = store.state.auth_login
 
   if (to.path === "/login") {
-    // 判断自动登陆
     var remember = getCookie("REMEMBER")
+    // 判断自动登陆
     if (remember === "1") {
       Vue.http.get(AUTO_LOGIN_URL).then(function (response) {
         if (response.data.success) {
           /*  记录状态 */
+          store.commit("USER_ID", response.data.content.id)
           store.commit("USER_NAME", response.data.content.account)
           store.commit("AUTH_LOGIN", true)
           store.commit("USER_DATA", response.data.content.perms)
@@ -62,13 +63,14 @@ router.beforeEach((to, from, next) => {
 Vue.http.interceptors.push(function (request, next) {
   next(function (response) {
     // 更具请求的状态， response参数会返回给 successCallback或errorCallback
-    if (response.data.error_info === "logout") {
-      store.state.auth_login = false
-      router.replace("/login")
+    if (!response.data.success) {  // success:false
+      if (response.data.error_info === "logout") {
+        store.state.auth_login = false
+        router.replace("/login")
+      }
     }
   })
 })
-
 
 /* eslint-disable no-new */
 new Vue({

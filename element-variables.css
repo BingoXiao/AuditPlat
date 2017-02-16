@@ -325,7 +325,7 @@
   -------------------------- */
   --button-font-size: 14px;
   --button-border-radius: var(--border-radius-base);
-  --button-paddding: 5px 20px;
+  --button-paddding: 5px 30px;
   --button-padding-vertical: 10px;
   --button-padding-horizontal: 20px;
 
@@ -389,17 +389,17 @@
   --switch-disabled-text-color: var(--color-dark-white);
 
   --switch-font-size: var(--font-size-base);
-  --switch-core-border-radius: 12px;
+  --switch-core-border-radius: 4px;
   --switch-width: 46px;
   --switch-height: 22px;
-  --switch-button-size: 16px;
+  --switch-button-size: 18px;
 
   /* Dialog
  -------------------------- */
   --dialog-background-color: var(--color-secondary);
   --dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  --dialog-tiny-width: 30%;
-  --dialog-small-width: 50%;
+  --dialog-tiny-width: 500px;
+  --dialog-small-width: 530px;
   --dialog-large-width: 90%;
   --dialog-close-color: var(--color-extra-light-silver);
   --dialog-close-hover-color: var(--color-primary);
@@ -410,7 +410,7 @@
  -------------------------- */
   --table-border-color: color(var(--border-color-base) h(-3) s(27%) l(90%));
   --table-text-color: var(--color-base-black);
-  --table-header-background: var(--color-extra-light-gray);
+  --table-header-background: var(--color-black);
 
   /* Pagination
  -------------------------- */

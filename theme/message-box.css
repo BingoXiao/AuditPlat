@@ -495,16 +495,16 @@
 }
 .el-button--text{
   border: none;
-  color: #20a0ff;
+  color: #000;
   background: transparent;
   padding-left: 0;
   padding-right: 0;
 }
 .el-button--text:hover, .el-button--text:focus{
-  color: rgb(77, 179, 255);
+  color: #fdd405;
 }
 .el-button--text:active{
-  color: rgb(29, 144, 230);
+  color: #000;
 }
 .el-button-group{
   display: inline-block;

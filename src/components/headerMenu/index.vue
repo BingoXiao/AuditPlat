@@ -2,7 +2,7 @@
   <el-row class="head" type="flex" justify="space-around" align="middle">
     <el-col :span="6">
       <router-link to="/login">
-        <img src="../../assets/logo.png" alt="近脉商家中心"/>
+        <img src="../../assets/logo.png" alt="近脉后台审核中心"/>
       </router-link>
     </el-col>
 
@@ -23,10 +23,11 @@
 
         <el-button type="text" v-popover:menu style="color: #fff">
           {{$store.state.user_name}}
-          <i class="el-icon-arrow-down el-icon--right"></i>
+          <i class="el-icon-arrow-down el-icon--right" style="font-size: 10px"></i>
         </el-button>
         <span>|</span>
-        <i class="iconfont icon-erweima"></i>
+        <i class="iconfont icon-erweima"
+           style="font-size: 17px;vertical-align: middle"></i>
       </div>
     </el-col>
   </el-row>
@@ -38,37 +39,36 @@
 
   export default{
     name: "header",
-    data () {
+    data() {
       return {
         visible: false
       }
     },
     methods: {
       // 修改密码
-      editPassword: function () {
+      editPassword: function() {
         var self = this
         self.visible = false
-
         self.$router.push("/editPassword")
       },
       // 退出登录
-      logOut: function () {
+      logOut: function() {
         var self = this
         self.visible = false
         this.$confirm("确认退出系统吗?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"
-        }).then(function () {
+        }).then(function() {
           self.$http.post(ACCOUNTS_LOGOUT_URL)
-            .then(function (response) {
+            .then(function(response) {
               if (response.data.success) {
                 self.$store.commit("AUTH_LOGIN", false)
                 clearCookie("REMEMBER")
 
                 self.$router.push("/login")
               }
-            }, function (response) {
+            }, function(response) {
               alert("无法连接，请稍后再试！")
             })
         })
@@ -89,7 +89,7 @@
   }
 
   img {
-    width: 200px;
+    width: 220px;
     margin-top: 5px;
   }
 

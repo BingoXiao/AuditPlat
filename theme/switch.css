@@ -176,7 +176,7 @@
     height: 22px;
     border: 1px solid rgb(191, 203, 217);
     outline: none;
-    border-radius: 12px;
+    border-radius: 4px;
     box-sizing: border-box;
     background: rgb(191, 203, 217);
     cursor: pointer;
@@ -187,10 +187,12 @@
     top: 0;
     left: 0;
     position: absolute;
-    border-radius: 100%;
+    top: -1px;
+    left: -1px;
+    border-radius: 4px;
     transition: transform .3s;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     z-index: 20;
     background-color: #fff
 }
@@ -198,11 +200,11 @@
 .el-switch--wide .el-switch__label {}
 
 .el-switch--wide .el-switch__label.el-switch__label--left span{
-    left: 10px
+    left: 6px
 }
 
 .el-switch--wide .el-switch__label.el-switch__label--right span{
-    right: 10px
+    right: 6px
 }
 :root{
     /* Transition

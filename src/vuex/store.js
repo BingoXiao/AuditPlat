@@ -12,19 +12,26 @@ const store = new Vuex.Store({
     // 判断是否登录
     auth_login: false,
     // 登录之后的用户信息（权限）
-    user_data: {}
+    user_data: {
+      bus_apply: true,
+      bus_register: true,
+      bus_verify: true,
+      checkout_verify: true,
+      project_verify: true,
+      item_list: true
+    }
   },
   mutations: {
-    USER_ID (state, status) {
+    USER_ID(state, status) {
       state.user_id = status
     },
-    USER_NAME (state, status) {
+    USER_NAME(state, status) {
       state.user_name = status
     },
-    AUTH_LOGIN (state, status) {
+    AUTH_LOGIN(state, status) {
       state.auth_login = status
     },
-    USER_DATA (state, perms) {
+    USER_DATA(state, perms) {
       state.user_data = perms
     }
   }

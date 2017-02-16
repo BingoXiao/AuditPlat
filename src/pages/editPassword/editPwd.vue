@@ -1,5 +1,6 @@
 <template>
   <el-row type="flex" justify="center">
+    <header-menu></header-menu>
     <el-col :xs="22" :sm="18" :md="14" :lg="12" class="login">
       <el-row>
         <br/>
@@ -44,24 +45,28 @@
 </template>
 
 <script>
-  import {ACCOUNTS_PASSWORD_URL} from "../common/interface"
-  import {clearCookie} from "../common/common"
+  import {ACCOUNTS_PASSWORD_URL} from "../../common/interface"
+  import {clearCookie, isPassword} from "../../common/common"
+  import headerMenu from "../../components/headerMenu/index"
 
   export default {
-    data () {
+    components: {
+      headerMenu
+    },
+    data() {
       var newPwdV = (rule, value, callback) => {
         if (value === "") {
           callback(new Error("请输入新密码"))
         } else {
-          if (!(/^[\x21-\x7e]{6,63}$/.test(value))) {
-            callback(new Error("密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"))
-          } else {
+          if (isPassword(value).flag) {
             if (value === this.pwdForm.oldPwd) {
               callback(new Error("新密码不能与原密码相同"))
             } else {
               this.$refs.pwdForm.validateField("confirmPwd")
               callback()
             }
+          } else {
+            callback(new Error("密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"))
           }
         }
       }
@@ -95,7 +100,7 @@
     },
     methods: {
       /* 密码修改提交 */
-      confirmEdit: function () {
+      confirmEdit: function() {
         var self = this
 
         this.$refs.pwdForm.validate((valid) => {
@@ -104,7 +109,7 @@
             var formData = new FormData(form)
             formData.append("id", self.$store.state.user_id)
             this.$http.post(ACCOUNTS_PASSWORD_URL, formData)
-              .then(function (response) {
+              .then(function(response) {
                 if (response.data.success) {
                   self.$store.commit("AUTH_LOGIN", false)
                   clearCookie("REMEMBER")
@@ -118,7 +123,7 @@
                 } else {
                   self.$message.error(response.data.error_info)
                 }
-              }, function (response) {
+              }, function(response) {
                 self.$message.error("无法连接，请稍后再试！")
               })
           }

@@ -8,13 +8,13 @@
 
 <script>
   export default{
-    data () {
+    data() {
       return {
         inputValue: ""
       }
     },
     methods: {
-      handleIconClick () {
+      handleIconClick() {
         alert(1)
       }
     }

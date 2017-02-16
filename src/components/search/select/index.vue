@@ -1,14 +1,12 @@
 <template>
-  <el-form-item label="状态：">
-    <el-select v-model="selectedValue" clearable
-               size="small" placeholder="请选择">
-      <el-option
-        v-for="item in options"
-        :label="item.label"
-        :value="item.value">
-      </el-option>
-    </el-select>
-  </el-form-item>
+  <el-select v-model="selectedValue" clearable
+             size="small" placeholder="请选择">
+    <el-option
+      v-for="item in options"
+      :label="item.label"
+      :value="item.value">
+    </el-option>
+  </el-select>
 </template>
 
 <style>
@@ -17,7 +15,7 @@
 
 <script>
   export default{
-    data(){
+    data() {
       return {
         selectedValue: "",
         options: [{

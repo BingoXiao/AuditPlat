@@ -486,7 +486,7 @@
     max-width: 100%;
     background-color: #fff;
     border: 1px solid rgb(223, 230, 236);
-    font-size: 14px;
+    font-size: 15px;
     color: rgb(31, 45, 61);
 }
 
@@ -566,7 +566,7 @@
 }
 
 .el-table th{
-    background-color: rgb(238, 241, 246);
+    background-color: #000;
     text-align: left;
 }
 
@@ -780,7 +780,7 @@
     position: absolute;
     top: -1px;
     right: 0;
-    background-color: rgb(238, 241, 246);
+    background-color: #000;
     border-bottom: 1px solid rgb(223, 230, 236);
 }
 
@@ -804,7 +804,7 @@
 }
 
 .el-table__fixed-header-wrapper thead div{
-    background-color: rgb(238, 241, 246);
+    background-color: #000;
     color: rgb(31, 45, 61);
 }
 
@@ -829,8 +829,8 @@
 }
 
 .el-table__header-wrapper thead div{
-    background-color: rgb(238, 241, 246);
-    color: rgb(31, 45, 61);
+    background-color: #000;
+    color: #ffffff;
 }
 
 .el-table__body-wrapper{

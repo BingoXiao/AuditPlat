@@ -1,5 +1,7 @@
 <template>
   <el-row type="flex" justify="center">
+    <header-menu></header-menu>
+
     <el-col :xs="22" :sm="18" :md="14" :lg="12" class="login">
       <el-row style="margin:20px 60px 20px 60px;">
         <h2 class="topTitle">
@@ -41,11 +43,15 @@
 </template>
 
 <script>
+  import headerMenu from "../components/headerMenu/index"
   import {ACCOUNTS_LOGIN_URL} from "../common/interface"
-  import {setCookie} from "../common/common"
+  import {setCookie, isAccount, isPassword} from "../common/common"
 
   export default {
-    data () {
+    components: {
+      headerMenu
+    },
+    data() {
       return {
         account: "",
         password: "",
@@ -56,31 +62,33 @@
     },
     methods: {
       /* 账号验证 */
-      accountV: function () {
-        if (!(/^[\x21-\x7e._-]{2,63}$/.test(this.account))) {
-          this.accErr = "账号长度为2~63位，且只能包含数字、字母及. _ -"
-          document.getElementsByName("account")[0].style.borderColor = "#ff4949"
-          return false
-        } else {
-          this.accErr = ""
+      accountV: function() {
+        var self = this
+        var Account = isAccount(self.account)
+        if (Account.flag) {
+          self.accErr = ""
           document.getElementsByName("account")[0].style.borderColor = "rgb(191, 203, 217)"
-          return true
+        } else {
+          self.accErr = Account.error
+          document.getElementsByName("account")[0].style.borderColor = "#ff4949"
         }
+        return Account.flag
       },
       /* 密码验证 */
-      passwordV: function () {
-        if (!(/^[\x21-\x7e]{6,63}$/.test(this.password))) {
-          this.pwdErr = "密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"
-          document.getElementsByName("password")[0].style.borderColor = "#ff4949"
-          return false
-        } else {
-          this.pwdErr = ""
+      passwordV: function() {
+        var self = this
+        var Password = isPassword(self.password)
+        if (Password.flag) {
+          self.pwdErr = ""
           document.getElementsByName("password")[0].style.borderColor = "rgb(191, 203, 217)"
-          return true
+        } else {
+          self.pwdErr = Password.error
+          document.getElementsByName("password")[0].style.borderColor = "#ff4949"
         }
+        return Password.flag
       },
       /* 登录提交 */
-      onSubmit: function () {
+      onSubmit: function() {
         var self = this
         if (self.accountV() && self.passwordV()) {
           var loginform = document.getElementById("loginForm")
@@ -88,7 +96,7 @@
 
           /*  记录登录状态 */
           self.$http.post(ACCOUNTS_LOGIN_URL, formData)
-            .then(function (response) {
+            .then(function(response) {
               if (response.data.success) {
                 /*  记录状态 */
                 self.$store.commit("USER_NAME", self.account)
@@ -100,11 +108,35 @@
                   setCookie("REMEMBER", "1", 30)
                 }
 
-                self.$router.push({path: "/setting"})
+                /* 根据权限进入不同得页面 */
+                if (self.$store.state.user_data.item_list === 1) { /* 管理员账号 */
+                  self.$router.push({path: "/setting"})
+                } else {   /* BD */
+                  if (self.$store.state.user_data.bus_apply === 1 ||
+                    self.$store.state.user_data.bus_register === 1) {
+                    if (self.$store.state.user_data.bus_apply === 1) {
+                      self.$router.push({path: "/bus_apply"})
+                    } else {
+                      self.$router.push({path: "/bus_register"})
+                    }
+                  } else {  /* 审核人员 */
+                    if (self.$store.state.user_data.bus_verify === 1 ||
+                      self.$store.state.user_data.checkout_verify === 1 ||
+                      self.$store.state.user_data.project_verify === 1) {
+                      if (self.$store.state.user_data.bus_verify === 1) {
+                        self.$router.push({path: "/bus_review"})
+                      } else if (self.$store.state.user_data.checkout_verify === 1) {
+                        self.$router.push({path: "/checkout_verify"})
+                      } else {
+                        self.$router.push({path: "/project_verify"})
+                      }
+                    }
+                  }
+                }
               } else {
                 self.pwdErr = response.body.error_info
               }
-            }, function (response) {
+            }, function(response) {
               self.$message.error("无法连接，请稍后再试！")
             })
         } else {

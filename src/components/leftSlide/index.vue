@@ -1,15 +1,15 @@
 <template>
-  <nav style="height: 100%; background-color:#383838">
-    <el-menu :default-active="$route.path" unique-opened router theme="dark"
-             @open="handleOpen" @close="handleClose">
+  <nav>
+    <el-menu :default-active="$route.path" unique-opened router theme="dark">
       <el-submenu :index="index+''" v-for="(item,index) in $router.options.routes"
-                  v-if="!item.hidden">
+                  v-if="isShow[item.hidden]">
         <template slot="title">
           {{item.name}}
         </template>
 
-        <el-menu-item v-for="child in item.children" :index="child.path">
-          <i :class="child.iconCls"></i>
+        <el-menu-item v-for="child in item.children" :index="child.path"
+                      v-if="isShow[child.hidden]">
+          <i class="iconfont" :class="child.iconCls"></i>
           {{child.name}}
         </el-menu-item>
       </el-submenu>
@@ -17,27 +17,36 @@
   </nav>
 </template>
 
-<style>
-
-</style>
-
 <script>
   export default{
-    data () {
+    data() {
       return {
-
-      }
-    },
-    methods: {
-      /* SubMenu 展开的回调  */
-      // index: 打开的 subMenu 的 index， indexPath: 打开的 subMenu 的 index path
-      handleOpen (key, keyPath) {
-        console.log(keyPath)
-      },
-      /* SubMenu 收起的回调 */
-      handleClose (key, keyPath) {
-        console.log(key, keyPath)
+        /* 根据权限判断左选单的菜单显示 */
+        isShow: {
+          login: false,
+          BD: (this.$store.state.user_data.bus_apply === 1) ||
+              (this.$store.state.user_data.bus_register === 1),
+          Reviewer: (this.$store.state.user_data.bus_verify === 1) ||
+                    (this.$store.state.user_data.checkout_verify === 1) ||
+                    (this.$store.state.user_data.project_verify === 1),
+          Administrator: (this.$store.state.user_data.bus_apply === 1) &&
+                        (this.$store.state.user_data.bus_register === 1) &&
+                        (this.$store.state.user_data.bus_verify === 1) &&
+                        (this.$store.state.user_data.checkout_verify === 1) &&
+                        (this.$store.state.user_data.project_verify === 1) &&
+                        (this.$store.state.user_data.item_list === 1),
+          bus_apply: this.$store.state.user_data.bus_apply === 1,
+          bus_register: this.$store.state.user_data.bus_register === 1,
+          bus_verify: this.$store.state.user_data.bus_verify === 1,
+          checkout_verify: this.$store.state.user_data.checkout_verify === 1,
+          project_verify: this.$store.state.user_data.project_verify === 1,
+          item_list: this.$store.state.user_data.item_list === 1
+        }
       }
     }
   }
 </script>
+
+<style scoped>
+
+</style>

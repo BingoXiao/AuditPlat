@@ -51,8 +51,8 @@ module.exports = {
     "space-before-blocks": ["error", "always"],
     // 要求或禁止函数圆括号之前有一个空格
     "space-before-function-paren": ["error", {
-      "anonymous": "always",
-      "named": "always",
+      "anonymous": "never",
+      "named": "never",
       "asyncArrow": "ignore"
     }],
     // 强制在逗号周围使用空格

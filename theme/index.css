@@ -709,16 +709,16 @@
 }
 .el-button--text {
     border: none;
-    color: #20a0ff;
+    color: #000;
     background: transparent;
     padding-left: 0;
     padding-right: 0;
 }
 .el-button--text:hover, .el-button--text:focus {
-    color: rgb(77, 179, 255);
+    color: #fdd405;
 }
 .el-button--text:active {
-    color: rgb(29, 144, 230);
+    color: #000;
 }
 .el-button-group {
     display: inline-block;
@@ -4043,7 +4043,7 @@
     height: 22px;
     border: 1px solid rgb(191, 203, 217);
     outline: none;
-    border-radius: 12px;
+    border-radius: 4px;
     box-sizing: border-box;
     background: rgb(191, 203, 217);
     cursor: pointer;
@@ -4053,19 +4053,21 @@
     top: 0;
     left: 0;
     position: absolute;
-    border-radius: 100%;
+    top: -1px;
+    left: -1px;
+    border-radius: 4px;
     transition: transform .3s;
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     z-index: 20;
     background-color: #fff;
 }
 .el-switch--wide .el-switch__label {}
 .el-switch--wide .el-switch__label.el-switch__label--left span {
-    left: 10px;
+    left: 6px;
 }
 .el-switch--wide .el-switch__label.el-switch__label--right span {
-    right: 10px;
+    right: 6px;
 }
 @charset "UTF-8";
 :root {
@@ -4531,16 +4533,16 @@
 }
 .el-button--text {
     border: none;
-    color: #20a0ff;
+    color: #000;
     background: transparent;
     padding-left: 0;
     padding-right: 0;
 }
 .el-button--text:hover, .el-button--text:focus {
-    color: rgb(77, 179, 255);
+    color: #fdd405;
 }
 .el-button--text:active {
-    color: rgb(29, 144, 230);
+    color: #000;
 }
 .el-button-group {
     display: inline-block;
@@ -4971,10 +4973,10 @@
     box-sizing: border-box;
 }
 .el-dialog--tiny {
-    width: 30%;
+    width: 500px;
 }
 .el-dialog--small {
-    width: 50%;
+    width: 530px;
 }
 .el-dialog--large {
     width: 90%;
@@ -4995,7 +4997,8 @@
     margin: 0;
 }
 .el-dialog__header {
-    padding: 20px 20px 0;
+    text-align: center;
+    padding: 50px 30px 0;
 }
 .el-dialog__close {
     cursor: pointer;
@@ -5009,6 +5012,7 @@
     font-size: 16px;
     font-weight: 700;
     color: rgb(31, 45, 61);
+    padding-left: 20px;
 }
 .el-dialog__body {
     padding: 30px 20px;
@@ -5017,6 +5021,8 @@
 }
 .el-dialog__headerbtn {
     float: right;
+    position: relative;
+    bottom: 20px;
 }
 .el-dialog__footer {
     padding: 10px 20px 15px;
@@ -5536,7 +5542,7 @@
     max-width: 100%;
     background-color: #fff;
     border: 1px solid rgb(223, 230, 236);
-    font-size: 14px;
+    font-size: 15px;
     color: rgb(31, 45, 61);
 }
 .el-table .el-tooltip {
@@ -5602,7 +5608,7 @@
     overflow: hidden;
 }
 .el-table th {
-    background-color: rgb(238, 241, 246);
+    background-color: #000;
     text-align: left;
 }
 .el-table th > div {
@@ -5785,7 +5791,7 @@
     position: absolute;
     top: -1px;
     right: 0;
-    background-color: rgb(238, 241, 246);
+    background-color: #000;
     border-bottom: 1px solid rgb(223, 230, 236);
 }
 .el-table__fixed-right {
@@ -5805,7 +5811,7 @@
     z-index: 3;
 }
 .el-table__fixed-header-wrapper thead div {
-    background-color: rgb(238, 241, 246);
+    background-color: #000;
     color: rgb(31, 45, 61);
 }
 .el-table__fixed-body-wrapper {
@@ -5825,8 +5831,8 @@
     overflow: hidden;
 }
 .el-table__header-wrapper thead div {
-    background-color: rgb(238, 241, 246);
-    color: rgb(31, 45, 61);
+    background-color: #000;
+    color: #ffffff;
 }
 .el-table__body-wrapper {
     overflow: auto;
@@ -9246,16 +9252,16 @@
 }
 .el-button--text {
     border: none;
-    color: #20a0ff;
+    color: #000;
     background: transparent;
     padding-left: 0;
     padding-right: 0;
 }
 .el-button--text:hover, .el-button--text:focus {
-    color: rgb(77, 179, 255);
+    color: #fdd405;
 }
 .el-button--text:active {
-    color: rgb(29, 144, 230);
+    color: #000;
 }
 .el-button-group {
     display: inline-block;
@@ -14072,7 +14078,7 @@
 .el-menu-item, .el-submenu__title {
     height: 56px;
     line-height: 56px;
-    font-size: 14px;
+    font-size: 15px;
     color: rgb(72, 87, 106);
     padding: 0 20px;
     cursor: pointer;

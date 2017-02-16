@@ -10,11 +10,40 @@ const ACCOUNTS_PASSWORD_URL = HOST_URL + "/account-manage/change-password/"
 // 用户登出 post
 const ACCOUNTS_LOGOUT_URL = HOST_URL + "/account-manage/logout/"
 
+/* 账户管理 */
+// 表格获取 get
+const ACCOUNTS_TABLE_URL = HOST_URL + "/account-manage/employees/"
+
+
+
+/*
+/!* 添加 *!/
+var ACCOUNTS_ADD_URL = HOST_URL + "/account-manage/add-employee/"
+var ACCOUNTS_ADD_TYPE = "post"
+
+  /!* 冻结 *!/
+var ACCOUNTS_fROZEN_URL = HOST_URL + "/account-manage/change-avail/"
+var ACCOUNTS_fROZEN_TYPE = "post"
+
+  /!*  删除  *!/
+var ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
+var ACCOUNTS_DELETE_TYPE = "post"
+
+  /!*  修改资料  *!/
+var ACCOUNTS_EDITINFO_URL = HOST_URL + "/account-manage/modify-profile/"
+var ACCOUNTS_EDITINFO_TYPE = "post"
+
+  /!*  修改密码  *!/
+var ACCOUNTS_EDITPWD_URL = HOST_URL + "/account-manage/reset-password/"
+var ACCOUNTS_EDITPWD_TYPE = "post"
+*/
+
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
   AUTO_LOGIN_URL,
   ACCOUNTS_PASSWORD_URL,
-  ACCOUNTS_LOGOUT_URL
+  ACCOUNTS_LOGOUT_URL,
+  ACCOUNTS_TABLE_URL
 }
 
 /* ***********基本通用资料********* */
@@ -340,32 +369,4 @@ exports = module.exports = {
  var COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/"
  var COMPAINTS_SUBMIT_TYPE = "post"
 
-
- /!* ******************** 系统设置 ********************* *!/
- /!* *****账户管理（accountManagement）****** *!/
- /!* 表格 *!/
- var ACCOUNTS_TABLE_URL = HOST_URL + "/account-manage/employees/"
- var ACCOUNTS_TABLE_TYPE = "get"
-
- /!* 添加 *!/
- var ACCOUNTS_ADD_URL = HOST_URL + "/account-manage/add-employee/"
- var ACCOUNTS_ADD_TYPE = "post"
-
- /!* 冻结 *!/
- var ACCOUNTS_fROZEN_URL = HOST_URL + "/account-manage/change-avail/"
- var ACCOUNTS_fROZEN_TYPE = "post"
-
- /!*  删除  *!/
- var ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
- var ACCOUNTS_DELETE_TYPE = "post"
-
- /!*  修改资料  *!/
- var ACCOUNTS_EDITINFO_URL = HOST_URL + "/account-manage/modify-profile/"
- var ACCOUNTS_EDITINFO_TYPE = "post"
-
- /!*  修改密码  *!/
- var ACCOUNTS_EDITPWD_URL = HOST_URL + "/account-manage/reset-password/"
- var ACCOUNTS_EDITPWD_TYPE = "post"
- */
-
-
+*/

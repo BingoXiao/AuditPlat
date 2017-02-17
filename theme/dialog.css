@@ -130,7 +130,7 @@
 }
 
 .el-dialog--small{
-    width: 530px;
+    width: 536px;
 }
 
 .el-dialog--large{
@@ -177,7 +177,7 @@
 }
 
 .el-dialog__body{
-    padding: 30px 20px;
+    padding: 0 20px 30px 20px;
     color: rgb(72, 87, 106);
     font-size: 14px;
 }

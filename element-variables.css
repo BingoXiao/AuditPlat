@@ -399,7 +399,7 @@
   --dialog-background-color: var(--color-secondary);
   --dialog-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   --dialog-tiny-width: 500px;
-  --dialog-small-width: 530px;
+  --dialog-small-width: 536px;
   --dialog-large-width: 90%;
   --dialog-close-color: var(--color-extra-light-silver);
   --dialog-close-hover-color: var(--color-primary);
@@ -423,7 +423,7 @@
   --pagination-button-disabled-color: #e4e4e4;
   --pagination-button-disabled-fill: var(--color-white);
   --pagination-border-color: var(--disabled-border-base);
-  --pagination-hover-fill: var(--color-primary);
+  --pagination-hover-fill: var(--color-black);
   --pagination-hover-color: var(--color-white);
 
   /* Popover

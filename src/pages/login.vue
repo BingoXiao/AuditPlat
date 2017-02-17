@@ -78,13 +78,20 @@
       passwordV: function() {
         var self = this
         var Password = isPassword(self.password)
-        if (Password.flag) {
-          self.pwdErr = ""
-          document.getElementsByName("password")[0].style.borderColor = "rgb(191, 203, 217)"
-        } else {
-          self.pwdErr = Password.error
+        if (self.password === "") {
+          self.pwdErr = "请输入密码"
           document.getElementsByName("password")[0].style.borderColor = "#ff4949"
+          Password.flag = false
+        } else {
+          if (Password.flag) {
+            self.pwdErr = ""
+            document.getElementsByName("password")[0].style.borderColor = "rgb(191, 203, 217)"
+          } else {
+            self.pwdErr = Password.error
+            document.getElementsByName("password")[0].style.borderColor = "#ff4949"
+          }
         }
+
         return Password.flag
       },
       /* 登录提交 */
@@ -133,11 +140,7 @@
                     }
                   }
                 }
-              } else {
-                self.pwdErr = response.body.error_info
               }
-            }, function(response) {
-              self.$message.error("无法连接，请稍后再试！")
             })
         } else {
           return false

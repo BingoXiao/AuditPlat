@@ -45,20 +45,26 @@ function clearCookie(cookieName) {
 // 姓名验证
 function isName(value) {
   var obj = {}
-
-  if (/^\s+$/.test(value)) {
+  if (value === "") {
     obj = {
       flag: false,
       error: "请输入姓名"
     }
   } else {
-    if (!(/^[\x21-\x7e\u4e00-\u9fa5]{1,30}$/.test(value))) {
+    if (/^\s+$/.test(value)) {
       obj = {
         flag: false,
-        error: "姓名长度为1~30位，且只能包含数字、字母及除空格外的特殊符号"
+        error: "请输入姓名"
       }
     } else {
-      obj = {flag: true, error: ""}
+      if (!(/^[\x21-\x7e\u4e00-\u9fa5]{1,30}$/.test(value))) {
+        obj = {
+          flag: false,
+          error: "姓名为1~30位，且只能包含数字、字母及除空格外的特殊符号"
+        }
+      } else {
+        obj = {flag: true, error: ""}
+      }
     }
   }
   return obj
@@ -79,25 +85,34 @@ function isPhone(value) {
   return obj
 }
 
+// 后台审核
 // 账户验证 账号长度为2~63位，且只能包含数字、字母及. _ -
 function isAccount(value) {
   var obj = {}
 
-  if (/^\s+$/.test(value)) {
+  if (value === "") {
     obj = {
       flag: false,
       error: "请输入账号"
     }
   } else {
-    if (!(/^[\w\d._-]{2,63}$/.test(value))) {
+    if (/^\s+$/.test(value)) {
       obj = {
         flag: false,
-        error: "账号长度为2~63位，且只能包含数字、字母及. _ -"
+        error: "请输入账号"
       }
     } else {
-      obj = {flag: true, error: ""}
+      if (!(/^[\w\d._-]{2,63}$/.test(value))) {
+        obj = {
+          flag: false,
+          error: "账号为2~63位，且只能包含数字、字母及. _ -"
+        }
+      } else {
+        obj = {flag: true, error: ""}
+      }
     }
   }
+
   return obj
 }
 
@@ -107,7 +122,7 @@ function isPassword(value) {
   if (!(/^[\x21-\x7e]{6,63}$/.test(value))) {   // 匹配键盘上所有可见字符
     obj = {
       flag: false,
-      error: "密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"
+      error: "密码为6~32位，且只能包含数字、字母及除空格外的特殊符号"
     }
   } else {
     obj = {flag: true, error: ""}

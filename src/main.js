@@ -93,11 +93,31 @@ router.beforeEach((to, from, next) => {
 // http拦截器
 Vue.http.interceptors.push(function(request, next) {
   next(function(response) {
-    // 更具请求的状态， response参数会返回给 successCallback或errorCallback
-    if (!response.data.success) {  // success:false
-      if (response.data.error_info === "logout") {
-        store.state.auth_login = false
-        router.replace("/login")
+    // 请求失败
+    if (response.status !== 200) {
+      Vue.prototype.$confirm("无法连接,请稍后再试", "提示", {
+        showCancelButton: false,
+        showConfirmButton: false,
+        type: "warning"
+      }).then(() => {
+      }).catch(() => {
+      })
+    } else {
+      if (!response.data.success) {  // success:false
+        if (response.data.error_info === "logout") {
+          store.state.auth_login = false
+          router.replace("/login")
+        } else if (response.data.error_info !== "") {
+          Vue.prototype.$confirm(response.data.error_info, "提示", {
+            showCancelButton: false,
+            showConfirmButton: false,
+            type: "warning"
+          }).then(() => {
+          }).catch(() => {
+          })
+        }
+      } else {
+        return response
       }
     }
   })

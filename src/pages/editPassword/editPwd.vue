@@ -55,10 +55,11 @@
     },
     data() {
       var newPwdV = (rule, value, callback) => {
+        var pwd = isPassword(value)
         if (value === "") {
-          callback(new Error("请输入新密码"))
+          callback(new Error("请输入密码"))
         } else {
-          if (isPassword(value).flag) {
+          if (pwd.flag) {
             if (value === this.pwdForm.oldPwd) {
               callback(new Error("新密码不能与原密码相同"))
             } else {
@@ -66,7 +67,7 @@
               callback()
             }
           } else {
-            callback(new Error("密码长度为6~32位，且只能包含数字、字母及除空格外的特殊符号"))
+            callback(new Error(pwd.error))
           }
         }
       }
@@ -90,10 +91,10 @@
             {required: true, message: "请输入原密码", trigger: "blur"}
           ],
           newPwd: [
-            {validator: newPwdV, trigger: "blur"}
+            {required: true, validator: newPwdV, trigger: "blur"}
           ],
           confirmPwd: [
-            {validator: confirmPwdV, trigger: "blur"}
+            {required: true, validator: confirmPwdV, trigger: "blur"}
           ]
         }
       }
@@ -103,12 +104,12 @@
       confirmEdit: function() {
         var self = this
 
-        this.$refs.pwdForm.validate((valid) => {
+        self.$refs.pwdForm.validate((valid) => {
           if (valid) {
             var form = document.getElementById("pwdForm")
             var formData = new FormData(form)
             formData.append("id", self.$store.state.user_id)
-            this.$http.post(ACCOUNTS_PASSWORD_URL, formData)
+            self.$http.post(ACCOUNTS_PASSWORD_URL, formData)
               .then(function(response) {
                 if (response.data.success) {
                   self.$store.commit("AUTH_LOGIN", false)
@@ -120,14 +121,11 @@
                   })
 
                   self.$router.push({path: "/login"})
-                } else {
-                  self.$message.error(response.data.error_info)
                 }
-              }, function(response) {
-                self.$message.error("无法连接，请稍后再试！")
               })
           }
-        })
+        }
+        )
       }
     }
   }

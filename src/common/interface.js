@@ -14,28 +14,23 @@ const ACCOUNTS_LOGOUT_URL = HOST_URL + "/account-manage/logout/"
 // 表格获取 get
 const ACCOUNTS_TABLE_URL = HOST_URL + "/account-manage/employees/"
 
+// 添加用户 post
+const ACCOUNTS_ADD_URL = HOST_URL + "/account-manage/add-employee/"
 
+// 修改资料 post
+const ACCOUNTS_EDITINFO_URL = HOST_URL + "/account-manage/modify-profile/"
 
+// 修改密码 post
+const ACCOUNTS_EDITPWD_URL = HOST_URL + "/account-manage/reset-password/"
 /*
-/!* 添加 *!/
-var ACCOUNTS_ADD_URL = HOST_URL + "/account-manage/add-employee/"
-var ACCOUNTS_ADD_TYPE = "post"
-
-  /!* 冻结 *!/
+/!* 冻结 *!/
 var ACCOUNTS_fROZEN_URL = HOST_URL + "/account-manage/change-avail/"
 var ACCOUNTS_fROZEN_TYPE = "post"
 
-  /!*  删除  *!/
+/!*  删除  *!/
 var ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
 var ACCOUNTS_DELETE_TYPE = "post"
 
-  /!*  修改资料  *!/
-var ACCOUNTS_EDITINFO_URL = HOST_URL + "/account-manage/modify-profile/"
-var ACCOUNTS_EDITINFO_TYPE = "post"
-
-  /!*  修改密码  *!/
-var ACCOUNTS_EDITPWD_URL = HOST_URL + "/account-manage/reset-password/"
-var ACCOUNTS_EDITPWD_TYPE = "post"
 */
 
 exports = module.exports = {
@@ -43,7 +38,10 @@ exports = module.exports = {
   AUTO_LOGIN_URL,
   ACCOUNTS_PASSWORD_URL,
   ACCOUNTS_LOGOUT_URL,
-  ACCOUNTS_TABLE_URL
+  ACCOUNTS_TABLE_URL,
+  ACCOUNTS_ADD_URL,
+  ACCOUNTS_EDITINFO_URL,
+  ACCOUNTS_EDITPWD_URL
 }
 
 /* ***********基本通用资料********* */

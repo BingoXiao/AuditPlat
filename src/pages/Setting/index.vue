@@ -31,7 +31,7 @@
     <!--表格-->
     <el-col :span="24">
       <br/>
-      <el-table :data="tableDatas" border highlight-current-row style="width: 100%;"
+      <el-table ref="table" :data="tableDatas" border highlight-current-row style="width: 100%;"
                 :row-key="tableDatas.id" @select="selectUsers">
         <el-table-column type="selection" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"></el-table-column>
@@ -369,19 +369,14 @@
 
       /* 勾选用户 */
       selectUsers: function(selection, row) {
-        var ids = []
-        var flag = []
+        let ids = []
+        let flag = []
         for (var i = 0; i < selection.length; i++) {
           ids.push(selection[i].id)
           flag.push(selection[i].is_active)
         }
         this.table.ids = ids
         this.table.is_activeS = flag
-      },
-
-      /* 编辑 */
-      handleEdit(index, row) {
-        console.log(index, row)
       },
 
       /* 改变当前页 */
@@ -525,9 +520,6 @@
         if (flag) {    // 按钮
           formData.append("ids", row)
           formData.append("flag", flag)      // 冻结为0，启用为1
-          for (var i of row) {               // 修改冻结状态
-            row[i].is_active = flag
-          }
         } else {       // 表格
           formData.append("ids", [row.id])
           formData.append("flag", row.is_active ? 1 : 0)
@@ -537,14 +529,29 @@
 //          console.log(pair[0] + ", " + pair[1])
 //        }
 
-//        self.$http.post(ACCOUNTS_FROZEN_URL, formData)
-//          .then(function(response) {
-//            if (response.data.success) {
-//
-//            } else {
-//              row.is_active = !row.is_active
-//            }
-//          })
+        self.$http.post(ACCOUNTS_FROZEN_URL, formData)
+          .then(function(response) {
+            if (response.data.success) {
+              if (flag) {      // 按钮点击后状态改变
+                for (let i = 0; i < row.length; i++) {
+                  for (let j = 0; j < self.tableDatas.length; j++) {
+                    if (self.tableDatas[j].id === row[i]) {
+                      self.tableDatas[j].is_active = (flag === "1")
+                      continue
+                    }
+                  }
+                }
+                self.table.is_activeS = []     // 修改数组中状态
+                for (let k = 0; k < row.length; k++) {
+                  self.table.is_activeS.push(flag === "1")
+                }
+              }
+            } else {
+              if (!flag) {
+                row.is_active = !row.is_active
+              }
+            }
+          })
       },
 
       /* 删除用户 */
@@ -553,8 +560,8 @@
         var formData = new FormData()
 
         if (flags) {    // 按钮 删除
-          if (row.length > 0) {
-            for (var i of flags) {
+          if (flags.length > 0) {
+            for (let i = 0; i < flags.length; i++) {
               if (flags[i]) {
                 self.dialog.tipsIcon = "el-icon-circle-cross hasError"
                 self.dialog.tips = "请先冻结您的账户！"

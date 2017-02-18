@@ -22,16 +22,13 @@ const ACCOUNTS_EDITINFO_URL = HOST_URL + "/account-manage/modify-profile/"
 
 // 修改密码 post
 const ACCOUNTS_EDITPWD_URL = HOST_URL + "/account-manage/reset-password/"
-/*
-/!* 冻结 *!/
-var ACCOUNTS_fROZEN_URL = HOST_URL + "/account-manage/change-avail/"
-var ACCOUNTS_fROZEN_TYPE = "post"
 
-/!*  删除  *!/
-var ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
-var ACCOUNTS_DELETE_TYPE = "post"
+// 删除 post
+const ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
 
-*/
+// 冻结 post
+const ACCOUNTS_FROZEN_URL = HOST_URL + "/account-manage/change-avail/"
+
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
@@ -41,7 +38,9 @@ exports = module.exports = {
   ACCOUNTS_TABLE_URL,
   ACCOUNTS_ADD_URL,
   ACCOUNTS_EDITINFO_URL,
-  ACCOUNTS_EDITPWD_URL
+  ACCOUNTS_EDITPWD_URL,
+  ACCOUNTS_DELETE_URL,
+  ACCOUNTS_FROZEN_URL
 }
 
 /* ***********基本通用资料********* */

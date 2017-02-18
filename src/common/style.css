@@ -36,6 +36,9 @@ button{
   color: #ff4949;
 }
 
+.hasError{
+  color: #ff4949;
+}
 
 .modal{
   text-align: center;
@@ -63,4 +66,10 @@ button{
 
 .label_left{
   text-align: left
+}
+
+.pageination{
+  text-align: center;
+  margin-top: 20px;
+  margin-bottom: 35px;
 }

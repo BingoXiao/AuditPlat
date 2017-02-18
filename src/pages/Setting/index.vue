@@ -17,9 +17,9 @@
     <el-col :span="24">
       <el-col :span="19">
         <el-button-group>
-          <el-button type="primary">启 用</el-button>
-          <el-button type="primary">冻 结</el-button>
-          <el-button type="primary">删 除</el-button>
+          <el-button type="primary" @click="freezeUsers(table.ids, '1')">启 用</el-button>
+          <el-button type="primary" @click="freezeUsers(table.ids, '0')">冻 结</el-button>
+          <el-button type="primary" @click="deleteUsers(table.ids, table.is_activeS)">删 除</el-button>
         </el-button-group>
       </el-col>
 
@@ -32,7 +32,7 @@
     <el-col :span="24">
       <br/>
       <el-table :data="tableDatas" border highlight-current-row style="width: 100%;"
-                @row-click="getRowDatas" :row-key="tableDatas.id">
+                :row-key="tableDatas.id" @select="selectUsers">
         <el-table-column type="selection" align="center"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"></el-table-column>
         <el-table-column prop="account" label="用户账号" align="center"></el-table-column>
@@ -45,23 +45,24 @@
         </el-table-column>
         <el-table-column prop="is_active" label="状态" align="center">
           <template scope="scope">
-            <el-switch v-model="scope.row.is_active" on-color="#020202" off-color="#C0CCDA"></el-switch>
+            <el-switch v-model="scope.row.is_active" on-color="#020202" off-color="#C0CCDA"
+                       @change="freezeUsers(scope.row)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template scope="scope">
-            <el-button type="text" icon="edit" @click="dialog.editUsersVisible = true"></el-button>
-            <el-button type="text" @click="dialog.editPasswordVisible = true">
+            <el-button type="text" icon="edit" @click="editUsersVisible(scope.row)"></el-button>
+            <el-button type="text" @click="editPasswordVisible(scope.row)" :context="_self">
               <i class="iconfont icon-yaochi-copy"
                  style="font-weight: bold;font-size:15px;"></i>
             </el-button>
-            <el-button type="text" icon="delete"></el-button>
+            <el-button type="text" icon="delete" @click="deleteUsers(scope.row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-col>
 
-    <el-col :span="24" style="text-align: center;margin-top: 20px;">
+    <el-col class="pageination" :span="24">
       <el-pagination :current-page="currentPage"
                      :page-size="pageSize"
                      layout="total, sizes, prev, pager, next, jumper"
@@ -92,7 +93,7 @@
           </el-form-item>
 
           <el-form-item label="权限：" prop="perms">
-            <el-checkbox-group v-model="addUsersForm.perms" @change="permsCheckedChange">
+            <el-checkbox-group v-model="addUsersForm.perms">
               <el-checkbox name="bus_verify" label="bus_verify">
                 <i class="iconfont icon-kaidianchenggong"></i> 商家审核
               </el-checkbox>
@@ -135,7 +136,7 @@
           </el-form-item>
 
           <el-form-item label="权限：" prop="perms">
-            <el-checkbox-group v-model="editUsersForm.perms" @change="permsCheckedChange">
+            <el-checkbox-group v-model="editUsersForm.perms">
               <el-checkbox name="bus_verify" label="icon-kaidianchenggong">
                 <i class="iconfont icon-kaidianchenggong"></i> 商家审核
               </el-checkbox>
@@ -200,22 +201,24 @@
       </div>
     </el-dialog>
 
-    <!--成功提示-->
+    <!--提示-->
     <el-dialog v-model="dialog.tipsVisible" size="tiny"
                :close-on-click-modal="false" class="tipsModal">
       <div class="mainTips">
-        <i class="el-icon-circle-check"></i>
+        <i :class="dialog.tipsIcon"></i>
         {{dialog.tips}}
         <p class="returnTips">自动返回系统中...</p>
       </div>
     </el-dialog>
+
   </el-row>
 </template>
 
 <script>
   import inputSearch from "../../components/search/input/index"
   import selectSearch from "../../components/search/select/index"
-  import {ACCOUNTS_TABLE_URL, ACCOUNTS_ADD_URL, ACCOUNTS_EDITINFO_URL, ACCOUNTS_EDITPWD_URL} from "../../common/interface"
+  import {ACCOUNTS_TABLE_URL, ACCOUNTS_ADD_URL, ACCOUNTS_EDITINFO_URL,
+    ACCOUNTS_EDITPWD_URL, ACCOUNTS_DELETE_URL, ACCOUNTS_FROZEN_URL} from "../../common/interface"
   import {isName, isAccount, isPassword} from "../../common/common"
 
   export default{
@@ -266,18 +269,22 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,           // 当前页
-        table: {
+        table: {                  // 记录表格行数据
           id: "",
+          ids: [],          // （冻结/删除）“按钮”操作的id数组
           name: "",
+          is_active: null,
+          is_activeS: [],   // （冻结/删除）“按钮”操作的flag数组,判断删除前动作
           account: "",
           perms: []
         },
         dialog: {
-          addUsersVisible: false,      // 添加用户模态框
-          editUsersVisible: false,     // 修改用户资料模态框
-          editPasswordVisible: false,  // 修改用户密码
-          tipsVisible: false,          // 操作提示
-          tips: ""                     // 操作后提示信息
+          addUsersVisible: false,          // 添加用户模态框
+          editUsersVisible: false,         // 修改用户资料模态框
+          editPasswordVisible: false,      // 修改用户密码
+          tipsVisible: false,              // 操作提示
+          tips: "",                        // 操作后提示信息
+          tipsIcon: ""                     // 操作后提示信息图标
         },
         addUsersForm: {           // 添加用户
           name: "",
@@ -299,10 +306,10 @@
             { type: "array", required: true, max: 5, message: "请至少选择一个权限", trigger: "change" }
           ]
         },
-        editUsersForm: {          // 修改用户资料
+        editUsersForm: {    // 修改用户资料
           perms: []
         },
-        editUsersRules: {
+        editUsersRules: {    // 修改用户资料
           perms: [
             { type: "array", required: true, max: 5, message: "请至少选择一个权限", trigger: "change" }
           ]
@@ -324,7 +331,7 @@
       this.getTables()
     },
     methods: {
-      /* 获取表格数据 */
+      /* 获取用户数据（表格） */
       getTables: function() {
         var self = this
         self.$http.get(ACCOUNTS_TABLE_URL).then(function(response) {
@@ -359,27 +366,30 @@
           }
         })
       },
-      /* 获取行数据 */
-      getRowDatas: function(row, event, column) {
-        var self = this
-        self.table.id = row.id
-        self.table.name = row.name
-        self.table.account = row.account
-        self.table.perms = row.service
-        self.editUsersForm.perms = row.service
+
+      /* 勾选用户 */
+      selectUsers: function(selection, row) {
+        var ids = []
+        var flag = []
+        for (var i = 0; i < selection.length; i++) {
+          ids.push(selection[i].id)
+          flag.push(selection[i].is_active)
+        }
+        this.table.ids = ids
+        this.table.is_activeS = flag
       },
+
       /* 编辑 */
       handleEdit(index, row) {
         console.log(index, row)
       },
+
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
         this.currentPage = currentPage
         this.getTables()
       },
-      permsCheckedChange: function(value) {
-//        console.log(value.length)
-      },
+
       /* 添加用户 */
       addUsers: function(formName) {
         var self = this
@@ -401,6 +411,7 @@
               .then(function(response) {
                 if (response.data.success) {
                   self.dialog.addUsersVisible = false
+                  self.dialog.tipsIcon = "el-icon-circle-check"
                   self.dialog.tips = "添加成功！"
                   self.dialog.tipsVisible = true
                   setTimeout(function() {
@@ -414,7 +425,16 @@
           }
         })
       },
+
       /* 修改用户资料 */
+      editUsersVisible: function(row) {
+        this.dialog.editUsersVisible = true
+        this.table.id = row.id
+        this.table.account = row.account
+        this.table.name = row.name
+        this.table.perms = row.service
+        this.editUsersForm.perms = row.service
+      },
       editUsersInfo: function(formName) {
         var self = this
         var form = document.getElementById("editUsersForm")
@@ -444,6 +464,7 @@
               .then(function(response) {
                 if (response.data.success) {
                   self.dialog.editUsersVisible = false
+                  self.dialog.tipsIcon = "el-icon-circle-check"
                   self.dialog.tips = "修改成功！"
                   self.dialog.tipsVisible = true
                   setTimeout(function() {
@@ -457,7 +478,14 @@
           }
         })
       },
+
       /* 修改用户密码 */
+      editPasswordVisible: function(row) {
+        this.dialog.editPasswordVisible = true
+        this.table.id = row.id
+        this.table.name = row.name
+        this.table.account = row.account
+      },
       editUsersPassword: function(formName) {
         var self = this
         var form = document.getElementById("editPasswordForm")
@@ -473,7 +501,8 @@
             self.$http.post(ACCOUNTS_EDITPWD_URL, formData)
               .then(function(response) {
                 if (response.data.success) {
-                  self.dialog.editUsersVisible = false
+                  self.dialog.editPasswordVisible = false
+                  self.dialog.tipsIcon = "el-icon-circle-check"
                   self.dialog.tips = "修改成功！"
                   self.dialog.tipsVisible = true
                   setTimeout(function() {
@@ -487,11 +516,94 @@
           }
         })
       },
-      /* 删除用户 */
-      deleteUsers: function() {
-        console.log(1)
+
+      /* 冻结用户 */
+      freezeUsers: function(row, flag) {
+        var self = this
+        var formData = new FormData()
+
+        if (flag) {    // 按钮
+          formData.append("ids", row)
+          formData.append("flag", flag)      // 冻结为0，启用为1
+          for (var i of row) {               // 修改冻结状态
+            row[i].is_active = flag
+          }
+        } else {       // 表格
+          formData.append("ids", [row.id])
+          formData.append("flag", row.is_active ? 1 : 0)
+        }
+
+//        for (var pair of formData.entries()) {
+//          console.log(pair[0] + ", " + pair[1])
+//        }
+
+//        self.$http.post(ACCOUNTS_FROZEN_URL, formData)
+//          .then(function(response) {
+//            if (response.data.success) {
+//
+//            } else {
+//              row.is_active = !row.is_active
+//            }
+//          })
       },
-      // 清空添加用户表单
+
+      /* 删除用户 */
+      deleteUsers: function(row, flags) {
+        var self = this
+        var formData = new FormData()
+
+        if (flags) {    // 按钮 删除
+          if (row.length > 0) {
+            for (var i of flags) {
+              if (flags[i]) {
+                self.dialog.tipsIcon = "el-icon-circle-cross hasError"
+                self.dialog.tips = "请先冻结您的账户！"
+                self.dialog.tipsVisible = true
+                setTimeout(function() {
+                  self.dialog.tipsVisible = false
+                }, 2000)
+                return false
+              }
+            }
+            formData.append("ids", row)
+          } else {
+            return false
+          }
+        } else {        // 表格
+          if (row.is_active) {
+            self.dialog.tipsIcon = "el-icon-circle-cross hasError"
+            self.dialog.tips = "请先冻结您的账户！"
+            self.dialog.tipsVisible = true
+            setTimeout(function() {
+              self.dialog.tipsVisible = false
+            }, 2000)
+            return false
+          } else {
+            var ids = [row.id]
+            formData.append("ids", ids)
+          }
+        }
+
+//        for (var pair of formData.entries()) {
+//          console.log(pair[0] + ", " + pair[1])
+//        }
+
+        self.$http.post(ACCOUNTS_DELETE_URL, formData)
+          .then(function(response) {
+            if (response.data.success) {
+              self.dialog.editUsersVisible = false
+              self.dialog.tipsIcon = "el-icon-circle-check"
+              self.dialog.tips = "删除成功！"
+              self.dialog.tipsVisible = true
+              setTimeout(function() {
+                self.dialog.tipsVisible = false
+                self.getTables()
+              }, 2000)
+            }
+          })
+      },
+
+      /* 清空添加用户表单 */
       resetForm: function(formName) {
         this.$refs[formName].resetFields()
       }

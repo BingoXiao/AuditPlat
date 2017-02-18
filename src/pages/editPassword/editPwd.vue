@@ -20,7 +20,7 @@
 
             <!--旧密码-->
             <el-form-item label="旧密码：" prop="oldPwd">
-              <el-input type="password" v-model="pwdForm.oldPwd" autofocus
+              <el-input type="password" v-model="pwdForm.oldPwd"
                         name="old_password"></el-input>
             </el-form-item>
 

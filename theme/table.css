@@ -486,7 +486,7 @@
     max-width: 100%;
     background-color: #fff;
     border: 1px solid rgb(223, 230, 236);
-    font-size: 15px;
+    font-size: 14px;
     color: rgb(31, 45, 61);
 }
 
@@ -830,7 +830,7 @@
 
 .el-table__header-wrapper thead div{
     background-color: #000;
-    color: #ffffff;
+    color: rgb(31, 45, 61);
 }
 
 .el-table__body-wrapper{

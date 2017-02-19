@@ -27,7 +27,7 @@ module.exports = {
     "block-scoped-var": 0,
     // if while function 后面的{必须与if在同一行，java风格。
     "brace-style": [2, "1tbs", { "allowSingleLine": true }],
-    // 要求或禁止在注释前有空白 (space 或 tab)
+    // 要求或禁止在注释前有空白 (space 或 tabs)
     "spaced-comment": ["error", "always", {
       "line": {
         "markers": ["/"],

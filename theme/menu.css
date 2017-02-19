@@ -97,7 +97,7 @@
 .el-menu-item, .el-submenu__title{
   height: 56px;
   line-height: 56px;
-  font-size: 15px;
+  font-size: 14px;
   color: rgb(72, 87, 106);
   padding: 0 20px;
   cursor: pointer;
@@ -125,21 +125,19 @@
 }
 
 .el-menu--dark .el-menu-item, .el-menu--dark .el-submenu__title{
-  color: #fff;
+  color: rgb(191, 203, 217);
 }
 
 .el-menu--dark .el-menu-item:hover, .el-menu--dark .el-submenu__title:hover{
-  background-color: #020202;
-  color: #fdd405;
+  background-color: rgb(72, 87, 106);
 }
 
 .el-menu--dark .el-submenu .el-menu{
-  background-color: #020202;
+  background-color: rgb(56, 56, 56);
 }
 
 .el-menu--dark .el-submenu .el-menu .el-menu-item:hover{
-  color: #000;
-  background-color: #fdd405;
+  background-color: rgb(72, 87, 106);
 }
 
 .el-menu--horizontal{}
@@ -246,8 +244,7 @@
 }
 
 .el-menu-item.is-active{
-  color: #000;
-  background-color: #fdd405;
+  color: #20a0ff;
 }
 
 .el-submenu [class^="el-icon-"]{
@@ -266,8 +263,7 @@
 }
 
 .el-submenu .el-menu-item:hover{
-  color: #000;
-  background-color: #fdd405;
+  background-color: rgb(209, 219, 229);
 }
 
 .el-submenu.is-opened > .el-submenu__title .el-submenu__icon-arrow{

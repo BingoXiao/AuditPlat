@@ -90,9 +90,8 @@
 
 .el-popover{
     position: absolute;
-    color: #fff;
     background: #393939;
-    min-width: 100px;
+    min-width: 150px;
     border-radius: 2px;
     border: 1px solid rgb(209, 219, 229);
     padding: 10px;

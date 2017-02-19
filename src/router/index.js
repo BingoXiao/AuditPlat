@@ -3,6 +3,7 @@ import Main from "../pages/main"
 import EDITPWD from "../pages/editPassword/editPwd"
 import Setting from "../pages/Setting/index"
 import Hello from "../pages/Hello"
+import aaa from "../aaa"
 
 const routes = [
   {
@@ -28,7 +29,11 @@ const routes = [
         name: "商家分配",
         hidden: "bus_apply",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-gendan",
+        children: [
+          { path: "/newShop", name: "新店注册", components: aaa },
+          { path: "/branchShop", name: "分店注册", components: aaa }
+        ]
       }, {
         path: "/bus_register",
         name: "商家注册",

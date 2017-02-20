@@ -78,10 +78,7 @@ router.beforeEach((to, from, next) => {
           store.commit("USER_NAME", response.data.content.account)
           store.commit("AUTH_LOGIN", true)
           store.commit("USER_DATA", response.data.content.perms)
-
           next()
-        } else {
-          next({path: "/login"})
         }
       })
     } else {

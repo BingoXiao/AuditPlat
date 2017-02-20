@@ -48,7 +48,6 @@
     left: 0;
     top: 60px;
     bottom: 0;
-    overflow: hidden;
   }
 
   .panel-content {
@@ -58,5 +57,6 @@
     top: 0;
     bottom: 0;
     padding: 30px 40px;
+    overflow: auto;
   }
 </style>

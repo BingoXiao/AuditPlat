@@ -1,53 +1,40 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://gitter.im/vuejs/vue" target="_blank">Gitter Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-      <br>
-      <li><a href="http://vuejs-templates.github.io/webpack/" target="_blank">Docs for This Template</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
+  <el-row>
+    <el-col :span="24">
+      <tab-component></tab-component>
+    </el-col>
+    <!--<el-col :span="24">
+      &lt;!&ndash;如果把切换出去的组件保留在内存中，可以保留它的状态或避免重新渲染。为此可以添加一个 keep-alive 指令参数：&ndash;&gt;
+      &lt;!&ndash;当组件在 <keep-alive> 内被切换，它的 activated 和 deactivated 这两个生命周期钩子函数将会被对应执行。&ndash;&gt;
+      &lt;!&ndash;v-bind:is=”组件名”，会自动去找匹配的组件名，如果没有，则不显示&ndash;&gt;
+      <keep-alive>
+        <component :is="currentView">
+          &lt;!&ndash; 非活动组件将被缓存！ &ndash;&gt;
+        </component>
+      </keep-alive>
+    </el-col>-->
+
+    <el-col :span="24">
+      <router-view name="tabContent"></router-view>
+    </el-col>
+  </el-row>
 </template>
 
 <script>
-export default {
-  name: "hello",
-  data() {
-    return {
-      msg: "Welcome to Your Vue.js App"
+  import tabComponent from "../components/tabs/index"
+
+  export default {
+    data() {
+      return {
+        active: 0
+      }
+    },
+    components: {
+      tabComponent
     }
   }
-}
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
 
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
 </style>

@@ -130,6 +130,11 @@ function isPassword(value) {
   return obj
 }
 
+/* 模态框 */
+function modalHide(fun) {
+  setTimeout(fun, 2000)
+}
+
 
 module.exports = {
   setCookie,
@@ -138,5 +143,6 @@ module.exports = {
   isName,
   isAccount,
   isPassword,
-  isPhone
+  isPhone,
+  modalHide
 }

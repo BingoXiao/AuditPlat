@@ -5542,7 +5542,7 @@
     max-width: 100%;
     background-color: #fff;
     border: 1px solid rgb(223, 230, 236);
-    font-size: 15px;
+    font-size: 14px;
     color: rgb(31, 45, 61);
 }
 .el-table .el-tooltip {
@@ -13265,18 +13265,21 @@
 .el-form--label-left {}
 .el-form--label-left .el-form-item__label {
     text-align: left;
+    font-family: "Microsoft YaHei";
 }
 .el-form--label-top {}
 .el-form--label-top .el-form-item__label {
     float: none;
     display: inline-block;
     padding: 0 0 10px 0;
+    font-family: "Microsoft YaHei";
 }
 .el-form--inline {}
 .el-form--inline .el-form-item {
     display: inline-block;
     margin-right: 10px;
     vertical-align: top;
+    font-family: "Microsoft YaHei";
 }
 .el-form-item {
     margin-bottom: 22px;
@@ -14116,7 +14119,7 @@
     color: #fdd405;
 }
 .el-menu--dark .el-submenu .el-menu {
-    background-color: #020202;
+    background-color: #383838;
 }
 .el-menu--dark .el-submenu .el-menu .el-menu-item:hover {
     color: #000;

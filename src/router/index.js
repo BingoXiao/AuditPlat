@@ -2,7 +2,11 @@ import Login from "../pages/login"
 import Main from "../pages/main"
 import EDITPWD from "../pages/editPassword/editPwd"
 import Setting from "../pages/Setting/index"
+import BusApply from "../pages/BD/bus_apply/index"
+import BusRegister from "../pages/BD/bus_register/index"
 import Hello from "../pages/Hello"
+
+const aaa = { template: "<div>This is Home</div>" }
 
 const routes = [
   {
@@ -27,20 +31,24 @@ const routes = [
         path: "/bus_apply",
         name: "商家分配",
         hidden: "bus_apply",
-        component: Hello,
-        iconCls: "icon-gendan"
+        component: BusApply,
+        iconCls: "icon-youjian"
       }, {
         path: "/bus_register",
         name: "商家注册",
         hidden: "bus_register",
-        component: Hello,
-        iconCls: "icon-gendan"
+        component: BusRegister,
+        iconCls: "icon-xiao09",
+        children: [
+          { path: "/bus_register/newShop", component: aaa },
+          { path: "/bus_register/branchShop", component: aaa }
+        ]
       }, {
         path: "/bus_list",
         name: "商家列表",
         hidden: "bus_register",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-baobiaofenlei"
       }
     ]
   },
@@ -55,19 +63,19 @@ const routes = [
         name: "商家审核",
         hidden: "bus_verify",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-xuanze"
       }, {
         path: "/project_verify",
         name: "项目审核",
         hidden: "project_verify",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-gerenziliao"
       }, {
         path: "/checkout_verify",
         name: "结款审核",
         hidden: "checkout_verify",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-zhangwujiekuan"
       }
     ]
   },
@@ -82,7 +90,7 @@ const routes = [
         name: "项目列表",
         hidden: "item_list",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-renzhengxiangmu"
       }
     ]
   },
@@ -97,19 +105,19 @@ const routes = [
         name: "优惠券管理",
         hidden: "Administrator",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-youhuiquan"
       }, {
         path: "/add_activity",
         name: "新增活动",
         hidden: "Administrator",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-iconfontxinzeng"
       }, {
         path: "/activity_list",
         name: "活动列表",
         hidden: "Administrator",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-liebiao"
       }
     ]
   },
@@ -124,13 +132,13 @@ const routes = [
         name: "系统公告",
         hidden: "Administrator",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-yewuyeicon16"
       }, {
         path: "/tip_off",
         name: "举报",
         hidden: "Administrator",
         component: Hello,
-        iconCls: "icon-gendan"
+        iconCls: "icon-dianpingjitousu"
       }
     ]
   },
@@ -145,7 +153,7 @@ const routes = [
         name: "账号管理",
         hidden: "Administrator",
         component: Setting,
-        iconCls: "icon-gendan"
+        iconCls: "icon-zhanghu"
       }
     ]
   },

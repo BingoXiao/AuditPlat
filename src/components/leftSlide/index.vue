@@ -10,7 +10,7 @@
         <el-menu-item v-for="child in item.children" :index="child.path"
                       v-if="isShow[child.hidden]">
           <i class="iconfont" :class="child.iconCls"></i>
-          {{child.name}}
+          &emsp;{{child.name}}
         </el-menu-item>
       </el-submenu>
     </el-menu>
@@ -48,5 +48,7 @@
 </script>
 
 <style scoped>
-
+  .iconfont{
+    font-size: 17px;
+  }
 </style>

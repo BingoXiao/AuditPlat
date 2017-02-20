@@ -1,4 +1,3 @@
-
 const HOST_URL = "https://shopmanage-dev.jinmailife.com"
 
 // 登录 post
@@ -22,16 +21,23 @@ const ACCOUNTS_EDITINFO_URL = HOST_URL + "/account-manage/modify-profile/"
 
 // 修改密码 post
 const ACCOUNTS_EDITPWD_URL = HOST_URL + "/account-manage/reset-password/"
-/*
-/!* 冻结 *!/
-var ACCOUNTS_fROZEN_URL = HOST_URL + "/account-manage/change-avail/"
-var ACCOUNTS_fROZEN_TYPE = "post"
 
-/!*  删除  *!/
-var ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
-var ACCOUNTS_DELETE_TYPE = "post"
+// 删除 post
+const ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
 
-*/
+// 冻结 post
+const ACCOUNTS_FROZEN_URL = HOST_URL + "/account-manage/change-avail/"
+
+/* BD */
+/* 商家分配 */
+// 表格 get
+const BDAPPLY_TABLE_URL = HOST_URL + "/register/applys/"
+
+// 获取所有带有商家分配权限的BD get
+const BDAPPLY_LIST_URL = HOST_URL + "/register/bds/"
+
+// 分配 post
+const BDAPPLY_ASSIGN_URL = HOST_URL + "/register/assign-work/"
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
@@ -41,8 +47,14 @@ exports = module.exports = {
   ACCOUNTS_TABLE_URL,
   ACCOUNTS_ADD_URL,
   ACCOUNTS_EDITINFO_URL,
-  ACCOUNTS_EDITPWD_URL
+  ACCOUNTS_EDITPWD_URL,
+  ACCOUNTS_DELETE_URL,
+  ACCOUNTS_FROZEN_URL,
+  BDAPPLY_TABLE_URL,
+  BDAPPLY_LIST_URL,
+  BDAPPLY_ASSIGN_URL
 }
+
 
 /* ***********基本通用资料********* */
 /* 获取节假日 */
@@ -106,22 +118,6 @@ exports = module.exports = {
  /!* 银行分行信息 *!/
  var SUBBANKS_URL = HOST_URL + "/register/subbanks/"
  var SUBBANKS_TYPE = "get"
-
-
-
- /!* ************************ BD ************************** *!/
- /!* ******商家分配（BDapply）******** *!/
- /!* 表格 *!/
- var BDAPPLY_TABLE_URL = HOST_URL + "/register/applys/"
- var BDAPPLY_TABLE_TYPE = "get"
-
- /!* 获取所有带有商家分配权限的BD *!/
- var BDAPPLY_LIST_URL = HOST_URL + "/register/bds/"
- var BDAPPLY_LIST_TYPE = "get"
-
- /!* 分配BD *!/
- var BDAPPLY_ASSIGN_URL = HOST_URL + "/register/assign-work/"
- var BDAPPLY_ASSIGN_TYPE = "post"
 
 
  /!* ******商家注册（BDregister）******** *!/

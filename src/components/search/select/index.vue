@@ -1,6 +1,5 @@
 <template>
-  <el-select v-model="selectedValue" clearable
-             size="small" placeholder="请选择">
+  <el-select v-model="value" clearable size="small" placeholder="请选择">
     <el-option
       v-for="item in options"
       :label="item.label"
@@ -9,25 +8,12 @@
   </el-select>
 </template>
 
-<style>
-
-</style>
-
 <script>
   export default{
+    props: ["options"],
     data() {
       return {
-        selectedValue: "",
-        options: [{
-          value: "全部",
-          label: "全部"
-        }, {
-          value: "冻结",
-          label: "冻结"
-        }, {
-          value: "启用",
-          label: "启用"
-        }]
+        value: ""
       }
     }
   }

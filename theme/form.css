@@ -94,6 +94,7 @@
 
 .el-form--label-left .el-form-item__label{
     text-align: left;
+    font-family: "Microsoft YaHei";
 }
 
 .el-form--label-top{}
@@ -102,6 +103,7 @@
     float: none;
     display: inline-block;
     padding: 0 0 10px 0;
+    font-family: "Microsoft YaHei";
 }
 
 .el-form--inline{}
@@ -110,6 +112,7 @@
     display: inline-block;
     margin-right: 10px;
     vertical-align: top;
+    font-family: "Microsoft YaHei";
 }
 
 .el-form-item{

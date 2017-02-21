@@ -1,19 +1,20 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <header-menu></header-menu>
+
+    <div class="panel">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
 <script>
+  import headerMenu from "./components/headerMenu/index"
+
   export default{
     name: "app",
     components: {
+      headerMenu
     }
   }
 </script>
-
-<style scoped>
-  #app {
-    width: 100%;
-  }
-</style>

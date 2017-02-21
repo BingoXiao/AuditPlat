@@ -2,7 +2,7 @@
   <el-row>
     <!--筛选栏-->
     <el-col :span="24" class="toolbar">
-      <el-form :inline="true" label-width="85px">
+      <el-form :inline="true" label-width="77px">
         <el-form-item label="日期：">
           <date-picker></date-picker>
         </el-form-item>
@@ -16,7 +16,7 @@
         </el-form-item>
 
         <el-form-item class="select" label="BD：">
-          <el-select v-model="search.BDvalue" clearable size="small" placeholder="请选择">
+          <el-select v-model="search.BDvalue" clearable size="small" placeholder="全部">
             <el-option
               v-for="item in search.BDlist"
               :label="item.name"
@@ -29,14 +29,13 @@
 
     <!--表格-->
     <el-col :span="24">
-      <br/>
       <el-table ref="table" :data="tableDatas" @row-click="selectShop"
                 border highlight-current-row style="width: 100%;">
         <el-table-column prop="applynum" label="申请号" align="center" min-width="200px"></el-table-column>
-        <el-table-column prop="busname" label="商家名称" align="center" min-width="200px"></el-table-column>
-        <el-table-column prop="city" label="城市" align="center" min-width="130px"></el-table-column>
-        <el-table-column prop="city_near" label="商圈" align="center" min-width="180px"></el-table-column>
-        <el-table-column prop="bd" label="BD" align="center" min-width="130px"></el-table-column>
+        <el-table-column prop="busname" label="商家名称" align="center" min-width="180px"></el-table-column>
+        <el-table-column prop="city" label="城市" align="center" min-width="120px"></el-table-column>
+        <el-table-column prop="city_near" label="商圈" align="center" min-width="140px"></el-table-column>
+        <el-table-column prop="bd" label="BD" align="center" min-width="120px"></el-table-column>
         <el-table-column prop="submit_time" label="提交时间" align="center" min-width="200px"></el-table-column>
         <el-table-column label="操作" align="center" min-width="120px">
           <template scope="scope">
@@ -73,7 +72,7 @@
             <el-select v-model="dialog.BD" clearable size="small"
                        placeholder="请选择" @change="chooseBD">
               <el-option
-                v-for="item in dialog.BDlist"
+                v-for="item in search.BDlist"
                 :label="item.name"
                 :value="item.bd_id">
               </el-option>
@@ -114,16 +113,13 @@
         search: {                 // 搜索栏
           state: [               // 状态列表
             {
-              value: "全部",
-              label: "全部"
-            }, {
               value: "已分配",
               label: "已分配"
             }, {
               value: "未分配",
               label: "未分配"
             }],
-          BDlist: [],                 // BD列表
+          BDlist: [],             // BD列表
           BDvalue: ""             // BD
         },
         tableDatas: [],           // 表格每页显示数据
@@ -134,7 +130,6 @@
           shop_id: ""
         },
         dialog: {
-          BDlist: [],           // BD列表
           BDvisible: false,     // 分配任务
           BD: "",               // BD_id
           tipsVisible: false,   // 操作提示
@@ -153,9 +148,7 @@
         self.$http.get(BDAPPLY_LIST_URL).then(function(response) {
           if (response.data.success) {
             var datas = response.data.content
-            self.dialog.BDlist = datas    // 模态框中
-            datas.unshift({bd_id: "ALL", name: "全部"})
-            self.search.BDlist = datas    // 筛选栏
+            self.search.BDlist = datas    // BD列表（模态框和筛选栏）
           }
         })
       },
@@ -193,7 +186,7 @@
       BDassignment: function() {
         var self = this
         var formData = new FormData()
-        if (self.dialog.BD !== "" && self.dialog.BD !== "ALL") {
+        if (self.dialog.BD !== "") {
           formData.append("applynum", self.table.applynum)
           formData.append("bd_id", self.dialog.BD)
         } else {

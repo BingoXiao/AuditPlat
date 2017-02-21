@@ -7,7 +7,7 @@
           <input-search></input-search>
         </el-form-item>
 
-        <el-form-item label="状态：">
+        <el-form-item label="状态：" class="select">
           <select-search :options="search.state"></select-search>
         </el-form-item>
       </el-form>
@@ -67,7 +67,7 @@
               </el-col>
               <el-col :span="4">
                 <el-tooltip content="删除" effect="dark" placement="bottom">
-                  <el-button type="text" icon="delete" @click="deleteUsers(scope.row)"></el-button>
+                  <el-button type="text" icon="delete2" @click="deleteUsers(scope.row)"></el-button>
                 </el-tooltip>
               </el-col>
             </el-row>
@@ -282,9 +282,6 @@
         search: {               // 搜索栏
           state: [
             {
-              value: "全部",
-              label: "全部"
-            }, {
               value: "冻结",
               label: "冻结"
             }, {

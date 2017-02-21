@@ -1,5 +1,6 @@
 <template>
-  <el-select v-model="value" clearable size="small" placeholder="请选择">
+  <el-select v-model="value" clearable size="small"
+             placeholder="全部" @change="filter">
     <el-option
       v-for="item in options"
       :label="item.label"
@@ -14,6 +15,11 @@
     data() {
       return {
         value: ""
+      }
+    },
+    methods: {
+      filter: function(value) {
+        console.log(value)
       }
     }
   }

@@ -22,10 +22,10 @@
         </el-popover>
 
         <el-button type="text" v-popover:menu style="color: #fff">
-          {{$store.state.user_name}}
-          <i class="el-icon-arrow-down el-icon--right" style="font-size: 10px"></i>
+          {{$store.state.user_name}}<i class="el-icon-arrow-down el-icon--right"
+                                       style="font-size: 10px"></i>
         </el-button>
-        <span>|</span>
+        <span style="margin-left: 8px;margin-right: 8px;">|</span>
         <i class="iconfont icon-erweima"
            style="font-size: 17px;vertical-align: middle"></i>
       </div>

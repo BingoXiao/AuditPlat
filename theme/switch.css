@@ -187,7 +187,9 @@
     top: 0;
     left: 0;
     position: absolute;
-    border-radius: 100%;
+    top: -1px;
+    left: -1px;
+    border-radius: 4px;
     transition: transform .3s;
     width: 18px;
     height: 18px;
@@ -198,11 +200,11 @@
 .el-switch--wide .el-switch__label {}
 
 .el-switch--wide .el-switch__label.el-switch__label--left span{
-    left: 10px
+    left: 6px
 }
 
 .el-switch--wide .el-switch__label.el-switch__label--right span{
-    right: 10px
+    right: 6px
 }
 :root{
     /* Transition

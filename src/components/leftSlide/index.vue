@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <el-menu :default-active="$route.path" unique-opened router theme="dark">
+    <el-menu :default-active="$route.matched[1].path" unique-opened router theme="dark">
       <el-submenu :index="index+''" v-for="(item,index) in $router.options.routes"
                   v-if="isShow[item.hidden]">
         <template slot="title">

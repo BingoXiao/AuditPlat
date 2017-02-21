@@ -3,8 +3,8 @@
     <div class="tabs_header">
       <ul class="tabs_panel">
         <li class="tabs_item" v-for="(item, index) in tabs"
-            @click="toggle(index)" :class="{active:active==index}">
-          <router-link :to="item.path">{{item.name}}</router-link>
+            @click="toggle(index)" :class="{active: item.param===type}">
+          <router-link :to="{params: {type: item.param}}">{{item.name}}</router-link>
         </li>
       </ul>
     </div>
@@ -13,24 +13,16 @@
 
 <script>
   export default{
+    props: ["tabs", "type"],
     data() {
       return {
-        active: 0,
-        tabs: [
-          {
-            path: "/bus_register/newShop",
-            name: "新店注册"
-          },
-          {
-            path: "/bus_register/branchShop",
-            name: "分店注册"
-          }
-        ]
       }
     },
     methods: {
       toggle(i) {
-        this.active = i
+        var self = this
+        self.active = i
+        self.$emit("toggle")
       }
     }
   }
@@ -53,6 +45,7 @@
     list-style: none;
     font-size: 15px;
     padding-left: 0;
+    margin-top: 0;
     margin-bottom: -1px;
   }
   .tabs_item{

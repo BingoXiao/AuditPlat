@@ -1,12 +1,13 @@
-import Login from "../pages/login"
+import Login from "../pages/login/index"
 import Main from "../pages/main"
 import EDITPWD from "../pages/editPassword/editPwd"
 import Setting from "../pages/Setting/index"
 import BusApply from "../pages/BD/bus_apply/index"
 import BusRegister from "../pages/BD/bus_register/index"
+import New from "../pages/BD/bus_register/new/index"
+import BusList from "../pages/BD/bus_list/index"
 import Hello from "../pages/Hello"
 
-const aaa = { template: "<div>This is Home</div>" }
 
 const routes = [
   {
@@ -14,12 +15,6 @@ const routes = [
     name: "登录",
     hidden: "login",
     component: Login
-  },
-  {
-    path: "/editPassword",
-    name: "修改密码",
-    hidden: "login",
-    component: EDITPWD
   },
   {
     path: "/",
@@ -34,23 +29,29 @@ const routes = [
         component: BusApply,
         iconCls: "icon-youjian"
       }, {
-        path: "/bus_register",
+        path: "/bus_register/:type",
         name: "商家注册",
         hidden: "bus_register",
         component: BusRegister,
         iconCls: "icon-xiao09",
         children: [
-          { path: "/bus_register/newShop", component: aaa },
-          { path: "/bus_register/branchShop", component: aaa }
+          {path: "new/:id", name: "新店注册"},
+          {path: "branch", name: "分店注册"},
+          {path: "apply", name: "商家申请注册"}
         ]
       }, {
         path: "/bus_list",
         name: "商家列表",
         hidden: "bus_register",
-        component: Hello,
+        component: BusList,
         iconCls: "icon-baobiaofenlei"
       }
     ]
+  },
+  {   // 注册详情页
+    path: "/bus_register/new/register",
+    hidden: "login",
+    component: New
   },
   {
     path: "/",
@@ -156,6 +157,12 @@ const routes = [
         iconCls: "icon-zhanghu"
       }
     ]
+  },
+  {
+    path: "/editPassword",
+    name: "修改密码",
+    hidden: "login",
+    component: EDITPWD
   },
   // 路由重定向:除了路由配置的地址，全部到/login页面
   {

@@ -1,19 +1,13 @@
 <template>
   <div class="block">
     <el-date-picker :editable="false"
-      v-model="valueFrom"
-      type="date" size="small"
-      placeholder="请选择日期"
-      :picker-options="pickerOptionsFrom"
-      @change="dateFrom">
-    </el-date-picker>
-    <span>&emsp;至&emsp;</span>
-    <el-date-picker :editable="false"
-      v-model="valueTo"
-      type="date" size="small"
-      placeholder="请选择日期"
-      :picker-options="pickerOptionsTo"
-      @change="dateTo">
+      v-model="range"
+      type="daterange"
+      range-separator=" ~ "
+      size="small"
+      placeholder="请选择日期范围"
+      :picker-options="pickerOptions"
+      @change="getDate">
     </el-date-picker>
   </div>
 </template>
@@ -22,34 +16,40 @@
   export default{
     data() {
       return {
-        valueFrom: "",    // 开始时间
-        valueTo: "",     // 结束时间
-        pickerOptionsFrom: {
-          disabledDate(time) {    // 禁用时间段
-            if (this.valueFrom === "") {
-              return time.getTime() > Date.now()
-            } else {
-              return time.getTime() > this.valueFrom.getTime()
+        range: "",     // 时间范围
+        pickerOptions: {
+          shortcuts: [{
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit("pick", [start, end])
             }
-          }
-        },
-        pickerOptionsTo: {
-          disabledDate(time) {    // 禁用时间段
-            if (this.valueTo === "") {
-              return time.getTime() > Date.now()
-            } else {
-              return time.getTime() > this.valueTo.getTime()
+          }, {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+              picker.$emit("pick", [start, end])
             }
-          }
+          }, {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date()
+              const start = new Date()
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+              picker.$emit("pick", [start, end])
+            }
+          }]
         }
       }
     },
     methods: {
-      dateFrom: function(value) {   // 选择开始时间
-        this.valueFrom = value
-      },
-      dateTo: function(value) {     // 选择结束时间
-        this.valueTo = value
+      getDate: function(value) {   // 获取时间范围
+        self.range = value
+//        console.log(self.range.split("~")[1])
       }
     }
   }

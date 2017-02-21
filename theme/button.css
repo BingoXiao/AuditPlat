@@ -94,7 +94,7 @@
     white-space: nowrap;
     cursor: pointer;
     background: #fdd405;
-    border: 1px solid rgb(191, 203, 217);
+    border: 1px solid transparent;
     color: #000;
     -webkit-appearance: none;
     text-align: center;
@@ -113,10 +113,7 @@
     margin-left: 10px;
 }
 
-.el-button:hover, .el-button:focus{
-    color: #20a0ff;
-    border-color: #20a0ff;
-}
+.el-button:hover, .el-button:focus{}
 
 .el-button:active{
     color: rgb(29, 144, 230);
@@ -433,18 +430,18 @@
 
 .el-button--text{
     border: none;
-    color: #20a0ff;
+    color: #000;
     background: transparent;
     padding-left: 0;
     padding-right: 0;
 }
 
 .el-button--text:hover, .el-button--text:focus{
-    color: rgb(77, 179, 255);
+    color: #fdd405;
 }
 
 .el-button--text:active{
-    color: rgb(29, 144, 230);
+    color: #000;
 }
 
 .el-button-group{

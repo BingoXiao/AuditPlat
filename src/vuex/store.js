@@ -19,7 +19,11 @@ const store = new Vuex.Store({
       checkout_verify: true,
       project_verify: true,
       item_list: true
-    }
+    },
+    // 地图坐标
+    map_point: [],
+    // 地址
+    address: ""
   },
   mutations: {
     USER_ID(state, status) {
@@ -33,6 +37,12 @@ const store = new Vuex.Store({
     },
     USER_DATA(state, perms) {
       state.user_data = perms
+    },
+    MAP_POINT(state, perms) {
+      state.map_point = perms
+    },
+    ADDRESS(state, perms) {
+      state.address = perms
     }
   }
 })

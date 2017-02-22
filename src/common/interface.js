@@ -57,6 +57,16 @@ const LCLASS_URL = HOST_URL + "/register/mclass/"
 // 子分类 get
 const SCLASS_URL = HOST_URL + "/register/sclass/"
 
+/* 省市区资料 */
+// 获取省 get
+const PROVINCE_URL = HOST_URL + "/register/provinces/"
+// 获取市 get
+const CITY_URL = HOST_URL + "/register/cities/"
+// 获取区 get
+const DISTRICT_URL = HOST_URL + "/register/districts/"
+// 获取商圈 get
+const CITYNEAR_URL = HOST_URL + "/register/citynears/"
+
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
@@ -76,7 +86,11 @@ exports = module.exports = {
   BUSLIST_TABLE_URL,
   CATEGORY_URL,
   LCLASS_URL,
-  SCLASS_URL
+  SCLASS_URL,
+  PROVINCE_URL,
+  CITY_URL,
+  DISTRICT_URL,
+  CITYNEAR_URL
 }
 
 
@@ -162,25 +176,6 @@ var BUSLIST_SUBMITCONSTRA_TYPE = "post"
  /!* 上传excel文件 *!/
  var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
  var EXCEL_UPLOAD_TYPE = "post"
-
- /!* ******省市区资料******** *!/
- /!* 获取省 *!/
- var PROVINCE_URL = HOST_URL + "/register/provinces/"
- var PROVINCE_TYPE = "get"
-
- /!* 获取市 *!/
- var CITY_URL = HOST_URL + "/register/cities/"
- var CITY_TYPE = "get"
-
- /!* 获取区 *!/
- var DISTRICT_URL = HOST_URL + "/register/districts/"
- var DISTRICT_TYPE = "get"
-
- /!* 获取商圈 *!/
- var CITYNEAR_URL = HOST_URL + "/register/citynears/"
- var CITYNEAR_TYPE = "get"
-
-
 
  /!* *****银行省市资料***** *!/
  /!* 银行省 *!/

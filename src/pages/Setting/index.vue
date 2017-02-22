@@ -33,23 +33,23 @@
       <br/>
       <el-table ref="table" :data="tableDatas" border highlight-current-row style="width: 100%;"
                 :row-key="tableDatas.id" @select="selectUsers" v-loading="loading">
-        <el-table-column type="selection" align="center" min-width="100px"></el-table-column>
-        <el-table-column prop="name" label="姓名" align="center" min-width="220px"></el-table-column>
-        <el-table-column prop="account" label="用户账号" align="center" min-width="220px"></el-table-column>
-        <el-table-column label="已开通服务" align="center" min-width="300px">
+        <el-table-column type="selection" align="center" min-width="130px"></el-table-column>
+        <el-table-column prop="name" label="姓名" align="center" min-width="130px"></el-table-column>
+        <el-table-column prop="account" label="用户账号" align="center" min-width="100px"></el-table-column>
+        <el-table-column label="已开通服务" align="center" min-width="150px">
           <template scope="scope">
             <span v-for="item in scope.row.service">
               <i class="iconfont" :class="item"></i>
             </span>
           </template>
         </el-table-column>
-        <el-table-column prop="is_active" label="状态" align="center" min-width="180px">
+        <el-table-column prop="is_active" label="状态" align="center" min-width="120px">
           <template scope="scope">
             <el-switch v-model="scope.row.is_active" on-color="#020202" off-color="#C0CCDA"
                        @change="freezeUsers(scope.row)"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" min-width="200px">
+        <el-table-column label="操作" align="center" min-width="150px">
           <template scope="scope">
             <el-row>
               <el-col :span="4" :offset="6">

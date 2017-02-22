@@ -27,7 +27,7 @@
         <el-table-column prop="city" label="城市" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="city_near" label="商圈" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="class" label="商家分类" align="center" min-width="200px"></el-table-column>
-        <el-table-column prop="status" label="状态" align="center" min-width="130px"></el-table-column>
+        <el-table-column prop="status" label="状态" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="date_join" label="开通时间" align="center" min-width="200px"></el-table-column>
         <el-table-column label="操作" align="center" min-width="120px">
           <template scope="scope">

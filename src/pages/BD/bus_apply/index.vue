@@ -32,10 +32,10 @@
       <el-table ref="table" :data="tableDatas" @row-click="selectShop"
                 border highlight-current-row style="width: 100%;">
         <el-table-column prop="applynum" label="申请号" align="center" min-width="200px"></el-table-column>
-        <el-table-column prop="busname" label="商家名称" align="center" min-width="180px"></el-table-column>
+        <el-table-column prop="busname" label="商家名称" align="center" min-width="150px"></el-table-column>
         <el-table-column prop="city" label="城市" align="center" min-width="120px"></el-table-column>
-        <el-table-column prop="city_near" label="商圈" align="center" min-width="140px"></el-table-column>
-        <el-table-column prop="bd" label="BD" align="center" min-width="120px"></el-table-column>
+        <el-table-column prop="city_near" label="商圈" align="center" min-width="150px"></el-table-column>
+        <el-table-column prop="bd" label="BD" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="submit_time" label="提交时间" align="center" min-width="200px"></el-table-column>
         <el-table-column label="操作" align="center" min-width="120px">
           <template scope="scope">

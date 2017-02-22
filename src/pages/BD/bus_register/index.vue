@@ -45,9 +45,15 @@
         <el-table-column prop="applynum" label="注册号" align="center" min-width="200px"></el-table-column>
         <el-table-column prop="busname" label="商家名称" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="city" label="城市" align="center" min-width="100px"></el-table-column>
-        <el-table-column prop="city_near" label="商圈" align="center" min-width="100px"></el-table-column>
+        <el-table-column prop="city_near" label="商圈" align="center" min-width="120px"></el-table-column>
         <el-table-column prop="name" label="联系人" align="center" min-width="100px"></el-table-column>
-        <el-table-column prop="status" label="状态" align="center" width="100px"></el-table-column>
+        <el-table-column label="状态" align="center" width="150px">
+          <template scope="scope">
+            <div>{{scope.row.status}}</div>
+            <span v-if="scope.row.reject_reason"
+                  style="font-size: 12px;color: #ff4949">{{scope.row.reject_reason}}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="bd" label="BD" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="submit_time" label="提交时间" align="center" width="180px"></el-table-column>
         <el-table-column label="操作" align="center" min-width="200px">

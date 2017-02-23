@@ -10,10 +10,10 @@
       </keep-alive>
     </el-col>
 
-    <el-col :span="24"  class="buttonGroup">
-      <el-button @click="next_step('qualificationInfo')">下一步</el-button>
-      <el-button @click="previous_step('basicInfo')">上一步</el-button>
-    </el-col>
+    <!--<el-col :span="24"  class="buttonGroup">-->
+      <!--<el-button @click="next_step('qualificationInfo')">下一步</el-button>-->
+      <!--<el-button @click="previous_step('basicInfo')">上一步</el-button>-->
+    <!--</el-col>-->
   </el-row>
 </template>
 

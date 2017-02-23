@@ -21,7 +21,7 @@ const store = new Vuex.Store({
       item_list: true
     },
     // 地图坐标
-    map_point: [],
+    map_point: "114.027016,22.546162",
     // 地址
     address: ""
   },

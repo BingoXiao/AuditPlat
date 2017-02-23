@@ -1,24 +1,24 @@
-html,body{
+html, body {
   margin: 0;
   height: 100%;
-  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
-button{
+button {
   font-family: "Microsoft YaHei";
 }
 
-#app{
+#app {
   width: 100%;
   height: 100%;
 }
 
-.formTitle{
+.formTitle {
   font-weight: normal;
   padding-left: 8px;
 }
 
-.buttonGroup{
+.buttonGroup {
   margin-top: 20px;
   margin-bottom: 70px;
   text-align: center;
@@ -75,6 +75,7 @@ button{
   border-bottom-color: #e8e8e8;
 }
 
+/* 一般错误提示 */
 .errorTips {
   position: absolute;
   top: 42px;
@@ -82,51 +83,64 @@ button{
   color: #ff4949;
 }
 
-.hasError{
+/* 模块错误提示*/
+.error{
+  font-size: 10px;
+  color: #ff4949;
+  margin-left: 8px;
+}
+
+.errorTipsModule {
+  font-size: 10px;
+  color: #ff4949;
+  /*margin-left: 5px;*/
+}
+
+.hasError {
   color: #ff4949;
 }
 
-.modal{
+.modal {
   text-align: center;
   padding: 0px 35px 10px 35px;
 }
 
-.tipsModal .mainTips{
+.tipsModal .mainTips {
   font-size: 24px;
   color: #000;
   text-align: center
 }
 
-.tipsModal .mainTips i{
+.tipsModal .mainTips i {
   font-size: 30px;
-  vertical-align:top
+  vertical-align: top
 }
 
-.tipsModal .returnTips{
+.tipsModal .returnTips {
   font-size: 18px;
 }
 
-.tipsModal .el-dialog__close{
+.tipsModal .el-dialog__close {
   display: none;
 }
 
-.label_left{
+.label_left {
   text-align: left
 }
 
-.pageination{
+.pageination {
   text-align: center;
   margin-top: 20px;
   margin-bottom: 35px;
 }
 
-.tableButton{
+.tableButton {
   background-color: #ffffff;
   border-color: #c2c3ce;
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
-.select{
+.select {
   width: 200px;
 }

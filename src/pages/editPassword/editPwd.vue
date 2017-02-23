@@ -38,7 +38,7 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="center">
-        <el-button type="primary" @click="confirmEdit">&emsp;确 定&emsp;</el-button>
+        <el-button type="primary" @click="confirmEdit('pwdForm')">&emsp;确 定&emsp;</el-button>
       </el-row>
     </el-col>
   </el-row>
@@ -101,10 +101,10 @@
     },
     methods: {
       /* 密码修改提交 */
-      confirmEdit: function() {
+      confirmEdit: function(formName) {
         var self = this
 
-        self.$refs.pwdForm.validate((valid) => {
+        self.$refs[formName].validate((valid) => {
           if (valid) {
             var form = document.getElementById("pwdForm")
             var formData = new FormData(form)
@@ -124,8 +124,7 @@
                 }
               })
           }
-        }
-        )
+        })
       }
     }
   }

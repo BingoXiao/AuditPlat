@@ -41,21 +41,15 @@ function clearCookie(cookieName) {
 }
 
 
-// 验证
+/* ************ 验证 ************ */
 // 姓名验证
 function isName(value) {
   var obj = {}
   if (value === "") {
-    obj = {
-      flag: false,
-      error: "请输入姓名"
-    }
+    obj = {flag: false, error: "请输入姓名"}
   } else {
     if (/^\s+$/.test(value)) {
-      obj = {
-        flag: false,
-        error: "请输入姓名"
-      }
+      obj = {flag: false, error: "请输入姓名"}
     } else {
       if (!(/^[\x21-\x7e\u4e00-\u9fa5]{1,30}$/.test(value))) {
         obj = {
@@ -74,13 +68,18 @@ function isName(value) {
 function isPhone(value) {
   var obj = {}
 
-  if (/^1\d{10}$/.test(value)) {
-    obj = {
-      flag: false,
-      error: "请填写正确格式的手机号码"
-    }
+  if (value === "") {
+    obj = {flag: false, error: "请填写手机号码"}
   } else {
-    obj = {flag: true, error: ""}
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: "请填写手机号码"}
+    } else {
+      if (!(/^1\d{10}$/.test(value))) {
+        obj = {flag: false, error: "手机号码格式不正确"}
+      } else {
+        obj = {flag: true, error: ""}
+      }
+    }
   }
   return obj
 }
@@ -91,22 +90,13 @@ function isAccount(value) {
   var obj = {}
 
   if (value === "") {
-    obj = {
-      flag: false,
-      error: "请输入账号"
-    }
+    obj = {flag: false, error: "请输入账号"}
   } else {
     if (/^\s+$/.test(value)) {
-      obj = {
-        flag: false,
-        error: "请输入账号"
-      }
+      obj = {flag: false, error: "请输入账号"}
     } else {
       if (!(/^[\w\d._-]{2,63}$/.test(value))) {
-        obj = {
-          flag: false,
-          error: "账号为2~63位，且只能包含数字、字母及. _ -"
-        }
+        obj = {flag: false, error: "账号为2~63位，且只能包含数字、字母及. _ -"}
       } else {
         obj = {flag: true, error: ""}
       }

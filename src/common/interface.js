@@ -43,6 +43,10 @@ const BDAPPLY_ASSIGN_URL = HOST_URL + "/register/assign-work/"
 // 表格 get
 const BDREGISTER_TABLE_URL = HOST_URL + "/register/registers/"
 
+// 新店注册信息提交 post
+const BDREGISTER_NEWREGISTER_URL = HOST_URL + "/register/busregister/"
+
+
 /* 商家列表 */
 // 获取表格 get
 const BUSLIST_TABLE_URL = HOST_URL + "/bus-manage/buslist/"
@@ -83,6 +87,7 @@ exports = module.exports = {
   BDAPPLY_LIST_URL,
   BDAPPLY_ASSIGN_URL,
   BDREGISTER_TABLE_URL,
+  BDREGISTER_NEWREGISTER_URL,
   BUSLIST_TABLE_URL,
   CATEGORY_URL,
   LCLASS_URL,
@@ -108,9 +113,6 @@ var BDREGISTER_EDITFILLING_TYPE = "get"
 var BDREGISTER_BRAEDITFILLING_URL = HOST_URL + "/bus-manage/branches/detail/"
 var BDREGISTER_BRAEDITFILLING_TYPE = "get"
 
-  /!* 新店注册信息提交 *!/
-var BDREGISTER_NEWREGISTER_URL = HOST_URL + "/register/busregister/"
-var BDREGISTER_NEWREGISTER_TYPE = "post"
 
   /!* 分店注册查询表格 *!/
 var BDREGISTER_BRALIST_URL = HOST_URL + "/bus-manage/buses/search/"

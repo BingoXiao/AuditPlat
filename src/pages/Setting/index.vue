@@ -31,10 +31,11 @@
     <!--表格-->
     <el-col :span="24">
       <br/>
-      <el-table ref="table" :data="tableDatas" border highlight-current-row style="width: 100%;"
-                :row-key="tableDatas.id" @select="selectUsers" v-loading="loading">
-        <el-table-column type="selection" align="center" min-width="130px"></el-table-column>
-        <el-table-column prop="name" label="姓名" align="center" min-width="130px"></el-table-column>
+      <el-table ref="table" border highlight-current-row style="width: 100%"
+                :data="tableDatas" :row-key="tableDatas.id" v-loading="loading"
+                @select="selectUsers" @select-all="selectUsers">
+        <el-table-column type="selection" min-width="130px"></el-table-column>
+        <el-table-column prop="name" label="姓名" align="center"  min-width="130px"></el-table-column>
         <el-table-column prop="account" label="用户账号" align="center" min-width="100px"></el-table-column>
         <el-table-column label="已开通服务" align="center" min-width="150px">
           <template scope="scope">
@@ -59,7 +60,7 @@
               </el-col>
               <el-col :span="4">
                 <el-tooltip content="修改密码" effect="dark" placement="bottom">
-                  <el-button type="text" @click="editPasswordVisible(scope.row)" :context="_self">
+                  <el-button type="text" @click="editPasswordVisible(scope.row)">
                     <i class="iconfont icon-yaochi-copy"
                        style="font-weight: bold;font-size:15px;"></i>
                   </el-button>
@@ -224,7 +225,6 @@
         <p class="returnTips">自动返回系统中...</p>
       </div>
     </el-dialog>
-
   </el-row>
 </template>
 

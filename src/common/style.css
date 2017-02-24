@@ -90,12 +90,6 @@ button {
   margin-left: 8px;
 }
 
-.errorTipsModule {
-  font-size: 10px;
-  color: #ff4949;
-  /*margin-left: 5px;*/
-}
-
 .hasError {
   color: #ff4949;
 }

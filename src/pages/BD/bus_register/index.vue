@@ -192,11 +192,11 @@
         var type = self.$route.params.type
         var href, otherWindow
         if (type === "new") {
-          href = "#/bus_register/new/register?id=fsa"
+          href = "#/bus_register/new/register#id=fsa"
           otherWindow = window.open(href)
           otherWindow.opener = null
         } else {
-          href = "#/bus_register/branch/register/?id=fdsaf"
+          href = "#/bus_register/branch/register#id=fdsaf"
           otherWindow = window.open(href)
           otherWindow.opener = null
         }

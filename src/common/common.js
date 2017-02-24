@@ -1,10 +1,22 @@
-/**
- * 设置cookie属性值
- * cookieName cookie属性名
- * value cookie属性值
- * time 时间
- */
-// 设置cookie
+// 获取url参数
+function getUrlParameters(path, name) {
+  var str = path.split("/")
+  var ss = str[str.length - 1]
+  var hash = ss.split("#")
+  var res = hash[hash.length - 1]
+  // 构造一个含有目标参数的正则表达式对象
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)")
+  var r = res.match(reg)
+  // 返回参数值
+  if (r != null) {
+    return unescape(r[2])
+  } else {
+    return ""
+  }
+}
+
+// 设置cookie属性值
+// cookieName cookie属性名, value cookie属性值, time 时间
 function setCookie(cookieName, value, days) {
   if (days) {
     var date = new Date()
@@ -127,6 +139,7 @@ function modalHide(fun) {
 
 
 module.exports = {
+  getUrlParameters,
   setCookie,
   getCookie,
   clearCookie,

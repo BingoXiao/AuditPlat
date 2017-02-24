@@ -75,7 +75,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .steps {
     margin-top: 50px;
   }

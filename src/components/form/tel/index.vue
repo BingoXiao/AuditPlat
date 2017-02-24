@@ -2,19 +2,22 @@
   <el-col :span="24">
     <el-col :span="3">
       <el-form-item>
-        <el-input v-model="tel1" placeholder="区号" @change="tel1_input" name="tel1"></el-input>
+        <el-input id="tel1" v-model="tel1" placeholder="区号"
+                  @change="tel1_input"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="1" style="text-align: center">—</el-col>
     <el-col :span="4">
       <el-form-item>
-        <el-input v-model="tel2" placeholder="门店号码" @change="tel2_input" name="tel2"></el-input>
+        <el-input id="tel2" v-model="tel2" placeholder="门店号码"
+                  @change="tel2_input"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="1" style="text-align: center">—</el-col>
     <el-col :span="3">
       <el-form-item>
-        <el-input v-model="tel3" placeholder="分机号" @change="tel3_input" name="tel3"></el-input>
+        <el-input id="tel3" v-model="tel3" placeholder="分机号"
+                  @change="tel3_input"></el-input>
       </el-form-item>
     </el-col>
 
@@ -36,9 +39,9 @@
       clear_error: function() {
         var self = this
         self.error = ""
-        document.getElementsByName("tel1")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementsByName("tel2")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementsByName("tel3")[0].style.borderColor = "rgb(191, 203, 217)"
+        document.getElementById("tel1").style.borderColor = "rgb(191, 203, 217)"
+        document.getElementById("tel2").style.borderColor = "rgb(191, 203, 217)"
+        document.getElementById("tel3").style.borderColor = "rgb(191, 203, 217)"
       },
       error_validate: function(value, name) {
         var self = this
@@ -49,7 +52,7 @@
             self.clear_error()
           } else {
             self.error = "号码格式不正确"
-            document.getElementsByName(name)[0].style.borderColor = "#ff4949"
+            document.getElementById(name).style.borderColor = "#ff4949"
           }
         }
       },
@@ -75,8 +78,20 @@
         } else {
           if (self.tel1 !== "" || self.tel3 !== "") {
             self.error = "号码格式不正确"
-            document.getElementsByName("tel2")[0].style.borderColor = "#ff4949"
+            document.getElementById("tel2").style.borderColor = "#ff4949"
+          } else {
+            self.clear_error()
           }
+        }
+
+        if (!self.error) {
+          var para = {
+            name: "tel",
+            value: self.tel1 + self.tel2 + self.tel3
+          }
+          self.$emit("telValidate", "tel_flag", para, true)
+        } else {
+          self.$emit("telValidate", "tel_flag", false)
         }
       }
     }

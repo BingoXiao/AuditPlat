@@ -2,8 +2,7 @@
   <el-col :span="24">
     <el-col :span="4">
       <el-form-item id="lclass">
-        <el-select v-model="lg_value" placeholder="合作行业" ref="lclass"
-                   @change="get_md_list" name="businfo.lclass_id">
+        <el-select v-model="lg_value" placeholder="合作行业" ref="lclass" @change="get_md_list">
           <el-option
             v-for="item in lg_list"
             :label="item.name"
@@ -15,8 +14,7 @@
 
     <el-col :span="4" class="selectOffset">
       <el-form-item id="mclass">
-        <el-select v-model="md_value" placeholder="品类"
-                   @change="get_sm_list" name="businfo.mclass_id">
+        <el-select v-model="md_value" placeholder="品类" @change="get_sm_list">
           <el-option
             v-for="item in md_list"
             :label="item.name"
@@ -29,8 +27,7 @@
     <el-col :span="5" class="selectOffset">
       <el-form-item id="sclass">
         <el-select v-model="sm_value" placeholder="子类别"
-                   v-show="smallVisible" name="businfo.sclass_id"
-                   @change="get_sm_data">
+                   v-show="smallVisible" @change="get_sm_data">
           <el-option
             v-for="item in sm_list"
             :label="item.name"
@@ -135,13 +132,23 @@
             document.getElementById("mclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
             document.getElementById("sclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
           } else {
-            if (self.sm_value === "" && self.sm_list.length === 0) {
+            if (self.sm_list.length > 0 && self.sm_value === "") {
               self.error = "请选择商家分类"
               document.getElementById("sclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
             } else {
               self.clear_error()
             }
           }
+        }
+
+        if (!self.error) {
+          var para = {
+            name: "class",
+            value: [self.lg_value, self.md_value, self.sm_value]
+          }
+          self.$emit("classValidate", "class_flag", para, true)
+        } else {
+          self.$emit("classValidate", "class_flag", false)
         }
       }
     }

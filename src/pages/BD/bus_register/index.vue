@@ -64,7 +64,7 @@
                        v-if="scope.row.status === '未处理'"> 注册</el-button>
             <el-button size="small" icon="edit" class="tableButton"
                        v-if="scope.row.status !== '未处理' && '送审中'"
-                       @click="edit"> 修改</el-button>
+                       @click="edit(scope.row)"> 修改</el-button>
             <span v-if="scope.row.status === '送审中'"><b> —— </b></span>
             <el-button size="small" icon="delete2" class="tableButton"
                        v-if="scope.row.status !== '送审中'"> 删除</el-button>
@@ -150,8 +150,8 @@
       BDlist: function() {
         var self = this
         self.$http.get(BDAPPLY_LIST_URL).then(function(response) {
-          if (response.data.success) {
-            self.search.BDlist = response.data.content    // 筛选栏
+          if (response.body.success) {
+            self.search.BDlist = response.body.content    // 筛选栏
           }
         })
       },
@@ -161,8 +161,8 @@
         var self = this
         var type = (self.$route.params.type).toUpperCase()
         self.$http.get(BDREGISTER_TABLE_URL + "?type=" + type).then(function(response) {
-          if (response.data.success) {
-            var datas = response.data.content
+          if (response.body.success) {
+            var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
           }
@@ -187,16 +187,16 @@
       },
 
       /* 修改(按钮) */
-      edit: function() {
+      edit: function(row) {
         var self = this
         var type = self.$route.params.type
         var href, otherWindow
         if (type === "new") {
-          href = "#/bus_register/new/register#id=fsa"
+          href = "#/bus_register/new/register#id=" + row.applynum
           otherWindow = window.open(href)
           otherWindow.opener = null
         } else {
-          href = "#/bus_register/branch/register#id=fdsaf"
+          href = "#/bus_register/branch/register#id=" + row.applynum
           otherWindow = window.open(href)
           otherWindow.opener = null
         }

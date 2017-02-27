@@ -45,7 +45,10 @@
 
 <script>
   export default{
-    props: ["steps", "active"],
+    props: {
+      steps: Array,
+      active: Number
+    },
     computed: {
       step1: function() {
         var self = this

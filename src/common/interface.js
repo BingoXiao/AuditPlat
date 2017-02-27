@@ -51,6 +51,7 @@ const BDREGISTER_NEWREGISTER_URL = HOST_URL + "/register/busregister/"
 // 获取表格 get
 const BUSLIST_TABLE_URL = HOST_URL + "/bus-manage/buslist/"
 
+const BUSLIST_DOWNLOAD_URL = HOST_URL + "/bus-manage/buses/download/"
 
 /* 基本信息 */
 /* 商家分类资料 */
@@ -71,6 +72,8 @@ const DISTRICT_URL = HOST_URL + "/register/districts/"
 // 获取商圈 get
 const CITYNEAR_URL = HOST_URL + "/register/citynears/"
 
+// 上传图片 post
+const TEMP_PHOTOS_URL = HOST_URL + "/register/upload-tmpimage/"
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
@@ -89,13 +92,15 @@ exports = module.exports = {
   BDREGISTER_TABLE_URL,
   BDREGISTER_NEWREGISTER_URL,
   BUSLIST_TABLE_URL,
+  BUSLIST_DOWNLOAD_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
   PROVINCE_URL,
   CITY_URL,
   DISTRICT_URL,
-  CITYNEAR_URL
+  CITYNEAR_URL,
+  TEMP_PHOTOS_URL
 }
 
 
@@ -171,9 +176,6 @@ var BUSLIST_SUBMITCONSTRA_TYPE = "post"
  var FESTIVALS_URL = HOST_URL + "/items/festivals/"
  var FESTIVALS_TYPE = "get"
 
- /!* 上传图片 *!/
- var TEMP_PHOTOS_URL = HOST_URL + "/register/upload-tmpimage/"
- var TEMP_PHOTOS_TYPE = "post"
 
  /!* 上传excel文件 *!/
  var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"

@@ -360,8 +360,8 @@
         var self = this
 //        self.loading = true
         self.$http.get(ACCOUNTS_TABLE_URL).then(function(response) {
-          if (response.data.success) {
-            var datas = response.data.content
+          if (response.body.success) {
+            var datas = response.body.content
             for (var i = 0; i < datas.length; i++) {
               var item = datas[i]
               var service = []
@@ -429,7 +429,7 @@
           if (valid) {
             self.$http.post(ACCOUNTS_ADD_URL, formData)
               .then(function(response) {
-                if (response.data.success) {
+                if (response.body.success) {
                   self.dialog.addUsersVisible = false
                   self.dialog.tipsIcon = "el-icon-circle-check"
                   self.dialog.tips = "添加成功！"
@@ -479,7 +479,7 @@
           if (valid) {
             self.$http.post(ACCOUNTS_EDITINFO_URL, formData)
               .then(function(response) {
-                if (response.data.success) {
+                if (response.body.success) {
                   self.dialog.editUsersVisible = false
                   self.dialog.tipsIcon = "el-icon-circle-check"
                   self.dialog.tips = "修改成功！"
@@ -515,7 +515,7 @@
           if (valid) {
             self.$http.post(ACCOUNTS_EDITPWD_URL, formData)
               .then(function(response) {
-                if (response.data.success) {
+                if (response.body.success) {
                   self.dialog.editPasswordVisible = false
                   self.dialog.tipsIcon = "el-icon-circle-check"
                   self.dialog.tips = "修改成功！"
@@ -550,7 +550,7 @@
 //        }
         self.$http.post(ACCOUNTS_FROZEN_URL, formData)
           .then(function(response) {
-            if (response.data.success) {
+            if (response.body.success) {
               if (flag) {      // 按钮点击后状态改变
                 for (let i = 0; i < row.length; i++) {
                   for (let j = 0; j < self.tableDatas.length; j++) {
@@ -614,7 +614,7 @@
 //        }
         self.$http.post(ACCOUNTS_DELETE_URL, formData)
           .then(function(response) {
-            if (response.data.success) {
+            if (response.body.success) {
               self.dialog.editUsersVisible = false
               self.dialog.tipsIcon = "el-icon-circle-check"
               self.dialog.tips = "删除成功！"

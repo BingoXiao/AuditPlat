@@ -138,3 +138,15 @@ button {
 .select {
   width: 200px;
 }
+
+.labelWrapper{
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+  line-height: 14px;
+  padding-top: 10px;
+  color: #ff4949;
+}
+.labelText{
+  color: #000;
+  padding-left: 9px;
+}

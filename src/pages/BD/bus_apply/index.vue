@@ -146,8 +146,8 @@
       BDlist: function() {
         var self = this
         self.$http.get(BDAPPLY_LIST_URL).then(function(response) {
-          if (response.data.success) {
-            var datas = response.data.content
+          if (response.body.success) {
+            var datas = response.body.content
             self.search.BDlist = datas    // BD列表（模态框和筛选栏）
           }
         })
@@ -157,8 +157,8 @@
       getTables: function() {
         var self = this
         self.$http.get(BDAPPLY_TABLE_URL).then(function(response) {
-          if (response.data.success) {
-            var datas = response.data.content
+          if (response.body.success) {
+            var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
           }
@@ -199,7 +199,7 @@
 
         self.$http.post(BDAPPLY_ASSIGN_URL, formData)
           .then(function(response) {
-            if (response.data.success) {
+            if (response.body.success) {
               self.dialog.BDvisible = false
               self.dialog.tips = "分配成功！"
               self.dialog.tipsVisible = true

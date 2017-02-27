@@ -79,8 +79,8 @@
       get_lg_list: function() {
         var self = this
         self.$http.get(CATEGORY_URL).then(function(response) {
-          if (response.data.success) {
-            self.lg_list = response.data.content
+          if (response.body.success) {
+            self.lg_list = response.body.content
           }
         })
       },
@@ -90,8 +90,8 @@
         self.smallVisible = true
         self.md_value = ""
         self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
-          if (response.data.success) {
-            self.md_list = response.data.content
+          if (response.body.success) {
+            self.md_list = response.body.content
           }
         })
         self.clear_error()
@@ -101,14 +101,14 @@
         var self = this
         self.sm_value = ""
         self.$http.get(SCLASS_URL + "?mclass_id=" + value).then(function(response) {
-          if (response.data.success) {
-            var list = response.data.content
+          if (response.body.success) {
+            var list = response.body.content
             if (!list.length) {
               self.smallVisible = false
               self.sm_list = ""
             } else {
               self.smallVisible = true
-              self.sm_list = response.data.content
+              self.sm_list = response.body.content
             }
           }
         })

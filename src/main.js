@@ -36,48 +36,48 @@ router.beforeEach((to, from, next) => {
     // 自动登陆
     if (remember === "1") {
       Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
-        if (response.data.success) {
+        if (response.body.success) {
           /*  记录状态 */
-          store.commit("USER_ID", response.data.content.id)
-          store.commit("USER_NAME", response.data.content.account)
+          store.commit("USER_ID", response.body.content.id)
+          store.commit("USER_NAME", response.body.content.account)
           store.commit("AUTH_LOGIN", true)
-          store.commit("USER_DATA", response.data.content.perms)
-        }
-      })
-      /* 根据权限进入不同得页面 */
-      if (store.state.user_data.item_list === 1) { /* 管理员账号 */
-        next({path: "/setting"})
-      } else {   /* BD */
-        if (store.state.user_data.bus_apply === 1 || store.state.user_data.bus_register === 1) {
-          if (store.state.user_data.bus_apply === 1) {
-            next({path: "/bus_apply"})
-          } else {
-            next({path: "/bus_register"})
-          }
-        } else {  /* 审核人员 */
-          if (store.state.user_data.bus_verify === 1 || store.state.user_data.checkout_verify === 1 ||
-            store.state.user_data.project_verify === 1) {
-            if (store.state.user_data.bus_verify === 1) {
-              next({path: "/bus_review"})
-            } else if (store.state.user_data.checkout_verify === 1) {
-              next({path: "/checkout_verify"})
-            } else {
-              next({path: "/project_verify"})
+          store.commit("USER_DATA", response.body.content.perms)
+          var pp = response.body.content.perms
+          /* 根据权限进入不同得页面 */
+          if (pp.item_list === 1) { /* 管理员账号 */
+            next({path: "/setting"})
+          } else {   /* BD */
+            if (pp === 1 || pp.bus_register === 1) {
+              if (pp.bus_apply === 1) {
+                next({path: "/bus_apply"})
+              } else {
+                next({path: "/bus_register"})
+              }
+            } else {  /* 审核人员 */
+              if (pp === 1 || pp.checkout_verify === 1 || pp.project_verify === 1) {
+                if (pp.bus_verify === 1) {
+                  next({path: "/bus_review"})
+                } else if (pp.checkout_verify === 1) {
+                  next({path: "/checkout_verify"})
+                } else {
+                  next({path: "/project_verify"})
+                }
+              }
             }
           }
         }
-      }
+      })
     } else {
       next()
     }
   } else {
     if (!store.state.auth_login) {
       Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
-        if (response.data.success) {
-          store.commit("USER_ID", response.data.content.id)
-          store.commit("USER_NAME", response.data.content.account)
+        if (response.body.success) {
+          store.commit("USER_ID", response.body.content.id)
+          store.commit("USER_NAME", response.body.content.account)
           store.commit("AUTH_LOGIN", true)
-          store.commit("USER_DATA", response.data.content.perms)
+          store.commit("USER_DATA", response.body.content.perms)
           next()
         } else {
           next({path: "/login"})
@@ -102,12 +102,12 @@ Vue.http.interceptors.push(function(request, next) {
       }).catch(() => {
       })
     } else {
-      if (!response.data.success) {  // success:false
-        if (response.data.error_info === "logout") {
+      if (!response.body.success) {  // success:false
+        if (response.body.error_info === "logout") {
           store.state.auth_login = false
           router.replace("/login")
-        } else if (response.data.error_info !== "") {
-          Vue.prototype.$confirm(response.data.error_info, "提示", {
+        } else if (response.body.error_info !== "") {
+          Vue.prototype.$confirm(response.body.error_info, "提示", {
             showCancelButton: false,
             showConfirmButton: false,
             type: "warning"

@@ -165,8 +165,8 @@
       get_province_list: function() {
         var self = this
         self.$http.get(PROVINCE_URL).then(function(response) {
-          if (response.data.success) {
-            self.province_list = response.data.content
+          if (response.body.success) {
+            self.province_list = response.body.content
           }
         })
       },
@@ -174,8 +174,8 @@
       get_city_list: function(value) {
         var self = this
         self.$http.get(CITY_URL + "?province_id=" + value).then(function(response) {
-          if (response.data.success) {
-            self.city_list = response.data.content
+          if (response.body.success) {
+            self.city_list = response.body.content
           }
         })
         self.clear_error()
@@ -184,8 +184,8 @@
       get_district_list: function(value) {
         var self = this
         self.$http.get(DISTRICT_URL + "?city_id=" + value).then(function(response) {
-          if (response.data.success) {
-            self.district_list = response.data.content
+          if (response.body.success) {
+            self.district_list = response.body.content
           }
         })
         self.clear_error()
@@ -194,8 +194,8 @@
       get_city_near_list: function(value) {
         var self = this
         self.$http.get(CITYNEAR_URL + "?district_id=" + value).then(function(response) {
-          if (response.data.success) {
-            self.city_near_list = response.data.content
+          if (response.body.success) {
+            self.city_near_list = response.body.content
           }
         })
         self.clear_error()

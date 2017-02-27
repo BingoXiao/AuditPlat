@@ -14,9 +14,12 @@
         <el-form-item label="商家分类：">
           <classify-search></classify-search>
         </el-form-item>
+
+        <el-form-item style="float: right">
+          <el-button type="primary" @click="download">下载列表</el-button>
+        </el-form-item>
       </el-form>
     </el-col>
-
 
     <!--表格-->
     <el-col :span="24">
@@ -53,7 +56,7 @@
   import inputSearch from "../../../components/search/input/index"
   import selectSearch from "../../../components/search/select/index"
   import classifySearch from "../../../components/search/classify/index"
-  import {BUSLIST_TABLE_URL} from "../../../common/interface"
+  import {BUSLIST_TABLE_URL, BUSLIST_DOWNLOAD_URL} from "../../../common/interface"
 
   export default {
     data() {
@@ -103,8 +106,8 @@
       getTables: function() {
         var self = this
         self.$http.get(BUSLIST_TABLE_URL).then(function(response) {
-          if (response.data.success) {
-            var datas = response.data.content
+          if (response.body.success) {
+            var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
           }
@@ -115,6 +118,13 @@
       selectShop: function(row, event, column) {
         this.table.applynum = row.applynum
         this.dialog.BD = row.bd
+      },
+
+      // 下载商家列表
+      download: function() {
+        var href = BUSLIST_DOWNLOAD_URL
+        var otherWindow = window.open(href, "_self")
+        otherWindow.opener = null
       },
 
       /* 改变当前页 */

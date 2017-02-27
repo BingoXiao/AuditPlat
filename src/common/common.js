@@ -79,7 +79,6 @@ function isName(value) {
 // 手机号码验证
 function isPhone(value) {
   var obj = {}
-
   if (value === "") {
     obj = {flag: false, error: "请填写手机号码"}
   } else {
@@ -100,7 +99,6 @@ function isPhone(value) {
 // 账户验证 账号长度为2~63位，且只能包含数字、字母及. _ -
 function isAccount(value) {
   var obj = {}
-
   if (value === "") {
     obj = {flag: false, error: "请输入账号"}
   } else {
@@ -114,7 +112,6 @@ function isAccount(value) {
       }
     }
   }
-
   return obj
 }
 
@@ -128,6 +125,25 @@ function isPassword(value) {
     }
   } else {
     obj = {flag: true, error: ""}
+  }
+  return obj
+}
+
+// 营业执照,餐饮许可证
+function isLicName(value, str) {
+  var obj = {}
+  if (value === "") {
+    obj = {flag: false, error: "请填写" + str + "名称"}
+  } else {
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: "请填写正确的" + str + "名称"}
+    } else {
+      if (!(/^[a-zA-Z\u4e00-\u9fa5\d]{1,}$/.test(value))) {
+        obj = {flag: false, error: "请填写正确的" + str + "名称"}
+      } else {
+        obj = {flag: true, error: ""}
+      }
+    }
   }
   return obj
 }
@@ -147,5 +163,6 @@ module.exports = {
   isAccount,
   isPassword,
   isPhone,
+  isLicName,
   modalHide
 }

@@ -13,7 +13,10 @@
 
 <script>
   export default{
-    props: ["tabs", "type"],
+    props: {
+      tabs: Array,
+      type: String
+    },
     data() {
       return {
       }

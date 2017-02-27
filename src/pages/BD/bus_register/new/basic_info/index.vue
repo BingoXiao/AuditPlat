@@ -45,7 +45,6 @@
   import busAddress from "../../../../../components/form/address/index"
   import busClassification from "../../../../../components/form/classification/index"
   import telComponent from "../../../../../components/form/tel/index"
-  import {BDREGISTER_NEWREGISTER_URL} from "../../../../../common/interface"
   import {isName, isPhone} from "../../../../../common/common"
 
   export default{

@@ -1,22 +1,28 @@
 <template>
   <el-col :span="24">
-    <el-form :model="quaForm" :rules="quaRules" ref="quaForm"
+    <el-form id="quaForm" :model="quaForm" :rules="quaRules" ref="quaForm"
              label-width="150px" label-position="top">
       <h3 class="formTitle">资质信息</h3>
       <el-form-item label="门店LOGO照片：" required>
-        <upload-image :imgWidth="140" :imgHeight="140" imgName="门店LOGO"
-                      :tips = "['250X250']"
+        <upload-image ref="logo_url" :imgWidth="140" :imgHeight="140" imgName="门店LOGO"
+                      v-on:handleScucess = "addFormData"
+                      :tips = "['250 X 250']"
+                      suffix_name="logo_url"
                       :imgSrc = "require('../../../../../assets/register/1.png')"></upload-image>
       </el-form-item>
 
       <el-form-item label="门店招牌照片：" required>
-        <upload-image :imgWidth="220" :imgHeight="140" imgName="门店招牌"
+        <upload-image ref="brand_url" :imgWidth="220" :imgHeight="140" imgName="门店招牌"
+                      suffix_name="brand_url"
+                      v-on:handleScucess = "addFormData"
                       :tips = "['从店面正前方取景，光线明亮', '店面招牌和店面大门全景拍摄', '图片不得有水印、LOGO和其他网站信息']"
                       :imgSrc = "require('../../../../../assets/register/1.png')"></upload-image>
       </el-form-item>
 
       <el-form-item label="店内照片：" required>
-        <upload-image :imgWidth="220" :imgHeight="140" imgName="店内照片"
+        <upload-image ref="indoor_url" :imgWidth="220" :imgHeight="140" imgName="店内照片"
+                      suffix_name="indoor_url"
+                      v-on:handleScucess = "addFormData"
                       :tips = "['体现主要经营环境，包含桌椅、墙面、地板等', '地面干净，无明显有无及垃圾；墙面无霉斑',
                       '照片如有工作人员，需着装干净整洁', '图片不得有水印、LOGO和其他网站信息']"
                       :imgSrc = "require('../../../../../assets/register/2.png')"></upload-image>
@@ -25,7 +31,9 @@
 
       <h5>营业执照</h5>
       <el-form-item label="上传清晰营业执照照片：" required>
-        <upload-image :imgWidth="220" :imgHeight="140" imgName="营业执照"
+        <upload-image ref="bl_image_url" :imgWidth="220" :imgHeight="140" imgName="营业执照"
+                      suffix_name="bl_image_url"
+                      v-on:handleScucess = "addFormData"
                       :tips = "['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
                       '证件清晰可辨认，不得使用复印件息']"
                       :imgSrc = "require('../../../../../assets/register/10.png')"></upload-image>
@@ -36,8 +44,8 @@
           <label>*<span class="labelText">营业执照名称：</span></label>
         </el-col>
         <el-col :span="10">
-          <el-form-item prop="bl_name" required>
-            <el-input v-model="quaForm.blinfo.bl_name" name="blinfo.bl_name"></el-input>
+          <el-form-item required prop="bl_name">
+            <el-input v-model="quaForm.bl_name"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -48,7 +56,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_account">
-            <el-input v-model="quaForm.blinfo.bl_account" name="blinfo.bl_account"></el-input>
+            <el-input v-model="quaForm.bl_account"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -59,7 +67,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_address">
-            <el-input v-model="quaForm.blinfo.bl_address" name="blinfo.bl_address"></el-input>
+            <el-input v-model="quaForm.bl_address"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -70,13 +78,16 @@
         </el-col>
         <el-col :span="18">
           <el-form-item required prop="blinfo_expire">
-            <el-radio-group v-model="quaForm.blinfo.bl_expire">
+            <el-radio-group v-model="quaForm.bl_expire">
               <el-radio label="长期有效"></el-radio>
               <el-radio label="到期日期为："></el-radio>
             </el-radio-group>
 
             <el-date-picker
-              v-model="quaForm.blinfo.expire_date"
+              :editable="false"
+              @change="transform_bl_expire"
+              :disabled="quaForm.bl_expire !== '到期日期为：'"
+              v-model="quaForm.bl_expire_date"
               type="date"
               placeholder="选择日期"
               :picker-options="blinfoPickerOptions">
@@ -88,7 +99,9 @@
 
       <h5>餐饮服务许可证</h5>
       <el-form-item label="上传清晰餐饮服务许可证照片：" required>
-        <upload-image :imgWidth="220" :imgHeight="140" imgName="营业执照"
+        <upload-image ref="sl_image_url" :imgWidth="220" :imgHeight="140" imgName="营业执照"
+                      suffix_name="sl_image_url"
+                      v-on:handleScucess = "addFormData"
                       :tips = "['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
                       '证件清晰可辨认，不得使用复印件息']"
                       :imgSrc = "require('../../../../../assets/register/11.jpg')"></upload-image>
@@ -100,7 +113,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_name">
-            <el-input v-model="quaForm.slinfo.bl_name" name="slinfo.sl_name"></el-input>
+            <el-input v-model="quaForm.sl_name"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -111,7 +124,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_account">
-            <el-input v-model="quaForm.slinfo.sl_account" name="slinfo.sl_account"></el-input>
+            <el-input v-model="quaForm.sl_account""></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -122,7 +135,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_address">
-            <el-input v-model="quaForm.slinfo.sl_address" name="slinfo.sl_address"></el-input>
+            <el-input v-model="quaForm.sl_address"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -134,7 +147,9 @@
         <el-col :span="18">
           <el-form-item required prop="sl_expire">
             <el-date-picker
-              v-model="quaForm.slinfo.sl_expire"
+              @change="transform_sl_expire"
+              :editable="false"
+              v-model="quaForm.sl_expire"
               type="date"
               placeholder="选择日期"
               :picker-options="blinfoPickerOptions">
@@ -149,23 +164,61 @@
 
 <script>
   import uploadImage from "../../../../../components/form/uploadImg/index"
-//  import {BDREGISTER_NEWREGISTER_URL} from "../../../../../common/interface"
-  import {isLicName} from "../../../../../common/common"
+  import {isLicName, isLicNumber, isLicAdd, getUrlParameters} from "../../../../../common/common"
 
   export default{
     data() {
-      var blinNameV = (rule, value, callback) => {
-        var blinN = isLicName(value, "营业执照")
-        if (!blinN.flag) {
-          callback(new Error(blinN.error))
+      var validateBlinName = (rule, value, callback) => {
+        var blinName = isLicName(value, "营业执照")
+        if (!blinName.flag) {
+          callback(new Error(blinName.error))
         } else {
           callback()
         }
       }
-      var slinNameV = (rule, value, callback) => {
-        var slinN = isLicName(value, "餐饮许可证")
-        if (!slinN.flag) {
-          callback(new Error(slinN.error))
+      var validateSlinName = (rule, value, callback) => {
+        var slinName = isLicName(value, "许可证")
+        if (!slinName.flag) {
+          callback(new Error(slinName.error))
+        } else {
+          callback()
+        }
+      }
+      var validateBlinAcc = (rule, value, callback) => {
+        var blinAcc = isLicNumber(value, "营业执照")
+        if (!blinAcc.flag) {
+          callback(new Error(blinAcc.error))
+        } else {
+          callback()
+        }
+      }
+      var validateSlinAcc = (rule, value, callback) => {
+        var slinAcc = isLicNumber(value, "许可证")
+        if (!slinAcc.flag) {
+          callback(new Error(slinAcc.error))
+        } else {
+          callback()
+        }
+      }
+      var validateBlinAdd = (rule, value, callback) => {
+        var blinAdd = isLicAdd(value, "营业执照")
+        if (!blinAdd.flag) {
+          callback(new Error(blinAdd.error))
+        } else {
+          callback()
+        }
+      }
+      var validateSlinAdd = (rule, value, callback) => {
+        var slinAdd = isLicAdd(value, "许可证")
+        if (!slinAdd.flag) {
+          callback(new Error(slinAdd.error))
+        } else {
+          callback()
+        }
+      }
+      var validateSlinExp = (rule, value, callback) => {
+        if (!value) {
+          callback(new Error("请选择许可证到期日期"))
         } else {
           callback()
         }
@@ -176,56 +229,98 @@
             return time.getTime() < Date.now() - 8.64e7
           }
         },
-        moduleV: {
-          tel_flag: false
-        },
         quaForm: {
-          busimages: {
-            logo_url: "",
-            brand_url: "",
-            indoor_url: ""
-          },
-          blinfo: {
-            bl_image_url: "",
-            bl_name: "",
-            bl_account: "",
-            bl_address: "",
-            bl_expire: "长期有效",
-            expire_date: ""
-          },
-          slinfo: {
-            sl_image_url: "",
-            sl_name: "",
-            sl_account: "",
-            sl_address: "",
-            sl_expire: ""
-          }
+          logo_url: "",
+          brand_url: "",
+          indoor_url: "",
+          bl_image_url: "",
+          bl_name: "",
+          bl_account: "",
+          bl_address: "",
+          bl_expire: "长期有效",
+          bl_expire_date: "",
+          sl_image_url: "",
+          sl_name: "",
+          sl_account: "",
+          sl_address: "",
+          sl_expire: ""
         },
         quaRules: {
           bl_name: [
-            { validator: blinNameV, trigger: "blur" }
+            { validator: validateBlinName, trigger: "blur" }
           ],
           sl_name: [
-            { validator: slinNameV, trigger: "blur" }
+            { validator: validateSlinName, trigger: "blur" }
+          ],
+          bl_account: [
+            { validator: validateBlinAcc, trigger: "blur" }
+          ],
+          sl_account: [
+            { validator: validateSlinAcc, trigger: "blur" }
+          ],
+          bl_address: [
+            { validator: validateBlinAdd, trigger: "blur" }
+          ],
+          sl_address: [
+            { validator: validateSlinAdd, trigger: "blur" }
+          ],
+          sl_expire: [
+            { validator: validateSlinExp, trigger: "[blur, change]" }
           ]
         }
       }
     },
     methods: {
+      addFormData: function(value, name) {
+        this.quaForm[name] = value
+      },
+      transform_bl_expire: function(value) {
+        this.quaForm.bl_expire_date = value
+      },
+      transform_sl_expire: function(value) {
+        this.quaForm.sl_expire = value
+      },
       quaValidate: function() {
         var self = this
+        // 图片验证
+        self.$refs.logo_url.validate()
+        self.$refs.brand_url.validate()
+        self.$refs.indoor_url.validate()
+        self.$refs.bl_image_url.validate()
+        self.$refs.sl_image_url.validate()
+        var imageFlag = self.quaForm.logo_url && self.quaForm.brand_url && self.quaForm.indoor_url &&
+          self.quaForm.bl_image_url && self.quaForm.sl_image_url
+        // 其他输入验证
         self.$refs.quaForm.validate((valid) => {
-          if (valid) {
-            alert(1)
-//            var form = document.getElementById("basicForm")
-//            var formData = new FormData(form)
-//            formData.append("step", "QUA")
-//            formData.append("applynum", "")
-//            self.$store.commit("FORM_DATA", formData)
-//            self.$store.commit("V_FLAG", true)
-//                    for (var pair of self.$store.state.form_data) {
-//                      console.log(pair[0] + ", " + pair[1])
-//                    }
+          if (valid && imageFlag) {
+            var formData = {
+              step: "QUA",
+              "applynum": getUrlParameters(window.location.hash, "id"),
+              busimages: {
+                "logo_url": self.quaForm.logo_url,
+                "brand_url": self.quaForm.brand_url,
+                "indoor_url": self.quaForm.indoor_url
+              },
+              blinfo: {
+                "bl_image_url": self.quaForm.bl_image_url,
+                "bl_name": self.quaForm.bl_name,
+                "bl_account": self.quaForm.bl_account,
+                "bl_address": self.quaForm.bl_address,
+                "bl_expire": ""
+              },
+              slinfo: {
+                "sl_image_url": self.quaForm.sl_image_url,
+                "sl_name": self.quaForm.sl_name,
+                "sl_account": self.quaForm.sl_account,
+                "sl_address": self.quaForm.sl_address,
+                "sl_expire": self.quaForm.sl_expire
+              }
+            }
+            if (self.quaForm.bl_expire !== "长期有效") {
+              formData.append("blinfo.bl_expire", self.quaForm.bl_expire_date)
+            }
+            self.$store.commit("FORM_DATA", formData)
+            self.$store.commit("V_FLAG", true)
           }
         })
       }

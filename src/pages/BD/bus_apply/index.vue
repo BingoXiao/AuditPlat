@@ -40,9 +40,11 @@
         <el-table-column label="操作" align="center" min-width="120px">
           <template scope="scope">
             <el-button v-if="scope.row.status==='已分配'" size="small"
-                       icon="edit" class="tableButton" @click="dialog.BDvisible = true"> 修改
+                       icon="edit" class="tableButton"
+                       @click="dialog.BDvisible = true"> 修改
             </el-button>
-            <el-button v-else size="small" class="tableButton" @click="dialog.BDvisible = true">
+            <el-button v-else size="small" class="tableButton"
+                       @click="dialog.BDvisible = true">
               <i class="iconfont icon-laba"></i> 分配
             </el-button>
           </template>

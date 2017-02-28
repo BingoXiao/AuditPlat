@@ -129,7 +129,7 @@ function isPassword(value) {
   return obj
 }
 
-// 营业执照,餐饮许可证
+// 营业执照,餐饮许可证名称
 function isLicName(value, str) {
   var obj = {}
   if (value === "") {
@@ -148,6 +148,45 @@ function isLicName(value, str) {
   return obj
 }
 
+// 营业执照,餐饮许可证号码
+function isLicNumber(value, str) {
+  var obj = {}
+  if (value === "") {
+    obj = {flag: false, error: "请填写" + str + "注册号"}
+  } else {
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: str + "注册号" + "格式不正确"}
+    } else {
+      if (!(/^[a-zA-Z\d]{1,}$/.test(value))) {
+        obj = {flag: false, error: str + "注册号" + "格式不正确"}
+      } else {
+        obj = {flag: true, error: ""}
+      }
+    }
+  }
+  return obj
+}
+
+// 营业执照,餐饮许可证地址
+function isLicAdd(value, str) {
+  var obj = {}
+  if (value === "") {
+    obj = {flag: false, error: "请填写" + str + "地址"}
+  } else {
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: str + "地址" + "格式不正确"}
+    } else {
+      if (!(/^[a-zA-Z\u4e00-\u9fa5\d]{1,}$/.test(value))) {
+        obj = {flag: false, error: str + "地址" + "格式不正确"}
+      } else {
+        obj = {flag: true, error: ""}
+      }
+    }
+  }
+  return obj
+}
+
+
 /* 模态框 */
 function modalHide(fun) {
   setTimeout(fun, 2000)
@@ -164,5 +203,7 @@ module.exports = {
   isPassword,
   isPhone,
   isLicName,
+  isLicNumber,
+  isLicAdd,
   modalHide
 }

@@ -32,7 +32,7 @@
         </el-form-item>
 
         <el-form-item v-show="$route.params.type !== 'apply'" style="float: right">
-          <el-button size="small" style="padding:8px 15px;">立即注册</el-button>
+          <el-button size="small" style="padding:8px 15px;" @click="editInfo">立即注册</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -40,7 +40,7 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" @row-click="selectShop" border
+      <el-table ref="table" :data="tableDatas" border
                 highlight-current-row style="width: 100%;">
         <el-table-column prop="applynum" label="注册号" align="center" min-width="200px"></el-table-column>
         <el-table-column prop="busname" label="商家名称" align="center" min-width="130px"></el-table-column>
@@ -64,7 +64,7 @@
                        v-if="scope.row.status === '未处理'"> 注册</el-button>
             <el-button size="small" icon="edit" class="tableButton"
                        v-if="scope.row.status !== '未处理' && '送审中'"
-                       @click="edit(scope.row)"> 修改</el-button>
+                       @click="editInfo(scope.row)"> 修改</el-button>
             <span v-if="scope.row.status === '送审中'"><b> —— </b></span>
             <el-button size="small" icon="delete2" class="tableButton"
                        v-if="scope.row.status !== '送审中'"> 删除</el-button>
@@ -174,12 +174,6 @@
         this.getTables()
       },
 
-      /* 表格数据选择 */
-      selectShop: function(row, event, column) {
-        this.table.applynum = row.applynum
-        this.dialog.BD = row.bd
-      },
-
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
         this.currentPage = currentPage
@@ -187,19 +181,25 @@
       },
 
       /* 修改(按钮) */
-      edit: function(row) {
+      editInfo: function(row) {
         var self = this
         var type = self.$route.params.type
         var href, otherWindow
-        if (type === "new") {
-          href = "#/bus_register/new/register#id=" + row.applynum
-          otherWindow = window.open(href)
-          otherWindow.opener = null
+        if (type === "new") {   // 新店注册（修改）
+          if (!row.applynum) {
+            href = "#/bus_register/new/register"
+          } else {
+            href = "#/bus_register/new/register#id=" + row.applynum
+          }
         } else {
-          href = "#/bus_register/branch/register#id=" + row.applynum
-          otherWindow = window.open(href)
-          otherWindow.opener = null
+          if (!row.applynum) {
+            href = "#/bus_register/branch/register"
+          } else {
+            href = "#/bus_register/branch/register#id=" + row.applynum
+          }
         }
+        otherWindow = window.open(href)
+        otherWindow.opener = null
       }
     },
     components: {

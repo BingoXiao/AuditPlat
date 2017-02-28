@@ -46,7 +46,9 @@
         </el-table-column>
         <el-table-column prop="is_active" label="状态" align="center" min-width="120px">
           <template scope="scope">
-            <el-switch v-model="scope.row.is_active" on-color="#020202" off-color="#C0CCDA"
+            <el-switch v-model="scope.row.is_active"
+                       on-color="#020202"
+                       off-color="#C0CCDA"
                        @change="freezeUsers(scope.row)"></el-switch>
           </template>
         </el-table-column>
@@ -55,7 +57,8 @@
             <el-row>
               <el-col :span="4" :offset="6">
                 <el-tooltip content="修改资料" effect="dark" placement="bottom">
-                  <el-button type="text" icon="edit" @click="editUsersVisible(scope.row)"></el-button>
+                  <el-button type="text" icon="edit"
+                             @click="editUsersVisible(scope.row)"></el-button>
                 </el-tooltip>
               </el-col>
               <el-col :span="4">

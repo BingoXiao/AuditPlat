@@ -8,8 +8,8 @@
         accept="image/png,image/jpeg,image/jpg"
         :action="upload_url"
         :show-file-list="false"
-        :on-success="handleAvatarScucess"
-        :before-upload="beforeAvatarUpload">
+        :on-success="handleScucess"
+        :before-upload="beforeUpload">
         <div ref="upload_tips" class="upload_tips">
           <div class="el-upload__text">{{imgName}}</div>
           <el-button size="small" type="primary">点击上传</el-button>
@@ -22,13 +22,13 @@
       <img :src="imgSrc" alt="" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}">
     </div>
 
-    <div v-if="tips" class="imgTips" :style="{height: imgHeight + 'px'}">
+    <div v-if="tipsFlag" class="imgTips" :style="{height: imgHeight + 'px'}">
       <ol>
         <li v-for="(item, index) in tips">{{item}}</li>
       </ol>
     </div>
     <div v-else class="imgTips" :style="{height: imgHeight + 'px'}">
-      <div>图片格式不正确</div>
+      <div>请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）</div>
     </div>
   </el-col>
 </template>
@@ -42,30 +42,49 @@
       imgWidth: Number,
       imgHeight: Number,
       imgName: String,
-      imgSrc: String
+      imgSrc: String,
+      suffix_name: String
     },
     data() {
       return {
         upload_url: "" + TEMP_PHOTOS_URL,
-        imageUrl: ""
+        imageUrl: "",
+        tipsFlag: true
       }
     },
     methods: {
-      beforeAvatarUpload(file) {
+      validate: function() {
+        var self = this
+        if (self.imageUrl === "") {
+          self.tipsFlag = false
+        } else {
+          self.tipsFlag = true
+        }
+      },
+      beforeUpload(file) {
+        var self = this
         const isJPG = (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png")
         const isLt2M = file.size / 1024 / 1024 < 2
 
-        if (!isJPG) {
-          this.$message.error("上传头像图片只能是 JPG 格式!")
-        }
-        if (!isLt2M) {
-          this.$message.error("上传头像图片大小不能超过 2MB!")
+        if (!isJPG || !isLt2M) {
+          if (self.imageUrl !== "") {
+            self.tipsFlag = false
+            setTimeout(function() {
+              self.tipsFlag = true
+            }, 2000)
+          } else {
+            self.tipsFlag = false
+          }
+        } else {
+          self.tipsFlag = true
         }
         return isJPG && isLt2M
       },
-      handleAvatarScucess(res, file) {
-        this.$refs.upload_tips.style.display = "none"
-        this.imageUrl = "" + file.url
+      handleScucess(res, file) {
+        var self = this
+        self.$refs.upload_tips.style.display = "none"
+        self.imageUrl = "" + file.url
+        self.$emit("handleScucess", res.content.url, self.suffix_name)
       }
     }
   }

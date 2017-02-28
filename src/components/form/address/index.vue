@@ -1,9 +1,9 @@
 <template>
   <el-col :span="24">
     <el-col :span="4">
-      <el-form-item id="province">
-        <el-select v-model="province_value" placeholder="--省--"
-                   @change="get_city_list">
+      <el-form-item>
+        <el-select name="province" placeholder="--省--"
+                   v-model="province_value" @change="get_city_list">
           <el-option
             v-for="item in province_list"
             :label="item.name"
@@ -14,9 +14,9 @@
     </el-col>
 
     <el-col :span="4" class="selectOffset">
-      <el-form-item id="city">
-        <el-select v-model="city_value" placeholder="--市--"
-                   @change="get_district_list">
+      <el-form-item>
+        <el-select name="city" placeholder="--市--"
+                   v-model="city_value" @change="get_district_list">
           <el-option
             v-for="item in city_list"
             :label="item.name"
@@ -27,9 +27,9 @@
     </el-col>
 
     <el-col :span="4" class="selectOffset">
-      <el-form-item id="district">
-        <el-select v-model="district_value" placeholder="--区/县--"
-                   @change="get_city_near_list">
+      <el-form-item>
+        <el-select name="district" placeholder="--区/县--"
+                   v-model="district_value" @change="get_city_near_list">
           <el-option
             v-for="item in district_list"
             :label="item.name"
@@ -40,9 +40,9 @@
     </el-col>
 
     <el-col :span="4" class="selectOffset">
-      <el-form-item id="city_near">
-        <el-select v-model="city_near_value" placeholder="--商圈--"
-                   @change="get_city_near_data">
+      <el-form-item>
+        <el-select name="city_near" placeholder="--商圈--"
+                   v-model="city_near_value" @change="get_city_near_data">
           <el-option
             v-for="item in city_near_list"
             :label="item.name"
@@ -56,8 +56,9 @@
 
     <el-col :span="24" style="margin-top: 22px">
       <el-col :span="12">
-        <el-input v-model="address_detail" name="businfo.address_detail"
-                  placeholder="填写具体的位置（精确至门牌号），请与执照地址保持一致" @change="clear_error">
+        <el-input v-model="address_detail" name="address_detail"
+                  placeholder="填写具体的位置（精确至门牌号），请与执照地址保持一致"
+                  @change="clear_error">
         </el-input>
       </el-col>
       <el-col :span="3" :offset="1">
@@ -82,7 +83,9 @@
   import BMap from "BMap"
 
   export default{
-    props: ["options"],
+    props: {
+      options: Object
+    },
     data() {
       return {
         province_value: "",
@@ -152,14 +155,18 @@
       })
     },
     methods: {
-      clear_error: function() {
+      clear_error: function(flag, color) {
         var self = this
-        self.error = ""
-        document.getElementById("province").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementById("city").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementById("district").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementById("city_near").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementsByName("businfo.address_detail")[0].style.borderColor = "rgb(191, 203, 217)"
+        if (flag) {
+          self.error = ""
+        } else {
+          self.error = "请选择门店地址"
+        }
+        document.getElementsByName("province")[0].style.borderColor = color
+        document.getElementsByName("city")[0].style.borderColor = color
+        document.getElementsByName("district")[0].style.borderColor = color
+        document.getElementsByName("city_near")[0].style.borderColor = color
+        document.getElementsByName("address_detail")[0].style.borderColor = color
       },
       /* 获取省列表 */
       get_province_list: function() {
@@ -178,7 +185,7 @@
             self.city_list = response.body.content
           }
         })
-        self.clear_error()
+        self.clear_error(true, "rgb(191, 203, 217)")
       },
       /* 获取区/县列表 */
       get_district_list: function(value) {
@@ -188,7 +195,7 @@
             self.district_list = response.body.content
           }
         })
-        self.clear_error()
+        self.clear_error(true, "rgb(191, 203, 217)")
       },
       /* 获取商圈列表 */
       get_city_near_list: function(value) {
@@ -198,46 +205,42 @@
             self.city_near_list = response.body.content
           }
         })
-        self.clear_error()
+        self.clear_error(true, "rgb(191, 203, 217)")
       },
       /* 获取商圈数据 */
       get_city_near_data: function(value) {
         var self = this
-        self.clear_error()
+        self.clear_error(true, "rgb(191, 203, 217)")
       },
       /* 验证 */
       addressValidate: function() {
         var self = this
         if (self.province_value === "") {
-          self.error = "请选择门店地址"
-          document.getElementById("province").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-          document.getElementById("city").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-          document.getElementById("district").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-          document.getElementById("city_near").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+          self.clear_error(false, "#ff4949")
         } else {
           if (self.city_value === "") {
             self.error = "请选择门店地址"
-            document.getElementById("city").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-            document.getElementById("district").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-            document.getElementById("city_near").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+            document.getElementsByName("city")[0].style.borderColor = "#ff4949"
+            document.getElementsByName("district")[0].style.borderColor = "#ff4949"
+            document.getElementsByName("city_near")[0].style.borderColor = "#ff4949"
           } else {
             if (self.district_value === "") {
               self.error = "请选择门店地址"
-              document.getElementById("district").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-              document.getElementById("city_near").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+              document.getElementsByName("district")[0].style.borderColor = "#ff4949"
+              document.getElementsByName("city_near")[0].style.borderColor = "#ff4949"
             } else {
               if (self.city_near_value === "") {
                 self.error = "请选择门店地址"
-                document.getElementById("city_near").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+                document.getElementsByName("city_near")[0].style.borderColor = "#ff4949"
               } else {
                 if (self.address_detail === "") {
                   self.error = "请填写完整门店地址"
-                  document.getElementsByName("businfo.address_detail")[0].style.borderColor = "#ff4949"
+                  document.getElementsByName("address_detail")[0].style.borderColor = "#ff4949"
                 } else {
                   if (self.address_point === "") {
                     self.error = "请在地图上定位当前地址"
                   } else {
-                    self.clear_error()
+                    self.clear_error(true, "rgb(191, 203, 217)")
                   }
                 }
               }
@@ -250,7 +253,8 @@
             name: "address",
             value: {
               select: [self.province_value, self.city_value, self.district_value, self.city_near_value],
-              point: self.address_point
+              point: self.address_point,
+              detail: self.address_detail
             }
           }
           self.$emit("addressValidate", "address_flag", para, true)
@@ -262,10 +266,10 @@
       /* 定位标记 */
       localAddress: function(address) {
         var self = this
-        var add = document.getElementById("province").getElementsByTagName("input")[0].value +
-          document.getElementById("city").getElementsByTagName("input")[0].value +
-          document.getElementById("district").getElementsByTagName("input")[0].value +
-          document.getElementById("city_near").getElementsByTagName("input")[0].value +
+        var add = document.getElementsByName("province")[0].value +
+          document.getElementsByName("city")[0].value +
+          document.getElementsByName("district")[0].value +
+          document.getElementsByName("city_near")[0].value +
             self.address_detail
         local.search(add)
       }

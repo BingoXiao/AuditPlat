@@ -36,20 +36,24 @@
       }
     },
     methods: {
-      clear_error: function() {
+      clear_error: function(flag, color) {
         var self = this
-        self.error = ""
-        document.getElementById("tel1").style.borderColor = "rgb(191, 203, 217)"
-        document.getElementById("tel2").style.borderColor = "rgb(191, 203, 217)"
-        document.getElementById("tel3").style.borderColor = "rgb(191, 203, 217)"
+        if (flag) {
+          self.error = ""
+        } else {
+          self.error = "请选择商家分类"
+        }
+        document.getElementById("tel1").style.borderColor = color
+        document.getElementById("tel2").style.borderColor = color
+        document.getElementById("tel3").style.borderColor = color
       },
       error_validate: function(value, name) {
         var self = this
         if (value === "") {
-          self.clear_error()
+          this.clear_error(true, "rgb(191, 203, 217)")
         } else {
           if (/^\d{1,}$/.test(value)) {
-            self.clear_error()
+            this.clear_error(true, "rgb(191, 203, 217)")
           } else {
             self.error = "号码格式不正确"
             document.getElementById(name).style.borderColor = "#ff4949"
@@ -57,13 +61,13 @@
         }
       },
       tel1_input: function() {
-        this.clear_error()
+        this.clear_error(true, "rgb(191, 203, 217)")
       },
       tel2_input: function() {
-        this.clear_error()
+        this.clear_error(true, "rgb(191, 203, 217)")
       },
       tel3_input: function() {
-        this.clear_error()
+        this.clear_error(true, "rgb(191, 203, 217)")
       },
       telValidate: function(value) {
         var self = this
@@ -80,7 +84,7 @@
             self.error = "号码格式不正确"
             document.getElementById("tel2").style.borderColor = "#ff4949"
           } else {
-            self.clear_error()
+            self.clear_error(true, "rgb(191, 203, 217)")
           }
         }
 

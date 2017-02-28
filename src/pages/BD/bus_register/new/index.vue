@@ -5,7 +5,7 @@
 
       <keep-alive>
         <el-col :span="20" :offset="2">
-          <component ref="child" :is="currentView"></component>
+          <component ref="child" :is="currentView" :datas="datas"></component>
         </el-col>
       </keep-alive>
     </el-col>
@@ -42,12 +42,13 @@
   import qualificationInfo from "./qualification_info/index"
   import checkoutInfo from "./checkout_info/index"
   import submitSuccess from "./submit_success/index"
-//  import {BDREGISTER_NEWREGISTER_URL} from "../../../../common/interface"
-//  import {getUrlParameters} from "../../../../common/common"
+  import {BDREGISTER_EDITFILLING_URL, BDREGISTER_NEWREGISTER_URL} from "../../../../common/interface"
+  import {getUrlParameters} from "../../../../common/common"
 
   export default{
     data() {
       return {
+        datas: {},
         active: 1,
         flag: false,     // 验证结果反馈
         steps: [
@@ -67,26 +68,44 @@
         currentView: "basicInfo"
       }
     },
+    mounted() {
+      this.getNewInfo()
+    },
     methods: {
+      // 获取新店信息
+      getNewInfo: function() {
+        var self = this
+        let id = getUrlParameters(window.location.hash, "id")
+        if (id) {
+          self.$http.get(BDREGISTER_EDITFILLING_URL + "?applynum=" + id)
+            .then(function(response) {
+              if (response.body.success) {
+                self.datas = response.body.content
+              }
+            })
+        }
+      },
+
+      // 下一步
       next_step: function(step) {
         var self = this
         if (self.active === 1) {   // 基本信息
-          self.active = self.active + 1
-          self.currentView = "qualificationInfo"
-//          console.log(getUrlParameters(window.location.hash, "id"))
-//          window.location.hash = "#/bus_register/new/register#id=fsaui"
-//          self.$refs.child.basicValidate()   // 验证
-//          if (self.$store.state.vflag) {
-//            alert("ok")
-//            self.$http.post(BDREGISTER_NEWREGISTER_URL, self.$store.state.form_data)
-//              .then(function(response) {
-//                if (response.body.success) {
-//                  self.active = self.active + 1
-//                  self.currentView = step
-//                  self.$store.commit("V_FLAG", false)
-//                }
-//              })
-//          }
+          self.$refs.child.basicValidate()   // 验证
+          if (self.$store.state.vflag) {
+            self.$http.post(BDREGISTER_NEWREGISTER_URL,
+              JSON.stringify(self.$store.state.form_data),
+              {emulateJSON: true})
+              .then(function(response) {
+                if (response.body.success) {
+                  if (!getUrlParameters(window.location.hash, "id")) {
+                    window.location.hash += "#id=" + response.body.content.applynum
+                  }
+                  self.active = self.active + 1
+                  self.currentView = "qualificationInfo"
+                  self.$store.commit("V_FLAG", false)
+                }
+              })
+          }
         } else if (self.active === 2) {
           self.active = self.active + 1
           self.currentView = "checkoutInfo"
@@ -95,6 +114,8 @@
           self.currentView = "submitSuccess"
         }
       },
+
+      // 上一步
       previous_step: function(step) {
         var self = this
         if (self.active === 4) {

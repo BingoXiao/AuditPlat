@@ -1,8 +1,9 @@
 <template>
   <el-col :span="24">
     <el-col :span="4">
-      <el-form-item id="lclass">
-        <el-select v-model="lg_value" placeholder="合作行业" ref="lclass" @change="get_md_list">
+      <el-form-item>
+        <el-select name="lclass" placeholder="合作行业"
+                   v-model="lg_value" @change="get_md_list">
           <el-option
             v-for="item in lg_list"
             :label="item.name"
@@ -13,8 +14,9 @@
     </el-col>
 
     <el-col :span="4" class="selectOffset">
-      <el-form-item id="mclass">
-        <el-select v-model="md_value" placeholder="品类" @change="get_sm_list">
+      <el-form-item>
+        <el-select  name="mclass" placeholder="品类"
+                    v-model="md_value" @change="get_sm_list">
           <el-option
             v-for="item in md_list"
             :label="item.name"
@@ -25,9 +27,9 @@
     </el-col>
 
     <el-col :span="5" class="selectOffset">
-      <el-form-item id="sclass">
-        <el-select v-model="sm_value" placeholder="子类别"
-                   v-show="smallVisible" @change="get_sm_data">
+      <el-form-item>
+        <el-select name="sclass" placeholder="子类别"
+                   v-model="sm_value" v-show="smallVisible" @change="get_sm_data">
           <el-option
             v-for="item in sm_list"
             :label="item.name"
@@ -45,7 +47,9 @@
   import {CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../common/interface"
 
   export default{
-//    props: ["options"],
+    props: {
+      options: Array
+    },
     data() {
       return {
         smallVisible: true,   // 三级分类显示
@@ -58,22 +62,26 @@
         error: ""
       }
     },
-    mounted: function() {
-      var self = this
-      self.get_lg_list()
-//      if (self.options.length > 0) {
-//        self.lg_value = self.options[0]
-//        self.md_value = self.options[1]
-//        self.sm_value = self.options[2]
-//      }
+    watch: {
+      options: function() {
+        this.show_lg_data()
+      }
     },
+//    mounted: function() {
+//      var self = this
+//      self.get_lg_list()
+//    },
     methods: {
-      clear_error: function() {
+      clear_error: function(flag, color) {
         var self = this
-        self.error = ""
-        document.getElementById("lclass").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementById("mclass").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
-        document.getElementById("sclass").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
+        if (flag) {
+          self.error = ""
+        } else {
+          self.error = "请选择商家分类"
+        }
+        document.getElementsByName("lclass")[0].style.borderColor = color
+        document.getElementsByName("mclass")[0].style.borderColor = color
+        document.getElementsByName("sclass")[0].style.borderColor = color
       },
       /* 获取合作行业列表 */
       get_lg_list: function() {
@@ -81,6 +89,18 @@
         self.$http.get(CATEGORY_URL).then(function(response) {
           if (response.body.success) {
             self.lg_list = response.body.content
+          }
+        })
+      },
+      show_lg_data: function() {
+        var self = this
+        self.$http.get(CATEGORY_URL).then(function(response) {
+          if (response.body.success) {
+            self.lg_list = response.body.content
+            if (self.options.length > 0) {
+              self.lg_value = parseInt(self.options[0])
+              self.show_md_data(self.lg_value)
+            }
           }
         })
       },
@@ -94,7 +114,21 @@
             self.md_list = response.body.content
           }
         })
-        self.clear_error()
+        self.clear_error(true, "rgb(191, 203, 217)")
+      },
+      show_md_data: function(value) {
+        var self = this
+        self.smallVisible = true
+        self.md_value = ""
+        self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
+          if (response.body.success) {
+            self.md_list = response.body.content
+            if (self.options.length > 0) {
+              self.md_value = parseInt(self.options[1])
+              self.show_sm_data(self.md_value)
+            }
+          }
+        })
       },
       /* 获取子类别列表 */
       get_sm_list: function(value) {
@@ -109,34 +143,53 @@
             } else {
               self.smallVisible = true
               self.sm_list = response.body.content
+              if (self.options.length > 0) {
+                self.sm_value = parseInt(self.options[2])
+              }
             }
           }
         })
-        self.clear_error()
+        self.clear_error(true, "rgb(191, 203, 217)")
+      },
+      show_sm_data: function(value) {
+        var self = this
+        self.sm_value = ""
+        self.$http.get(SCLASS_URL + "?mclass_id=" + value).then(function(response) {
+          if (response.body.success) {
+            var list = response.body.content
+            if (!list.length) {
+              self.smallVisible = false
+              self.sm_list = ""
+            } else {
+              self.smallVisible = true
+              self.sm_list = response.body.content
+              if (self.options.length > 0) {
+                self.sm_value = parseInt(self.options[2])
+              }
+            }
+          }
+        })
       },
       /* 子类别数据改变时 */
       get_sm_data: function(value) {
-        this.clear_error()
+        this.clear_error(true, "rgb(191, 203, 217)")
       },
       /* 分类验证 */
       classValidate: function() {
         var self = this
         if (self.lg_value === "") {
-          self.error = "请选择商家分类"
-          document.getElementById("lclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-          document.getElementById("mclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-          document.getElementById("sclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+          self.clear_error(false, "#ff4949")
         } else {
           if (self.md_value === "") {
             self.error = "请选择商家分类"
-            document.getElementById("mclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
-            document.getElementById("sclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+            document.getElementsByName("mclass")[0].style.borderColor = "#ff4949"
+            document.getElementsByName("sclass")[0].style.borderColor = "#ff4949"
           } else {
             if (self.sm_list.length > 0 && self.sm_value === "") {
               self.error = "请选择商家分类"
-              document.getElementById("sclass").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+              document.getElementsByName("sclass")[0].style.borderColor = "#ff4949"
             } else {
-              self.clear_error()
+              self.clear_error(true, "rgb(191, 203, 217)")
             }
           }
         }

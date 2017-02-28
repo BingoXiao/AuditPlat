@@ -5,20 +5,21 @@
       <h3 class="formTitle">商家信息</h3>
       <el-col :span="8">
         <el-form-item label="商家姓名：" prop="name" required>
-          <el-input v-model="basicForm.name" name="userinfo.name"></el-input>
+          <el-input v-model="basicForm.name"></el-input>
         </el-form-item>
       </el-col>
 
       <el-col :span="7" :offset="1">
         <el-form-item label="商家手机：" prop="phonenum" required>
-          <el-input v-model="basicForm.phonenum" name="userinfo.phonenum"></el-input>
+          <el-input v-model="basicForm.phonenum"></el-input>
         </el-form-item>
       </el-col>
 
       <!--商家分类-->
       <el-col :span="24">
         <el-form-item label="商家分类：" required>
-          <bus-classification ref="bus_class_children" v-on:classValidate="module_res"></bus-classification>
+          <bus-classification ref="bus_class_children" :options="basicForm.class"
+                              v-on:classValidate="module_res"></bus-classification>
         </el-form-item>
       </el-col>
 
@@ -26,7 +27,7 @@
       <h3 class="formTitle">门店信息</h3>
       <el-form-item label="门店名称：" prop="busname">
         <el-col :span="14">
-          <el-input v-model="basicForm.busname" name="businfo.busname"></el-input>
+          <el-input v-model="basicForm.busname"></el-input>
         </el-col>
       </el-form-item>
 
@@ -35,7 +36,8 @@
       </el-form-item>
 
       <el-form-item label="门店地址：" required>
-        <bus-address ref="address_children" v-on:addressValidate="module_res"></bus-address>
+        <bus-address ref="address_children" :options="basicForm.address"
+                     v-on:addressValidate="module_res"></bus-address>
       </el-form-item>
     </el-form>
   </el-col>
@@ -45,9 +47,12 @@
   import busAddress from "../../../../../components/form/address/index"
   import busClassification from "../../../../../components/form/classification/index"
   import telComponent from "../../../../../components/form/tel/index"
-  import {isName, isPhone} from "../../../../../common/common"
+  import {isName, isPhone, getUrlParameters} from "../../../../../common/common"
 
   export default{
+    props: {
+      datas: Object
+    },
     data() {
       // 商家姓名
       var nameV = (rule, value, callback) => {
@@ -67,7 +72,6 @@
           callback()
         }
       }
-
       return {
         moduleV: {
           class_flag: false,
@@ -95,6 +99,23 @@
         }
       }
     },
+    watch: {
+      datas: function() {
+        var self = this
+        var userinfo = self.datas.userinfo
+        var businfo = self.datas.businfo
+        self.basicForm.name = userinfo.name          // 商家姓名
+        self.basicForm.phonenum = userinfo.phonenum  // 商家手机
+        self.basicForm.busname = businfo.busname     // 门店名称
+        let classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id
+        self.basicForm.class = classArr.split(",")        // 分类
+        let addArr = businfo.province_id + "," + businfo.city_id + "," +
+          businfo.district_id + "," + businfo.city_near_id
+        self.basicForm.address.select = addArr.split(",")
+        self.basicForm.address.detail = businfo.address_details
+        self.basicForm.address.point = businfo.address_point
+      }
+    },
     methods: {
       module_res: function(name, para, flag) {
         var self = this
@@ -116,23 +137,33 @@
         self.$refs.address_children.addressValidate()
         self.$refs.basicForm.validate((valid) => {
           if (valid && self.moduleV.class_flag && self.moduleV.tel_flag && self.moduleV.address_flag) {
-            var form = document.getElementById("basicForm")
-            var formData = new FormData(form)
-            formData.append("step", "BASE")
-            formData.append("applynum", "self.$router.path")
-            formData.append("businfo.lclass_id", self.class[0])
-            formData.append("businfo.mclass_id", self.class[1])
-            formData.append("businfo.sclass_id", self.class[2])
-            formData.append("businfo.province_id", self.address.select[0])
-            formData.append("businfo.city_id", self.address.select[1])
-            formData.append("businfo.district_id", self.address.select[2])
-            formData.append("businfo.address_details", self.address.select[3])
-            formData.append("businfo.address_point", self.address.point)
+            var formData = {
+              "step": "BASE",
+              "applynum": "",
+              "userinfo": {
+                "name": self.basicForm.name,            // 商家姓名
+                "phonenum": self.basicForm.phonenum     // 商家手机
+              },
+              "businfo": {
+                "tel": self.basicForm.tel,              // 店铺座机
+                "busname": self.basicForm.busname,      // 店铺名称
+                "province_id": self.address.select[0],  // 所在省
+                "city_id": self.address.select[1],      // 所在城市
+                "district_id": self.address.select[2],  // 所在区县
+                "city_near_id": self.address.select[3], // 所属商圈
+                "address_details": self.address.detail, // 详细地址
+                "address_point": self.address.point,    // 百度地图坐标
+                "lclass_id": self.class[0],             // 一级分类
+                "mclass_id": self.class[1],             // 二级分类
+                "sclass_id": self.class[2]              // 三级分类
+              }
+            }
+            let id = getUrlParameters(window.location.hash, "id")
+            if (id) {
+              formData.applynum = id
+            }
             self.$store.commit("FORM_DATA", formData)
             self.$store.commit("V_FLAG", true)
-//            for (var pair of self.$store.state.form_data) {
-//              console.log(pair[0] + ", " + pair[1])
-//            }
           }
         })
       }

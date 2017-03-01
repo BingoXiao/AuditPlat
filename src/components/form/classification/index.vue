@@ -59,18 +59,15 @@
         lg_list: [],
         md_list: [],
         sm_list: [],
-        error: ""
+        error: "",
+        flag: false
       }
     },
     watch: {
       options: function() {
-        this.show_lg_data()
+        this.get_lg_list()
       }
     },
-//    mounted: function() {
-//      var self = this
-//      self.get_lg_list()
-//    },
     methods: {
       clear_error: function(flag, color) {
         var self = this
@@ -83,97 +80,74 @@
         document.getElementsByName("mclass")[0].style.borderColor = color
         document.getElementsByName("sclass")[0].style.borderColor = color
       },
+
       /* 获取合作行业列表 */
       get_lg_list: function() {
         var self = this
         self.$http.get(CATEGORY_URL).then(function(response) {
           if (response.body.success) {
             self.lg_list = response.body.content
-          }
-        })
-      },
-      show_lg_data: function() {
-        var self = this
-        self.$http.get(CATEGORY_URL).then(function(response) {
-          if (response.body.success) {
-            self.lg_list = response.body.content
-            if (self.options.length > 0) {
+            if (self.options.length > 0 && !self.falg) {
               self.lg_value = parseInt(self.options[0])
-              self.show_md_data(self.lg_value)
             }
           }
         })
       },
+
       /* 获取品类列表 */
+      md_http: function(value) {
+        var self = this
+        self.smallVisible = true
+        self.md_value = ""
+        self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
+          if (response.body.success) {
+            self.md_list = response.body.content
+
+            if (!self.flag) {
+              self.md_value = parseInt(self.options[1])
+            }
+          }
+        })
+      },
       get_md_list: function(value) {
         var self = this
-        self.smallVisible = true
-        self.md_value = ""
-        self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
-          if (response.body.success) {
-            self.md_list = response.body.content
-          }
-        })
+        self.md_http(value)
         self.clear_error(true, "rgb(191, 203, 217)")
       },
-      show_md_data: function(value) {
+
+      /* 获取子类别列表 */
+      sm_http: function(value) {
         var self = this
-        self.smallVisible = true
-        self.md_value = ""
-        self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
+        self.sm_value = ""
+        self.$http.get(SCLASS_URL + "?mclass_id=" + value).then(function(response) {
           if (response.body.success) {
-            self.md_list = response.body.content
-            if (self.options.length > 0) {
-              self.md_value = parseInt(self.options[1])
-              self.show_sm_data(self.md_value)
+            var list = response.body.content
+            if (!list.length) {
+              self.smallVisible = false
+              self.sm_list = ""
+            } else {
+              self.smallVisible = true
+              self.sm_list = response.body.content
+
+              if (!self.flag) {
+                self.sm_value = parseInt(self.options[2])
+                self.flag = true
+              }
             }
           }
         })
       },
-      /* 获取子类别列表 */
       get_sm_list: function(value) {
         var self = this
-        self.sm_value = ""
-        self.$http.get(SCLASS_URL + "?mclass_id=" + value).then(function(response) {
-          if (response.body.success) {
-            var list = response.body.content
-            if (!list.length) {
-              self.smallVisible = false
-              self.sm_list = ""
-            } else {
-              self.smallVisible = true
-              self.sm_list = response.body.content
-              if (self.options.length > 0) {
-                self.sm_value = parseInt(self.options[2])
-              }
-            }
-          }
-        })
+        self.sm_http(value)
         self.clear_error(true, "rgb(191, 203, 217)")
       },
-      show_sm_data: function(value) {
-        var self = this
-        self.sm_value = ""
-        self.$http.get(SCLASS_URL + "?mclass_id=" + value).then(function(response) {
-          if (response.body.success) {
-            var list = response.body.content
-            if (!list.length) {
-              self.smallVisible = false
-              self.sm_list = ""
-            } else {
-              self.smallVisible = true
-              self.sm_list = response.body.content
-              if (self.options.length > 0) {
-                self.sm_value = parseInt(self.options[2])
-              }
-            }
-          }
-        })
-      },
+
       /* 子类别数据改变时 */
       get_sm_data: function(value) {
         this.clear_error(true, "rgb(191, 203, 217)")
       },
+
       /* 分类验证 */
       classValidate: function() {
         var self = this

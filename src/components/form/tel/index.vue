@@ -2,21 +2,21 @@
   <el-col :span="24">
     <el-col :span="3">
       <el-form-item>
-        <el-input id="tel1" v-model="tel1" placeholder="区号"
+        <el-input name="tel1" v-model="tel1" placeholder="区号"
                   @change="tel1_input"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="1" style="text-align: center">—</el-col>
     <el-col :span="4">
       <el-form-item>
-        <el-input id="tel2" v-model="tel2" placeholder="门店号码"
+        <el-input name="tel2" v-model="tel2" placeholder="门店号码"
                   @change="tel2_input"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="1" style="text-align: center">—</el-col>
     <el-col :span="3">
       <el-form-item>
-        <el-input id="tel3" v-model="tel3" placeholder="分机号"
+        <el-input name="tel3" v-model="tel3" placeholder="分机号"
                   @change="tel3_input"></el-input>
       </el-form-item>
     </el-col>
@@ -27,12 +27,28 @@
 
 <script>
   export default{
+    props: {
+      tel: String
+    },
     data() {
       return {
         tel1: "",
         tel2: "",
         tel3: "",
         error: ""
+      }
+    },
+    watch: {
+      tel: function() {
+        var self = this
+        if (self.tel) {
+          var arr = self.tel.split("-")
+          self.tel2 = arr[1]
+          self.tel1 = arr[0]
+          if (arr.length > 2) {
+            self.tel3 = arr[2]
+          }
+        }
       }
     },
     methods: {
@@ -43,10 +59,11 @@
         } else {
           self.error = "请选择商家分类"
         }
-        document.getElementById("tel1").style.borderColor = color
-        document.getElementById("tel2").style.borderColor = color
-        document.getElementById("tel3").style.borderColor = color
+        document.getElementsByName("tel1")[0].style.borderColor = color
+        document.getElementsByName("tel2")[0].style.borderColor = color
+        document.getElementsByName("tel3")[0].style.borderColor = color
       },
+      // 号码验证
       error_validate: function(value, name) {
         var self = this
         if (value === "") {
@@ -55,8 +72,8 @@
           if (/^\d{1,}$/.test(value)) {
             this.clear_error(true, "rgb(191, 203, 217)")
           } else {
-            self.error = "号码格式不正确"
-            document.getElementById(name).style.borderColor = "#ff4949"
+            self.error = "请填写正确的座机号码"
+            document.getElementsByName(name)[0].style.borderColor = "#ff4949"
           }
         }
       },
@@ -73,16 +90,19 @@
         var self = this
         if (self.tel2 !== "") {
           self.error_validate(self.tel2, "tel2")
-          if (self.tel1 !== "") {
+          if (self.tel1 === "") {
+            self.error = "请填写完整座机号码"
+            document.getElementsByName("tel1")[0].style.borderColor = "#ff4949"
+          } else {
             self.error_validate(self.tel1, "tel1")
-          }
-          if (self.tel3 !== "") {
-            self.error_validate(self.tel3, "tel3")
+            if (self.tel3 !== "") {
+              self.error_validate(self.tel3, "tel3")
+            }
           }
         } else {
-          if (self.tel1 !== "" || self.tel3 !== "") {
-            self.error = "号码格式不正确"
-            document.getElementById("tel2").style.borderColor = "#ff4949"
+          if (self.tel3 !== "" || self.tel1 !== "") {
+            self.error = "请填写完整座机号码"
+            document.getElementsByName("tel2")[0].style.borderColor = "#ff4949"
           } else {
             self.clear_error(true, "rgb(191, 203, 217)")
           }

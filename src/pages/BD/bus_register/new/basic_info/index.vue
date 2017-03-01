@@ -32,7 +32,8 @@
       </el-form-item>
 
       <el-form-item label="门店座机：">
-        <tel-component ref="tel_children" v-on:telValidate="module_res"></tel-component>
+        <tel-component ref="tel_children" :tel="basicForm.tel"
+                       v-on:telValidate="module_res"></tel-component>
       </el-form-item>
 
       <el-form-item label="门店地址：" required>
@@ -107,13 +108,14 @@
         self.basicForm.name = userinfo.name          // 商家姓名
         self.basicForm.phonenum = userinfo.phonenum  // 商家手机
         self.basicForm.busname = businfo.busname     // 门店名称
+        self.basicForm.tel = businfo.tel             // 门店名称
         let classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id
         self.basicForm.class = classArr.split(",")        // 分类
         let addArr = businfo.province_id + "," + businfo.city_id + "," +
           businfo.district_id + "," + businfo.city_near_id
-        self.basicForm.address.select = addArr.split(",")
-        self.basicForm.address.detail = businfo.address_details
-        self.basicForm.address.point = businfo.address_point
+        self.$set(self.basicForm.address, "select", addArr.split(","))
+        self.$set(self.basicForm.address, "detail", businfo.address_details)
+        self.$set(self.basicForm.address, "point", businfo.address_point)
       }
     },
     methods: {

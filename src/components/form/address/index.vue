@@ -98,19 +98,18 @@
         city_near_list: [],
         address_detail: "",
         address_point: "",
-        error: ""
+        error: "",
+        flag: false
+      }
+    },
+    watch: {
+      options: function() {
+        var self = this
+        self.get_province_list()
       }
     },
     mounted: function() {
       var self = this
-      self.get_province_list()
-//      if (self.options.length > 0) {
-//        self.province_value = self.options[0]
-//        self.city_value = self.options[1]
-//        self.district_value = self.options[2]
-//        self.city_near_value = self.options[3]
-//      }
-
       // 百度地图API功能
       var map = new BMap.Map("allmap")
       var point = new BMap.Point(114.025974, 22.546054)
@@ -174,44 +173,81 @@
         self.$http.get(PROVINCE_URL).then(function(response) {
           if (response.body.success) {
             self.province_list = response.body.content
+            if (self.options.select.length > 0 && !self.flag) {
+              self.address_detail = self.options.detail
+              self.address_point = self.options.point
+              self.province_value = parseInt(self.options.select[0])
+            }
           }
         })
       },
+
       /* 获取市列表 */
-      get_city_list: function(value) {
+      city_http: function(value) {
         var self = this
+        self.city_value = ""
         self.$http.get(CITY_URL + "?province_id=" + value).then(function(response) {
           if (response.body.success) {
             self.city_list = response.body.content
+            if (!self.flag) {
+              self.city_value = parseInt(self.options.select[1])
+            }
           }
         })
+      },
+      get_city_list: function(value) {
+        var self = this
+        self.city_http(value)
         self.clear_error(true, "rgb(191, 203, 217)")
       },
+
       /* 获取区/县列表 */
-      get_district_list: function(value) {
+      district_http: function(value) {
         var self = this
+        self.district_value = ""
         self.$http.get(DISTRICT_URL + "?city_id=" + value).then(function(response) {
           if (response.body.success) {
             self.district_list = response.body.content
+
+            if (!self.flag) {
+              self.district_value = parseInt(self.options.select[2])
+            }
           }
         })
+      },
+      get_district_list: function(value) {
+        var self = this
+        self.district_http(value)
         self.clear_error(true, "rgb(191, 203, 217)")
       },
+
       /* 获取商圈列表 */
-      get_city_near_list: function(value) {
+      city_near_http: function(value) {
         var self = this
+        self.city_near_value = ""
         self.$http.get(CITYNEAR_URL + "?district_id=" + value).then(function(response) {
           if (response.body.success) {
             self.city_near_list = response.body.content
+
+            if (!self.flag) {
+              self.city_near_value = parseInt(self.options.select[3])
+              self.flag = true
+            }
           }
         })
+      },
+      get_city_near_list: function(value) {
+        var self = this
+        self.city_near_http(value)
         self.clear_error(true, "rgb(191, 203, 217)")
       },
+
       /* 获取商圈数据 */
       get_city_near_data: function(value) {
         var self = this
         self.clear_error(true, "rgb(191, 203, 217)")
       },
+
       /* 验证 */
       addressValidate: function() {
         var self = this

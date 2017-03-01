@@ -30,6 +30,19 @@
     <div v-else class="imgTips" :style="{height: imgHeight + 'px'}">
       <div>请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）</div>
     </div>
+
+    <!--预览图片-->
+    <div class="cover" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
+         v-if="coverVisible"
+         :moveenter="coverVisible = true"
+         :moveleave="coverVisible = false">
+      <div class="amplify" @click="handlePreview">
+        <i class="el-icon-view"></i>
+      </div>
+    </div>
+    <el-dialog v-model="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
   </el-col>
 </template>
 
@@ -38,21 +51,40 @@
 
   export default{
     props: {
-      tips: Array,
-      imgWidth: Number,
-      imgHeight: Number,
-      imgName: String,
-      imgSrc: String,
-      suffix_name: String
+      tips: Array,          // 要求
+      imgWidth: Number,     // 图片宽度
+      imgHeight: Number,    // 图片高度
+      imgName: String,      // 图片名称（展示）
+      imgSrc: String,       // 样片展示
+      suffix_name: String,  // 图片名称(返回)
+      imgFill: String       // 图片填充来源
     },
     data() {
       return {
         upload_url: "" + TEMP_PHOTOS_URL,
         imageUrl: "",
-        tipsFlag: true
+        tipsFlag: true,
+        dialogImageUrl: "",
+        dialogVisible: false
       }
     },
+    watch: {
+      imgFill: function() {
+        var self = this
+        if (self.imgFill) {
+          self.$refs.upload_tips.style.display = "none"
+          self.imageUrl = "https://shopmanage-dev.jinmailife.com" + self.imgFill
+        }
+      }
+    },
+    mounted() {
+
+    },
     methods: {
+      handlePreview(file) {
+        this.dialogImageUrl = file.url
+        this.dialogVisible = true
+      },
       validate: function() {
         var self = this
         if (self.imageUrl === "") {
@@ -136,5 +168,22 @@
   .avatar {
     width: 100%;
     height: 100%;
+  }
+
+  .cover {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    text-align: center;
+    display: table;
+    background-color:rgba(0, 0, 0, 0.45)
+  }
+
+  .amplify {
+    cursor: pointer;
+    font-size: 26px;
+    color: #a8a8a8;
+    display: table-cell;
+    vertical-align: middle;
   }
 </style>

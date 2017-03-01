@@ -52,7 +52,7 @@
 
   export default{
     props: {
-      datas: Object
+      filling: Object
     },
     data() {
       // 商家姓名
@@ -101,10 +101,10 @@
       }
     },
     watch: {
-      datas: function() {
+      filling: function() {
         var self = this
-        var userinfo = self.datas.userinfo
-        var businfo = self.datas.businfo
+        var userinfo = self.filling.userinfo
+        var businfo = self.filling.businfo
         self.basicForm.name = userinfo.name          // 商家姓名
         self.basicForm.phonenum = userinfo.phonenum  // 商家手机
         self.basicForm.busname = businfo.busname     // 门店名称

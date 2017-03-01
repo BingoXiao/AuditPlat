@@ -62,7 +62,7 @@
         </el-input>
       </el-col>
       <el-col :span="3" :offset="1">
-        <el-button type="primary" @click="localAddress">定位标记</el-button>
+        <el-button type="primary" @click="orientate">定位标记</el-button>
       </el-col>
     </el-col>
 
@@ -82,6 +82,7 @@
   import {PROVINCE_URL, CITY_URL, DISTRICT_URL, CITYNEAR_URL} from "../../../common/interface"
   import BMap from "BMap"
 
+  var map, point, marker, geoc
   export default{
     props: {
       options: Object
@@ -111,11 +112,11 @@
     mounted: function() {
       var self = this
       // 百度地图API功能
-      var map = new BMap.Map("allmap")
-      var point = new BMap.Point(114.025974, 22.546054)
-      var marker = new BMap.Marker(point)  // 创建标注
+      map = new BMap.Map("allmap")
+      point = new BMap.Point(114.025974, 22.546054)
+      marker = new BMap.Marker(point)  // 创建标注
       map.centerAndZoom(point, 18)
-      var geoc = new BMap.Geocoder()
+      geoc = new BMap.Geocoder()
 
       // 根据提供的坐标点显示位置
       if (self.$store.state.map_point) {
@@ -144,11 +145,10 @@
             marker.setAnimation(BMAP_ANIMATION_BOUNCE) // 创建一个跳动的红点
             // 将地址解析结果显示在地图上
             self.address_point = pt.lng + "," + pt.lat
-            self.clear_error()
+            self.clear_error(true, "rgb(191, 203, 217)")
           }
         })
       })
-
       window.local = new BMap.LocalSearch(map, {
         renderOptions: {map: map}
       })
@@ -156,6 +156,9 @@
     methods: {
       clear_error: function(flag, color) {
         var self = this
+//        console.log(self.province_value + "," + self.city_value + "," +
+//          self.district_value + "," + self.city_near_value + "," +
+//          self.address_detail + "," + self.address_point)
         if (flag) {
           self.error = ""
         } else {
@@ -174,9 +177,10 @@
           if (response.body.success) {
             self.province_list = response.body.content
             if (self.options.select.length > 0 && !self.flag) {
+              self.province_value = parseInt(self.options.select[0])
               self.address_detail = self.options.detail
               self.address_point = self.options.point
-              self.province_value = parseInt(self.options.select[0])
+              self.showLocal(self.address_point)
             }
           }
         })
@@ -248,6 +252,28 @@
         self.clear_error(true, "rgb(191, 203, 217)")
       },
 
+      // 根据提供的坐标点显示位置
+      showLocal: function(po) {
+        var str = po.split(",")
+        var newPoint = new BMap.Point(str[0], str[1])
+        var marker = new BMap.Marker(newPoint)
+
+        map.clearOverlays()
+        map.panTo(newPoint)
+        map.addOverlay(marker)
+      },
+
+      // 定位
+      orientate: function() {
+        var self = this
+        var add = document.getElementsByName("province")[0].value +
+          document.getElementsByName("city")[0].value +
+          document.getElementsByName("district")[0].value +
+          document.getElementsByName("city_near")[0].value +
+          self.address_detail
+        local.search(add)
+      },
+
       /* 验证 */
       addressValidate: function() {
         var self = this
@@ -297,17 +323,6 @@
         } else {
           self.$emit("addressValidate", "address_flag", false)
         }
-      },
-
-      /* 定位标记 */
-      localAddress: function(address) {
-        var self = this
-        var add = document.getElementsByName("province")[0].value +
-          document.getElementsByName("city")[0].value +
-          document.getElementsByName("district")[0].value +
-          document.getElementsByName("city_near")[0].value +
-            self.address_detail
-        local.search(add)
       }
     }
   }

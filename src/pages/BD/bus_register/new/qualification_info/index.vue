@@ -5,15 +5,15 @@
       <h3 class="formTitle">资质信息</h3>
       <el-form-item label="门店LOGO照片：" required>
         <upload-image ref="logo_url" :imgWidth="140" :imgHeight="140" imgName="门店LOGO"
+                      :imgFill="quaForm.logo_url" suffix_name="logo_url"
                       v-on:handleScucess = "addFormData"
                       :tips = "['250 X 250']"
-                      suffix_name="logo_url"
                       :imgSrc = "require('../../../../../assets/register/1.png')"></upload-image>
       </el-form-item>
 
       <el-form-item label="门店招牌照片：" required>
         <upload-image ref="brand_url" :imgWidth="220" :imgHeight="140" imgName="门店招牌"
-                      suffix_name="brand_url"
+                      :imgFill="quaForm.brand_url" suffix_name="brand_url"
                       v-on:handleScucess = "addFormData"
                       :tips = "['从店面正前方取景，光线明亮', '店面招牌和店面大门全景拍摄', '图片不得有水印、LOGO和其他网站信息']"
                       :imgSrc = "require('../../../../../assets/register/1.png')"></upload-image>
@@ -21,7 +21,7 @@
 
       <el-form-item label="店内照片：" required>
         <upload-image ref="indoor_url" :imgWidth="220" :imgHeight="140" imgName="店内照片"
-                      suffix_name="indoor_url"
+                      :imgFill="quaForm.indoor_url" suffix_name="indoor_url"
                       v-on:handleScucess = "addFormData"
                       :tips = "['体现主要经营环境，包含桌椅、墙面、地板等', '地面干净，无明显有无及垃圾；墙面无霉斑',
                       '照片如有工作人员，需着装干净整洁', '图片不得有水印、LOGO和其他网站信息']"
@@ -32,7 +32,7 @@
       <h5>营业执照</h5>
       <el-form-item label="上传清晰营业执照照片：" required>
         <upload-image ref="bl_image_url" :imgWidth="220" :imgHeight="140" imgName="营业执照"
-                      suffix_name="bl_image_url"
+                      :imgFill="quaForm.bl_image_url" suffix_name="quaForm.bl_image_url"
                       v-on:handleScucess = "addFormData"
                       :tips = "['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
                       '证件清晰可辨认，不得使用复印件息']"
@@ -77,21 +77,22 @@
           <label>*<span class="labelText">注册有效期：</span></label>
         </el-col>
         <el-col :span="18">
-          <el-form-item required prop="blinfo_expire">
+          <el-form-item required>
             <el-radio-group v-model="quaForm.bl_expire">
-              <el-radio label="长期有效"></el-radio>
-              <el-radio label="到期日期为："></el-radio>
+              <el-radio label="long">长期有效</el-radio>
+              <el-radio label="valid">到期日期为：</el-radio>
             </el-radio-group>
-
-            <el-date-picker
+            <el-date-picker id="bl_expire"
               :editable="false"
+              :clearable="false"
               @change="transform_bl_expire"
-              :disabled="quaForm.bl_expire !== '到期日期为：'"
+              :disabled="quaForm.bl_expire === 'long'"
               v-model="quaForm.bl_expire_date"
               type="date"
               placeholder="选择日期"
               :picker-options="blinfoPickerOptions">
             </el-date-picker>
+            <span v-if="error" class="error">{{error}}</span>
           </el-form-item>
         </el-col>
       </el-col>
@@ -100,7 +101,7 @@
       <h5>餐饮服务许可证</h5>
       <el-form-item label="上传清晰餐饮服务许可证照片：" required>
         <upload-image ref="sl_image_url" :imgWidth="220" :imgHeight="140" imgName="营业执照"
-                      suffix_name="sl_image_url"
+                      :imgFill="quaForm.sl_image_url" suffix_name="sl_image_url"
                       v-on:handleScucess = "addFormData"
                       :tips = "['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
                       '证件清晰可辨认，不得使用复印件息']"
@@ -123,8 +124,8 @@
           <label>*<span class="labelText">许可证注册号：</span></label>
         </el-col>
         <el-col :span="10">
-          <el-form-item required prop="sl_account">
-            <el-input v-model="quaForm.sl_account""></el-input>
+          <el-form-item required prop="sl_code">
+            <el-input v-model="quaForm.sl_code"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -149,6 +150,7 @@
             <el-date-picker
               @change="transform_sl_expire"
               :editable="false"
+              :clearable="false"
               v-model="quaForm.sl_expire"
               type="date"
               placeholder="选择日期"
@@ -158,7 +160,6 @@
         </el-col>
       </el-col>
     </el-form>
-    <el-button @click="quaValidate">diandsafaf</el-button>
   </el-col>
 </template>
 
@@ -167,6 +168,9 @@
   import {isLicName, isLicNumber, isLicAdd, getUrlParameters} from "../../../../../common/common"
 
   export default{
+    props: {
+      filling: Object
+    },
     data() {
       var validateBlinName = (rule, value, callback) => {
         var blinName = isLicName(value, "营业执照")
@@ -229,6 +233,7 @@
             return time.getTime() < Date.now() - 8.64e7
           }
         },
+        error: "",
         quaForm: {
           logo_url: "",
           brand_url: "",
@@ -237,11 +242,11 @@
           bl_name: "",
           bl_account: "",
           bl_address: "",
-          bl_expire: "长期有效",
+          bl_expire: "long",
           bl_expire_date: "",
           sl_image_url: "",
           sl_name: "",
-          sl_account: "",
+          sl_code: "",
           sl_address: "",
           sl_expire: ""
         },
@@ -255,7 +260,7 @@
           bl_account: [
             { validator: validateBlinAcc, trigger: "blur" }
           ],
-          sl_account: [
+          sl_code: [
             { validator: validateSlinAcc, trigger: "blur" }
           ],
           bl_address: [
@@ -270,12 +275,38 @@
         }
       }
     },
+    watch: {
+      filling: function() {
+        var self = this
+        var businfo = self.filling.businfo
+        var blinfo = self.filling.blinfo
+        var slinfo = self.filling.slinfo
+        self.quaForm.logo_url = businfo.logo_url
+        self.quaForm.brand_url = businfo.brand_url
+        self.quaForm.indoor_url = businfo.indoor_url
+        self.quaForm.bl_image_url = blinfo.bl_image_url
+        self.quaForm.bl_account = blinfo.bl_account
+        self.quaForm.bl_name = blinfo.bl_name
+        self.quaForm.bl_address = blinfo.bl_address
+        if (blinfo.bl_expire) {
+          self.quaForm.bl_expire = "valid"
+          self.quaForm.bl_expire_date = blinfo.bl_expire
+        }
+        self.quaForm.sl_image_url = slinfo.sl_image_url
+        self.quaForm.sl_code = slinfo.sl_code
+        self.quaForm.sl_name = slinfo.sl_name
+        self.quaForm.sl_address = slinfo.sl_address
+        self.quaForm.sl_expire = slinfo.sl_expire
+      }
+    },
     methods: {
       addFormData: function(value, name) {
         this.quaForm[name] = value
       },
       transform_bl_expire: function(value) {
         this.quaForm.bl_expire_date = value
+        this.error = ""
+        document.getElementById("bl_expire").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
       },
       transform_sl_expire: function(value) {
         this.quaForm.sl_expire = value
@@ -290,9 +321,13 @@
         self.$refs.sl_image_url.validate()
         var imageFlag = self.quaForm.logo_url && self.quaForm.brand_url && self.quaForm.indoor_url &&
           self.quaForm.bl_image_url && self.quaForm.sl_image_url
+        if (self.quaForm.bl_expire === "valid" && self.quaForm.bl_expire_date === "") {
+          self.error = "请选择营业执照到期日期"
+          document.getElementById("bl_expire").getElementsByTagName("input")[0].style.borderColor = "#ff4949"
+        }
         // 其他输入验证
         self.$refs.quaForm.validate((valid) => {
-          if (valid && imageFlag) {
+          if (valid && imageFlag && !self.error) {
             var formData = {
               step: "QUA",
               "applynum": getUrlParameters(window.location.hash, "id"),
@@ -311,13 +346,13 @@
               slinfo: {
                 "sl_image_url": self.quaForm.sl_image_url,
                 "sl_name": self.quaForm.sl_name,
-                "sl_account": self.quaForm.sl_account,
+                "sl_code": self.quaForm.sl_code,
                 "sl_address": self.quaForm.sl_address,
                 "sl_expire": self.quaForm.sl_expire
               }
             }
-            if (self.quaForm.bl_expire !== "长期有效") {
-              formData.append("blinfo.bl_expire", self.quaForm.bl_expire_date)
+            if (self.quaForm.bl_expire === "valid") {
+              formData.blinfo.bl_expire = self.quaForm.bl_expire_date
             }
             self.$store.commit("FORM_DATA", formData)
             self.$store.commit("V_FLAG", true)

@@ -75,6 +75,17 @@ const DISTRICT_URL = HOST_URL + "/register/districts/"
 // 获取商圈 get
 const CITYNEAR_URL = HOST_URL + "/register/citynears/"
 
+/* 银行资料 */
+// 银行省 get
+const BANK_PROVINCES_URL = HOST_URL + "/register/admiprovinces/"
+// 银行市 get
+const BANK_CITIES_URL = HOST_URL + "/register/admicities/"
+// 银行总行信息 get
+const BANKS_URL = HOST_URL + "/register/banks/"
+// 银行分行信息 get
+const SUBBANKS_URL = HOST_URL + "/register/subbanks/"
+
+
 // 上传图片 post
 const TEMP_PHOTOS_URL = HOST_URL + "/register/upload-tmpimage/"
 
@@ -104,6 +115,10 @@ exports = module.exports = {
   CITY_URL,
   DISTRICT_URL,
   CITYNEAR_URL,
+  BANK_PROVINCES_URL,
+  BANK_CITIES_URL,
+  BANKS_URL,
+  SUBBANKS_URL,
   TEMP_PHOTOS_URL
 }
 
@@ -182,22 +197,6 @@ var BUSLIST_SUBMITCONSTRA_TYPE = "post"
  var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
  var EXCEL_UPLOAD_TYPE = "post"
 
- /!* *****银行省市资料***** *!/
- /!* 银行省 *!/
- var BANK_PROVINCES_URL = HOST_URL + "/register/admiprovinces/"
- var BANK_PROVINCES_TYPE = "get"
-
- /!* 银行市 *!/
- var BANK_CITIES_URL = HOST_URL + "/register/admicities/"
- var BANK_CITIES_TYPE = "get"
-
- /!* 银行总行信息 *!/
- var BANKS_URL = HOST_URL + "/register/banks/"
- var BANKS_TYPE = "get"
-
- /!* 银行分行信息 *!/
- var SUBBANKS_URL = HOST_URL + "/register/subbanks/"
- var SUBBANKS_TYPE = "get"
 
  /!* ********************* 审核 ********************* *!/
  /!* *********商家审核（busVerify）********* *!/

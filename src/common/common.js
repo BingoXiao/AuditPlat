@@ -75,7 +75,6 @@ function isName(value) {
   }
   return obj
 }
-
 // 手机号码验证
 function isPhone(value) {
   var obj = {}
@@ -94,6 +93,7 @@ function isPhone(value) {
   }
   return obj
 }
+
 
 // 后台审核
 // 账户验证 账号长度为2~63位，且只能包含数字、字母及. _ -
@@ -114,7 +114,6 @@ function isAccount(value) {
   }
   return obj
 }
-
 // 密码验证
 function isPassword(value) {
   var obj = {}
@@ -128,6 +127,7 @@ function isPassword(value) {
   }
   return obj
 }
+
 
 // 营业执照,餐饮许可证名称
 function isLicName(value, str) {
@@ -147,18 +147,17 @@ function isLicName(value, str) {
   }
   return obj
 }
-
-// 营业执照,餐饮许可证号码
+// 营业执照,餐饮许可证,证件号码
 function isLicNumber(value, str) {
   var obj = {}
   if (value === "") {
-    obj = {flag: false, error: "请填写" + str + "注册号"}
+    obj = {flag: false, error: "请填写" + str}
   } else {
     if (/^\s+$/.test(value)) {
-      obj = {flag: false, error: str + "注册号" + "格式不正确"}
+      obj = {flag: false, error: str + "格式不正确"}
     } else {
       if (!(/^[a-zA-Z\d]{1,}$/.test(value))) {
-        obj = {flag: false, error: str + "注册号" + "格式不正确"}
+        obj = {flag: false, error: str + "格式不正确"}
       } else {
         obj = {flag: true, error: ""}
       }
@@ -166,7 +165,6 @@ function isLicNumber(value, str) {
   }
   return obj
 }
-
 // 营业执照,餐饮许可证地址
 function isLicAdd(value, str) {
   var obj = {}
@@ -186,6 +184,24 @@ function isLicAdd(value, str) {
   return obj
 }
 
+// 银行卡号
+function isbankNumber(value) {
+  var obj = {}
+  if (value === "") {
+    obj = {flag: false, error: "请填写银行卡号"}
+  } else {
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: "请填写正确的银行卡号"}
+    } else {
+      if (!(/^\d{1,}$/.test(value))) {
+        obj = {flag: false, error: "请填写正确的银行卡号"}
+      } else {
+        obj = {flag: true, error: ""}
+      }
+    }
+  }
+  return obj
+}
 
 /* 模态框 */
 function modalHide(fun) {
@@ -205,5 +221,6 @@ module.exports = {
   isLicName,
   isLicNumber,
   isLicAdd,
+  isbankNumber,
   modalHide
 }

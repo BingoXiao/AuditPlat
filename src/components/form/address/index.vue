@@ -100,17 +100,24 @@
         address_detail: "",
         address_point: "",
         error: "",
-        flag: false
+        flag: true
       }
     },
     watch: {
       options: function() {
         var self = this
-        self.get_province_list()
+        if (self.options.select.length > 0) {
+          self.flag = false
+          self.province_value = parseInt(self.options.select[0])
+          self.address_detail = self.options.detail
+          self.address_point = self.options.point
+          self.showLocal(self.address_point)
+        }
       }
     },
-    mounted: function() {
+    mounted() {
       var self = this
+      self.get_province_list()
       // 百度地图API功能
       map = new BMap.Map("allmap")
       point = new BMap.Point(114.025974, 22.546054)
@@ -176,12 +183,6 @@
         self.$http.get(PROVINCE_URL).then(function(response) {
           if (response.body.success) {
             self.province_list = response.body.content
-            if (self.options.select.length > 0 && !self.flag) {
-              self.province_value = parseInt(self.options.select[0])
-              self.address_detail = self.options.detail
-              self.address_point = self.options.point
-              self.showLocal(self.address_point)
-            }
           }
         })
       },
@@ -190,6 +191,8 @@
       city_http: function(value) {
         var self = this
         self.city_value = ""
+        self.district_value = ""
+        self.city_near_value = ""
         self.$http.get(CITY_URL + "?province_id=" + value).then(function(response) {
           if (response.body.success) {
             self.city_list = response.body.content
@@ -201,7 +204,9 @@
       },
       get_city_list: function(value) {
         var self = this
-        self.city_http(value)
+        if (value) {
+          self.city_http(value)
+        }
         self.clear_error(true, "rgb(191, 203, 217)")
       },
 
@@ -209,6 +214,7 @@
       district_http: function(value) {
         var self = this
         self.district_value = ""
+        self.city_near_value = ""
         self.$http.get(DISTRICT_URL + "?city_id=" + value).then(function(response) {
           if (response.body.success) {
             self.district_list = response.body.content
@@ -221,7 +227,9 @@
       },
       get_district_list: function(value) {
         var self = this
-        self.district_http(value)
+        if (value) {
+          self.district_http(value)
+        }
         self.clear_error(true, "rgb(191, 203, 217)")
       },
 

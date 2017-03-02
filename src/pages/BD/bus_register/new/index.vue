@@ -24,7 +24,7 @@
 
       <!--结款信息-->
       <el-col :span="20" :offset="2" v-show="currentView === 'checkoutInfo'">
-        <checkout-info></checkout-info>
+        <checkout-info ref="checkChild" :filling="filling"></checkout-info>
         <el-col :span="24" class="bottomButton">
           <el-button size="large" type="primary" @click="previous_step('qualificationInfo')">上一步</el-button>
           <el-button size="large" type="primary" @click="next_step('checkoutInfo')">下一步</el-button>
@@ -103,7 +103,7 @@
         } else if (self.active === 2) {
           self.$refs.quaChild.quaValidate()       // 资质信息
         } else if (self.active === 3) {
-          self.active = self.active + 1
+          self.$refs.checkChild.checkValidate("1")     // 结款信息
         }
 
         if (self.$store.state.vflag) {

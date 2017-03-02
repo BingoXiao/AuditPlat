@@ -3,27 +3,26 @@
     <el-form id="basicForm" :model="basicForm" :rules="basicRules"
              ref="basicForm" label-width="100px">
       <h3 class="formTitle">商家信息</h3>
-      <el-col :span="8">
-        <el-form-item label="商家姓名：" prop="name" required>
-          <el-input v-model="basicForm.name"></el-input>
-        </el-form-item>
-      </el-col>
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="商家姓名：" prop="name" required>
+            <el-input v-model="basicForm.name"></el-input>
+          </el-form-item>
+        </el-col>
 
-      <el-col :span="7" :offset="1">
-        <el-form-item label="商家手机：" prop="phonenum" required>
-          <el-input v-model="basicForm.phonenum"></el-input>
-        </el-form-item>
-      </el-col>
+        <el-col :span="7" :offset="1">
+          <el-form-item label="商家手机：" prop="phonenum" required>
+            <el-input v-model="basicForm.phonenum"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <!--商家分类-->
-      <el-col :span="24">
-        <el-form-item label="商家分类：" required>
-          <bus-classification ref="bus_class_children" :options="basicForm.class"
-                              v-on:classValidate="module_res"></bus-classification>
-        </el-form-item>
-      </el-col>
+      <el-form-item label="商家分类：" required>
+        <bus-classification ref="bus_class_children" :options="basicForm.class"
+                            v-on:classValidate="module_res"></bus-classification>
+      </el-form-item>
 
-      <br/>
       <h3 class="formTitle">门店信息</h3>
       <el-form-item label="门店名称：" prop="busname">
         <el-col :span="14">

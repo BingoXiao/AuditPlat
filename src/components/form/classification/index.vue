@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="24">
+  <el-row>
     <el-col :span="4">
       <el-form-item>
         <el-select name="lclass" placeholder="合作行业"
@@ -40,7 +40,7 @@
     </el-col>
 
     <span v-if="error" class="error">{{error}}</span>
-  </el-col>
+  </el-row>
 </template>
 
 <script>
@@ -60,12 +60,20 @@
         md_list: [],
         sm_list: [],
         error: "",
-        flag: false
+        flag: true
       }
+    },
+    mounted() {
+      var self = this
+      self.get_lg_list()
     },
     watch: {
       options: function() {
-        this.get_lg_list()
+        var self = this
+        if (self.options.length > 0) {
+          self.flag = false
+          self.lg_value = parseInt(self.options[0])
+        }
       }
     },
     methods: {
@@ -87,9 +95,6 @@
         self.$http.get(CATEGORY_URL).then(function(response) {
           if (response.body.success) {
             self.lg_list = response.body.content
-            if (self.options.length > 0 && !self.falg) {
-              self.lg_value = parseInt(self.options[0])
-            }
           }
         })
       },
@@ -102,7 +107,6 @@
         self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
           if (response.body.success) {
             self.md_list = response.body.content
-
             if (!self.flag) {
               self.md_value = parseInt(self.options[1])
             }
@@ -111,7 +115,9 @@
       },
       get_md_list: function(value) {
         var self = this
-        self.md_http(value)
+        if (value) {
+          self.md_http(value)
+        }
         self.clear_error(true, "rgb(191, 203, 217)")
       },
 
@@ -139,7 +145,9 @@
       },
       get_sm_list: function(value) {
         var self = this
-        self.sm_http(value)
+        if (value) {
+          self.sm_http(value)
+        }
         self.clear_error(true, "rgb(191, 203, 217)")
       },
 

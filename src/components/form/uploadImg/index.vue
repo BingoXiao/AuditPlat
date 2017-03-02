@@ -1,6 +1,7 @@
 <template>
   <el-col :span="24">
     <div class="imgWrapper">
+      <!--上传图片-->
       <el-upload
         class = "avatar-uploader"
         :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
@@ -18,31 +19,21 @@
       </el-upload>
     </div>
 
+    <!--样片展示-->
     <div class="imgSample">
       <img :src="imgSrc" alt="" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}">
     </div>
 
+    <!--上传提示-->
     <div v-if="tipsFlag" class="imgTips" :style="{height: imgHeight + 'px'}">
       <ol>
         <li v-for="(item, index) in tips">{{item}}</li>
       </ol>
     </div>
+    <!--错误提示-->
     <div v-else class="imgTips" :style="{height: imgHeight + 'px'}">
       <div>请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）</div>
     </div>
-
-    <!--预览图片-->
-    <div class="cover" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
-         v-if="coverVisible"
-         :moveenter="coverVisible = true"
-         :moveleave="coverVisible = false">
-      <div class="amplify" @click="handlePreview">
-        <i class="el-icon-view"></i>
-      </div>
-    </div>
-    <el-dialog v-model="dialogVisible">
-      <img width="100%" :src="dialogImageUrl" alt="">
-    </el-dialog>
   </el-col>
 </template>
 
@@ -54,37 +45,30 @@
       tips: Array,          // 要求
       imgWidth: Number,     // 图片宽度
       imgHeight: Number,    // 图片高度
-      imgName: String,      // 图片名称（展示）
+      imgName: String,      // 名称展示
       imgSrc: String,       // 样片展示
       suffix_name: String,  // 图片名称(返回)
-      imgFill: String       // 图片填充来源
+      imgFill: String       // 图片展示（商家资料）
     },
     data() {
       return {
-        upload_url: "" + TEMP_PHOTOS_URL,
-        imageUrl: "",
-        tipsFlag: true,
-        dialogImageUrl: "",
-        dialogVisible: false
+        upload_url: TEMP_PHOTOS_URL,   // 上传地址
+        imageUrl: "",                  // 图片的URL
+        tipsFlag: true                 // 上传错误标志
       }
     },
     watch: {
+      // 图片展示
       imgFill: function() {
         var self = this
-        if (self.imgFill) {
+        if (self.imgFill !== "") {
           self.$refs.upload_tips.style.display = "none"
           self.imageUrl = "https://shopmanage-dev.jinmailife.com" + self.imgFill
         }
       }
     },
-    mounted() {
-
-    },
     methods: {
-      handlePreview(file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = true
-      },
+      // 上传图片验证
       validate: function() {
         var self = this
         if (self.imageUrl === "") {
@@ -112,10 +96,12 @@
         }
         return isJPG && isLt2M
       },
+      // 上传成功（返回父组件相关信息）
       handleScucess(res, file) {
         var self = this
         self.$refs.upload_tips.style.display = "none"
         self.imageUrl = "" + file.url
+        // 图片url 及 对应名称
         self.$emit("handleScucess", res.content.url, self.suffix_name)
       }
     }

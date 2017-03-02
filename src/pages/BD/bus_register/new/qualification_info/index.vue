@@ -5,38 +5,42 @@
       <h3 class="formTitle">资质信息</h3>
       <el-form-item label="门店LOGO照片：" required>
         <upload-image ref="logo_url" :imgWidth="140" :imgHeight="140" imgName="门店LOGO"
-                      :imgFill="quaForm.logo_url" suffix_name="logo_url"
-                      v-on:handleScucess = "addFormData"
-                      :tips = "['250 X 250']"
-                      :imgSrc = "require('../../../../../assets/register/1.png')"></upload-image>
+                      :imgFill="quaForm.logo_url"
+                      suffix_name="logo_url"
+                      v-on:handleScucess="addFormData"
+                      :tips="['250 X 250']"
+                      :imgSrc="require('../../../../../assets/register/1.png')"></upload-image>
       </el-form-item>
 
       <el-form-item label="门店招牌照片：" required>
         <upload-image ref="brand_url" :imgWidth="220" :imgHeight="140" imgName="门店招牌"
-                      :imgFill="quaForm.brand_url" suffix_name="brand_url"
-                      v-on:handleScucess = "addFormData"
-                      :tips = "['从店面正前方取景，光线明亮', '店面招牌和店面大门全景拍摄', '图片不得有水印、LOGO和其他网站信息']"
-                      :imgSrc = "require('../../../../../assets/register/1.png')"></upload-image>
+                      :imgFill="quaForm.brand_url"
+                      suffix_name="brand_url"
+                      v-on:handleScucess="addFormData"
+                      :tips="['从店面正前方取景，光线明亮', '店面招牌和店面大门全景拍摄', '图片不得有水印、LOGO和其他网站信息']"
+                      :imgSrc="require('../../../../../assets/register/1.png')"></upload-image>
       </el-form-item>
 
       <el-form-item label="店内照片：" required>
         <upload-image ref="indoor_url" :imgWidth="220" :imgHeight="140" imgName="店内照片"
-                      :imgFill="quaForm.indoor_url" suffix_name="indoor_url"
-                      v-on:handleScucess = "addFormData"
-                      :tips = "['体现主要经营环境，包含桌椅、墙面、地板等', '地面干净，无明显有无及垃圾；墙面无霉斑',
+                      :imgFill="quaForm.indoor_url"
+                      suffix_name="indoor_url"
+                      v-on:handleScucess="addFormData"
+                      :tips="['体现主要经营环境，包含桌椅、墙面、地板等', '地面干净，无明显有无及垃圾；墙面无霉斑',
                       '照片如有工作人员，需着装干净整洁', '图片不得有水印、LOGO和其他网站信息']"
-                      :imgSrc = "require('../../../../../assets/register/2.png')"></upload-image>
+                      :imgSrc="require('../../../../../assets/register/2.png')"></upload-image>
       </el-form-item>
 
 
       <h5>营业执照</h5>
       <el-form-item label="上传清晰营业执照照片：" required>
         <upload-image ref="bl_image_url" :imgWidth="220" :imgHeight="140" imgName="营业执照"
-                      :imgFill="quaForm.bl_image_url" suffix_name="quaForm.bl_image_url"
-                      v-on:handleScucess = "addFormData"
-                      :tips = "['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
+                      :imgFill="quaForm.bl_image_url"
+                      suffix_name="bl_image_url"
+                      v-on:handleScucess="addFormData"
+                      :tips="['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
                       '证件清晰可辨认，不得使用复印件息']"
-                      :imgSrc = "require('../../../../../assets/register/10.png')"></upload-image>
+                      :imgSrc="require('../../../../../assets/register/10.png')"></upload-image>
       </el-form-item>
 
       <el-col :span="24">
@@ -101,11 +105,12 @@
       <h5>餐饮服务许可证</h5>
       <el-form-item label="上传清晰餐饮服务许可证照片：" required>
         <upload-image ref="sl_image_url" :imgWidth="220" :imgHeight="140" imgName="营业执照"
-                      :imgFill="quaForm.sl_image_url" suffix_name="sl_image_url"
-                      v-on:handleScucess = "addFormData"
-                      :tips = "['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
+                      :imgFill="quaForm.sl_image_url"
+                      suffix_name="sl_image_url"
+                      v-on:handleScucess="addFormData"
+                      :tips="['证照边框及国徽必须包含在内','证照拍摄角度应为“正视”，不得出现歪斜现象',
                       '证件清晰可辨认，不得使用复印件息']"
-                      :imgSrc = "require('../../../../../assets/register/11.jpg')"></upload-image>
+                      :imgSrc="require('../../../../../assets/register/11.jpg')"></upload-image>
       </el-form-item>
 
       <el-col :span="24">
@@ -189,7 +194,7 @@
         }
       }
       var validateBlinAcc = (rule, value, callback) => {
-        var blinAcc = isLicNumber(value, "营业执照")
+        var blinAcc = isLicNumber(value, "营业执照注册号")
         if (!blinAcc.flag) {
           callback(new Error(blinAcc.error))
         } else {
@@ -197,7 +202,7 @@
         }
       }
       var validateSlinAcc = (rule, value, callback) => {
-        var slinAcc = isLicNumber(value, "许可证")
+        var slinAcc = isLicNumber(value, "许可证注册号")
         if (!slinAcc.flag) {
           callback(new Error(slinAcc.error))
         } else {

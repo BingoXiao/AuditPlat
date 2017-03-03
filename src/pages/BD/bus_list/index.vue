@@ -23,8 +23,8 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" @row-click="selectShop" border
-                highlight-current-row style="width: 100%;" :row-key="tableDatas.bususer_id">
+      <el-table ref="table" :data="tableDatas" border highlight-current-row
+                style="width: 100%;" :row-key="tableDatas.bususer_id">
         <el-table-column prop="number" label="商家编号" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="account" label="商家账号" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="city" label="城市" align="center" min-width="100px"></el-table-column>
@@ -34,7 +34,7 @@
         <el-table-column prop="date_join" label="开通时间" align="center" min-width="200px"></el-table-column>
         <el-table-column label="操作" align="center" min-width="120px">
           <template scope="scope">
-            <el-button size="small" icon="search" class="tableButton"> 查看</el-button>
+            <el-button size="small" icon="search" class="tableButton" @click="viewBus(scope.row)"> 查看</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -61,7 +61,7 @@
   export default {
     data() {
       return {
-        tabs: [
+        tabs: [       // 顶部tab标签
           {
             param: "new",
             name: "新店注册"
@@ -76,7 +76,7 @@
           }
         ],
         search: {                 // 搜索栏
-          state: [               // 状态列表
+          state: [                // 状态列表
             {
               value: "筹备中",
               label: "筹备中"
@@ -90,6 +90,9 @@
               value: "已关闭",
               label: "已关闭"
             }]
+        },
+        table: {
+          bususer_id: ""
         },
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
@@ -114,12 +117,12 @@
         })
       },
 
-      /* 表格数据选择 */
-      selectShop: function(row, event, column) {
-        this.table.applynum = row.applynum
-        this.dialog.BD = row.bd
+      // 查看
+      viewBus: function(row) {
+        var self = this
+        self.table.bususer_id = row.bususer_id
+        alert(self.table.bususer_id)
       },
-
       // 下载商家列表
       download: function() {
         var href = BUSLIST_DOWNLOAD_URL

@@ -113,7 +113,7 @@
     data() {
       return {
         search: {                 // 搜索栏
-          state: [               // 状态列表
+          state: [                // 状态列表
             {
               value: "已分配",
               label: "已分配"
@@ -129,7 +129,7 @@
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,           // 当前页
         table: {                  // 记录表格行数据
-          shop_id: ""
+          applynum: ""            // 商家申请号
         },
         dialog: {
           BDvisible: false,     // 分配任务

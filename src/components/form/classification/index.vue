@@ -177,13 +177,8 @@
         }
 
         if (!self.error) {
-          var para = {
-            name: "class",
-            value: [self.lg_value, self.md_value, self.sm_value]
-          }
-          self.$emit("classValidate", "class_flag", para, true)
-        } else {
-          self.$emit("classValidate", "class_flag", false)
+          var value = [self.lg_value, self.md_value, self.sm_value]
+          self.$emit("classValidate", "class", value, true)
         }
       }
     }

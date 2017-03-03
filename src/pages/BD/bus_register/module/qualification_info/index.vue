@@ -174,9 +174,10 @@
 
   export default{
     props: {
-      filling: Object
+      filling: Object     // 信息填充
     },
     data() {
+      // 营业执照名称
       var validateBlinName = (rule, value, callback) => {
         var blinName = isLicName(value, "营业执照")
         if (!blinName.flag) {
@@ -185,6 +186,7 @@
           callback()
         }
       }
+      // 许可证名称
       var validateSlinName = (rule, value, callback) => {
         var slinName = isLicName(value, "许可证")
         if (!slinName.flag) {
@@ -193,6 +195,7 @@
           callback()
         }
       }
+      // 营业执照号码
       var validateBlinAcc = (rule, value, callback) => {
         var blinAcc = isLicNumber(value, "营业执照注册号")
         if (!blinAcc.flag) {
@@ -201,6 +204,7 @@
           callback()
         }
       }
+      // 许可证号码
       var validateSlinAcc = (rule, value, callback) => {
         var slinAcc = isLicNumber(value, "许可证注册号")
         if (!slinAcc.flag) {
@@ -209,6 +213,7 @@
           callback()
         }
       }
+      // 营业执照地址
       var validateBlinAdd = (rule, value, callback) => {
         var blinAdd = isLicAdd(value, "营业执照")
         if (!blinAdd.flag) {
@@ -217,17 +222,11 @@
           callback()
         }
       }
+      // 许可证地址
       var validateSlinAdd = (rule, value, callback) => {
         var slinAdd = isLicAdd(value, "许可证")
         if (!slinAdd.flag) {
           callback(new Error(slinAdd.error))
-        } else {
-          callback()
-        }
-      }
-      var validateSlinExp = (rule, value, callback) => {
-        if (!value) {
-          callback(new Error("请选择许可证到期日期"))
         } else {
           callback()
         }
@@ -238,22 +237,22 @@
             return time.getTime() < Date.now() - 8.64e7
           }
         },
-        error: "",
+        error: "",   // 营业执照到期日期错误提示
         quaForm: {
-          logo_url: "",
-          brand_url: "",
-          indoor_url: "",
-          bl_image_url: "",
-          bl_name: "",
-          bl_account: "",
-          bl_address: "",
-          bl_expire: "long",
-          bl_expire_date: "",
-          sl_image_url: "",
-          sl_name: "",
-          sl_code: "",
-          sl_address: "",
-          sl_expire: ""
+          logo_url: "",     // 门店LOGO
+          brand_url: "",    // 门店招牌
+          indoor_url: "",   // 店内照片
+          bl_image_url: "",    // 营业执照照片
+          bl_name: "",         // 营业执照名称
+          bl_account: "",      // 营业执照注册号
+          bl_address: "",      // 营业执照地址
+          bl_expire: "long",   // 营业执照注册有效期radio组
+          bl_expire_date: "",  // 营业执照注册有效日期
+          sl_image_url: "",    // 许可证照片
+          sl_name: "",         // 许可证名称
+          sl_code: "",         // 许可证注册号
+          sl_address: "",      // 许可证地址
+          sl_expire: ""        // 许可证有效日期
         },
         quaRules: {
           bl_name: [
@@ -275,7 +274,7 @@
             { validator: validateSlinAdd, trigger: "blur" }
           ],
           sl_expire: [
-            { validator: validateSlinExp, trigger: "[blur, change]" }
+            { required: true, message: "请选择许可证到期日期", trigger: "[blur, change]" }
           ]
         }
       }
@@ -289,33 +288,41 @@
         self.quaForm.logo_url = businfo.logo_url
         self.quaForm.brand_url = businfo.brand_url
         self.quaForm.indoor_url = businfo.indoor_url
-        self.quaForm.bl_image_url = blinfo.bl_image_url
-        self.quaForm.bl_account = blinfo.bl_account
-        self.quaForm.bl_name = blinfo.bl_name
-        self.quaForm.bl_address = blinfo.bl_address
-        if (blinfo.bl_expire) {
-          self.quaForm.bl_expire = "valid"
-          self.quaForm.bl_expire_date = blinfo.bl_expire
+        if (blinfo.bl_image_url) {     // 营业执照
+          self.quaForm.bl_image_url = blinfo.bl_image_url
+          self.quaForm.bl_account = blinfo.bl_account
+          self.quaForm.bl_name = blinfo.bl_name
+          self.quaForm.bl_address = blinfo.bl_address
+          if (blinfo.bl_expire) {
+            self.quaForm.bl_expire = "valid"
+            self.quaForm.bl_expire_date = blinfo.bl_expire
+          }
         }
-        self.quaForm.sl_image_url = slinfo.sl_image_url
-        self.quaForm.sl_code = slinfo.sl_code
-        self.quaForm.sl_name = slinfo.sl_name
-        self.quaForm.sl_address = slinfo.sl_address
-        self.quaForm.sl_expire = slinfo.sl_expire
+        if (slinfo.sl_image_url) {    // 许可证
+          self.quaForm.sl_image_url = slinfo.sl_image_url
+          self.quaForm.sl_code = slinfo.sl_code
+          self.quaForm.sl_name = slinfo.sl_name
+          self.quaForm.sl_address = slinfo.sl_address
+          self.quaForm.sl_expire = slinfo.sl_expire
+        }
       }
     },
     methods: {
+      // 获取子模块数据
       addFormData: function(value, name) {
         this.quaForm[name] = value
       },
+      // 获取营业执照到期日期
       transform_bl_expire: function(value) {
         this.quaForm.bl_expire_date = value
         this.error = ""
         document.getElementById("bl_expire").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)"
       },
+      // 获取许可证到期日期
       transform_sl_expire: function(value) {
         this.quaForm.sl_expire = value
       },
+      // 资质信息验证
       quaValidate: function() {
         var self = this
         // 图片验证
@@ -337,18 +344,18 @@
               step: "QUA",
               "applynum": getUrlParameters(window.location.hash, "id"),
               busimages: {
-                "logo_url": self.quaForm.logo_url,
-                "brand_url": self.quaForm.brand_url,
-                "indoor_url": self.quaForm.indoor_url
+                "logo_url": self.quaForm.logo_url,      // 门店LOGO
+                "brand_url": self.quaForm.brand_url,    // 门店招牌
+                "indoor_url": self.quaForm.indoor_url   // 店内照片
               },
-              blinfo: {
+              blinfo: {    // 营业执照
                 "bl_image_url": self.quaForm.bl_image_url,
                 "bl_name": self.quaForm.bl_name,
                 "bl_account": self.quaForm.bl_account,
                 "bl_address": self.quaForm.bl_address,
                 "bl_expire": ""
               },
-              slinfo: {
+              slinfo: {    // 许可证
                 "sl_image_url": self.quaForm.sl_image_url,
                 "sl_name": self.quaForm.sl_name,
                 "sl_code": self.quaForm.sl_code,

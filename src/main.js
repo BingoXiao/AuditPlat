@@ -94,7 +94,7 @@ Vue.http.interceptors.push(function(request, next) {
   next(function(response) {
     // 请求失败
     if (response.status !== 200) {
-      Vue.prototype.$confirm("无法连接,请稍后再试", "提示", {
+      Vue.prototype.$confirm("无法连接,请稍后再试!", "提示", {
         showCancelButton: false,
         showConfirmButton: false,
         type: "warning"

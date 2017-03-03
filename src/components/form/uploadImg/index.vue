@@ -77,6 +77,7 @@
           self.tipsFlag = true
         }
       },
+      // 上传图片前验证
       beforeUpload(file) {
         var self = this
         const isJPG = (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png")

@@ -28,33 +28,6 @@ const ACCOUNTS_DELETE_URL = HOST_URL + "/account-manage/delete-employee/"
 // 冻结 post
 const ACCOUNTS_FROZEN_URL = HOST_URL + "/account-manage/change-avail/"
 
-/* BD */
-/* 商家分配 */
-// 表格 get
-const BDAPPLY_TABLE_URL = HOST_URL + "/register/applys/"
-
-// 获取所有带有商家分配权限的BD get
-const BDAPPLY_LIST_URL = HOST_URL + "/register/bds/"
-
-// 分配 post
-const BDAPPLY_ASSIGN_URL = HOST_URL + "/register/assign-work/"
-
-/* 商家注册 */
-// 表格 get
-const BDREGISTER_TABLE_URL = HOST_URL + "/register/registers/"
-
-// 新店注册资料查看 get
-const BDREGISTER_EDITFILLING_URL = HOST_URL + "/register/pendingverinfo/"
-
-// 新店注册信息提交 post
-const BDREGISTER_NEWREGISTER_URL = HOST_URL + "/register/busregister/"
-
-
-/* 商家列表 */
-// 获取表格 get
-const BUSLIST_TABLE_URL = HOST_URL + "/bus-manage/buslist/"
-
-const BUSLIST_DOWNLOAD_URL = HOST_URL + "/bus-manage/buses/download/"
 
 /* 基本信息 */
 /* 商家分类资料 */
@@ -85,9 +58,50 @@ const BANKS_URL = HOST_URL + "/register/banks/"
 // 银行分行信息 get
 const SUBBANKS_URL = HOST_URL + "/register/subbanks/"
 
-
 // 上传图片 post
 const TEMP_PHOTOS_URL = HOST_URL + "/register/upload-tmpimage/"
+
+
+/* BD */
+/* 商家分配 */
+// 表格 get
+const BDAPPLY_TABLE_URL = HOST_URL + "/register/applys/"
+
+// 获取所有带有商家分配权限的BD get
+const BDAPPLY_LIST_URL = HOST_URL + "/register/bds/"
+
+// 分配 post
+const BDAPPLY_ASSIGN_URL = HOST_URL + "/register/assign-work/"
+
+/* 商家注册 */
+// 表格 get
+const BDREGISTER_TABLE_URL = HOST_URL + "/register/registers/"
+
+// 新店注册资料查看 get
+const BDREGISTER_EDITFILLING_URL = HOST_URL + "/register/pendingverinfo/"
+
+// 新店注册信息提交 post
+const BDREGISTER_NEWREGISTER_URL = HOST_URL + "/register/busregister/"
+
+// 删除新店(分店) post
+const BDREGISTER_DELETE_URL = function(id) {
+  return HOST_URL + "/register/applys/" + id + "/delete/"
+}
+
+/* 商家列表 */
+// 获取表格 get
+const BUSLIST_TABLE_URL = HOST_URL + "/bus-manage/buslist/"
+// 下载
+const BUSLIST_DOWNLOAD_URL = HOST_URL + "/bus-manage/buses/download/"
+
+
+/* 商家审核 */
+// 商家申请表格 get
+const BDVERIFY_APPLYTABLE_URL = HOST_URL + "/register/pendingver/"
+
+// 商家信息修改表格 get
+const BDVERIFY_EDITTABLE_URL = HOST_URL + "/bus-manage/busedit-items/"
+
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
@@ -106,8 +120,11 @@ exports = module.exports = {
   BDREGISTER_TABLE_URL,
   BDREGISTER_EDITFILLING_URL,
   BDREGISTER_NEWREGISTER_URL,
+  BDREGISTER_DELETE_URL,
   BUSLIST_TABLE_URL,
   BUSLIST_DOWNLOAD_URL,
+  BDVERIFY_APPLYTABLE_URL,
+  BDVERIFY_EDITTABLE_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -142,10 +159,6 @@ var BDREGISTER_BRALIST_TYPE = "get"
   /!* 分店注册信息提交 *!/
 var BDREGISTER_BRAREGISTER_URL = HOST_URL + "/bus-manage/branches/add/"
 var BDREGISTER_BRAREGISTER_TYPE = "post"
-
-  /!* 删除新店(分店) *!/
-var BDREGISTER_DELETE_URL = new Function("id",'return HOST_URL + "/register/applys/"+id+"/delete/"')
-var BDREGISTER_DELETE_TYPE = "post"
 */
 
 /*
@@ -203,14 +216,6 @@ var BUSLIST_SUBMITCONSTRA_TYPE = "post"
  /!* 信息填充 *!/
  var BDVERIFY_FILLING_URL = HOST_URL + "/bus-manage/busedit-details/"
  var BDVERIFY_FILLING_TYPE = "get"
-
- /!* 商家申请表格 *!/
- var BDVERIFY_APPLYTABLE_URL = HOST_URL + "/register/pendingver/"
- var BDVERIFY_APPLYTABLE_TYPE = "get"
-
- /!* 商家信息修改表格 *!/
- var BDVERIFY_EDITTABLE_URL = HOST_URL + "/bus-manage/busedit-items/"
- var BDVERIFY_EDITTABLE_TYPE = "get"
 
  /!* 商家申请通过（驳回） *!/
  var BDVERIFY_APPLYPASS_URL = HOST_URL + "/register/verify/"
@@ -363,5 +368,4 @@ var BUSLIST_SUBMITCONSTRA_TYPE = "post"
  /!* 提交 *!/
  var COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/"
  var COMPAINTS_SUBMIT_TYPE = "post"
-
 */

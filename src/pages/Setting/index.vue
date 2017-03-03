@@ -32,7 +32,7 @@
     <el-col :span="24">
       <br/>
       <el-table ref="table" border highlight-current-row style="width: 100%"
-                :data="tableDatas" :row-key="tableDatas.id" v-loading="loading"
+                :data="tableDatas" :row-key="tableDatas.id"
                 @select="selectUsers" @select-all="selectUsers">
         <el-table-column type="selection" min-width="130px"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"  min-width="130px"></el-table-column>
@@ -281,9 +281,8 @@
         }
       }
       return {
-        loading: true,
-        search: {               // 搜索栏
-          state: [
+        search: {                // 搜索栏
+          state: [               // 状态
             {
               value: "冻结",
               label: "冻结"
@@ -297,17 +296,17 @@
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,           // 当前页
         table: {                  // 记录表格行数据
-          id: "",
+          id: "",           // （冻结/删除）表格内操作的 id
           ids: [],          // （冻结/删除）“按钮”操作的id数组
-          name: "",
-          is_active: null,
+          is_active: null,  // （冻结/删除）表格内操作的 flag
           is_activeS: [],   // （冻结/删除）“按钮”操作的flag数组,判断删除前动作
-          account: "",
-          perms: []
+          name: "",         // 用户姓名
+          account: "",      // 用户账号
+          perms: []         // 用户权限
         },
-        dialog: {
-          addUsersVisible: false,          // 添加用户模态框
-          editUsersVisible: false,         // 修改用户资料模态框
+        dialog: {                          // 模态框标志
+          addUsersVisible: false,          // 添加用户
+          editUsersVisible: false,         // 修改用户资料
           editPasswordVisible: false,      // 修改用户密码
           tipsVisible: false,              // 操作提示
           tips: "",                        // 操作后提示信息
@@ -319,7 +318,7 @@
           password: "",
           perms: ["bus_verify"]
         },
-        addUsersRules: {
+        addUsersRules: {     // 添加用户
           name: [
             { required: true, validator: nameV, trigger: "blur" }
           ],
@@ -336,12 +335,12 @@
         editUsersForm: {    // 修改用户资料
           perms: []
         },
-        editUsersRules: {    // 修改用户资料
+        editUsersRules: {
           perms: [
             { type: "array", required: true, max: 5, message: "请至少选择一个权限", trigger: "change" }
           ]
         },
-        editPasswordForm: {
+        editPasswordForm: {    // 修改用户密码
           newPwd: ""
         },
         editPasswordRules: {
@@ -361,7 +360,6 @@
       /* 获取用户数据（表格） */
       getTables: function() {
         var self = this
-//        self.loading = true
         self.$http.get(ACCOUNTS_TABLE_URL).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
@@ -389,8 +387,6 @@
               }
               datas[i].service = service
             }
-
-            self.loading = false
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
           }
@@ -451,12 +447,13 @@
 
       /* 修改用户资料 */
       editUsersVisible: function(row) {
-        this.dialog.editUsersVisible = true
-        this.table.id = row.id
-        this.table.account = row.account
-        this.table.name = row.name
-        this.table.perms = row.service
-        this.editUsersForm.perms = row.service
+        var self = this
+        self.dialog.editUsersVisible = true
+        self.table.id = row.id
+        self.table.account = row.account
+        self.table.name = row.name
+        self.table.perms = row.service
+        self.editUsersForm.perms = row.service
       },
       editUsersInfo: function(formName) {
         var self = this

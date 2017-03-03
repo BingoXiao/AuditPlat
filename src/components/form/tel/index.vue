@@ -43,8 +43,8 @@
         var self = this
         if (self.tel) {
           var arr = self.tel.split("-")
-          self.tel2 = arr[1]
           self.tel1 = arr[0]
+          self.tel2 = arr[1]
           if (arr.length > 2) {
             self.tel3 = arr[2]
           }
@@ -107,15 +107,9 @@
             self.clear_error(true, "rgb(191, 203, 217)")
           }
         }
-
         if (!self.error) {
-          var para = {
-            name: "tel",
-            value: self.tel1 + self.tel2 + self.tel3
-          }
-          self.$emit("telValidate", "tel_flag", para, true)
-        } else {
-          self.$emit("telValidate", "tel_flag", false)
+          var str = self.tel1 + "-" + self.tel2 + "-" + self.tel3
+          self.$emit("telValidate", "tel", str, true)
         }
       }
     }

@@ -46,8 +46,8 @@
 <script>
   export default{
     props: {
-      steps: Array,
-      active: Number
+      steps: Array,     // 步骤条title
+      active: Number    // 激活index
     },
     computed: {
       step1: function() {

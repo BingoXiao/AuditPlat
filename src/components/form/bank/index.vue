@@ -47,10 +47,10 @@
       <el-col :span="10">
         <el-form-item label="开户行名称：" label-width="120px" required>
           <el-col :span="15">
-            <el-input v-if="branch_flag"  v-model="custom_branch"
+            <el-input v-show="branch_flag"  v-model="custom_branch"
                       name="custom_branch" @change="branchInput"></el-input>
             <el-select name="branch" placeholder="--开户行名称--"
-                       v-else v-model="branch_value" @change="get_branch_data">
+                       v-show="!branch_flag" v-model="branch_value" @change="get_branch_data">
               <el-option
                 v-for="item in branch_list"
                 :label="item.subbank_name"
@@ -212,7 +212,7 @@
       // 自定义支行名称输入
       branchInput: function() {
         var self = this
-        self.branch_type("rgb(191, 203, 217)")
+        self.clear_error(true, "rgb(191, 203, 217)")
       },
       /* 验证 */
       bankValidate: function() {
@@ -231,32 +231,33 @@
               document.getElementsByName("bank")[0].style.borderColor = "#ff4949"
               self.branch_type("#ff4949")
             } else {
-              if (self.branch_value === "") {
-                self.error = "请选择门店地址"
-                self.branch_type("#ff4949")
+              if (self.branch_flag) {   // 自定义支行
+                if (self.custom_branch === "") {
+                  self.error = "请填写开户行名称"
+                  self.branch_type("#ff4949")
+                } else {
+                  self.clear_error(true, "rgb(191, 203, 217)")
+                }
               } else {
-                self.clear_error(true, "rgb(191, 203, 217)")
+                if (self.branch_value === "") {
+                  self.error = "请选择门店地址"
+                  self.branch_type("#ff4949")
+                } else {
+                  self.clear_error(true, "rgb(191, 203, 217)")
+                }
               }
             }
           }
         }
 
         if (!self.error) {
-          var para = null
+          var value = null
           if (self.branch_flag) {
-            para = {
-              name: "bank",
-              value: [self.admiprovince_value, self.admicity_value, self.bank_value, self.branch_value, ""]
-            }
+            value = [self.admiprovince_value, self.admicity_value, self.bank_value, 0, self.custom_branch]
           } else {
-            para = {
-              name: "bank",
-              value: [self.admiprovince_value, self.admicity_value, self.bank_value, 0, self.custom_branch]
-            }
+            value = [self.admiprovince_value, self.admicity_value, self.bank_value, self.branch_value, ""]
           }
-          self.$emit("bankValidate", "bank_flag", para, true)
-        } else {
-          self.$emit("bankValidate", "bank_flag", false)
+          self.$emit("bankValidate", "bank", value, true)
         }
       }
     }

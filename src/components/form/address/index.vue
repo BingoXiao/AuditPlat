@@ -106,9 +106,9 @@
     watch: {
       options: function() {
         var self = this
-        if (self.options.select.length > 0) {
+        if (self.options.selectArr.length > 0) {
           self.flag = false
-          self.province_value = parseInt(self.options.select[0])
+          self.province_value = parseInt(self.options.selectArr[0])
           self.address_detail = self.options.detail
           self.address_point = self.options.point
           self.showLocal(self.address_point)
@@ -197,7 +197,7 @@
           if (response.body.success) {
             self.city_list = response.body.content
             if (!self.flag) {
-              self.city_value = parseInt(self.options.select[1])
+              self.city_value = parseInt(self.options.selectArr[1])
             }
           }
         })
@@ -218,9 +218,8 @@
         self.$http.get(DISTRICT_URL + "?city_id=" + value).then(function(response) {
           if (response.body.success) {
             self.district_list = response.body.content
-
             if (!self.flag) {
-              self.district_value = parseInt(self.options.select[2])
+              self.district_value = parseInt(self.options.selectArr[2])
             }
           }
         })
@@ -242,7 +241,7 @@
             self.city_near_list = response.body.content
 
             if (!self.flag) {
-              self.city_near_value = parseInt(self.options.select[3])
+              self.city_near_value = parseInt(self.options.selectArr[3])
               self.flag = true
             }
           }
@@ -317,19 +316,14 @@
             }
           }
         }
-
         if (!self.error) {
-          var para = {
-            name: "address",
-            value: {
-              select: [self.province_value, self.city_value, self.district_value, self.city_near_value],
-              point: self.address_point,
-              detail: self.address_detail
-            }
+          let str = self.province_value + "," + self.city_value + "," + self.district_value + "," + self.city_near_value
+          let value = {
+            selectArr: str.split(","),
+            point: self.address_point,
+            detail: self.address_detail
           }
-          self.$emit("addressValidate", "address_flag", para, true)
-        } else {
-          self.$emit("addressValidate", "address_flag", false)
+          self.$emit("addressValidate", "address", value, true)
         }
       }
     }

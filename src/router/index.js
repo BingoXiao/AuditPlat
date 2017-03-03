@@ -6,6 +6,7 @@ import BusApply from "../pages/BD/bus_apply/index"
 import BusRegister from "../pages/BD/bus_register/index"
 import New from "../pages/BD/bus_register/new/index"
 import BusList from "../pages/BD/bus_list/index"
+import BusReview from "../pages/Review/bus_review/index"
 import Hello from "../pages/Hello"
 
 
@@ -36,8 +37,8 @@ const routes = [
         iconCls: "icon-xiao09",
         children: [
           {path: "new/:id", name: "新店注册"},
-          {path: "branch", name: "分店注册"},
-          {path: "apply", name: "商家申请注册"}
+          {path: "branch/:id", name: "分店注册"},
+          {path: "apply/:id", name: "商家申请注册"}
         ]
       }, {
         path: "/bus_list",
@@ -60,11 +61,17 @@ const routes = [
     component: Main,
     children: [
       {
-        path: "/bus_review",
+        path: "/bus_review/:type",
         name: "商家审核",
         hidden: "bus_verify",
-        component: Hello,
-        iconCls: "icon-xuanze"
+        component: BusReview,
+        iconCls: "icon-xuanze",
+        children: [
+          {path: "bus_apply/:id", name: "商家申请"},
+          {path: "bus_apply_record/:id", name: "商家申请记录"},
+          {path: "businfo_edit/:id", name: "商家信息修改"},
+          {path: "businfo_edit_record/:id", name: "商家信息修改记录"}
+        ]
       }, {
         path: "/project_verify",
         name: "项目审核",

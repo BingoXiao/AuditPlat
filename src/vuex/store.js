@@ -23,7 +23,9 @@ const store = new Vuex.Store({
     // 表单数据
     form_data: null,
     // 表单验证标志
-    vflag: null
+    vflag: null,
+    // 短信通知手机号码
+    userPhone: ""
   },
   mutations: {
     USER_ID(state, status) {
@@ -43,6 +45,9 @@ const store = new Vuex.Store({
     },
     V_FLAG(state, perms) {
       state.vflag = perms
+    },
+    USER_PHONE(state, perms) {
+      state.userPhone = perms
     }
   }
 })

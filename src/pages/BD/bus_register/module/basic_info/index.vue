@@ -51,7 +51,7 @@
 
   export default{
     props: {
-      filling: Object
+      filling: Object     // 信息填充
     },
     data() {
       // 商家姓名
@@ -73,18 +73,18 @@
         }
       }
       return {
-        moduleV: {
-          class_flag: false,
-          tel_flag: false,
-          address_flag: false
+        moduleV: {         // 模块验证结果
+          class: false,    // 分类
+          tel: false,      // 座机
+          address: false   // 地址
         },
         basicForm: {
-          name: "",
-          phonenum: "",
-          busname: "",
-          tel: "",
-          class: [],
-          address: {}
+          name: "",        // 姓名
+          phonenum: "",    // 手机
+          busname: "",     // 门店名称
+          tel: "",         // 门店座机
+          class: [],       // 分类
+          address: {}      // 地址
         },
         basicRules: {
           name: [
@@ -108,36 +108,38 @@
         self.basicForm.phonenum = userinfo.phonenum  // 商家手机
         self.basicForm.busname = businfo.busname     // 门店名称
         self.basicForm.tel = businfo.tel             // 门店名称
-        let classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id
+        var classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id
         self.basicForm.class = classArr.split(",")        // 分类
-        let addArr = businfo.province_id + "," + businfo.city_id + "," +
+        var addArr = businfo.province_id + "," + businfo.city_id + "," +
           businfo.district_id + "," + businfo.city_near_id
-        self.$set(self.basicForm.address, "select", addArr.split(","))
-        self.$set(self.basicForm.address, "detail", businfo.address_details)
-        self.$set(self.basicForm.address, "point", businfo.address_point)
+        self.$set(self.basicForm.address, "selectArr", addArr.split(","))      // 地址（下拉框）
+        self.$set(self.basicForm.address, "detail", businfo.address_details)   // 详细地址
+        self.$set(self.basicForm.address, "point", businfo.address_point)      // 地址坐标
       }
     },
     methods: {
-      module_res: function(name, para, flag) {
+      // 模块验证结果及取值
+      module_res: function(name, value, flag) {
         var self = this
-        self.moduleV[name] = flag
-        if (arguments.length > 2) {   // 获取表单模块中的值
-          if (para.name === "tel") {
-            self.tel = para.value
-          } else if (para.name === "class") {
-            self.class = para.value
-          } else {
-            self.address = para.value
-          }
-        }
+        self.moduleV[name] = flag      // 返回模块验证结果
+        self.basicForm[name] = value   // 返回模块数据
       },
+      // 基本信息验证
       basicValidate: function() {
         var self = this
-        self.$refs.bus_class_children.classValidate()
-        self.$refs.tel_children.telValidate()
-        self.$refs.address_children.addressValidate()
+        self.$refs.bus_class_children.classValidate()    // 分类验证
+        self.$refs.tel_children.telValidate()            // 座机验证
+        self.$refs.address_children.addressValidate()    // 地址验证
         self.$refs.basicForm.validate((valid) => {
-          if (valid && self.moduleV.class_flag && self.moduleV.tel_flag && self.moduleV.address_flag) {
+          if (valid && self.moduleV.class && self.moduleV.tel && self.moduleV.address) {
+            var telStr = ""    // 修改座机号码格式
+            if (self.basicForm.tel2) {
+              if (self.basicForm.tel3) {
+                telStr = self.basicForm.tel1 + "-" + self.basicForm.tel2 + "-" + self.basicForm.tel3
+              } else {
+                telStr = self.basicForm.tel1 + "-" + self.basicForm.tel2
+              }
+            }
             var formData = {
               "step": "BASE",
               "applynum": "",
@@ -146,25 +148,26 @@
                 "phonenum": self.basicForm.phonenum     // 商家手机
               },
               "businfo": {
-                "tel": self.basicForm.tel,              // 店铺座机
+                "tel": telStr,                          // 店铺座机
                 "busname": self.basicForm.busname,      // 店铺名称
-                "province_id": self.address.select[0],  // 所在省
-                "city_id": self.address.select[1],      // 所在城市
-                "district_id": self.address.select[2],  // 所在区县
-                "city_near_id": self.address.select[3], // 所属商圈
-                "address_details": self.address.detail, // 详细地址
-                "address_point": self.address.point,    // 百度地图坐标
-                "lclass_id": self.class[0],             // 一级分类
-                "mclass_id": self.class[1],             // 二级分类
-                "sclass_id": self.class[2]              // 三级分类
+                "province_id": self.basicForm.address.selectArr[0],  // 所在省
+                "city_id": self.basicForm.address.selectArr[1],      // 所在城市
+                "district_id": self.basicForm.address.selectArr[2],  // 所在区县
+                "city_near_id": self.basicForm.address.selectArr[3], // 所属商圈
+                "address_details": self.basicForm.address.detail, // 详细地址
+                "address_point": self.basicForm.address.point,    // 百度地图坐标
+                "lclass_id": self.basicForm.class[0],             // 一级分类
+                "mclass_id": self.basicForm.class[1],             // 二级分类
+                "sclass_id": self.basicForm.class[2]              // 三级分类
               }
             }
-            let id = getUrlParameters(window.location.hash, "id")
+            var id = getUrlParameters(window.location.hash, "id")
             if (id) {
               formData.applynum = id
             }
             self.$store.commit("FORM_DATA", formData)
             self.$store.commit("V_FLAG", true)
+            self.$store.commit("USER_PHONE", self.basicForm.phonenum)
           }
         })
       }

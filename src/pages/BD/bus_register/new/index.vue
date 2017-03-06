@@ -5,7 +5,8 @@
 
       <!--基本信息-->
       <el-col :span="20" :offset="2" v-show="currentView === 'basicInfo'">
-        <basic-info ref="basicChild" :filling="filling"></basic-info>
+        <basic-info ref="basicChild" :filling="filling"
+                    :name="PAN.name" :phonenum="PAN.phonenum"></basic-info>
         <el-col :span="24" class="bottomButton" style="padding-left: 20px;">
           <el-button size="large" type="primary" @click="next_step('qualificationInfo')">下一步</el-button>
         </el-col>
@@ -63,6 +64,10 @@
     data() {
       return {
         filling: {},          // 注册信息填充
+        PAN: {                // 主账号
+          name: "",           // 商家姓名
+          phonenum: ""        // 商家手机
+        },
         flag: false,          // 验证结果反馈
         saveVisible: false,   // 保存资料
         active: 1,                 // 激活步骤
@@ -96,6 +101,8 @@
             .then(function(response) {
               if (response.body.success) {
                 self.filling = response.body.content
+                self.PAN.name = response.body.content.userinfo.name
+                self.PAN.phonenum = response.body.content.userinfo.phonenum
               }
             })
         }

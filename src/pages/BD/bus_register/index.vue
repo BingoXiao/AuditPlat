@@ -192,7 +192,7 @@
           } else {                                  // 修改
             href = "#/bus_register/new/register#id=" + row.applynum
           }
-        } else {               // 分店
+        } else if (type === "branch") {               // 分店
           if (!row.applynum) {                       // 立即注册
             href = "#/bus_register/branch/register"
           } else {                                   // 修改
@@ -206,7 +206,7 @@
       /* 删除（新店、分店） */
       deleteBus: function(row) {
         var self = this
-        self.$confirm('确认删除商家' + ":" + row.busname + "?", "提示", {
+        self.$confirm("确认删除商家" + "：" + row.busname + "?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
           type: "warning"

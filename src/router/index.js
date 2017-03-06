@@ -5,6 +5,7 @@ import Setting from "../pages/Setting/index"
 import BusApply from "../pages/BD/bus_apply/index"
 import BusRegister from "../pages/BD/bus_register/index"
 import New from "../pages/BD/bus_register/new/index"
+import Branch from "../pages/BD/bus_register/branch/index"
 import BusList from "../pages/BD/bus_list/index"
 import BusReview from "../pages/Review/bus_review/index"
 import Hello from "../pages/Hello"
@@ -49,10 +50,17 @@ const routes = [
       }
     ]
   },
-  {   // 注册详情页
+  {   // 新店注册详情页
     path: "/bus_register/new/register",
     hidden: "login",
+    name: "新店注册详情页",
     component: New
+  },
+  {   // 分店注册详情页
+    path: "/bus_register/branch/register",
+    hidden: "login",
+    name: "分店注册详情页",
+    component: Branch
   },
   {
     path: "/",

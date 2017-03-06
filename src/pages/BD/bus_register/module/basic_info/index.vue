@@ -51,7 +51,9 @@
 
   export default{
     props: {
-      filling: Object     // 信息填充
+      filling: Object,     // 信息填充
+      name: String,
+      phonenum: String
     },
     data() {
       // 商家姓名
@@ -104,8 +106,10 @@
         var self = this
         var userinfo = self.filling.userinfo
         var businfo = self.filling.businfo
+        /*
         self.basicForm.name = userinfo.name          // 商家姓名
         self.basicForm.phonenum = userinfo.phonenum  // 商家手机
+        */
         self.basicForm.busname = businfo.busname     // 门店名称
         self.basicForm.tel = businfo.tel             // 门店名称
         var classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id
@@ -115,6 +119,14 @@
         self.$set(self.basicForm.address, "selectArr", addArr.split(","))      // 地址（下拉框）
         self.$set(self.basicForm.address, "detail", businfo.address_details)   // 详细地址
         self.$set(self.basicForm.address, "point", businfo.address_point)      // 地址坐标
+      },
+      name: function() {
+        var self = this
+        self.basicForm.name = self.name          // 商家姓名
+      },
+      phonenum: function() {
+        var self = this
+        self.basicForm.phonenum = self.phonenum  // 商家手机
       }
     },
     methods: {

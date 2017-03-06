@@ -118,7 +118,7 @@
   --radio-color: var(--color-base-black);
   --radio-input-height: 18px;
   --radio-input-width: 18px;
-  --radio-input-border-radius: var(--border-radius-circle);
+  --radio-input-border-radius: 100%;
   --radio-input-fill: var(--color-white);
   --radio-input-border: var(--border-base);
   --radio-input-border-color: var(--border-color-base);

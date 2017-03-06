@@ -3,7 +3,7 @@
     <el-form id="checkForm" :model="checkForm" :rules="checkRules" ref="checkForm"
              label-width="103px" label-position="left">
       <h3 class="formTitle">结款信息</h3>
-      <el-form-item label="结款信息" required>
+      <el-form-item label="结款信息:" required>
         <el-radio-group v-model="checkForm.bankRadio" @change="bankRadio_change">
           <el-radio label="hasBank">有</el-radio>
           <el-radio label="noBank">无</el-radio>

@@ -66,39 +66,48 @@ const TEMP_PHOTOS_URL = HOST_URL + "/register/upload-tmpimage/"
 /* 商家分配 */
 // 表格 get
 const BDAPPLY_TABLE_URL = HOST_URL + "/register/applys/"
-
 // 获取所有带有商家分配权限的BD get
 const BDAPPLY_LIST_URL = HOST_URL + "/register/bds/"
-
 // 分配 post
 const BDAPPLY_ASSIGN_URL = HOST_URL + "/register/assign-work/"
+
 
 /* 商家注册 */
 // 表格 get
 const BDREGISTER_TABLE_URL = HOST_URL + "/register/registers/"
-
 // 新店注册资料查看 get
 const BDREGISTER_EDITFILLING_URL = HOST_URL + "/register/pendingverinfo/"
-
 // 新店注册信息提交 post
 const BDREGISTER_NEWREGISTER_URL = HOST_URL + "/register/busregister/"
-
 // 删除新店(分店) post
 const BDREGISTER_DELETE_URL = function(id) {
   return HOST_URL + "/register/applys/" + id + "/delete/"
 }
+
+// 分店修改 get
+const BDREGISTER_BRAEDITFILLING_URL = HOST_URL + "/bus-manage/branches/detail/"
+// 分店注册查询表格 get
+const BDREGISTER_BRALIST_URL = HOST_URL + "/bus-manage/buses/search/"
+// 分店注册信息提交 post
+const BDREGISTER_BRAREGISTER_URL = HOST_URL + "/bus-manage/branches/add/"
+
 
 /* 商家列表 */
 // 获取表格 get
 const BUSLIST_TABLE_URL = HOST_URL + "/bus-manage/buslist/"
 // 下载
 const BUSLIST_DOWNLOAD_URL = HOST_URL + "/bus-manage/buses/download/"
+// 获取基本信息 get
+const BUSLIST_BASIC_URL = HOST_URL + "/bus-manage/businfo/"
+// 获取身份证信息 get
+const BUSLIST_ID_URL = HOST_URL + "/bus-manage/idinfo/"
+// 获取结算信息 get
+const BUSLIST_SETTLER_URL = HOST_URL + "/bus-manage/settleinfo/"
 
 
 /* 商家审核 */
 // 商家申请表格 get
 const BDVERIFY_APPLYTABLE_URL = HOST_URL + "/register/pendingver/"
-
 // 商家信息修改表格 get
 const BDVERIFY_EDITTABLE_URL = HOST_URL + "/bus-manage/busedit-items/"
 
@@ -121,8 +130,14 @@ exports = module.exports = {
   BDREGISTER_EDITFILLING_URL,
   BDREGISTER_NEWREGISTER_URL,
   BDREGISTER_DELETE_URL,
+  BDREGISTER_BRAEDITFILLING_URL,
+  BDREGISTER_BRALIST_URL,
+  BDREGISTER_BRAREGISTER_URL,
   BUSLIST_TABLE_URL,
   BUSLIST_DOWNLOAD_URL,
+  BUSLIST_BASIC_URL,
+  BUSLIST_ID_URL,
+  BUSLIST_SETTLER_URL,
   BDVERIFY_APPLYTABLE_URL,
   BDVERIFY_EDITTABLE_URL,
   CATEGORY_URL,
@@ -141,64 +156,42 @@ exports = module.exports = {
 
 
 /*
-  /!* 获取页面信息 *!/
-  /!* 商家申请查看 *!/
-var BDREGISTER_APPLFILLING_URL = HOST_URL + "/register/businfo/"
-var BDREGISTER_APPLFILLING_TYPE = "get"
+ /!* 获取页面信息 *!/
+ /!* 商家申请查看 *!/
+ var BDREGISTER_APPLFILLING_URL = HOST_URL + "/register/businfo/"
+ var BDREGISTER_APPLFILLING_TYPE = "get"
 
 
-  /!* 分店修改 *!/
-var BDREGISTER_BRAEDITFILLING_URL = HOST_URL + "/bus-manage/branches/detail/"
-var BDREGISTER_BRAEDITFILLING_TYPE = "get"
+ /*
+ /!* ***********商家列表（busList）*************** *!/
+ /!* 获取基本信息 *!/
+ var BUSLIST_BASIC_URL = HOST_URL + "/bus-manage/businfo/"
+ var BUSLIST_BASIC_TYPE = "get"
 
+ /!* 获取营业执照信息 *!/
+ var BUSLIST_BLIC_URL = HOST_URL + "/bus-manage/blinfo/"
+ var BUSLIST_BLIC_TYPE = "get"
 
-  /!* 分店注册查询表格 *!/
-var BDREGISTER_BRALIST_URL = HOST_URL + "/bus-manage/buses/search/"
-var BDREGISTER_BRALIST_TYPE = "get"
+ /!* 获取餐饮许可证信息 *!/
+ var BUSLIST_SLIC_URL = HOST_URL + "/bus-manage/slinfo/"
+ var BUSLIST_SLIC_TYPE = "get"
 
-  /!* 分店注册信息提交 *!/
-var BDREGISTER_BRAREGISTER_URL = HOST_URL + "/bus-manage/branches/add/"
-var BDREGISTER_BRAREGISTER_TYPE = "post"
-*/
+ /!* 获取合约信息 *!/
+ var BUSLIST_CONSTRA_URL = HOST_URL + "/register/treaty/get/"
+ var BUSLIST_CONSTRA_TYPE = "get"
 
-/*
-/!* ***********商家列表（busList）*************** *!/
-  /!* 获取基本信息 *!/
-var BUSLIST_BASIC_URL = HOST_URL + "/bus-manage/businfo/"
-var BUSLIST_BASIC_TYPE = "get"
+ /!* 获取商家列表信息 *!/
+ var BUSLIST_BRANCH_URL = HOST_URL + "/bus-manage/branches/"
+ var BUSLIST_BRANCH_TYPE = "get"
 
-  /!* 获取身份证信息 *!/
-var BUSLIST_ID_URL = HOST_URL + "/bus-manage/idinfo/"
-var BUSLIST_ID_TYPE = "get"
+ /!* 提交商家列表 *!/
+ var BUSLIST_SUBMIT_URL = HOST_URL + "/bus-manage/change-business-status/"
+ var BUSLIST_SUBMIT_TYPE = "post"
 
-  /!* 获取营业执照信息 *!/
-var BUSLIST_BLIC_URL = HOST_URL + "/bus-manage/blinfo/"
-var BUSLIST_BLIC_TYPE = "get"
-
-  /!* 获取餐饮许可证信息 *!/
-var BUSLIST_SLIC_URL = HOST_URL + "/bus-manage/slinfo/"
-var BUSLIST_SLIC_TYPE = "get"
-
-  /!* 获取结算信息 *!/
-var BUSLIST_SETTLER_URL = HOST_URL + "/bus-manage/settleinfo/"
-var BUSLIST_SETTLER_TYPE = "get"
-
-  /!* 获取合约信息 *!/
-var BUSLIST_CONSTRA_URL = HOST_URL + "/register/treaty/get/"
-var BUSLIST_CONSTRA_TYPE = "get"
-
-  /!* 获取商家列表信息 *!/
-var BUSLIST_BRANCH_URL = HOST_URL + "/bus-manage/branches/"
-var BUSLIST_BRANCH_TYPE = "get"
-
-  /!* 提交商家列表 *!/
-var BUSLIST_SUBMIT_URL = HOST_URL + "/bus-manage/change-business-status/"
-var BUSLIST_SUBMIT_TYPE = "post"
-
-  /!* 提交合约 *!/
-var BUSLIST_SUBMITCONSTRA_URL = HOST_URL + "/register/treaty/post/"
-var BUSLIST_SUBMITCONSTRA_TYPE = "post"
-*/
+ /!* 提交合约 *!/
+ var BUSLIST_SUBMITCONSTRA_URL = HOST_URL + "/register/treaty/post/"
+ var BUSLIST_SUBMITCONSTRA_TYPE = "post"
+ */
 /* ***********基本通用资料********* */
 /* 获取节假日 */
 /*
@@ -368,4 +361,4 @@ var BUSLIST_SUBMITCONSTRA_TYPE = "post"
  /!* 提交 *!/
  var COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/"
  var COMPAINTS_SUBMIT_TYPE = "post"
-*/
+ */

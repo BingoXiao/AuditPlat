@@ -52,6 +52,17 @@ function clearCookie(cookieName) {
   }
 }
 
+function getValue(arr, ser, id, name) {
+  var value = ""
+  for (let i = 0; i < arr.length; i++) {
+    let item = arr[i]
+    if (item[id] === ser) {
+      value = item[name]
+      break
+    }
+  }
+  return value
+}
 
 /* ************ 验证 ************ */
 // 姓名验证
@@ -214,6 +225,7 @@ module.exports = {
   setCookie,
   getCookie,
   clearCookie,
+  getValue,
   isName,
   isAccount,
   isPassword,

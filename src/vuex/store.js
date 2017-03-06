@@ -23,7 +23,7 @@ const store = new Vuex.Store({
     // 表单数据
     form_data: null,
     // 表单验证标志
-    vflag: null,
+    vflag: false,
     // 短信通知手机号码
     userPhone: ""
   },

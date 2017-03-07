@@ -29,13 +29,13 @@
         <qualification-info ref="quaChild" :filling="filling"></qualification-info>
         <el-col :span="24" class="bottomButton">
           <el-button size="large" type="primary" @click="previous_step('basicInfo')">上一步</el-button>
-          <el-button size="large" type="primary" @click="next_step('checkoutInfo')">下一步</el-button>
+          <el-button size="large" type="primary" @click="next_step('showCheckInfo')">下一步</el-button>
         </el-col>
       </el-col>
 
 
       <!--结款信息-->
-      <el-col :span="20" :offset="2" v-show="currentView === 'checkoutInfo'">
+      <el-col :span="20" :offset="2" v-show="currentView === 'showCheckInfo'">
         <show-check-info ref="checkChild" :Bank="Bank" :ID="ID"></show-check-info>
         <el-col :span="24" class="bottomButton">
           <el-button size="large" type="primary" @click="next_step('submitSuccess', 'VERIFYING')">送审</el-button>
@@ -77,7 +77,7 @@
     data() {
       return {
         filling: {},          // 基本信息填充
-        Bank: {},            // 银行信息填充
+        Bank: {},             // 银行信息填充
         ID: {},               // 身份信息填充
         PAN: {                // 主账号
           name: "",           // 商家姓名
@@ -87,7 +87,6 @@
         saveVisible: false,   // 保存资料
         active: 1,                 // 激活步骤
         currentView: "busSearch",  // 当前步骤
-//        currentView: "checkoutInfo",
         steps: [                   // 步骤条
           {
             index: 1,
@@ -163,48 +162,51 @@
             self.active = self.active + 1
             self.currentView = step
           })
-        } else if (self.active === 2) {   // 基本信息验证
-          self.$refs.basicChild.basicValidate()
-        } else if (self.active === 3) {   // 资质信息验证
-          self.$refs.quaChild.quaValidate()
-        } else if (self.active === 4) {   // 结款信息验证
-          self.$refs.checkChild.checkValidate(flag)
-        }
+        } else {
+          if (self.active === 2) {   // 基本信息验证
+            self.$refs.basicChild.basicValidate()
+          } else if (self.active === 3) {   // 资质信息验证
+            self.$refs.quaChild.quaValidate()
+          } else if (self.active === 4) {   // 结款信息验证
+            var formData = {
+              "step": "LAST",
+              "applynum": getUrlParameters(window.location.hash, "id"),
+              "type": flag   // 送审为"VERIFYING"，保存为"HANDLING"
+            }
+            self.$store.commit("V_FLAG", true)
+            self.$store.commit("FORM_DATA", formData)
+          }
 
-        if (self.$store.state.vflag && self.active !== 1) {    // 验证成功
-          self.active = self.active + 1
-          self.currentView = step
-//          self.$http.post(BDREGISTER_BRAREGISTER_URL,
-//            JSON.stringify(self.$store.state.form_data),
-//            {emulateJSON: true})
-//            .then(function(response) {
-//              if (response.body.success) {
-//                if (!getUrlParameters(window.location.hash, "id")) {
-//                  window.location.hash += "#id=" + response.body.content.applynum
-//                }
-//                if (step === "save") {       // 保存
-//                  self.saveVisible = true
-//                  setTimeout(function() {
-//                    self.saveVisible = false
-//                    self.$router.push({path: "/bus_register/new"})
-//                  }, 1000)
-//                } else {                    // 送审
-//                  self.active = self.active + 1
-//                  self.currentView = step
-//                }
-//                self.$store.commit("V_FLAG", false)
-//              }
-//            })
+          if (self.$store.state.vflag) {    // 验证成功
+            self.$http.post(BDREGISTER_BRAREGISTER_URL,
+              JSON.stringify(self.$store.state.form_data),
+              {emulateJSON: true})
+              .then(function(response) {
+                if (response.body.success) {
+                  if (!getUrlParameters(window.location.hash, "id")) {
+                    window.location.hash += "#id=" + response.body.content.applynum
+                  }
+                  if (step === "save") {       // 保存
+                    self.saveVisible = true
+                    setTimeout(function() {
+                      self.saveVisible = false
+                      self.$router.push({path: "/bus_register/branch"})
+                    }, 1000)
+                  } else {                    // 送审
+                    self.active = self.active + 1
+                    self.currentView = step
+                  }
+                  self.$store.commit("V_FLAG", false)
+                }
+              })
+          }
         }
       },
 
       // 上一步
       previous_step: function(step) {
         var self = this
-        if (self.active === 5) {
-          self.active = self.active - 1
-          self.currentView = "checkoutInfo"
-        } else if (self.active === 4) {
+        if (self.active === 4) {
           self.active = self.active - 1
           self.currentView = "qualificationInfo"
         } else if (self.active === 3) {

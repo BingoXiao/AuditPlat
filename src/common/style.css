@@ -150,3 +150,8 @@ button {
   color: #000;
   padding-left: 9px;
 }
+
+.info{
+  font-size: 14px;
+  font-family: "Microsoft YaHei";
+}

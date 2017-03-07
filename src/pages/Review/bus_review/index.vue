@@ -32,7 +32,7 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" border
+      <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
                 highlight-current-row style="width: 100%;">
         <el-table-column prop="submit_time" label="提交时间" align="center" min-width="180px"></el-table-column>
         <el-table-column prop="applynum" label="审编号" align="center" min-width="200px"></el-table-column>
@@ -74,6 +74,7 @@
   export default {
     data() {
       return {
+        loading: false,
         tabs: [
           {
             param: "bus_apply",
@@ -129,6 +130,7 @@
       /* 获取数据（表格） */
       getTables: function() {
         var self = this
+        self.loading = true
         var type = (self.$route.params.type)
         var url = ""
         var Type = "V"
@@ -155,6 +157,9 @@
             var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
+            setTimeout(function() {
+              self.loading = false
+            })
           }
         })
       },

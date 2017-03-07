@@ -103,7 +103,7 @@
         self.$refs.upload_tips.style.display = "none"
         self.imageUrl = "" + file.url
         // 图片url 及 对应名称
-        self.$emit("handleScucess", res.content.url, self.suffix_name)
+        self.$emit("handleSuccess", res.content.url, self.suffix_name)
       }
     }
   }

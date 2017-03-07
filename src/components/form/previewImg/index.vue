@@ -1,59 +1,46 @@
 <template>
-  <el-col :span="24">
+  <div>
     <div class="imgWrapper">
-      <div class = "avatar-uploader">
-        <img v-if="imageUrl" :src="imageUrl" class="avatar" @mouseenter="coverVisible = true"
-             @mouseleave="coverVisible = false">
+      <div class = "avatar-uploader" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}">
+        <img :src="image" class="avatar"
+             @mouseenter="coverVisible = true">
       </div>
-    </div>
-
-    <div class="imgSample">
-      <img :src="imgSrc" alt="" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}">
-    </div>
-
-    <div v-if="tipsFlag" class="imgTips" :style="{height: imgHeight + 'px'}">
-      <ol>
-        <li v-for="(item, index) in tips">{{item}}</li>
-      </ol>
-    </div>
-
-    <!--预览图片-->
-    <div class="cover" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
-         v-show="coverVisible">
-      <div class="amplify" @click="dialogVisible = true">
-        <i class="el-icon-view"></i>
+      <!--预览图片-->
+      <div class="cover" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
+           v-show="coverVisible" @mouseleave="coverVisible = false"
+           @click="dialogVisible = true">
+        <div class="amplify">
+          <i class="el-icon-view"></i>
+        </div>
       </div>
-      <el-dialog v-model="dialogVisible"
-                 :close-on-click-modal="false">
-        <img width="100%" :src="imageUrl" alt="">
-      </el-dialog>
+
     </div>
-  </el-col>
+
+    <el-dialog v-model="dialogVisible" :close-on-click-modal="false">
+      <img width="100%" :src="image" alt=""/>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
   export default{
     props: {
-      tips: Array,          // 要求
       imgWidth: Number,     // 图片宽度
       imgHeight: Number,    // 图片高度
-      imgSrc: String,       // 样片展示
-      suffix_name: String,  // 图片名称(返回)
-      imgFill: String       // 图片填充来源
+      imgSrc: String       // 图片填充来源
     },
     data() {
       return {
-        imageUrl: "",
-        dialogVisible: false,
-        coverVisible: false
+        dialogVisible: false,   // 查看大图片
+        coverVisible: false     // 放大层
       }
     },
-    watch: {
+    computed: {
       // 图片展示
-      imgFill: function() {
+      image: function() {
         var self = this
-        if (self.imgFill !== "") {
-          self.imageUrl = "https://shopmanage-dev.jinmailife.com" + self.imgFill
+        if (self.imgSrc !== "") {
+          return "https://shopmanage-dev.jinmailife.com" + self.imgSrc
         }
       }
     }
@@ -61,32 +48,8 @@
 </script>
 
 <style scoped>
-  .imgWrapper, .imgSample, .imgTips{
-    float: left;
-  }
-
-  .imgSample{
-    margin-left: 30px;
-  }
-
-  .imgTips{
-    display: table;
-  }
-
-  .imgTips>ol, .imgTips>div{
-    font-size: 10px;
-    display: table-cell;
-    vertical-align: bottom;
-    padding-left: 30px;
-  }
-
-  .imgTips>ol>li{
-    line-height: 20px;
-    color: #909090;
-  }
-
-  .imgTips>div{
-    color: #ff4949;
+  .imgWrapper{
+    position: relative;
   }
 
   .avatar-uploader{
@@ -107,7 +70,7 @@
     top: 1px;
     text-align: center;
     display: table;
-    background-color:rgba(0, 0, 0, 0.45)
+    background-color:rgba(0, 0, 0, 0.4)
   }
 
   .amplify {

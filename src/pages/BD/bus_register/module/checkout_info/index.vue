@@ -107,7 +107,7 @@
             <upload-image ref="card_back" :imgWidth="220" :imgHeight="140" imgName="国徽页"
                           :imgFill="IDForm.card_back_url"
                           suffix_name="card_back_url"
-                          v-on:handleScucess="addFormData"
+                          v-on:handleSuccess="addFormData"
                           :tips="['证件清晰可辨认，不得使用复印件']"
                           :imgSrc="IDForm.card_back_url_sample"></upload-image>
           </el-col>
@@ -118,7 +118,7 @@
           <upload-image ref="card_all" :imgWidth="220" :imgHeight="280" imgName="个人信息页"
                         :imgFill="IDForm.card_all_url"
                         suffix_name="card_all_url"
-                        v-on:handleScucess="addFormData"
+                        v-on:handleSuccess="addFormData"
                         :tips="['证件清晰可辨认，不得使用复印件']"
                         :imgSrc="IDForm.card_all_url_sample"></upload-image>
         </el-form-item>
@@ -253,33 +253,37 @@
         var self = this
         var bankinfo = self.filling.bankinfo
         var userinfo = self.filling.userinfo
-        if (bankinfo.person_or_company_name) {   // 有银行信息
-          self.checkForm.bankRadio = "hasBank"
-          self.checkForm.account_type = bankinfo.account_type                        // 银行账户
-          self.checkForm.person_or_company_name = bankinfo.person_or_company_name    // 开户名
-          var arr = []
-          arr[0] = bankinfo.admiprovince_id      // 开户行所在省
-          arr[1] = bankinfo.admicity_id          // 开户行所在市
-          arr[2] = bankinfo.bank_id              // 银行名称
-          arr[3] = bankinfo.branch_id            // 开户行名称（0表示自定义）
-          arr[4] = bankinfo.custom_branch        // 自定义开户行名称
-          self.checkForm.bank = arr
-          self.checkForm.bank_account = bankinfo.bank_account                        // 银行卡号
-          self.checkForm.billing_account_name = bankinfo.billing_account_name        // 财务联系人
-          self.checkForm.billing_account_tel = bankinfo.billing_account_tel          // 财务联系人手机
+        if (bankinfo) {
+          if (bankinfo.person_or_company_name) {   // 有银行信息
+            self.checkForm.bankRadio = "hasBank"
+            self.checkForm.account_type = bankinfo.account_type                        // 银行账户
+            self.checkForm.person_or_company_name = bankinfo.person_or_company_name    // 开户名
+            var arr = []
+            arr[0] = bankinfo.admiprovince_id      // 开户行所在省
+            arr[1] = bankinfo.admicity_id          // 开户行所在市
+            arr[2] = bankinfo.bank_id              // 银行名称
+            arr[3] = bankinfo.branch_id            // 开户行名称（0表示自定义）
+            arr[4] = bankinfo.custom_branch        // 自定义开户行名称
+            self.checkForm.bank = arr
+            self.checkForm.bank_account = bankinfo.bank_account                        // 银行卡号
+            self.checkForm.billing_account_name = bankinfo.billing_account_name        // 财务联系人
+            self.checkForm.billing_account_tel = bankinfo.billing_account_tel          // 财务联系人手机
+          }
         }
-        if (userinfo.card_code) {         // 有身份信息
-          self.IDForm.IDRadio = "hasID"
-          self.IDForm.cert_type = userinfo.cert_type    // 证件类型
-          self.IDForm.real_name = userinfo.real_name    // 真实姓名
-          self.IDForm.card_code = userinfo.card_code    // 证件号码
-          if (userinfo.cert_type === "PASSPORT") {
-            self.IDForm.card_all_url = userinfo.card_front_url  // 护照
-            self.IDForm.cardImg = false
-          } else {
-            self.IDForm.cardImg = true
-            self.IDForm.card_front_url = userinfo.card_front_url  // 其他
-            self.IDForm.card_back_url = userinfo.card_back_url
+        if (userinfo) {
+          if (userinfo.card_code) {         // 有身份信息
+            self.IDForm.IDRadio = "hasID"
+            self.IDForm.cert_type = userinfo.cert_type    // 证件类型
+            self.IDForm.real_name = userinfo.real_name    // 真实姓名
+            self.IDForm.card_code = userinfo.card_code    // 证件号码
+            if (userinfo.cert_type === "PASSPORT") {
+              self.IDForm.card_all_url = userinfo.card_front_url  // 护照
+              self.IDForm.cardImg = false
+            } else {
+              self.IDForm.cardImg = true
+              self.IDForm.card_front_url = userinfo.card_front_url  // 其他
+              self.IDForm.card_back_url = userinfo.card_back_url
+            }
           }
         }
       }
@@ -320,7 +324,8 @@
       },
       // 图片数据返回
       addFormData: function(value, name) {
-        this.IDForm[name] = value
+        var self = this
+        self.IDForm[name] = value
       },
       // 银行信息验证
       checkFormV: function() {
@@ -399,7 +404,11 @@
           formData.userinfo.real_name = self.IDForm.real_name
           formData.userinfo.cert_type = self.IDForm.cert_type
           formData.userinfo.card_code = self.IDForm.card_code
-          formData.userinfo.card_front_url = self.IDForm.card_front_url
+          if (self.IDForm.cert_type === "PASSPORT") {
+            formData.userinfo.card_front_url = self.IDForm.card_front_url
+          } else {
+            formData.userinfo.card_front_url = self.IDForm.card_all_url
+          }
           formData.userinfo.card_back_url = self.IDForm.card_back_url
         } else {
           self.IDFormFlag = true

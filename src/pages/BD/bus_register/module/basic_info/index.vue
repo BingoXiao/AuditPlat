@@ -24,7 +24,7 @@
       </el-form-item>
 
       <h3 class="formTitle">门店信息</h3>
-      <el-form-item label="门店名称：" prop="busname">
+      <el-form-item label="门店名称：" prop="busname" required>
         <el-col :span="14">
           <el-input v-model="basicForm.busname"></el-input>
         </el-col>
@@ -106,14 +106,10 @@
         var self = this
         var userinfo = self.filling.userinfo
         var businfo = self.filling.businfo
-        /*
-        self.basicForm.name = userinfo.name          // 商家姓名
-        self.basicForm.phonenum = userinfo.phonenum  // 商家手机
-        */
-        self.basicForm.busname = businfo.busname     // 门店名称
-        self.basicForm.tel = businfo.tel             // 门店名称
+        self.basicForm.busname = businfo.busname      // 门店名称
+        self.basicForm.tel = businfo.tel              // 门店名称
         var classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id
-        self.basicForm.class = classArr.split(",")        // 分类
+        self.basicForm.class = classArr.split(",")    // 分类
         var addArr = businfo.province_id + "," + businfo.city_id + "," +
           businfo.district_id + "," + businfo.city_near_id
         self.$set(self.basicForm.address, "selectArr", addArr.split(","))      // 地址（下拉框）
@@ -144,14 +140,6 @@
         self.$refs.address_children.addressValidate()    // 地址验证
         self.$refs.basicForm.validate((valid) => {
           if (valid && self.moduleV.class && self.moduleV.tel && self.moduleV.address) {
-            var telStr = ""    // 修改座机号码格式
-            if (self.basicForm.tel2) {
-              if (self.basicForm.tel3) {
-                telStr = self.basicForm.tel1 + "-" + self.basicForm.tel2 + "-" + self.basicForm.tel3
-              } else {
-                telStr = self.basicForm.tel1 + "-" + self.basicForm.tel2
-              }
-            }
             var formData = {
               "step": "BASE",
               "applynum": "",
@@ -160,7 +148,7 @@
                 "phonenum": self.basicForm.phonenum     // 商家手机
               },
               "businfo": {
-                "tel": telStr,                          // 店铺座机
+                "tel": self.basicForm.tel,                          // 店铺座机
                 "busname": self.basicForm.busname,      // 店铺名称
                 "province_id": self.basicForm.address.selectArr[0],  // 所在省
                 "city_id": self.basicForm.address.selectArr[1],      // 所在城市
@@ -176,6 +164,9 @@
             var id = getUrlParameters(window.location.hash, "id")
             if (id) {
               formData.applynum = id
+            }
+            if (self.$route.name === "分店注册详情页") {
+              formData.userinfo.account = self.$store.state.busAccount
             }
             self.$store.commit("FORM_DATA", formData)
             self.$store.commit("V_FLAG", true)

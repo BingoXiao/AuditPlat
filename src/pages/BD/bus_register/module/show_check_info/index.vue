@@ -43,7 +43,7 @@
           <el-col :span="10">
             <el-form-item label="开户行名称：" label-width="120px" required>
               <el-col :span="15">
-                <span v-if="checkForm.bank.branch!=0" class="info">{{checkForm.bank.branch}}</span>
+                <span v-if="parseInt(checkForm.bank.branch) === 0" class="info">{{checkForm.bank.branch}}</span>
                 <span v-else class="info">{{checkForm.bank.custom_branch}}</span>
               </el-col>
             </el-form-item>
@@ -52,9 +52,7 @@
 
 
         <el-form-item label="银行卡号：" prop="bank_account" required>
-          <el-col :span="12">
-            <span class="info">{{checkForm.bank_account}}</span>
-          </el-col>
+          <span class="info">{{checkForm.bank_account}}</span>
         </el-form-item>
 
         <el-row>
@@ -86,37 +84,33 @@
         </el-col>
       </el-form-item>
 
-      <el-col :span="24" v-show="IDForm.bankRadio">
-        <el-form-item label="上传清晰证件照片" label-width="150px" required></el-form-item>
+      <el-col :span="24" v-show="IDForm.IDRadio">
         <el-form-item label="证件类型：" prop="cert_type" required>
           <span class="info">{{IDForm.cert_type}}</span>
         </el-form-item>
 
         <el-form-item label="真实姓名：" prop="real_name" required>
-          <el-col :span="10">
-            <el-input v-model="IDForm.real_name" placeholder="请填写真实姓名"></el-input>
-          </el-col>
+          <span class="info">{{IDForm.real_name}}</span>
         </el-form-item>
 
         <el-form-item label="证件号码：" prop="card_code" required>
-          <el-col :span="10">
-            <el-input v-model="IDForm.card_code" placeholder="请填写证件号码"></el-input>
-          </el-col>
+          <span class="info">{{IDForm.card_code}}</span>
         </el-form-item>
 
+        <el-form-item label="上传清晰证件照片" label-width="150px" required></el-form-item>
         <!--身份证、港澳通行证、台胞证-->
-        <el-form-item v-show="IDForm.cardImg">
-          <el-col :span="24">
-
+        <el-form-item label-width="0" v-if="IDForm.card_back_url">
+          <el-col :span="6">
+            <show-image :imgWidth="220" :imgHeight="140" :imgSrc="IDForm.card_front_url"></show-image>
           </el-col>
-          <el-col :span="24">
-
+          <el-col :span="6">
+            <show-image :imgWidth="220" :imgHeight="140" :imgSrc="IDForm.card_back_url"></show-image>
           </el-col>
         </el-form-item>
 
         <!--护照-->
-        <el-form-item v-show="!IDForm.cardImg">
-
+        <el-form-item label-width="0" v-else>
+          <show-image :imgWidth="220" :imgHeight="280" :imgSrc="IDForm.card_front_url"></show-image>
         </el-form-item>
       </el-col>
     </el-form>
@@ -125,6 +119,7 @@
 
 <script>
   import radioCheck from "../../../../../components/radio/index.vue"
+  import showImage from "../../../../../components/form/previewImg/index.vue"
   import {BANK_PROVINCES_URL, BANK_CITIES_URL,
     BANKS_URL, SUBBANKS_URL} from "../../../../../common/interface"
   import {getValue} from "../../../../../common/common"
@@ -155,20 +150,15 @@
           billing_account_name: "",      // 财务联系人
           billing_account_tel: ""        // 财务联系人电话
         },
-        IDForm: {                  // 身份信息
-          IDRadio: false,           // 有无身份信息
-          cert_type: "",    // 证件类型
+        IDForm: {                // 身份信息
+          IDRadio: false,        // 有无身份信息
+          cert_type: "",         // 证件类型
           real_name: "",         // 真实姓名
           card_code: "",         // 证件号码
           card_front_url: "",    // 证件正面照
-          card_back_url: "",     // 证件背面照
-          card_all_url: ""       // 护照照片
+          card_back_url: ""      // 证件背面照
         }
       }
-    },
-    mounted() {
-      // 获取银行省
-      this.get_admiprovince_list()
     },
     watch: {
       Bank: function() {
@@ -177,14 +167,7 @@
         if (bank.bank_account) {
           self.checkForm.bankRadio = true      // 有无银行信息
           // 银行省、市、银行、支行
-          self.checkForm.bank.admiprovince = getValue(self.checkForm.bank.admiprovince_list, bank.admiprovince_id, "id", "name")
-          self.get_admicity(bank.admiprovince_id, bank.admicity_id)
-          self.checkForm.bank.bank = getValue(self.checkForm.bank.bank_list, bank.bank_id, "bank_id", "bank_name")
-          if (bank.branch_id === 0) {
-            self.checkForm.bank.custom_branch = bank.custom_branch + "（自定义）"
-          } else {
-            self.get_branch(bank.bank_id, bank.admicity_id, bank.branch_id)
-          }
+          self.get_admiprovince(bank.admiprovince_id, bank.admicity_id, bank.bank_id, bank.branch_id, bank.custom_branch)
           self.checkForm.account_type = bank.account_type                       // 银行账户类型
           self.checkForm.person_or_company_name = bank.person_or_company_name   // 开户名
           self.checkForm.bank_account = bank.bank_account                       // 银行卡号
@@ -195,7 +178,7 @@
       ID: function() {
         var self = this
         var id = self.ID
-        if (id.card_back_url) {
+        if (id.card_code) {
           self.IDForm.IDRadio = true
           var cert = {
             "ID_CARD": "身份证",
@@ -208,55 +191,62 @@
           self.IDForm.card_code = id.card_code      // 证件号码
           self.IDForm.card_front_url = id.card_front_url   // 证件正面照
           self.IDForm.card_back_url = id.card_back_url     // 证件背面照
-          self.IDForm.card_all_url = id.card_front_url     // 护照照片
         }
       }
     },
     methods: {
       /* 获取银行省、银行列表 id、name */
-      get_admiprovince_list: function() {
+      get_admiprovince: function(admiprovince, admicity, bank, branch, custom) {
         var self = this
         self.$http.get(BANK_PROVINCES_URL).then(function(response) {
           if (response.body.success) {
-            self.checkForm.bank.admiprovince_list = response.body.content
+            let arr = response.body.content
+            self.checkForm.bank.admiprovince = getValue(arr, admiprovince, "id", "name")
+            self.get_admicity(admiprovince, admicity, bank, branch, custom)
           }
         })
-
+      },
+      get_admicity: function(admiprovince, admicity, bank, branch, custom) {
+        var self = this
+        self.$http.get(BANK_CITIES_URL + "?admiprovince_id=" + admiprovince).then(function(response) {
+          if (response.body.success) {
+            let arr = response.body.content
+            self.checkForm.bank.admicity = getValue(arr, admicity, "id", "name")
+            self.get_bank(admicity, bank, branch, custom)
+          }
+        })
+      },
+      get_bank: function(admicity, bank, branch, custom) {
+        var self = this
         self.$http.get(BANKS_URL).then(function(response) {
           if (response.body.success) {
-            self.checkForm.bank.bank_list = response.body.content
+            let arr = response.body.content
+            self.checkForm.bank.bank = getValue(arr, bank, "bank_id", "bank_name")
+            self.get_branch(admicity, bank, branch, custom)
           }
         })
       },
-      get_admicity: function(province, value) {
+      get_branch: function(admicity, bank, branch, custom) {
         var self = this
-        var res = ""
-        self.$http.get(BANK_CITIES_URL + "?admiprovince_id=" + province).then(function(response) {
-          if (response.body.success) {
-            self.checkForm.bank.admicity = getValue(response.body.content, value, "id", "name")
-          }
-        })
-      },
-      get_branch: function(bank, city, value) {
-        var self = this
-        var res = ""
-        self.$http.get(SUBBANKS_URL + "?bank_id=" + bank + "&admicity_id=" + city).then(function(response) {
-          if (response.body.success) {
-            self.checkForm.bank.branch = getValue(response.body.content, value, "subbank_id", "subbank_name")
-          }
-        })
-        return res
+        if (parseInt(branch) === 0) {
+          self.checkForm.bank.custom_branch = custom + "（自定义）"
+        } else {
+          self.$http.get(SUBBANKS_URL + "?bank_id=" + bank + "&admicity_id=" + admicity).then(function(response) {
+            if (response.body.success) {
+              let arr = response.body.content
+              self.checkForm.bank.branch = getValue(arr, branch, "subbank_id", "subbank_name")
+            }
+          })
+        }
       }
     },
     components: {
-      radioCheck
+      radioCheck,
+      showImage
     }
   }
 </script>
 
 <style scoped>
-  .info{
-    font-size: 14px;
-    font-family: "Microsoft YaHei";
-  }
+
 </style>

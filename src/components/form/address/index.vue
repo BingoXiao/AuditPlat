@@ -1,5 +1,5 @@
 <template>
-  <el-col :span="24">
+  <el-row>
     <el-col :span="4">
       <el-form-item>
         <el-select name="province" placeholder="--省--"
@@ -72,17 +72,17 @@
       </small>
 
       <div class="map_wrapper">
-        <div id="allmap" style="width:100%;margin:auto;height:400px;"></div>
+        <div id="allmap" style="width:100%;min-width:920px;margin:auto;height:400px;"></div>
       </div>
     </el-col>
-  </el-col>
+  </el-row>
 </template>
 
 <script>
   import {PROVINCE_URL, CITY_URL, DISTRICT_URL, CITYNEAR_URL} from "../../../common/interface"
   import BMap from "BMap"
 
-  var map, point, marker, geoc
+  let map, point, marker, geoc
   export default{
     props: {
       options: Object
@@ -101,18 +101,6 @@
         address_point: "",
         error: "",
         flag: true
-      }
-    },
-    watch: {
-      options: function() {
-        var self = this
-        if (self.options.selectArr.length > 0) {
-          self.flag = false
-          self.province_value = parseInt(self.options.selectArr[0])
-          self.address_detail = self.options.detail
-          self.address_point = self.options.point
-          self.showLocal(self.address_point)
-        }
       }
     },
     mounted() {
@@ -159,6 +147,24 @@
       window.local = new BMap.LocalSearch(map, {
         renderOptions: {map: map}
       })
+    },
+    watch: {
+      options: function() {
+        var self = this
+        if (self.options.selectArr.length > 0) {
+          self.flag = false
+          self.province_value = parseInt(self.options.selectArr[0])
+          self.address_detail = self.options.detail
+          self.address_point = self.options.point
+          if (self.$route.name === "分店注册详情页") {
+            map.addEventListener("tilesloaded", function() {
+              self.showLocal(self.options.point)
+            })
+          } else {
+            self.showLocal(self.options.point)
+          }
+        }
+      }
     },
     methods: {
       clear_error: function(flag, color) {
@@ -264,7 +270,6 @@
         var str = po.split(",")
         var newPoint = new BMap.Point(str[0], str[1])
         var marker = new BMap.Marker(newPoint)
-
         map.clearOverlays()
         map.panTo(newPoint)
         map.addOverlay(marker)

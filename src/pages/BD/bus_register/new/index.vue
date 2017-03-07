@@ -57,7 +57,8 @@
   import qualificationInfo from "../module/qualification_info/index"
   import checkoutInfo from "../module/checkout_info/index"
   import submitSuccess from "../module/submit_success/index"
-  import {BDREGISTER_EDITFILLING_URL, BDREGISTER_NEWREGISTER_URL} from "../../../../common/interface"
+  import {BDREGISTER_APPLFILLING_URL, BDREGISTER_EDITFILLING_URL,
+    BDREGISTER_NEWREGISTER_URL} from "../../../../common/interface"
   import {getUrlParameters} from "../../../../common/common"
 
   export default{
@@ -97,14 +98,25 @@
         var self = this
         let id = getUrlParameters(window.location.hash, "id")
         if (id) {   // 有填充信息
-          self.$http.get(BDREGISTER_EDITFILLING_URL + "?applynum=" + id)
-            .then(function(response) {
-              if (response.body.success) {
-                self.filling = response.body.content
-                self.PAN.name = response.body.content.userinfo.name
-                self.PAN.phonenum = response.body.content.userinfo.phonenum
-              }
-            })
+          if (self.$route.name === "商家申请注册详情页") {
+            self.$http.get(BDREGISTER_APPLFILLING_URL + "?applynum=" + id)
+              .then(function(response) {
+                if (response.body.success) {
+                  self.filling = response.body.content
+                  self.PAN.name = response.body.content.userinfo.name
+                  self.PAN.phonenum = response.body.content.userinfo.phonenum
+                }
+              })
+          } else {
+            self.$http.get(BDREGISTER_EDITFILLING_URL + "?applynum=" + id)
+              .then(function(response) {
+                if (response.body.success) {
+                  self.filling = response.body.content
+                  self.PAN.name = response.body.content.userinfo.name
+                  self.PAN.phonenum = response.body.content.userinfo.phonenum
+                }
+              })
+          }
         }
       },
 
@@ -131,7 +143,11 @@
                   self.saveVisible = true
                   setTimeout(function() {
                     self.saveVisible = false
-                    self.$router.push({path: "/bus_register/new"})
+                    if (self.$route.name === "商家申请注册详情页") {
+                      self.$router.push({path: "/bus_register/apply"})
+                    } else if (self.$route.name === "新店注册详情页") {
+                      self.$router.push({path: "/bus_register/new"})
+                    }
                   }, 1000)
                 } else {                    // 送审
                   self.active = self.active + 1
@@ -146,10 +162,7 @@
       // 上一步
       previous_step: function(step) {
         var self = this
-        if (self.active === 4) {
-          self.active = self.active - 1
-          self.currentView = "checkoutInfo"
-        } else if (self.active === 3) {
+        if (self.active === 3) {
           self.active = self.active - 1
           self.currentView = "qualificationInfo"
         } else if (self.active === 2) {

@@ -11,8 +11,9 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" border highlight-current-row
-                style="width: 100%;" :row-key="''+tableDatas.bus_id" @row-click="getAcc">
+      <el-table ref="table" :data="tableDatas" v-loading.body="loading"
+                border highlight-current-row style="width: 100%;"
+                :row-key="''+tableDatas.bus_id" @row-click="getAcc">
         <el-table-column label="" width="55px">
           <template scope="scope">
             <el-radio v-model="busForm.bus_id" class="radio"
@@ -51,6 +52,7 @@
     },
     data() {
       return {
+        loading: true,
         busForm: {
           bus_id: "",    // 商家id
           account: "",   // 商家账号
@@ -70,22 +72,31 @@
         self.totalItems = 1
         self.busForm.bus_id = self.filling.parentbus.bus_id
         self.busForm.account = self.filling.parentbus.account
+        this.$store.commit("BUS_ACCOUNT", self.filling.parentbus.account)
+        setTimeout(function() {
+          self.loading = false
+        })
       }
     },
     methods: {
       /* 商家搜索（表格） */
       search_bus: function() {
         var self = this
+        self.loading = true
         self.$http.get(BDREGISTER_BRALIST_URL + "?account=" + self.busForm.bus).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
+            setTimeout(function() {
+              self.loading = false
+            })
           }
         })
       },
       // 获取商家账号
       getAcc: function(row) {
+        this.$store.commit("BUS_ACCOUNT", row.account)
         this.busForm.account = row.account
       },
       /* 改变当前页 */

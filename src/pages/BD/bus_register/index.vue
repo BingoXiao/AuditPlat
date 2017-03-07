@@ -40,7 +40,7 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" border
+      <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
                 highlight-current-row style="width: 100%;">
         <el-table-column prop="applynum" label="注册号" align="center" min-width="200px"></el-table-column>
         <el-table-column prop="busname" label="商家名称" align="center" min-width="130px"></el-table-column>
@@ -59,9 +59,11 @@
         <el-table-column label="操作" align="center" min-width="200px">
           <template scope="scope">
             <el-button size="small" icon="search" class="tableButton"
-                       v-if="scope.row.status === '未处理'"> 查看</el-button>
+                       v-if="scope.row.status === '未处理'"
+                       @click="viewInfo(scope.row)"> 查看</el-button>
             <el-button size="small" icon="document" class="tableButton"
-                       v-if="scope.row.status === '未处理'"> 注册</el-button>
+                       v-if="scope.row.status === '未处理'"
+                       @click="applyRe(scope.row)"> 注册</el-button>
             <el-button size="small" icon="edit" class="tableButton"
                        v-if="scope.row.status !== '未处理' && scope.row.status !== '送审中'"
                        @click="editInfo(scope.row)"> 修改</el-button>
@@ -95,6 +97,7 @@
   export default {
     data() {
       return {
+        loading: false,
         tabs: [
           {
             param: "new",
@@ -160,12 +163,16 @@
       getTables: function() {
         var self = this
         self.currentPage = 1
+        self.loading = true
         var type = (self.$route.params.type).toUpperCase()
         self.$http.get(BDREGISTER_TABLE_URL + "?type=" + type).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
+            setTimeout(function() {
+              self.loading = false
+            })
           }
         })
       },
@@ -181,6 +188,22 @@
         this.getTables()
       },
 
+      /* 查看 */
+      viewInfo: function(row) {
+        var self = this
+        var href, otherWindow
+        href = "#/bus_register/apply/view#id=" + row.applynum
+        otherWindow = window.open(href)
+        otherWindow.opener = null
+      },
+
+      /* 商家申请注册 */
+      applyRe: function(row) {
+        var href, otherWindow
+        href = "#/bus_register/new/register#id=" + row.applynum
+        otherWindow = window.open(href)
+        otherWindow.opener = null
+      },
       /* 立即注册、修改 */
       editInfo: function(row) {
         var self = this
@@ -198,6 +221,8 @@
           } else {                                   // 修改
             href = "#/bus_register/branch/register#id=" + row.applynum
           }
+        } else if (type === "apply") {
+          href = "#/bus_register/apply/register#id=" + row.applynum
         }
         otherWindow = window.open(href)
         otherWindow.opener = null

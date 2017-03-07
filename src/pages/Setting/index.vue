@@ -31,8 +31,8 @@
     <!--表格-->
     <el-col :span="24">
       <br/>
-      <el-table ref="table" border highlight-current-row style="width: 100%"
-                :data="tableDatas" :row-key="tableDatas.id"
+      <el-table ref="table" border highlight-current-row v-loading.body="loading"
+                :data="tableDatas" :row-key="tableDatas.id" style="width: 100%"
                 @select="selectUsers" @select-all="selectUsers">
         <el-table-column type="selection" min-width="130px"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"  min-width="130px"></el-table-column>
@@ -281,6 +281,7 @@
         }
       }
       return {
+        loading: false,
         search: {                // 搜索栏
           state: [               // 状态
             {
@@ -360,6 +361,7 @@
       /* 获取用户数据（表格） */
       getTables: function() {
         var self = this
+        self.loading = true
         self.$http.get(ACCOUNTS_TABLE_URL).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
@@ -389,6 +391,9 @@
             }
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
+            setTimeout(function() {
+              self.loading = false
+            })
           }
         })
       },

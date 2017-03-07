@@ -23,7 +23,8 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" border highlight-current-row
+      <el-table ref="table" :data="tableDatas" v-loading.body="loading"
+                border highlight-current-row
                 style="width: 100%;" :row-key="tableDatas.bususer_id">
         <el-table-column prop="number" label="商家编号" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="account" label="商家账号" align="center" min-width="130px"></el-table-column>
@@ -61,6 +62,7 @@
   export default {
     data() {
       return {
+        loading: false,
         tabs: [       // 顶部tab标签
           {
             param: "new",
@@ -108,11 +110,15 @@
       /* 获取数据（表格） */
       getTables: function() {
         var self = this
+        self.loading = true
         self.$http.get(BUSLIST_TABLE_URL).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
+            setTimeout(function() {
+              self.loading = false
+            })
           }
         })
       },

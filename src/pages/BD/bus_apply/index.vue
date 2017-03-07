@@ -29,7 +29,7 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" @row-click="selectShop"
+      <el-table ref="table" :data="tableDatas" @row-click="selectShop" v-loading.body="loading"
                 border highlight-current-row style="width: 100%;">
         <el-table-column prop="applynum" label="申请号" align="center" min-width="200px"></el-table-column>
         <el-table-column prop="busname" label="商家名称" align="center" min-width="150px"></el-table-column>
@@ -112,6 +112,7 @@
   export default{
     data() {
       return {
+        loading: false,
         search: {                 // 搜索栏
           state: [                // 状态列表
             {
@@ -158,11 +159,15 @@
       /* 获取数据（表格） */
       getTables: function() {
         var self = this
+        self.loading = true
         self.$http.get(BDAPPLY_TABLE_URL).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
             self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
             self.totalItems = parseInt(datas.length)
+            setTimeout(function() {
+              self.loading = false
+            })
           }
         })
       },

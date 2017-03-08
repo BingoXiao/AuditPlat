@@ -27,7 +27,7 @@
       <el-col :span="20" :offset="2" v-show="currentView === 'checkoutInfo'">
         <checkout-info ref="checkChild" :filling="filling"></checkout-info>
         <el-col :span="24" class="bottomButton">
-          <el-button size="large" type="primary" @click="next_step('submitSuccess', 'VERIFYING')">送审</el-button>
+          <el-button size="large" type="primary" @click="next_step('submitSuccess', 'VERIFYING')">送 审</el-button>
           <el-button size="large" type="primary" @click="next_step('save', 'HANDLING')">储存并待处理</el-button>
           <el-button size="large" type="primary" @click="previous_step('qualificationInfo')">上一步</el-button>
         </el-col>

@@ -99,7 +99,7 @@
             <upload-image ref="card_front" :imgWidth="220" :imgHeight="140" imgName="个人信息页"
                           :imgFill="IDForm.card_front_url"
                           suffix_name="card_front_url"
-                          v-on:handleScucess="addFormData"
+                          v-on:handleSuccess="addFormData"
                           :tips="['证件清晰可辨认，不得使用复印件']"
                           :imgSrc="IDForm.card_front_url_sample"></upload-image>
           </el-col>
@@ -355,6 +355,10 @@
           }
         })
       },
+      /* 表单重置 */
+//      resetForm: function() {
+//        this.$refs.checkForm.resetFields()
+//      },
       // 结款信息验证
       checkValidate: function(flag) {
         var self = this
@@ -405,14 +409,15 @@
           formData.userinfo.cert_type = self.IDForm.cert_type
           formData.userinfo.card_code = self.IDForm.card_code
           if (self.IDForm.cert_type === "PASSPORT") {
-            formData.userinfo.card_front_url = self.IDForm.card_front_url
-          } else {
             formData.userinfo.card_front_url = self.IDForm.card_all_url
+          } else {
+            formData.userinfo.card_front_url = self.IDForm.card_front_url
           }
           formData.userinfo.card_back_url = self.IDForm.card_back_url
         } else {
           self.IDFormFlag = true
         }
+        // 验证判断
         if (self.checkFormFlag && self.IDFormFlag) {
           self.$store.commit("FORM_DATA", formData)
           self.$store.commit("V_FLAG", true)

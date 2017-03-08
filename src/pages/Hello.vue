@@ -21,7 +21,7 @@
 </template>
 
 <script>
-  import tabComponent from "../components/tabs/index"
+  import tabComponent from "../components/tabs/router/index"
 
   export default {
     data() {

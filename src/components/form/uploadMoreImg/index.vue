@@ -1,40 +1,42 @@
 <template>
-  <el-col :span="24">
+  <div>
     <div class="imgWrapper">
       <!--上传图片-->
       <el-upload
         class = "avatar-uploader"
+        list-type="picture-card"
         :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
         name="image"
         accept="image/png,image/jpeg,image/jpg"
         :action="upload_url"
         :show-file-list="false"
         :on-success="handleSuccess"
-        :before-upload="beforeUpload">
-        <div ref="upload_tips" class="upload_tips">
-          <div class="el-upload__text">{{imgName}}</div>
-          <el-button size="small" type="primary">点击上传</el-button>
-        </div>
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        :before-upload="beforeUpload"
+        :on-remove="handleRemove">
+        <i class="el-icon-plus"></i>
+        <img v-if="image" :src="image" class="avatar">
       </el-upload>
+
+      <div class = "avatar-uploader" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}">
+        <img :src="image" class="avatar" @mouseenter="coverVisible = true">
+      </div>
+
+      <!--错误提示-->
+      <div v-if="error" class="imgTips" :style="{height: imgHeight + 'px'}">
+        <div>请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）</div>
+      </div>
     </div>
 
-    <!--样片展示-->
-    <div class="imgSample">
-      <img :src="imgSrc" alt="" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}">
+    <!--预览图片-->
+    <div v-if="image" class="cover" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
+         v-show="coverVisible" @mouseleave="coverVisible = false"
+         @click="dialogVisible = true">
+      <div class="amplify">
+        <i class="el-icon-view"></i>
+        <i class="el-icon-delete"></i>
+      </div>
     </div>
-
-    <!--上传提示-->
-    <div v-if="tipsFlag" class="imgTips" :style="{height: imgHeight + 'px'}">
-      <ol>
-        <li v-for="(item, index) in tips">{{item}}</li>
-      </ol>
-    </div>
-    <!--错误提示-->
-    <div v-else class="imgTips" :style="{height: imgHeight + 'px'}">
-      <div>请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）</div>
-    </div>
-  </el-col>
+  </div>
 </template>
 
 <script>
@@ -42,19 +44,17 @@
 
   export default{
     props: {
-      tips: Array,          // 要求
       imgWidth: Number,     // 图片宽度
       imgHeight: Number,    // 图片高度
-      imgName: String,      // 名称展示
-      imgSrc: String,       // 样片展示
-      suffix_name: String,  // 图片名称(返回)
-      imgFill: String       // 图片展示（商家资料）
+      imgFill: String       // 图片资料
     },
     data() {
       return {
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
-        imageUrl: "",                  // 图片的URL
-        tipsFlag: true                 // 上传错误标志
+        image: "",                  // 图片的URL
+        error: "",                     // 上传错误标志
+        dialogVisible: false,   // 查看大图片
+        coverVisible: false      // 放大层
       }
     },
     watch: {
@@ -63,7 +63,7 @@
         var self = this
         if (self.imgFill !== "") {
           self.$refs.upload_tips.style.display = "none"
-          self.imageUrl = "https://shopmanage-dev.jinmailife.com" + self.imgFill
+          self.image = "https://shopmanage-dev.jinmailife.com" + self.imgFill
         }
       }
     },
@@ -101,41 +101,32 @@
       handleSuccess(res, file) {
         var self = this
         self.$refs.upload_tips.style.display = "none"
-        self.imageUrl = "" + file.url
+        self.image = "" + file.url
         // 图片url 及 对应名称
         self.$emit("handleSuccess", res.content.url, self.suffix_name)
+      },
+      // 文件列表移除文件
+      handleRemove: function(file, fileList) {
+        console.log(file, fileList)
       }
     }
   }
 </script>
 
 <style scoped>
-  .imgWrapper, .imgSample, .imgTips{
+  .imgWrapper, .imgTips{
     float: left;
   }
 
-  .imgSample{
-    margin-left: 30px;
+  .el-icon-plus{
+    font-size: 30px;
+    color: #a5a5a5;
+    display: table-cell;
+    vertical-align: middle;
   }
 
   .imgTips{
     display: table;
-  }
-
-  .imgTips>ol, .imgTips>div{
-    font-size: 10px;
-    display: table-cell;
-    vertical-align: bottom;
-    padding-left: 30px;
-  }
-
-  .imgTips>ol>li{
-    line-height: 20px;
-    color: #909090;
-  }
-
-  .imgTips>div{
-    color: #ff4949;
   }
 
   .avatar-uploader{
@@ -163,7 +154,7 @@
     top: 1px;
     text-align: center;
     display: table;
-    background-color:rgba(0, 0, 0, 0.45)
+    background-color:rgba(0, 0, 0, 0.4)
   }
 
   .amplify {

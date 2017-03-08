@@ -6,14 +6,13 @@
              @mouseenter="coverVisible = true">
       </div>
       <!--预览图片-->
-      <div class="cover" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
+      <div v-if="image" class="cover" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
            v-show="coverVisible" @mouseleave="coverVisible = false"
            @click="dialogVisible = true">
         <div class="amplify">
           <i class="el-icon-view"></i>
         </div>
       </div>
-
     </div>
 
     <el-dialog v-model="dialogVisible" :close-on-click-modal="false">
@@ -57,6 +56,7 @@
     font-family: "Microsoft YaHei";
     position: relative;
     text-align: center;
+    border: 1px dashed #bbb;
   }
 
   .avatar {

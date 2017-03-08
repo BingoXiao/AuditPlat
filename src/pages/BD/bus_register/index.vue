@@ -22,13 +22,7 @@
         </el-form-item>
 
         <el-form-item class="select" label="BD：">
-          <el-select v-model="search.BDvalue" clearable size="small" placeholder="全部">
-            <el-option
-              v-for="item in search.BDlist"
-              :label="item.name"
-              :value="item.bd_id">
-            </el-option>
-          </el-select>
+          <bd-list v-on:bd_filter="bd_filter"></bd-list>
         </el-form-item>
 
         <el-form-item v-show="$route.params.type !== 'apply'" style="float: right">
@@ -56,10 +50,10 @@
         </el-table-column>
         <el-table-column prop="bd" label="BD" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="submit_time" label="提交时间" align="center" width="180px"></el-table-column>
-        <el-table-column label="操作" align="center" min-width="200px">
+        <el-table-column label="操作" align="center" min-width="280px">
           <template scope="scope">
             <el-button size="small" icon="search" class="tableButton"
-                       v-if="scope.row.status === '未处理'"
+                       v-if="$route.params.type === 'apply'"
                        @click="viewInfo(scope.row)"> 查看</el-button>
             <el-button size="small" icon="document" class="tableButton"
                        v-if="scope.row.status === '未处理'"
@@ -88,11 +82,12 @@
 </template>
 
 <script>
-  import tabComponent from "../../../components/tabs/index"
+  import tabComponent from "../../../components/tabs/router/index"
   import datePicker from "../../../components/search/datePicker/index"
   import inputSearch from "../../../components/search/input/index"
   import selectSearch from "../../../components/search/select/index"
-  import {BDAPPLY_LIST_URL, BDREGISTER_TABLE_URL, BDREGISTER_DELETE_URL} from "../../../common/interface"
+  import bdList from "../../../components/search/BDlist/index"
+  import {BDREGISTER_TABLE_URL, BDREGISTER_DELETE_URL} from "../../../common/interface"
 
   export default {
     data() {
@@ -126,9 +121,7 @@
             }, {
               value: "驳回",
               label: "驳回"
-            }],
-          BDlist: [],             // BD列表
-          BDvalue: ""             // BD
+            }]
         },
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
@@ -144,21 +137,9 @@
       }
     },
     mounted: function() {
-      var self = this
-      self.BDlist()
-      self.getTables()  // APPLY,NEW,BRANCH
+      this.getTables()  // APPLY,NEW,BRANCH
     },
     methods: {
-      /* 获取BD列表 */
-      BDlist: function() {
-        var self = this
-        self.$http.get(BDAPPLY_LIST_URL).then(function(response) {
-          if (response.body.success) {
-            self.search.BDlist = response.body.content    // 筛选栏
-          }
-        })
-      },
-
       /* 获取数据（表格） */
       getTables: function() {
         var self = this
@@ -188,9 +169,13 @@
         this.getTables()
       },
 
+      // BD下拉框筛选
+      bd_filter: function(value) {
+        alert(value)
+      },
+
       /* 查看 */
       viewInfo: function(row) {
-        var self = this
         var href, otherWindow
         href = "#/bus_register/apply/view#id=" + row.applynum
         otherWindow = window.open(href)
@@ -249,7 +234,8 @@
       tabComponent,
       datePicker,
       inputSearch,
-      selectSearch
+      selectSearch,
+      bdList
     }
   }
 </script>

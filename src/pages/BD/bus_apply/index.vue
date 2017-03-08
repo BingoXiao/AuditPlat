@@ -141,8 +141,8 @@
       }
     },
     mounted: function() {
-      this.BDlist()
       this.getTables()
+      this.BDlist()
     },
     methods: {
       /* 获取BD列表 */
@@ -155,7 +155,6 @@
           }
         })
       },
-
       /* 获取数据（表格） */
       getTables: function() {
         var self = this

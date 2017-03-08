@@ -72,7 +72,7 @@
       </small>
 
       <div class="map_wrapper">
-        <div id="allmap" style="width:100%;min-width:920px;margin:auto;height:400px;"></div>
+        <div id="allmap" class="allmap"></div>
       </div>
     </el-col>
   </el-row>
@@ -338,14 +338,5 @@
 <style scoped>
   .selectOffset{
     margin-left: 15px;
-  }
-
-  .map_tips {
-    font-size: 10px;
-    color: #a5a5a5;
-  }
-
-  .map_wrapper {
-    margin-top: 5px;
   }
 </style>

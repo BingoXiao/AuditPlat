@@ -17,7 +17,7 @@
         <el-table-column label="" width="55px">
           <template scope="scope">
             <el-radio v-model="busForm.bus_id" class="radio"
-                      :label="scope.row.bususer_id"></el-radio>
+                      :label="scope.row.bususer_id" ></el-radio>
           </template>
         </el-table-column>
         <el-table-column prop="number" label="申请号" align="center" min-width="90px"></el-table-column>
@@ -64,18 +64,25 @@
         currentPage: 1            // 当前页
       }
     },
+    mounted() {
+      if (!getUrlParameters(window.location.hash, "id")) {
+        this.search_bus()
+      }
+    },
     watch: {
       filling: function() {
         var self = this
-        self.tableDatas = []
-        self.tableDatas.push(self.filling.parentbus)
-        self.totalItems = 1
-        self.busForm.bus_id = self.filling.parentbus.bus_id
-        self.busForm.account = self.filling.parentbus.account
-        this.$store.commit("BUS_ACCOUNT", self.filling.parentbus.account)
-        setTimeout(function() {
-          self.loading = false
-        })
+        if (getUrlParameters(window.location.hash, "id")) {
+          self.tableDatas = []
+          self.tableDatas.push(self.filling.parentbus)
+          self.totalItems = 1
+          self.busForm.bus_id = self.filling.parentbus.bus_id
+          self.busForm.account = self.filling.parentbus.account
+          this.$store.commit("BUS_ACCOUNT", self.filling.parentbus.account)
+          setTimeout(function() {
+            self.loading = false
+          })
+        }
       }
     },
     methods: {
@@ -94,10 +101,12 @@
           }
         })
       },
-      // 获取商家账号
+      // 获取商家账号(表格行点击事件)
       getAcc: function(row) {
-        this.$store.commit("BUS_ACCOUNT", row.account)
-        this.busForm.account = row.account
+        var self = this
+        self.$store.commit("BUS_ACCOUNT", row.account)
+        self.busForm.account = row.account
+        self.busForm.bus_id = row.bus_id
       },
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
@@ -108,8 +117,11 @@
       busValidate: function(func) {
         var self = this
         if (self.busForm.bus_id) {
-          if (self.busForm.bus_id !== self.filling.parentbus.bus_id) {
-            self.$emit("getPAN", self.busForm.bus_id)
+          // 初始id和选择商家id不同
+          if (getUrlParameters(window.location.hash, "id")) {
+            if (self.busForm.bus_id !== self.filling.parentbus.bus_id) {
+              self.$emit("getPAN", self.busForm.bus_id)
+            }
           }
           self.$emit("getCheck", self.busForm.account)
           func()

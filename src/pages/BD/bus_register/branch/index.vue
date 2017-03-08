@@ -36,9 +36,9 @@
 
       <!--结款信息-->
       <el-col :span="20" :offset="2" v-show="currentView === 'showCheckInfo'">
-        <show-check-info ref="checkChild" :Bank="Bank" :ID="ID"></show-check-info>
+        <show-check-info :Bank="Bank" :ID="ID"></show-check-info>
         <el-col :span="24" class="bottomButton">
-          <el-button size="large" type="primary" @click="next_step('submitSuccess', 'VERIFYING')">送审</el-button>
+          <el-button size="large" type="primary" @click="next_step('submitSuccess', 'VERIFYING')">送 审</el-button>
           <el-button size="large" type="primary" @click="next_step('save', 'HANDLING')">储存并待处理</el-button>
           <el-button size="large" type="primary" @click="previous_step('qualificationInfo')">上一步</el-button>
         </el-col>
@@ -125,7 +125,6 @@
             })
         }
       },
-
       // 商家搜索 获取主账号信息
       getPAN: function(busID) {
         var self = this
@@ -137,7 +136,7 @@
           }
         })
       },
-      // 获取结款信息
+      // 获取结款信息和身份信息
       getCheck: function(busAcc) {
         var self = this
         // 获取银行信息
@@ -153,7 +152,6 @@
           }
         })
       },
-
       // 下一步
       next_step: function(step, flag) {
         var self = this
@@ -202,7 +200,6 @@
           }
         }
       },
-
       // 上一步
       previous_step: function(step) {
         var self = this

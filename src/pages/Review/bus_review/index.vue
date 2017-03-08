@@ -18,13 +18,7 @@
         </el-form-item>
 
         <el-form-item class="select" label="BD：">
-          <el-select v-model="search.BDvalue" clearable size="small" placeholder="全部">
-            <el-option
-              v-for="item in search.BDlist"
-              :label="item.name"
-              :value="item.bd_id">
-            </el-option>
-          </el-select>
+          <bd-list></bd-list>
         </el-form-item>
       </el-form>
     </el-col>
@@ -65,10 +59,11 @@
 </template>
 
 <script>
-  import tabComponent from "../../../components/tabs/index"
+  import tabComponent from "../../../components/tabs/router/index"
   import datePicker from "../../../components/search/datePicker/index"
   import inputSearch from "../../../components/search/input/index"
   import selectSearch from "../../../components/search/select/index"
+  import bdList from "../../../components/search/BDlist/index"
   import {BDAPPLY_LIST_URL, BDVERIFY_APPLYTABLE_URL, BDVERIFY_EDITTABLE_URL} from "../../../common/interface"
 
   export default {
@@ -93,10 +88,6 @@
             name: "商家信息修改记录"
           }
         ],
-        search: {                 // 搜索栏
-          BDlist: [],                 // BD列表
-          BDvalue: ""             // BD
-        },
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
@@ -112,21 +103,9 @@
       }
     },
     mounted: function() {
-      var self = this
-      self.BDlist()
-      self.getTables()  // APPLY,NEW,BRANCH
+      this.getTables()  // APPLY,NEW,BRANCH
     },
     methods: {
-      /* 获取BD列表 */
-      BDlist: function() {
-        var self = this
-        self.$http.get(BDAPPLY_LIST_URL).then(function(response) {
-          if (response.body.success) {
-            self.search.BDlist = response.body.content    // 筛选栏
-          }
-        })
-      },
-
       /* 获取数据（表格） */
       getTables: function() {
         var self = this
@@ -201,7 +180,8 @@
       tabComponent,
       datePicker,
       inputSearch,
-      selectSearch
+      selectSearch,
+      bdList
     }
   }
 </script>

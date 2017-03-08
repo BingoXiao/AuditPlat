@@ -43,7 +43,7 @@
           <el-col :span="10">
             <el-form-item label="开户行名称：" label-width="120px" required>
               <el-col :span="15">
-                <span v-if="parseInt(checkForm.bank.branch) === 0" class="info">{{checkForm.bank.branch}}</span>
+                <span v-if="checkForm.bank.branchFlag" class="info">{{checkForm.bank.branch}}</span>
                 <span v-else class="info">{{checkForm.bank.custom_branch}}</span>
               </el-col>
             </el-form-item>
@@ -141,6 +141,7 @@
             bank: null,
             bank_list: [],
             branch: null,
+            branchFlag: true,
             branch_list: [],
             custom_branch: ""
           },                             // 银行信息（下拉框）
@@ -229,8 +230,10 @@
       get_branch: function(admicity, bank, branch, custom) {
         var self = this
         if (parseInt(branch) === 0) {
+          self.checkForm.bank.branchFlag = false
           self.checkForm.bank.custom_branch = custom + "（自定义）"
         } else {
+          self.checkForm.bank.branchFlag = true
           self.$http.get(SUBBANKS_URL + "?bank_id=" + bank + "&admicity_id=" + admicity).then(function(response) {
             if (response.body.success) {
               let arr = response.body.content

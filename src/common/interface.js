@@ -99,14 +99,20 @@ const BDREGISTER_BRAREGISTER_URL = HOST_URL + "/bus-manage/branches/add/"
 const BUSLIST_TABLE_URL = HOST_URL + "/bus-manage/buslist/"
 // 下载
 const BUSLIST_DOWNLOAD_URL = HOST_URL + "/bus-manage/buses/download/"
+// 获取商家列表信息 get
+const BUSLIST_BRANCH_URL = HOST_URL + "/bus-manage/branches/"
 // 获取基本信息 get
 const BUSLIST_BASIC_URL = HOST_URL + "/bus-manage/businfo/"
+// 获取营业执照信息 get
+const BUSLIST_BLIC_URL = HOST_URL + "/bus-manage/blinfo/"
+// 获取餐饮许可证信息 get
+const BUSLIST_SLIC_URL = HOST_URL + "/bus-manage/slinfo/"
+// 获取合约信息 get
+const BUSLIST_CONSTRA_URL = HOST_URL + "/register/treaty/get/"
 // 获取身份证信息 get
 const BUSLIST_ID_URL = HOST_URL + "/bus-manage/idinfo/"
 // 获取结算信息 get
 const BUSLIST_SETTLER_URL = HOST_URL + "/bus-manage/settleinfo/"
-
-
 /* 商家审核 */
 // 商家申请表格 get
 const BDVERIFY_APPLYTABLE_URL = HOST_URL + "/register/pendingver/"
@@ -138,7 +144,11 @@ exports = module.exports = {
   BDREGISTER_BRAREGISTER_URL,
   BUSLIST_TABLE_URL,
   BUSLIST_DOWNLOAD_URL,
+  BUSLIST_BRANCH_URL,
   BUSLIST_BASIC_URL,
+  BUSLIST_BLIC_URL,
+  BUSLIST_SLIC_URL,
+  BUSLIST_CONSTRA_URL,
   BUSLIST_ID_URL,
   BUSLIST_SETTLER_URL,
   BDVERIFY_APPLYTABLE_URL,
@@ -160,27 +170,7 @@ exports = module.exports = {
 
 /*
  /!* ***********商家列表（busList）*************** *!/
- /!* 获取基本信息 *!/
- var BUSLIST_BASIC_URL = HOST_URL + "/bus-manage/businfo/"
- var BUSLIST_BASIC_TYPE = "get"
-
- /!* 获取营业执照信息 *!/
- var BUSLIST_BLIC_URL = HOST_URL + "/bus-manage/blinfo/"
- var BUSLIST_BLIC_TYPE = "get"
-
- /!* 获取餐饮许可证信息 *!/
- var BUSLIST_SLIC_URL = HOST_URL + "/bus-manage/slinfo/"
- var BUSLIST_SLIC_TYPE = "get"
-
- /!* 获取合约信息 *!/
- var BUSLIST_CONSTRA_URL = HOST_URL + "/register/treaty/get/"
- var BUSLIST_CONSTRA_TYPE = "get"
-
- /!* 获取商家列表信息 *!/
- var BUSLIST_BRANCH_URL = HOST_URL + "/bus-manage/branches/"
- var BUSLIST_BRANCH_TYPE = "get"
-
- /!* 提交商家列表 *!/
+  /!* 提交商家列表 *!/
  var BUSLIST_SUBMIT_URL = HOST_URL + "/bus-manage/change-business-status/"
  var BUSLIST_SUBMIT_TYPE = "post"
 

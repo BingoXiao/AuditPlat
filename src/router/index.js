@@ -8,6 +8,7 @@ import New from "../pages/BD/bus_register/new/index"
 import Branch from "../pages/BD/bus_register/branch/index"
 import Apply from "../pages/BD/bus_register/apply/index"
 import BusList from "../pages/BD/bus_list/index"
+import BLView from "../pages/BD/bus_list/view/index"
 import BusReview from "../pages/Review/bus_review/index"
 import Hello from "../pages/Hello"
 
@@ -74,6 +75,12 @@ const routes = [
     hidden: "login",
     name: "商家申请查看",
     component: Apply
+  },
+  {   // 商家列表详情查看
+    path: "/bus_list/view",
+    hidden: "login",
+    name: "商家列表详情查看",
+    component: BLView
   },
   {
     path: "/",

@@ -39,7 +39,8 @@
             </small>
 
             <div class="map_wrapper">
-              <div id="allmap" style="width:100%;min-width:920px;margin:auto;height:400px;"></div>
+              <div id="allmap" class="allmap"></div>
+              <div class="mapCover"></div>
             </div>
           </el-form-item>
 
@@ -87,7 +88,7 @@
         name: "",          // 姓名
         phonenum: "",      // 手机
         busname: "",       // 门店名称
-        tel: "无",         // 门店座机
+        tel: "",         // 门店座机
         province: null,    // 省
         city: null,        // 市
         district: null,    // 区
@@ -140,6 +141,8 @@
             self.busname = businfo.busname      // 门店名称
             if (businfo.tel) {
               self.tel = businfo.tel            // 门店名称
+            } else {
+              self.tel = "无"
             }
             self.get_province(businfo.province_id, businfo.city_id, businfo.district_id, businfo.city_near_id)
             self.address_details = businfo.address_details     // 门店地址

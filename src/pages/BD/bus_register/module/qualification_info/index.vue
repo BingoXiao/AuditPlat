@@ -126,7 +126,7 @@
 
       <el-col :span="24">
         <el-col class="labelWrapper qualabel5">
-          <label>*<span class="labelText">许可证注册号：</span></label>
+          <label>*<span class="labelText">许可证编号：</span></label>
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_code">

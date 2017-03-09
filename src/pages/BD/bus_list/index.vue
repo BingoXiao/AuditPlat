@@ -127,7 +127,8 @@
       viewBus: function(row) {
         var self = this
         self.table.bususer_id = row.bususer_id
-        self.$router.push({path: "bus_list/view#id=" + row.bususer_id})
+        self.$router.push({path: "bus_list/view#id=" +
+        row.bususer_id + "&account=" + row.account})
       },
       // 下载商家列表
       download: function() {

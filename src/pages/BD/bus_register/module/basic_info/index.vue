@@ -104,7 +104,6 @@
     watch: {
       filling: function() {
         var self = this
-        var userinfo = self.filling.userinfo
         var businfo = self.filling.businfo
         self.basicForm.busname = businfo.busname      // 门店名称
         self.basicForm.tel = businfo.tel              // 门店名称

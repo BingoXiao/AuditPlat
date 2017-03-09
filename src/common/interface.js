@@ -113,11 +113,22 @@ const BUSLIST_CONSTRA_URL = HOST_URL + "/register/treaty/get/"
 const BUSLIST_ID_URL = HOST_URL + "/bus-manage/idinfo/"
 // 获取结算信息 get
 const BUSLIST_SETTLER_URL = HOST_URL + "/bus-manage/settleinfo/"
+// 提交合约 post
+const BUSLIST_SUBMITCONSTRA_URL = HOST_URL + "/register/treaty/post/"
+// 提交商家列表 post
+const BUSLIST_SUBMIT_URL = HOST_URL + "/bus-manage/change-business-status/"
+
 /* 商家审核 */
 // 商家申请表格 get
 const BDVERIFY_APPLYTABLE_URL = HOST_URL + "/register/pendingver/"
 // 商家信息修改表格 get
 const BDVERIFY_EDITTABLE_URL = HOST_URL + "/bus-manage/busedit-items/"
+// 商家申请通过（驳回） post
+const BDVERIFY_APPLYPASS_URL = HOST_URL + "/register/verify/"
+// 商家信息修改 获取数据 get
+const BDVERIFY_FILLING_URL = HOST_URL + "/bus-manage/busedit-details/"
+// 商家信息修改通过（驳回） post
+const BDVERIFY_EDITPASS_URL = HOST_URL + "/bus-manage/busedit-verify/"
 
 
 exports = module.exports = {
@@ -151,8 +162,13 @@ exports = module.exports = {
   BUSLIST_CONSTRA_URL,
   BUSLIST_ID_URL,
   BUSLIST_SETTLER_URL,
+  BUSLIST_SUBMITCONSTRA_URL,
+  BUSLIST_SUBMIT_URL,
   BDVERIFY_APPLYTABLE_URL,
   BDVERIFY_EDITTABLE_URL,
+  BDVERIFY_APPLYPASS_URL,
+  BDVERIFY_FILLING_URL,
+  BDVERIFY_EDITPASS_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -169,40 +185,16 @@ exports = module.exports = {
 
 
 /*
- /!* ***********商家列表（busList）*************** *!/
-  /!* 提交商家列表 *!/
- var BUSLIST_SUBMIT_URL = HOST_URL + "/bus-manage/change-business-status/"
- var BUSLIST_SUBMIT_TYPE = "post"
-
- /!* 提交合约 *!/
- var BUSLIST_SUBMITCONSTRA_URL = HOST_URL + "/register/treaty/post/"
- var BUSLIST_SUBMITCONSTRA_TYPE = "post"
- */
 /* ***********基本通用资料********* */
 /* 获取节假日 */
 /*
  var FESTIVALS_URL = HOST_URL + "/items/festivals/"
  var FESTIVALS_TYPE = "get"
 
-
  /!* 上传excel文件 *!/
  var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
  var EXCEL_UPLOAD_TYPE = "post"
 
-
- /!* ********************* 审核 ********************* *!/
- /!* *********商家审核（busVerify）********* *!/
- /!* 信息填充 *!/
- var BDVERIFY_FILLING_URL = HOST_URL + "/bus-manage/busedit-details/"
- var BDVERIFY_FILLING_TYPE = "get"
-
- /!* 商家申请通过（驳回） *!/
- var BDVERIFY_APPLYPASS_URL = HOST_URL + "/register/verify/"
- var BDVERIFY_APPLYPASS_TYPE = "post"
-
- /!* 商家信息修改通过（驳回） *!/
- var BDVERIFY_EDITPASS_URL = HOST_URL + "/bus-manage/busedit-verify/"
- var BDVERIFY_EDITPASS_TYPE = "post"
 
  /!* *********项目审核（projectVerify）********** *!/
  /!* 表格 *!/

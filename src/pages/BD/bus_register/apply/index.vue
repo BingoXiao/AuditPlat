@@ -81,6 +81,7 @@
   import BMap from "BMap"
   import {getValue, getUrlParameters} from "../../../../common/common"
 
+  /* eslint-disable no-unused-vars */
   let map, point, marker, geoc
   export default{
     data() {

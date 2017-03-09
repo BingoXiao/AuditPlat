@@ -66,7 +66,8 @@
         <span v-show="!openLock" @click="openLockInfo" class="iconfont icon-jiesuo"></span>
       </h3>
       <el-form-item label="状态" required>
-        <el-select v-model="Operate_Status" placeholder="请选择" :disabled="openDisable">
+        <el-select v-model="Operate_Status" placeholder="请选择"
+                   :disabled="openDisable">
           <el-option
             v-for="item in Operate"
             :label="item.label"
@@ -75,14 +76,28 @@
         </el-select>
       </el-form-item>
     </el-form>
+
+    <el-button type="primary" size="large" class="buttonGroup"
+               @click="basicValidate">
+      &emsp;提 交&emsp;</el-button>
+
+    <!--提示-->
+    <el-dialog v-model="tipsVisible" size="tiny"
+               :close-on-click-modal="false" class="tipsModal">
+      <div class="mainTips">
+        <i class="el-icon-circle-check"></i>
+        <span class="tips">&emsp;页面详情修改成功!</span>
+        <br/><br/><br/>
+      </div>
+    </el-dialog>
   </el-col>
 </template>
 
 <script>
   import BMap from "BMap"
   import showImage from "../../../../../components/form/previewImg/index.vue"
-  import {PROVINCE_URL, CITY_URL, DISTRICT_URL, CITYNEAR_URL} from "../../../../../common/interface"
-  import {isName, isPhone, getValue, getUrlParameters} from "../../../../../common/common"
+  import {PROVINCE_URL, CITY_URL, DISTRICT_URL, CITYNEAR_URL, BUSLIST_SUBMIT_URL} from "../../../../../common/interface"
+  import {isName, isPhone, getValue, modalHide, getUrlParameters} from "../../../../../common/common"
 
   let map, point, marker
   export default{
@@ -113,6 +128,7 @@
         openLock: true,
         busDisable: false,
         openDisable: false,
+        tipsVisible: false,
         basicForm: {
           name: "",          // 姓名
           phonenum: ""       // 手机
@@ -259,7 +275,7 @@
         map.panTo(newPoint)
         map.addOverlay(marker)
       },
-      // 修改商家负责人信息
+      // lock商家负责人信息
       busLockInfo: function() {
         var self = this
         if (self.busLock) {   // 解锁
@@ -269,7 +285,7 @@
         }
         self.busLock = !self.busLock
       },
-      // 修改营业状态
+      // lock营业状态
       openLockInfo: function() {
         var self = this
         if (self.openLock) {   // 解锁
@@ -283,14 +299,30 @@
       basicValidate: function() {
         var self = this
         self.$refs.basicForm.validate((valid) => {
-          if (valid && self.moduleV.class && self.moduleV.tel && self.moduleV.address) {
-            var formData = {
-              "tel": self.basicForm.tel,          // 店铺座机
-              "busname": self.basicForm.busname   // 店铺名称
-            }
-            self.$store.commit("FORM_DATA", formData)
-            self.$store.commit("V_FLAG", true)
-            self.$store.commit("USER_PHONE", self.basicForm.phonenum)
+          if (valid) {
+            this.$confirm("确定修改页面详情?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            }).then(() => {
+              var formData = new FormData()
+              formData.append("bus_id", getUrlParameters(window.location.hash, "id"))
+              formData.append("status", self.Operate_Status)
+              formData.append("name", self.basicForm.name)
+              formData.append("phonenum", self.basicForm.phonenum)
+//              for (var pair of formData.entries()) {
+//                console.log(pair[0] + ", " + pair[1])
+//              }
+              self.$http.post(BUSLIST_SUBMIT_URL, formData)
+              .then(function(response) {
+                if (response.data.success) {
+                  self.tipsVisible = true
+                  modalHide(function() {
+                    self.tipsVisible = false
+                  })
+                }
+              })
+            })
           }
         })
       }

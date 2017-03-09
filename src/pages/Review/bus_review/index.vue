@@ -38,9 +38,9 @@
         <el-table-column label="操作" align="center" min-width="100px">
           <template scope="scope">
             <el-button size="small" icon="search" class="tableButton"
-                       v-if="statusShow"> 查看</el-button>
+                       v-if="statusShow" @click="checkinfo(scope.row)"> 查看</el-button>
             <el-button size="small" icon="document" class="tableButton"
-                       v-else> 审核</el-button>
+                       v-else @click="checkinfo(scope.row)"> 审核</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -64,7 +64,7 @@
   import inputSearch from "../../../components/search/input/index"
   import selectSearch from "../../../components/search/select/index"
   import bdList from "../../../components/search/BDlist/index"
-  import {BDAPPLY_LIST_URL, BDVERIFY_APPLYTABLE_URL, BDVERIFY_EDITTABLE_URL} from "../../../common/interface"
+  import {BDVERIFY_APPLYTABLE_URL, BDVERIFY_EDITTABLE_URL} from "../../../common/interface"
 
   export default {
     data() {
@@ -154,26 +154,15 @@
         this.getTables()
       },
 
-      /* 修改(按钮) */
-      editInfo: function(row) {
+      /* 审核（查看） */
+      checkinfo: function(row) {
         var self = this
         var type = self.$route.params.type
-        var href, otherWindow
-        if (type === "new") {   // 新店注册（修改）
-          if (!row.applynum) {
-            href = "#/bus_register/new/register"
-          } else {
-            href = "#/bus_register/new/register#id=" + row.applynum
-          }
+        if (type === "businfo_edit" || type === "businfo_edit_record") {     // 商家信息修改
+          self.$router.push({path: self.$route.path + "/content#id=" + row.item_id + "&applynum=" + row.applynum})
         } else {
-          if (!row.applynum) {
-            href = "#/bus_register/branch/register"
-          } else {
-            href = "#/bus_register/branch/register#id=" + row.applynum
-          }
+          self.$router.push({path: self.$route.path + "/content#id=" + row.applynum})
         }
-        otherWindow = window.open(href)
-        otherWindow.opener = null
       }
     },
     components: {

@@ -620,23 +620,23 @@
 }
 .el-button--danger {
     color: #fff;
-    background-color: #ff4949;
-    border-color: #ff4949;
+    background-color: #c82324;
+    border-color: #c82324;
 }
 .el-button--danger:hover, .el-button--danger:focus {
-    background: rgb(255, 109, 109);
-    border-color: rgb(255, 109, 109);
+    background: rgb(211, 79, 80);
+    border-color: rgb(211, 79, 80);
     color: #fff;
 }
 .el-button--danger:active {
-    background: rgb(230, 66, 66);
-    border-color: rgb(230, 66, 66);
+    background: rgb(180, 32, 32);
+    border-color: rgb(180, 32, 32);
     color: #fff;
     outline: none;
 }
 .el-button--danger.is-active {
-    background: rgb(230, 66, 66);
-    border-color: rgb(230, 66, 66);
+    background: rgb(180, 32, 32);
+    border-color: rgb(180, 32, 32);
     color: #fff;
 }
 .el-button--danger.is-plain {
@@ -646,13 +646,13 @@
 }
 .el-button--danger.is-plain:hover, .el-button--danger.is-plain:focus {
     background: #fff;
-    border-color: #ff4949;
-    color: #ff4949;
+    border-color: #c82324;
+    color: #c82324;
 }
 .el-button--danger.is-plain:active {
     background: #fff;
-    border-color: rgb(230, 66, 66);
-    color: rgb(230, 66, 66);
+    border-color: rgb(180, 32, 32);
+    color: rgb(180, 32, 32);
     outline: none;
 }
 .el-button--info {
@@ -4449,23 +4449,23 @@
 }
 .el-button--danger {
     color: #fff;
-    background-color: #ff4949;
-    border-color: #ff4949;
+    background-color: #c82324;
+    border-color: #c82324;
 }
 .el-button--danger:hover, .el-button--danger:focus {
-    background: rgb(255, 109, 109);
-    border-color: rgb(255, 109, 109);
+    background: rgb(211, 79, 80);
+    border-color: rgb(211, 79, 80);
     color: #fff;
 }
 .el-button--danger:active {
-    background: rgb(230, 66, 66);
-    border-color: rgb(230, 66, 66);
+    background: rgb(180, 32, 32);
+    border-color: rgb(180, 32, 32);
     color: #fff;
     outline: none;
 }
 .el-button--danger.is-active {
-    background: rgb(230, 66, 66);
-    border-color: rgb(230, 66, 66);
+    background: rgb(180, 32, 32);
+    border-color: rgb(180, 32, 32);
     color: #fff;
 }
 .el-button--danger.is-plain {
@@ -4475,13 +4475,13 @@
 }
 .el-button--danger.is-plain:hover, .el-button--danger.is-plain:focus {
     background: #fff;
-    border-color: #ff4949;
-    color: #ff4949;
+    border-color: #c82324;
+    color: #c82324;
 }
 .el-button--danger.is-plain:active {
     background: #fff;
-    border-color: rgb(230, 66, 66);
-    color: rgb(230, 66, 66);
+    border-color: rgb(180, 32, 32);
+    color: rgb(180, 32, 32);
     outline: none;
 }
 .el-button--info {
@@ -9170,23 +9170,23 @@
 }
 .el-button--danger {
     color: #fff;
-    background-color: #ff4949;
-    border-color: #ff4949;
+    background-color: #c82324;
+    border-color: #c82324;
 }
 .el-button--danger:hover, .el-button--danger:focus {
-    background: rgb(255, 109, 109);
-    border-color: rgb(255, 109, 109);
+    background: rgb(211, 79, 80);
+    border-color: rgb(211, 79, 80);
     color: #fff;
 }
 .el-button--danger:active {
-    background: rgb(230, 66, 66);
-    border-color: rgb(230, 66, 66);
+    background: rgb(180, 32, 32);
+    border-color: rgb(180, 32, 32);
     color: #fff;
     outline: none;
 }
 .el-button--danger.is-active {
-    background: rgb(230, 66, 66);
-    border-color: rgb(230, 66, 66);
+    background: rgb(180, 32, 32);
+    border-color: rgb(180, 32, 32);
     color: #fff;
 }
 .el-button--danger.is-plain {
@@ -9196,13 +9196,13 @@
 }
 .el-button--danger.is-plain:hover, .el-button--danger.is-plain:focus {
     background: #fff;
-    border-color: #ff4949;
-    color: #ff4949;
+    border-color: #c82324;
+    color: #c82324;
 }
 .el-button--danger.is-plain:active {
     background: #fff;
-    border-color: rgb(230, 66, 66);
-    color: rgb(230, 66, 66);
+    border-color: rgb(180, 32, 32);
+    color: rgb(180, 32, 32);
     outline: none;
 }
 .el-button--info {

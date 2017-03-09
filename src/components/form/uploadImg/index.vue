@@ -3,7 +3,7 @@
     <div class="imgWrapper">
       <!--上传图片-->
       <el-upload
-        class = "avatar-uploader"
+        class="avatar-uploader"
         :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
         name="image"
         accept="image/png,image/jpeg,image/jpg"
@@ -52,6 +52,7 @@
     },
     data() {
       return {
+        http: "https://shopmanage-dev.jinmailife.com",
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
         imageUrl: "",                  // 图片的URL
         tipsFlag: true                 // 上传错误标志
@@ -63,7 +64,7 @@
         var self = this
         if (self.imgFill !== "") {
           self.$refs.upload_tips.style.display = "none"
-          self.imageUrl = "https://shopmanage-dev.jinmailife.com" + self.imgFill
+          self.imageUrl = self.http + self.imgFill
         }
       }
     },

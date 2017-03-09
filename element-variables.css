@@ -365,9 +365,9 @@
   --button-warning-color: var(--color-white);
   --button-warning-fill: var(--color-warning);
 
-  --button-danger-border: var(--color-danger);
+  --button-danger-border: #c82324;
   --button-danger-color: var(--color-white);
-  --button-danger-fill: var(--color-danger);
+  --button-danger-fill: #c82324;
 
   --button-info-border: var(--color-info);
   --button-info-color: var(--color-white);

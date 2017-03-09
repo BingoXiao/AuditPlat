@@ -18,7 +18,7 @@
           <tab-component :tabs="tabs" :which="which" v-on:toggle="tabChange"></tab-component>
           <div class="braSwitch">
             <span>切换分店：</span>
-            <el-select v-model="branch">
+            <el-select v-model="branch" @change="changeBranch">
               <el-option
                 v-for="item in branches"
                 :value="item.bus_id"
@@ -35,11 +35,8 @@
         <show-bl-info v-show="currentView === 'bl'" :filling="blInfo"></show-bl-info>
         <show-sl-info v-show="currentView === 'sl'" :filling="slInfo"></show-sl-info>
         <show-check-info v-show="currentView === 'check'" :Bank="bankInfo" :ID="idInfo"></show-check-info>
-        <contract-info v-show="currentView === 'cons'" :filling="constractInfo"></contract-info>
-      </el-col>
-
-      <el-col :span="20" :offset="2" style="margin-top:30px;margin-bottom:70px;">
-        <el-button type="primary" size="large">&emsp;提 交&emsp;</el-button>
+        <contract-info v-show="currentView === 'cons'" :filling="constractInfo"
+                       :account="busAccount"></contract-info>
       </el-col>
     </el-col>
   </el-row>
@@ -47,7 +44,7 @@
 
 <script>
   import tabComponent from "../../../../components/tabs/inner/index"
-  import showBasicInfo from "../module/showBasicInfo/index"
+  import showBasicInfo from "../module/showBasInfoE/index"
   import showBlInfo from "../module/showBlInfo/index"
   import showSlInfo from "../module/showSlInfo/index"
   import showCheckInfo from "../../bus_register/module/show_check_info/index"
@@ -55,7 +52,7 @@
   import {BUSLIST_BRANCH_URL, BUSLIST_BASIC_URL,
     BUSLIST_BLIC_URL, BUSLIST_SLIC_URL, BUSLIST_CONSTRA_URL,
     BUSLIST_ID_URL, BUSLIST_SETTLER_URL} from "../../../../common/interface"
-  import {getValue, getUrlParameters} from "../../../../common/common"
+  import {getUrlParameters} from "../../../../common/common"
 
   export default{
     data() {
@@ -92,12 +89,12 @@
       branchlist: function() {
         var self = this
         let id = getUrlParameters(window.location.hash, "id")
+        let acc = getUrlParameters(window.location.hash, "account")
         self.$http.get(BUSLIST_BRANCH_URL + "?bususer_id=" + id).then(function(response) {
           if (response.body.success) {
             self.branches = response.body.content
             self.branch = (self.branches)[0].bus_id
-            self.busAccount = (self.branches)[0].busname
-            self.get_buslist_info((self.branches)[0].bus_id, (self.branches)[0].busname)
+            self.busAccount = acc
           }
         })
       },
@@ -109,6 +106,12 @@
         self.get_sl_info(busId)
         self.get_bank_info(acc)
         self.get_id_info(acc)
+        self.get_contract_info(acc)
+      },
+      // 改变分店
+      changeBranch: function(value) {
+        var self = this
+        self.get_buslist_info(value, self.busAccount)
       },
       // 获取基本信息
       get_basic_info: function(busId) {
@@ -138,27 +141,27 @@
         })
       },
       // 获取银行信息
-      get_bank_info: function(busId) {
+      get_bank_info: function(acc) {
         var self = this
-        self.$http.get(BUSLIST_SETTLER_URL + "?account=" + busId).then(function(response) {
+        self.$http.get(BUSLIST_SETTLER_URL + "?account=" + acc).then(function(response) {
           if (response.body.success) {
             self.bankInfo = response.body.content
           }
         })
       },
       // 获取身份信息
-      get_id_info: function(busId) {
+      get_id_info: function(acc) {
         var self = this
-        self.$http.get(BUSLIST_ID_URL + "?account=" + busId).then(function(response) {
+        self.$http.get(BUSLIST_ID_URL + "?account=" + acc).then(function(response) {
           if (response.body.success) {
             self.idInfo = response.body.content
           }
         })
       },
       // 获取合约信息
-      get_contract_info: function(busId) {
+      get_contract_info: function(acc) {
         var self = this
-        self.$http.get(BUSLIST_CONSTRA_URL + "?account=" + busId).then(function(response) {
+        self.$http.get(BUSLIST_CONSTRA_URL + "?account=" + acc).then(function(response) {
           if (response.body.success) {
             self.constractInfo = response.body.content
           }

@@ -106,7 +106,7 @@ button {
 }
 
 .tipsModal .mainTips i {
-  font-size: 30px;
+  font-size: 28px;
   vertical-align: top
 }
 
@@ -120,6 +120,14 @@ button {
 
 .label_left {
   text-align: left
+}
+
+.tipsModal .el-dialog__body{
+  padding-top: 0;
+}
+
+.tips{
+  font-size: 20px;
 }
 
 .pageination {

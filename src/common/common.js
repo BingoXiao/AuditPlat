@@ -52,6 +52,7 @@ function clearCookie(cookieName) {
   }
 }
 
+// 获取对象数组中指定属性下的值
 function getValue(arr, ser, id, name) {
   var value = ""
   for (let i = 0; i < arr.length; i++) {
@@ -219,6 +220,45 @@ function modalHide(fun) {
   setTimeout(fun, 2000)
 }
 
+// 数据对比（数组）
+function compareArrData(arr1, arr2) {
+  var flag = false
+  if (arr1.length !== arr2.length) {
+    return false
+  } else {
+    for (let i = 0; i < arr1.length; i++) {
+      for (let j = 0; j < arr2.length; j++) {
+        if (arr1[i] !== arr2[j]) {
+          return false
+        } else {
+          flag = true
+        }
+      }
+    }
+  }
+  return flag
+}
+
+// 数据对比（对象数组）
+function compareObjArrData(arr1, arr2) {
+  var flag = false
+  if (arr1.length !== arr2.length) {
+    return false
+  } else {
+    for (let i = 0; i < arr1.length; i++) {
+      for (let key in arr1[i]) {
+        for (let j = 0; j < arr2.length; j++) {
+          if (arr1[i][key] !== arr2[j][key]) {
+            return false
+          } else {
+            flag = true
+          }
+        }
+      }
+    }
+  }
+  return flag
+}
 
 module.exports = {
   getUrlParameters,
@@ -234,5 +274,7 @@ module.exports = {
   isLicNumber,
   isLicAdd,
   isbankNumber,
-  modalHide
+  modalHide,
+  compareArrData,
+  compareObjArrData
 }

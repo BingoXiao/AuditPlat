@@ -12,6 +12,9 @@ import BLView from "../pages/BD/bus_list/view/index"
 import BusReview from "../pages/Review/bus_review/index"
 import ApplyReview from "../pages/Review/bus_review/apply/index"
 import EditReview from "../pages/Review/bus_review/modify/index"
+import ProjectReview from "../pages/Review/project_review/index"
+import ProjectContent from "../pages/Review/project_review/inner/index"
+import wholeShops from "../pages/Review/project_review/wholeShops/index"
 import Hello from "../pages/Hello"
 
 
@@ -103,11 +106,17 @@ const routes = [
           {path: "businfo_edit_record/:id", name: "商家信息修改记录"}
         ]
       }, {
-        path: "/project_verify",
+        path: "/project_verify/:type",
         name: "项目审核",
         hidden: "project_verify",
-        component: Hello,
-        iconCls: "icon-gerenziliao"
+        component: ProjectReview,
+        iconCls: "icon-gerenziliao",
+        children: [
+          {path: "online/:id", name: "上线申请"},
+          {path: "edit/:id", name: "修改申请"},
+          {path: "offline/:id", name: "下线申请"},
+          {path: "record/:id", name: "记录"}
+        ]
       }, {
         path: "/checkout_verify",
         name: "结款审核",
@@ -140,6 +149,36 @@ const routes = [
     hidden: "login",
     name: "商家信息修改审核查看",
     component: EditReview
+  },
+  {   // 上线申请
+    path: "/project_verify/online/content",
+    hidden: "login",
+    name: "上线申请审核",
+    component: ProjectContent
+  },
+  {   // 修改申请
+    path: "/project_verify/edit/content",
+    hidden: "login",
+    name: "修改申请审核",
+    component: ProjectContent
+  },
+  {   // 下线申请
+    path: "/project_verify/offline/content",
+    hidden: "login",
+    name: "下线申请审核",
+    component: ProjectContent
+  },
+  {   // 记录
+    path: "/project_verify/record/content",
+    hidden: "login",
+    name: "项目审核记录",
+    component: ProjectContent
+  },
+  {   // 查看更多门店
+    path: "/project/wholeShops",
+    hidden: "login",
+    name: "全部门店",
+    component: wholeShops
   },
   {
     path: "/",

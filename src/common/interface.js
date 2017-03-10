@@ -131,6 +131,16 @@ const BDVERIFY_FILLING_URL = HOST_URL + "/bus-manage/busedit-details/"
 const BDVERIFY_EDITPASS_URL = HOST_URL + "/bus-manage/busedit-verify/"
 
 
+/* 项目审核 */
+// 表格 get
+const PROVERIFY_TABLE_URL = HOST_URL + "/items/"
+// 信息填充 get
+const PROVERIFY_FILLING_URL = HOST_URL + "/items/detail/"
+// 提交同意（驳回） post
+const PROVERIFY_PASS_URL = HOST_URL + "/items/verify/"
+
+
+
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
   AUTO_LOGIN_URL,
@@ -169,6 +179,9 @@ exports = module.exports = {
   BDVERIFY_APPLYPASS_URL,
   BDVERIFY_FILLING_URL,
   BDVERIFY_EDITPASS_URL,
+  PROVERIFY_TABLE_URL,
+  PROVERIFY_FILLING_URL,
+  PROVERIFY_PASS_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -194,20 +207,6 @@ exports = module.exports = {
  /!* 上传excel文件 *!/
  var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
  var EXCEL_UPLOAD_TYPE = "post"
-
-
- /!* *********项目审核（projectVerify）********** *!/
- /!* 表格 *!/
- var PROVERIFY_TABLE_URL = HOST_URL + "/items/"
- var PROVERIFY_TABLE_TYPE = "get"
-
- /!* 信息填充 *!/
- var PROVERIFY_FILLING_URL = HOST_URL + "/items/detail/"
- var PROVERIFY_FILLING_TYPE = "get"
-
- /!* 提交同意（驳回） *!/
- var PROVERIFY_PASS_URL = HOST_URL + "/items/verify/"
- var PROVERIFY_PASS_TYPE = "post"
 
  /!* ********** 结款审核（settleVerify） ********** *!/
  /!* 结款申请（记录） *!/

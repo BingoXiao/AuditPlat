@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <header-menu></header-menu>
+    <header-menu v-show="$route.name !== '全部门店'"></header-menu>
 
     <div class="panel">
       <router-view></router-view>

@@ -2,13 +2,13 @@
   <el-row class="panel-center" style="top:80px;">
     <el-col :span="20" :offset="2">
       <el-col :span="20" :offset="2">
-        <el-row style="border-bottom: 1px solid #d3ddea; padding-bottom:10px">
-          <el-col :span="6">
-            <p style="font-size: 21px">商务经理：{{bd}}</p>
+        <el-row style="border-bottom: 1px solid #d3ddea; padding-bottom:10px;font-size: 21px">
+          <el-col :span="8">
+            <p>商务经理：{{bd}}</p>
           </el-col>
-          <el-col :span="18" v-if="$route.name === '商家申请审核查看'">
-            <span v-if="!reason" style="color:#13CE66">通过</span>
-            <span v-else style="color:#FF4949">驳回：{{reason}}</span>
+          <el-col :span="16" v-if="$route.name === '商家申请审核查看'">
+            <p v-if="!reason" style="color:#13CE66">通过</p>
+            <p v-else style="color:#FF4949">驳回：{{reason}}</p>
           </el-col>
         </el-row>
 
@@ -118,7 +118,6 @@
         passDialog: false,     // 驳回模态框
         tipsVisible: false,    // 操作提示模态框
         dialogtips: "",        // 操作提示
-        rejectReason: "商家信息有误/不真实",    // 驳回原因
         textarea: ""
       }
     },
@@ -151,8 +150,8 @@
               self.slInfo = data.slinfo
               self.shopName = data.userinfo.account       // 店名
               self.applynum = getUrlParameters(window.location.hash, "id")       // 审编号
-              self.bd = ""
-              self.reason = ""
+              self.bd = data.applyinfo.bd
+              self.reason = data.applyinfo.reject_reason || ""
             }
           })
       },

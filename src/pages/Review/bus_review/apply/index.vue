@@ -35,7 +35,8 @@
           <p style="font-size: 17px">确认商家<b> "{{shopName}} (申请编号: {{applynum}})" </b>申请审核通过？</p>
           <br/>
           <div class="buttonGroup" style="margin-bottom:20px">
-            <el-button type="primary" size="large" @click="pass(true)">确 认</el-button>
+            <el-button type="primary" size="large"
+                       @click="pass(true)" style="margin-right:20px">确 认</el-button>
             <el-button size="large" @click="passDialog = false">取 消</el-button>
           </div>
         </el-col>
@@ -50,7 +51,8 @@
             亲爱的审核员，您未通过 <b>"{{shopName}} (申请编号: {{applynum}})"</b> 的申请审核，请输入未通过审核原因
           </p>
           <p>未通过原因：</p>
-          <el-radio-group v-model="rejectReason" style="line-height: 30px">
+          <el-radio-group v-model="rejectReason" style="line-height: 30px"
+                          @change="radioChange">
             <el-col :span="12">
               <el-radio label="商家信息有误/不真实">商家信息有误/不真实</el-radio>
             </el-col>
@@ -63,6 +65,9 @@
            <el-col :span="12">
              <el-radio label="其他(请填写)">其他(请填写)</el-radio>
            </el-col>
+            <el-col :span="24">
+              <span v-if="error" class="error">{{error}}</span>
+            </el-col>
           </el-radio-group>
           <br/>
           <el-input
@@ -74,8 +79,9 @@
           </el-input>
           <br/><br/>
           <div class="buttonGroup" style="margin-bottom:20px">
-            <el-button type="primary" size="large" @click="pass(false)">发 送</el-button>
-            <el-button type="primary" size="large" @click="rejectDialog = false">取 消</el-button>
+            <el-button type="primary" size="large"
+                       @click="pass(false)" style="margin-right:20px">发 送</el-button>
+            <el-button size="large" @click="rejectDialog = false">取 消</el-button>
           </div>
         </el-col>
       </el-row>
@@ -114,6 +120,8 @@
         idInfo: {},            // 身份填充
         shopName: "",          // 店名
         applynum: "",          // 审编号
+        error: "",             // 驳回选择其他原因（文本框未填写时提示）
+        rejectReason: "商家信息有误/不真实",
         rejectDialog: false,   // 驳回模态框
         passDialog: false,     // 驳回模态框
         tipsVisible: false,    // 操作提示模态框
@@ -161,6 +169,11 @@
         var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
         self.$router.push({path: htmlSrc})
       },
+      // 驳回选择理由
+      radioChange: function() {
+        var self = this
+        self.error = ""
+      },
       // 审核
       pass: function(flag) {
         var self = this
@@ -180,24 +193,31 @@
             reject_reason: self.rejectReason
           }
           if (self.rejectReason === "其他(请填写)") {
-            formdata.reject_reason = self.textarea
-          }
-          self.dialogtips = "发送成功"
-        }
-        self.$http.post(BDVERIFY_APPLYPASS_URL,
-          JSON.stringify(formdata),
-          {emulateJSON: true})
-          .then(function(response) {
-            if (response.body.success) {
-              self.passDialog = false
-              self.rejectDialog = false
-              self.tipsVisible = true
-              modalHide(function() {
-                self.tipsVisible = false
-                self.$router.push({path: "/bus_review/bus_apply"})
-              })
+            if (self.textarea) {
+              formdata.reject_reason = self.textarea
+              self.error = ""
+              self.dialogtips = "发送成功"
+            } else {
+              self.error = "请选择驳回原因"
             }
-          })
+          }
+        }
+        if (!self.error) {
+          self.$http.post(BDVERIFY_APPLYPASS_URL,
+            JSON.stringify(formdata),
+            {emulateJSON: true})
+            .then(function(response) {
+              if (response.body.success) {
+                self.passDialog = false
+                self.rejectDialog = false
+                self.tipsVisible = true
+                modalHide(function() {
+                  self.tipsVisible = false
+                  self.$router.push({path: "/bus_review/bus_apply"})
+                })
+              }
+            })
+        }
       }
     },
     components: {

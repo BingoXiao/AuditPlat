@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import {PROVERIFY_FILLING_URL, PROVERIFY_PASS_URL} from "../../../../common/interface"
+  import {PROVERIFY_FILLING_URL} from "../../../../common/interface"
   import {getUrlParameters} from "../../../../common/common"
 
   export default{

@@ -61,6 +61,9 @@ const SUBBANKS_URL = HOST_URL + "/register/subbanks/"
 // 上传图片 post
 const TEMP_PHOTOS_URL = HOST_URL + "/register/upload-tmpimage/"
 
+// 获取节假日 get
+const FESTIVALS_URL = HOST_URL + "/items/festivals/"
+
 
 /* BD */
 /* 商家分配 */
@@ -140,6 +143,17 @@ const PROVERIFY_FILLING_URL = HOST_URL + "/items/detail/"
 const PROVERIFY_PASS_URL = HOST_URL + "/items/verify/"
 
 
+/* 结款审核 */
+// 结款申请（记录） get
+const CHECKVERIFY_APPLY_URL = HOST_URL + "/bus-manage/settlement/items/"
+// 结款申请(下载当日任务)
+const CHECKVERIFY_APPLY_TODYDL_URL = HOST_URL + "/bus-manage/settlement/items/dtasks/"
+// 结款申请(上传结款信息)
+const EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
+// 结款申请记录(下载结款明细)
+const CHECKVERIFY_RECORD_DOWNLOAD_URL = HOST_URL + "/bus-manage/settlement/items/drecord/"
+
+
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
@@ -182,6 +196,10 @@ exports = module.exports = {
   PROVERIFY_TABLE_URL,
   PROVERIFY_FILLING_URL,
   PROVERIFY_PASS_URL,
+  CHECKVERIFY_APPLY_URL,
+  CHECKVERIFY_RECORD_DOWNLOAD_URL,
+  CHECKVERIFY_APPLY_TODYDL_URL,
+  EXCEL_UPLOAD_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -193,25 +211,19 @@ exports = module.exports = {
   BANK_CITIES_URL,
   BANKS_URL,
   SUBBANKS_URL,
-  TEMP_PHOTOS_URL
+  TEMP_PHOTOS_URL,
+  FESTIVALS_URL
 }
 
 
 /*
 /* ***********基本通用资料********* */
-/* 获取节假日 */
 /*
- var FESTIVALS_URL = HOST_URL + "/items/festivals/"
- var FESTIVALS_TYPE = "get"
-
  /!* 上传excel文件 *!/
  var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
  var EXCEL_UPLOAD_TYPE = "post"
 
  /!* ********** 结款审核（settleVerify） ********** *!/
- /!* 结款申请（记录） *!/
- var CHECKVERIFY_APPLY_URL = HOST_URL + "/bus-manage/settlement/items/"
- var CHECKVERIFY_APPLY_TYPE = "get"
 
  /!* 商家银行账户修改（记录） *!/
  var CHECKVERIFY_BANKEDIT_URL = HOST_URL + "/bus-manage/bank/items/"

@@ -220,6 +220,18 @@ function modalHide(fun) {
   setTimeout(fun, 2000)
 }
 
+// 节假日对比
+function compareFestival(dateFestivals, begin, end) {
+  var res = ""
+  for (let i = 0; i < dateFestivals.length; i++) {
+    if (begin === dateFestivals[i].begin_date_ex && end === dateFestivals[i].end_date_ex) {
+      res = dateFestivals[i].name
+    }
+  }
+  return res
+}
+
+
 // 数据对比（数组）
 function compareArrData(arr1, arr2) {
   var flag = false
@@ -276,5 +288,6 @@ module.exports = {
   isbankNumber,
   modalHide,
   compareArrData,
-  compareObjArrData
+  compareObjArrData,
+  compareFestival
 }

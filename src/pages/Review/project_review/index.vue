@@ -144,7 +144,6 @@
       /* 获取数据（表格） */
       getTables: function() {
         var self = this
-        self.currentPage = 1
         self.loading = true
         let arr = {
           "online": "UP",
@@ -175,13 +174,16 @@
 
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function() {
-        this.getTables()
+        var self = this
+        self.currentPage = 1
+        self.getTables()
       },
 
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        var self = this
+        self.currentPage = currentPage
+        self.getTables()
       },
 
       /* 查看 */

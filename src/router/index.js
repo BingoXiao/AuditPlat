@@ -15,6 +15,7 @@ import EditReview from "../pages/Review/bus_review/modify/index"
 import ProjectReview from "../pages/Review/project_review/index"
 import ProjectContent from "../pages/Review/project_review/inner/index"
 import wholeShops from "../pages/Review/project_review/wholeShops/index"
+import AuditReview from "../pages/Review/audit_review/index"
 import Hello from "../pages/Hello"
 
 
@@ -118,11 +119,19 @@ const routes = [
           {path: "record/:id", name: "记录"}
         ]
       }, {
-        path: "/checkout_verify",
+        path: "/checkout_verify/:type",
         name: "结款审核",
         hidden: "checkout_verify",
-        component: Hello,
-        iconCls: "icon-zhangwujiekuan"
+        component: AuditReview,
+        iconCls: "icon-zhangwujiekuan",
+        children: [
+          {path: "check_apply", name: "结款申请"},
+          {path: "check_apply_record", name: "结款申请记录"},
+          {path: "bank_account/:id", name: "商家银行账户修改"},
+          {path: "bank_account_record/:id", name: "商家银行账户修改记录"},
+          {path: "refund", name: "操作退款"},
+          {path: "refund_record", name: "退款记录"}
+        ]
       }
     ]
   },

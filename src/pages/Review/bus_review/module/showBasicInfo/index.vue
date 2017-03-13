@@ -63,8 +63,8 @@
   import BMap from "BMap"
   import showImage from "../../../../../components/form/previewImg/index.vue"
   import {PROVINCE_URL, CITY_URL, DISTRICT_URL, CITYNEAR_URL, CATEGORY_URL,
-    LCLASS_URL, SCLASS_URL, BUSLIST_SUBMIT_URL} from "../../../../../common/interface"
-  import {getValue, modalHide, getUrlParameters} from "../../../../../common/common"
+    LCLASS_URL, SCLASS_URL} from "../../../../../common/interface"
+  import {getValue} from "../../../../../common/common"
 
   let map, point, marker
   export default{
@@ -94,7 +94,6 @@
     },
     mounted() {
       var self = this
-//      let id = getUrlParameters(window.location.hash, "id")
       // 百度地图API功能
       map = new BMap.Map("allmap")
       point = new BMap.Point(114.025974, 22.546054)

@@ -7,7 +7,7 @@
             <p>商家账号：{{shopName}}</p>
           </el-col>
           <el-col :span="16" v-if="$route.name === '商家信息修改审核查看'">
-            <p v-if="reject_reason" style="color:#FF4949">驳回：{{reject_reason}}</p>
+            <p v-if="reason" style="color:#FF4949">驳回：{{reason}}</p>
             <p v-else style="color:#13CE66">通过</p>
           </el-col>
         </el-row>
@@ -137,7 +137,8 @@
           <p style="font-size: 17px">确认商家<b> "{{shopName}} (申请编号: {{applynum}})" </b>申请审核通过？</p>
           <br/>
           <div class="buttonGroup" style="margin-bottom:20px">
-            <el-button type="primary" size="large" @click="pass(true)">确 认</el-button>
+            <el-button type="primary" size="large"
+                       @click="pass(true)" style="margin-right:20px">确 认</el-button>
             <el-button size="large" @click="passDialog = false">取 消</el-button>
           </div>
         </el-col>
@@ -152,7 +153,8 @@
             亲爱的审核员，您未通过 <b>"{{shopName}} (申请编号: {{applynum}})"</b> 的申请审核，请输入未通过审核原因
           </p>
           <p>未通过原因：</p>
-          <el-radio-group v-model="rejectReason" style="line-height: 30px">
+          <el-radio-group v-model="rejectReason" style="line-height: 30px"
+                          @change="radioChange">
             <el-col :span="12">
               <el-radio label="商家信息有误/不真实">商家信息有误/不真实</el-radio>
             </el-col>
@@ -165,6 +167,9 @@
             <el-col :span="12">
               <el-radio label="其他(请填写)">其他(请填写)</el-radio>
             </el-col>
+            <el-col :span="24">
+              <span v-if="error" class="error">{{error}}</span>
+            </el-col>
           </el-radio-group>
           <br/>
           <el-input
@@ -176,8 +181,9 @@
           </el-input>
           <br/><br/>
           <div class="buttonGroup" style="margin-bottom:20px">
-            <el-button type="primary" size="large" @click="pass(false)">发 送</el-button>
-            <el-button type="primary" size="large" @click="rejectDialog = false">取 消</el-button>
+            <el-button type="primary" size="large"
+                       @click="pass(false)" style="margin-right:20px">发 送</el-button>
+            <el-button size="large" @click="rejectDialog = false">取 消</el-button>
           </div>
         </el-col>
       </el-row>
@@ -199,14 +205,14 @@
   import BMap from "BMap"
   import openHour from "../../../../components/form/openHour/index"
   import {BDVERIFY_FILLING_URL, BDVERIFY_EDITPASS_URL} from "../../../../common/interface"
-  import {getValue, modalHide, compareArrData, compareObjArrData, getUrlParameters} from "../../../../common/common"
+  import {modalHide, compareArrData, compareObjArrData, getUrlParameters} from "../../../../common/common"
 
   let map, point, marker
   export default{
     data() {
       return {
         showBtn: false,      // 是否显示审核和驳回按钮
-        reject_reason: "",          // 原因
+        reason: "",          // 原因
         shopName: "",        // 店名
         applynum: "",        // 审编号
         name: "",            // 姓名
@@ -247,6 +253,8 @@
           open_status: "",        // 营业状态
           capita_consumption: ""            // 人均
         },
+        error: "",             // 驳回选择其他原因（文本框未填写时提示）
+        rejectReason: "商家信息有误/不真实",
         rejectDialog: false,   // 驳回模态框
         passDialog: false,     // 驳回模态框
         tipsVisible: false,    // 操作提示模态框
@@ -373,43 +381,50 @@
         var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
         self.$router.push({path: htmlSrc})
       },
+      // 驳回选择理由
+      radioChange: function() {
+        var self = this
+        self.error = ""
+      },
       // 审核
       pass: function(flag) {
         var self = this
         let id = getUrlParameters(window.location.hash, "id")
-        var formdata = {}
+        var formdata = {
+          flag: flag,
+          item_id: id,
+          reject_reason: ""
+        }
         if (flag) {   // 通过
-          formdata = {
-            flag: flag,
-            item_id: id,
-            reject_reason: ""
-          }
           self.dialogtips = "审核成功"
         } else {   // 驳回
-          formdata = {
-            flag: flag,
-            item_id: id,
-            reject_reason: self.rejectReason
-          }
+          formdata.reject_reason = self.rejectReason
           if (self.rejectReason === "其他(请填写)") {
-            formdata.reject_reason = self.textarea
-          }
-          self.dialogtips = "发送成功"
-        }
-        self.$http.post(BDVERIFY_EDITPASS_URL,
-          JSON.stringify(formdata),
-          {emulateJSON: true})
-          .then(function(response) {
-            if (response.body.success) {
-              self.passDialog = false
-              self.rejectDialog = false
-              self.tipsVisible = true
-              modalHide(function() {
-                self.tipsVisible = false
-                self.$router.push({path: "/bus_review/bus_apply"})
-              })
+            if (self.textarea) {
+              formdata.reject_reason = self.textarea
+              self.error = ""
+              self.dialogtips = "发送成功"
+            } else {
+              self.error = "请选择驳回原因"
             }
-          })
+          }
+        }
+        if (!self.error) {
+          self.$http.post(BDVERIFY_EDITPASS_URL,
+            JSON.stringify(formdata),
+            {emulateJSON: true})
+            .then(function(response) {
+              if (response.body.success) {
+                self.passDialog = false
+                self.rejectDialog = false
+                self.tipsVisible = true
+                modalHide(function() {
+                  self.tipsVisible = false
+                  self.$router.push({path: "/bus_review/bus_apply"})
+                })
+              }
+            })
+        }
       },
       // 根据提供的坐标点显示位置
       showLocal: function(po) {

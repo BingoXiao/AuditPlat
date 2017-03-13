@@ -1,42 +1,43 @@
 <template>
   <el-row type="flex" justify="center">
-  <el-col :xs="22" :sm="18" :md="14" :lg="12" class="login">
-    <el-row style="margin:20px 60px 20px 60px;">
-      <h2 class="topTitle">
-        <strong>审核后台登录</strong>
-      </h2>
-    </el-row>
+    <el-col :xs="22" :sm="18" :md="14" :lg="12" class="login">
+      <el-row style="margin:20px 60px 20px 60px;">
+        <h2 class="topTitle">
+          <strong>审核后台登录</strong>
+        </h2>
+      </el-row>
 
-    <el-row type="flex" justify="center">
-      <el-col :span="16">
-        <!--账号-->
-        <el-form id="loginForm" label-width="50px" label-position="left">
-          <el-form-item label="账号">
-            <el-input id="accountDiv" v-model="account" name="account" autofocus></el-input>
-            <!--账号错误提示-->
-            <i class="el-icon-circle-close errorTips" v-if="accErr"> {{accErr}}</i>
-          </el-form-item>
+      <el-row type="flex" justify="center">
+        <el-col :span="16">
+          <!--账号-->
+          <el-form id="loginForm" label-width="50px" label-position="left">
+            <el-form-item label="账号">
+              <el-input id="accountDiv" v-model="account" name="account" autofocus></el-input>
+              <!--账号错误提示-->
+              <i class="el-icon-circle-close errorTips" v-if="accErr"> {{accErr}}</i>
+            </el-form-item>
 
-          <!--密码-->
-          <el-form-item label="密码">
-            <el-input type="password" auto-complete="off" name="password"
-                      v-model="password"></el-input>
-            <!--密码错误提示-->
-            <i class="el-icon-circle-close errorTips" v-if="pwdErr"> {{pwdErr}}</i>
-          </el-form-item>
+            <!--密码-->
+            <el-form-item label="密码">
+              <el-input type="password" auto-complete="off" name="password"
+                        v-model="password"></el-input>
+              <!--密码错误提示-->
+              <i class="el-icon-circle-close errorTips" v-if="pwdErr"> {{pwdErr}}</i>
+            </el-form-item>
 
-          <!--记住-->
-          <el-form-item label="">
-            <el-checkbox label="下次自动登录" v-model="checked" :checked="checked"></el-checkbox>
-          </el-form-item>
+            <!--记住-->
+            <el-form-item label="">
+              <el-checkbox label="下次自动登录" v-model="checked" :checked="checked"></el-checkbox>
+            </el-form-item>
 
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">登 录</el-button>
-          </el-form-item>
-        </el-form>
-      </el-col>
-    </el-row>
-  </el-col>
+            <el-form-item>
+              <el-button type="primary" @click="onSubmit">登 录</el-button>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-col>
+  </el-row>
 </template>
 
 <script>

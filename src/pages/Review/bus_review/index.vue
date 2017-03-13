@@ -113,15 +113,12 @@
         var type = (self.$route.params.type)
         var url = ""
         var Type = "V"
-        self.currentPage = 1
         if (type === "bus_apply" || type === "businfo_edit") {
           if (type === "bus_apply") {
             url = BDVERIFY_APPLYTABLE_URL
           } else if (type === "businfo_edit") {
             url = BDVERIFY_EDITTABLE_URL
           }
-          self.statusShow = false
-          Type = "V"
         } else if (type === "bus_apply_record" || type === "businfo_edit_record") {
           if (type === "bus_apply_record") {
             url = BDVERIFY_APPLYTABLE_URL
@@ -145,6 +142,7 @@
 
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function() {
+        this.currentPage = 1
         this.getTables()
       },
 

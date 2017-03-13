@@ -2,25 +2,25 @@
   <div>
     <table>
       <tr>
-        <td><el-checkbox v-model="checkAll">整周</el-checkbox>
+        <td><el-checkbox v-model="checkAll" disabled>整周</el-checkbox>
           <span>&nbsp;|</span>
         </td>
         <td>
           <el-checkbox-group v-model="checkList">
-            <el-checkbox label="1">周一</el-checkbox>
-            <el-checkbox label="2">周二</el-checkbox>
-            <el-checkbox label="3">周三</el-checkbox>
-            <el-checkbox label="4">周四</el-checkbox>
-            <el-checkbox label="5">周五</el-checkbox>
-            <el-checkbox label="6">周六</el-checkbox>
-            <el-checkbox label="7">周日</el-checkbox>
+            <el-checkbox label="1" disabled>周一</el-checkbox>
+            <el-checkbox label="2" disabled>周二</el-checkbox>
+            <el-checkbox label="3" disabled>周三</el-checkbox>
+            <el-checkbox label="4" disabled>周四</el-checkbox>
+            <el-checkbox label="5" disabled>周五</el-checkbox>
+            <el-checkbox label="6" disabled>周六</el-checkbox>
+            <el-checkbox label="7" disabled>周日</el-checkbox>
           </el-checkbox-group>
         </td>
       </tr>
 
       <tr>
         <td>
-          <el-checkbox v-model="wholeHour">24小时</el-checkbox>
+          <el-checkbox v-model="wholeHour" disabled>24小时</el-checkbox>
           <span>&nbsp;|</span>
         </td>
         <td>

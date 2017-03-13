@@ -143,7 +143,6 @@
       /* 获取数据（表格） */
       getTables: function() {
         var self = this
-        self.currentPage = 1
         self.loading = true
         var type = (self.$route.params.type).toUpperCase()
         self.$http.get(BDREGISTER_TABLE_URL + "?type=" + type).then(function(response) {
@@ -160,6 +159,7 @@
 
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function() {
+        this.currentPage = 1
         this.getTables()
       },
 

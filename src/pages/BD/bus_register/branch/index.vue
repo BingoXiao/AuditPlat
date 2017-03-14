@@ -51,14 +51,8 @@
       </el-col>
     </el-col>
 
-    <el-dialog v-model="saveVisible" size="tiny"
-               :close-on-click-modal="false" class="tipsModal">
-      <div class="mainTips">
-        <i class="el-icon-circle-check"></i>
-        保存成功！
-        <p class="returnTips">自动返回系统中...</p>
-      </div>
-    </el-dialog>
+    <!--提示-->
+    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
   </el-row>
 </template>
 
@@ -69,6 +63,7 @@
   import qualificationInfo from "../module/qualification_info/index"
   import showCheckInfo from "../module/show_check_info/index"
   import submitSuccess from "../module/submit_success/index"
+  import dialogTips from "../../../../components/dialogTips/index.vue"
   import {BDREGISTER_BRAEDITFILLING_URL, BDREGISTER_BRAREGISTER_URL, BUSLIST_BASIC_URL,
     BUSLIST_ID_URL, BUSLIST_SETTLER_URL} from "../../../../common/interface"
   import {getUrlParameters} from "../../../../common/common"
@@ -84,7 +79,9 @@
           phonenum: ""        // 商家手机
         },
         flag: false,          // 验证结果反馈
-        saveVisible: false,   // 保存资料
+        isRight: true,       // 保存提示提示框
+        tips: "保存成功！",
+        tipsVisible: false,
         active: 1,                 // 激活步骤
         currentView: "busSearch",  // 当前步骤
         steps: [                   // 步骤条
@@ -221,7 +218,8 @@
       basicInfo,
       qualificationInfo,
       showCheckInfo,
-      submitSuccess
+      submitSuccess,
+      dialogTips
     }
   }
 </script>

@@ -16,6 +16,9 @@ import ProjectReview from "../pages/Review/project_review/index"
 import ProjectContent from "../pages/Review/project_review/inner/index"
 import wholeShops from "../pages/Review/project_review/wholeShops/index"
 import AuditReview from "../pages/Review/audit_review/index"
+import bankAccountContent from "../pages/Review/audit_review/bank_account/bank_account_view/index"
+import ProjectList from "../pages/PM/project_list/index"
+import ProjectListContent from "../pages/PM/project_list/content/index"
 import Hello from "../pages/Hello"
 
 
@@ -150,13 +153,13 @@ const routes = [
   {   // 商家信息修改详情页
     path: "/bus_review/businfo_edit/content",
     hidden: "login",
-    name: "商家信息修改审核",
+    name: "商家信息修改",
     component: EditReview
   },
   {   // 商家信息修改查看详情页
     path: "/bus_review/businfo_edit_record/content",
     hidden: "login",
-    name: "商家信息修改审核查看",
+    name: "商家信息修改记录",
     component: EditReview
   },
   {   // 上线申请
@@ -189,6 +192,18 @@ const routes = [
     name: "全部门店",
     component: wholeShops
   },
+  {   // 商家银行账户修改
+    path: "/checkout_verify/bank_account/content",
+    hidden: "login",
+    name: "商家银行账户修改",
+    component: bankAccountContent
+  },
+  {   // 商家银行账户修改记录
+    path: "/checkout_verify/bank_account_record/content",
+    hidden: "login",
+    name: "商家银行账户修改记录",
+    component: bankAccountContent
+  },
   {
     path: "/",
     name: "项目管理",
@@ -199,10 +214,16 @@ const routes = [
         path: "/project_list",
         name: "项目列表",
         hidden: "item_list",
-        component: Hello,
+        component: ProjectList,
         iconCls: "icon-renzhengxiangmu"
       }
     ]
+  },
+  {   // 记录
+    path: "/project_list/content",
+    hidden: "login",
+    name: "项目审核记录",
+    component: ProjectListContent
   },
   {
     path: "/",

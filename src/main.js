@@ -97,6 +97,7 @@ Vue.http.interceptors.push(function(request, next) {
       Vue.prototype.$confirm("无法连接,请稍后再试!", "提示", {
         showCancelButton: false,
         showConfirmButton: false,
+        closeOnClickModal: false,
         type: "warning"
       }).then(() => {
       }).catch(() => {
@@ -110,6 +111,7 @@ Vue.http.interceptors.push(function(request, next) {
           Vue.prototype.$confirm(response.body.error_info, "提示", {
             showCancelButton: false,
             showConfirmButton: false,
+            closeOnClickModal: false,
             type: "warning"
           }).then(() => {
           }).catch(() => {

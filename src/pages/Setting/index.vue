@@ -220,20 +220,14 @@
     </el-dialog>
 
     <!--提示-->
-    <el-dialog v-model="dialog.tipsVisible" size="tiny"
-               :close-on-click-modal="false" class="tipsModal">
-      <div class="mainTips">
-        <i :class="dialog.tipsIcon"></i>
-        {{dialog.tips}}
-        <p class="returnTips">自动返回系统中...</p>
-      </div>
-    </el-dialog>
+    <dialogTips :isRight="dialog.isRight" :tips="dialog.tips" :tipsVisible="dialog.tipsVisible"></dialogTips>
   </el-row>
 </template>
 
 <script>
   import inputSearch from "../../components/search/input/index"
   import selectSearch from "../../components/search/select/index"
+  import dialogTips from "../../components/dialogTips/index.vue"
   import {ACCOUNTS_TABLE_URL, ACCOUNTS_ADD_URL, ACCOUNTS_EDITINFO_URL,
     ACCOUNTS_EDITPWD_URL, ACCOUNTS_DELETE_URL, ACCOUNTS_FROZEN_URL} from "../../common/interface"
   import {isName, isAccount, isPassword, modalHide} from "../../common/common"
@@ -309,9 +303,12 @@
           addUsersVisible: false,          // 添加用户
           editUsersVisible: false,         // 修改用户资料
           editPasswordVisible: false,      // 修改用户密码
-          tipsVisible: false,              // 操作提示
-          tips: "",                        // 操作后提示信息
-          tipsIcon: ""                     // 操作后提示信息图标
+//          tipsVisible: false,              // 操作提示
+//          tips: "",                        // 操作后提示信息
+//          tipsIcon: ""                     // 操作后提示信息图标
+          isRight: true,
+          tips: "",
+          tipsVisible: false
         },
         addUsersForm: {           // 添加用户
           name: "",
@@ -435,11 +432,11 @@
               .then(function(response) {
                 if (response.body.success) {
                   self.dialog.addUsersVisible = false
-                  self.dialog.tipsIcon = "el-icon-circle-check"
+                  self.dialog.isRight = true
                   self.dialog.tips = "添加成功！"
                   self.dialog.tipsVisible = true
                   modalHide(function() {
-                    self.dialog.tipsVisible = false
+                    self.dialog.isRight = false
                     self.getTables()
                   })
                 }
@@ -486,7 +483,7 @@
               .then(function(response) {
                 if (response.body.success) {
                   self.dialog.editUsersVisible = false
-                  self.dialog.tipsIcon = "el-icon-circle-check"
+                  self.dialog.isRight = true
                   self.dialog.tips = "修改成功！"
                   self.dialog.tipsVisible = true
                   modalHide(function() {
@@ -522,7 +519,7 @@
               .then(function(response) {
                 if (response.body.success) {
                   self.dialog.editPasswordVisible = false
-                  self.dialog.tipsIcon = "el-icon-circle-check"
+                  self.dialog.isRight = true
                   self.dialog.tips = "修改成功！"
                   self.dialog.tipsVisible = true
                   modalHide(function() {
@@ -586,7 +583,7 @@
           if (flags.length > 0) {
             for (let i = 0; i < flags.length; i++) {
               if (flags[i]) {
-                self.dialog.tipsIcon = "el-icon-circle-cross hasError"
+                self.dialog.isRight = false
                 self.dialog.tips = "请先冻结您的账户！"
                 self.dialog.tipsVisible = true
                 modalHide(function() {
@@ -603,7 +600,7 @@
           }
         } else {        // 表格
           if (row.is_active) {
-            self.dialog.tipsIcon = "el-icon-circle-cross hasError"
+            self.dialog.isRight = false
             self.dialog.tips = "请先冻结您的账户！"
             self.dialog.tipsVisible = true
             modalHide(function() {
@@ -621,7 +618,7 @@
           .then(function(response) {
             if (response.body.success) {
               self.dialog.editUsersVisible = false
-              self.dialog.tipsIcon = "el-icon-circle-check"
+              self.dialog.isRight = true
               self.dialog.tips = "删除成功！"
               self.dialog.tipsVisible = true
               modalHide(function() {
@@ -639,7 +636,8 @@
     },
     components: {
       inputSearch,
-      selectSearch
+      selectSearch,
+      dialogTips
     }
   }
 </script>

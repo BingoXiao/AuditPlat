@@ -9,7 +9,8 @@
             v-model="consForm.date"
             type="date"
             placeholder="选择日期"
-            :picker-options="pickerOptions">
+            :picker-options="pickerOptions"
+            @change="getDate">
           </el-date-picker>
         </el-col>
       </el-form-item>
@@ -41,19 +42,13 @@
     </el-col>
 
     <!--提示-->
-    <el-dialog v-model="tipsVisible" size="tiny"
-               :close-on-click-modal="false" class="tipsModal">
-      <div class="mainTips">
-        <i class="el-icon-circle-check"></i>
-        <span class="tips">&emsp;合约 "{{consForm.name}}" 保存成功!</span>
-        <br/><br/><br/>
-      </div>
-    </el-dialog>
+    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
   </el-col>
 </template>
 
 <script>
   import uploadMoreImage from "../../../../../components/form/uploadMoreImg/index"
+  import dialogTips from "../../../../../components/dialogTips/index.vue"
   import {BUSLIST_SUBMITCONSTRA_URL} from "../../../../../common/interface"
   import {modalHide} from "../../../../../common/common"
 
@@ -69,7 +64,9 @@
             return time.getTime() < Date.now() - 8.64e7
           }
         },
-        tipsVisible: false,  // 模态框提示
+        isRight: true,       // 保存提示提示框
+        tips: "合约保存成功！",
+        tipsVisible: false,
         consForm: {
           name: "",      // 合同名称
           date: "",      // 合同过有效期
@@ -82,7 +79,7 @@
             {required: true, message: "请填写合同名称", trigger: "blur"}
           ],
           date: [
-            {required: true, message: "请选择合同有效期", trigger: "blur"}
+            {required: true, message: "请选择合同有效期", trigger: "change"}
           ]
         }
       }
@@ -110,6 +107,11 @@
       get_data: function(value, name) {
         var self = this
         self.consForm[name] = value
+      },
+      // 获取日期
+      getDate: function(value) {
+        var self = this
+        self.consForm.date = value
       },
       // 保存合同该内容
       saveConstract: function() {
@@ -145,7 +147,8 @@
       }
     },
     components: {
-      uploadMoreImage
+      uploadMoreImage,
+      dialogTips
     }
   }
 </script>

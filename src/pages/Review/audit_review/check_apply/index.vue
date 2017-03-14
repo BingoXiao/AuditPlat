@@ -14,16 +14,16 @@
       <el-row>
         <el-col :span="24" class="toolbar" style="margin-bottom:10px;">
           <el-col :span="12">
-            <el-button type="primary">结款成功</el-button>
-            <el-button type="danger" >结款失败</el-button>
+            <el-button type="primary" @click="checkPass('S')">结款成功</el-button>
+            <el-button type="danger" @click="checkPass('F')">结款失败</el-button>
           </el-col>
           <el-col :span="12" style="text-align: right;">
             <el-button type="primary" @click="download">下载当日任务</el-button>
-            <el-upload :action="upload_url"
+            <el-upload :action="upload_url" class="myupload"
                        :before-upload="handleChange"
                        :on-success="handleSuccess"
                        style="border: none;width:150px;vertical-align:top;">
-              <el-button type="primary">上传结款信息</el-button>
+              <el-button type="primary" @click="uploadVisible = true">上传结款信息</el-button>
             </el-upload>
           </el-col>
         </el-col>
@@ -43,7 +43,7 @@
         <el-table-column prop="person_or_company_name" label="开户行" align="center" min-width="110px"></el-table-column>
         <el-table-column prop="bank_account" label="银行账户" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="balance" label="提款金额" align="center" min-width="100px"></el-table-column>
-        <el-table-column prop="status" label="状态" align="center" width="80px"></el-table-column>
+        <el-table-column prop="status" label="状态" align="center" min-width="80px"></el-table-column>
       </el-table>
     </el-col>
 
@@ -57,13 +57,19 @@
                      @size-change="pageSizesChange">
       </el-pagination>
     </el-col>
+
+
+    <!--提示-->
+    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
   </el-row>
 </template>
 
 <script>
   import inputSearch from "../../../../components/search/input/index"
+  import dialogTips from "../../../../components/dialogTips/index.vue"
+  import {modalHide} from "../../../../common/common"
   import {CHECKVERIFY_APPLY_URL, CHECKVERIFY_APPLY_TODYDL_URL,
-    EXCEL_UPLOAD_URL} from "../../../../common/interface"
+    EXCEL_UPLOAD_URL, CHECKVERIFY_SUCCESS_SEARCH_URL} from "../../../../common/interface"
 
   export default {
     props: {
@@ -74,10 +80,14 @@
         loading: false,
         selectArr: [],            // 选中数组
         upload_url: EXCEL_UPLOAD_URL,  // 上传
+        uploadVisible: false,
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
-        currentPage: 1            // 当前页
+        currentPage: 1,            // 当前页
+        isRight: true,       // 提示框
+        tips: "",
+        tipsVisible: false
       }
     },
     mounted() {
@@ -126,9 +136,8 @@
       download: function() {
         var self = this
         var arr = JSON.stringify(self.selectArr)
-        window.open(CHECKVERIFY_APPLY_TODYDL_URL, "_self")
+        window.open(CHECKVERIFY_APPLY_TODYDL_URL + "?applynums=" + arr, "_self")
       },
-
       /* 上传结款信息 */
       handleChange(file, fileList) {
         var self = this
@@ -136,9 +145,11 @@
         var extStart = ext.lastIndexOf(".")
         var type = ext.substring(extStart, ext.length).toUpperCase()
         if (type !== ".XLS" && type !== ".XLSX" && type !== ".XLSB" && type !== ".XLSM" && type !== ".XLST") {
-          this.$alert("请上传excel文件！", "提示", {
-            confirmButtonText: "确定",
-            type: "warning"
+          self.isRight = false
+          self.tips = "请上传excel文件！"
+          self.tipsVisible = true
+          modalHide(function() {
+            self.tipsVisible = false
           })
           return false
         } else {
@@ -147,21 +158,57 @@
       },
       // 上传成功
       handleSuccess: function(response, file, fileList) {
+        var self = this
         if (response.success) {
-          this.$alert("上传文件成功！", "提示", {
-            confirmButtonText: "确定",
-            type: "success"
+          self.isRight = true
+          self.tips = "上传文件成功！"
+          self.tipsVisible = true
+          modalHide(function() {
+            self.tipsVisible = false
+          })
+        }
+      },
+      // 结款成功（失败）
+      checkPass: function(flag) {
+        var self = this
+        var formData = new FormData()
+        formData.append("flag", flag)
+        formData.append("applynums", self.selectArr)
+        var title = "是否确定选择账号结款成功？"
+        if (flag === "F") {
+          title = "是否确定选择账号结款失败？"
+        }
+        if (self.selectArr.length < 1) {
+          self.isRight = false
+          self.tips = "请选择结款商家！"
+          self.tipsVisible = true
+          modalHide(function() {
+            self.tipsVisible = false
           })
         } else {
-          this.$alert(response.error_info, "提示", {
+          self.$confirm(title, "提示", {
             confirmButtonText: "确定",
-            type: "warning"
+            cancelButtonText: "取消",
+            closeOnClickModal: false
+          }).then(() => {
+            self.$http.post(CHECKVERIFY_SUCCESS_SEARCH_URL, formData)
+            .then(function(response) {
+              if (response.body.success) {
+                self.isRight = true
+                self.tips = "操作成功！"
+                self.tipsVisible = true
+                modalHide(function() {
+                  self.tipsVisible = false
+                })
+              }
+            })
           })
         }
       }
     },
     components: {
-      inputSearch
+      inputSearch,
+      dialogTips
     }
   }
 </script>

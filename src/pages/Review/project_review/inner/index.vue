@@ -622,19 +622,13 @@
     </el-dialog>
 
     <!--提示-->
-    <el-dialog v-model="tipsVisible" size="tiny"
-               :close-on-click-modal="false" class="tipsModal">
-      <div class="mainTips">
-        <i class="el-icon-circle-check"></i>
-        {{dialogtips}}
-        <p class="returnTips">自动返回系统中...</p>
-      </div>
-    </el-dialog>
+    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
   </el-row>
 </template>
 
 <script>
   import radioCheck from "../../../../components/radio/index.vue"
+  import dialogTips from "../../../../components/dialogTips/index.vue"
   import {PROVERIFY_FILLING_URL, PROVERIFY_PASS_URL, FESTIVALS_URL} from "../../../../common/interface"
   import {modalHide, getUrlParameters, compareFestival} from "../../../../common/common"
 
@@ -787,8 +781,9 @@
         textarea: "",
         rejectDialog: false,   // 驳回模态框
         passDialog: false,     // 驳回模态框
-        tipsVisible: false,    // 操作提示模态框
-        dialogtips: ""         // 操作提示
+        isRight: true,       // 提示框
+        tips: "操作成功！",
+        tipsVisible: false
       }
     },
     mounted() {
@@ -904,14 +899,14 @@
           auto_billing_cycle: self.data.auto_billing_cycle
         }
         if (flag) {   // 通过
-          self.dialogtips = "审核成功"
+          self.tips = "审核成功"
         } else {   // 驳回
+          self.tips = "驳回成功"
           formdata.reject_reason = self.rejectReason
           if (self.rejectReason === "其他(请填写)") {
             if (self.textarea) {
               formdata.reject_reason = self.textarea
               self.error = ""
-              self.dialogtips = "驳回成功"
             } else {
               self.error = "请选择驳回原因"
             }
@@ -928,8 +923,8 @@
                 self.tipsVisible = true
                 modalHide(function() {
                   self.tipsVisible = false
-                  let res = self.$route.path.split("/")[1]
-                  self.$router.push({path: "/project_verify/" + res})
+                  var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
+                  self.$router.push({path: htmlSrc})
                 })
               }
             })
@@ -937,7 +932,8 @@
       }
     },
     components: {
-      radioCheck
+      radioCheck,
+      dialogTips
     }
   }
 </script>

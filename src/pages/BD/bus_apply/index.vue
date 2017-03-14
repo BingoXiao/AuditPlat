@@ -91,14 +91,7 @@
     </el-dialog>
 
     <!--提示-->
-    <el-dialog v-model="dialog.tipsVisible" size="tiny"
-               :close-on-click-modal="false" class="tipsModal">
-      <div class="mainTips">
-        <i class="el-icon-circle-check"></i>
-        {{dialog.tips}}
-        <p class="returnTips">自动返回系统中...</p>
-      </div>
-    </el-dialog>
+    <dialogTips :isRight="dialog.isRight" :tips="dialog.tips" :tipsVisible="dialog.tipsVisible"></dialogTips>
   </el-row>
 </template>
 
@@ -106,6 +99,7 @@
   import datePicker from "../../../components/search/datePicker/index"
   import inputSearch from "../../../components/search/input/index"
   import selectSearch from "../../../components/search/select/index"
+  import dialogTips from "../../../components/dialogTips/index.vue"
   import {modalHide} from "../../../common/common"
   import {BDAPPLY_TABLE_URL, BDAPPLY_LIST_URL, BDAPPLY_ASSIGN_URL} from "../../../common/interface"
 
@@ -135,8 +129,9 @@
         dialog: {
           BDvisible: false,     // 分配任务
           BD: "",               // BD_id
-          tipsVisible: false,   // 操作提示
-          tips: ""              // 操作后提示信息
+          isRight: true,       // 提示框
+          tips: "分配成功！",
+          tipsVisible: false
         }
       }
     },
@@ -207,7 +202,6 @@
           .then(function(response) {
             if (response.body.success) {
               self.dialog.BDvisible = false
-              self.dialog.tips = "分配成功！"
               self.dialog.tipsVisible = true
               modalHide(function() {
                 self.dialog.tipsVisible = false
@@ -220,7 +214,8 @@
     components: {
       datePicker,
       inputSearch,
-      selectSearch
+      selectSearch,
+      dialogTips
     }
   }
 </script>

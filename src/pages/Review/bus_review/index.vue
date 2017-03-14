@@ -119,6 +119,7 @@
           } else if (type === "businfo_edit") {
             url = BDVERIFY_EDITTABLE_URL
           }
+          self.statusShow = false
         } else if (type === "bus_apply_record" || type === "businfo_edit_record") {
           if (type === "bus_apply_record") {
             url = BDVERIFY_APPLYTABLE_URL

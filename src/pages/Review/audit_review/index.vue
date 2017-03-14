@@ -16,7 +16,10 @@
   import tabComponent from "../../../components/tabs/router/index"
   import checkApply from "./check_apply/index"
   import checkApplyRecord from "./check_apply_record/index"
-  import Hello from "../../Hello"
+  import bankAccount from "./bank_account/index"
+  import bankAccountRecord from "./bank_account_record/index"
+  import refund from "./refund/index"
+  import refundRecord from "./refund_record/index"
 
   export default {
     data() {
@@ -71,8 +74,14 @@
           self.view = "checkApply"
         } else if (type === "check_apply_record") {
           self.view = "checkApplyRecord"
+        } else if (type === "bank_account") {
+          self.view = "bankAccount"
+        } else if (type === "bank_account_record") {
+          self.view = "bankAccountRecord"
+        } else if (type === "refund_record") {
+          self.view = "refundRecord"
         } else {
-          self.view = "Hello"
+          self.view = "refund"
         }
       }
     },
@@ -80,7 +89,10 @@
       tabComponent,
       checkApply,
       checkApplyRecord,
-      Hello
+      bankAccount,
+      bankAccountRecord,
+      refundRecord,
+      refund
     }
   }
 </script>

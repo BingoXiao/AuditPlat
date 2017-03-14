@@ -190,20 +190,15 @@
     </el-dialog>
 
     <!--提示-->
-    <el-dialog v-model="tipsVisible" size="tiny"
-               :close-on-click-modal="false" class="tipsModal">
-      <div class="mainTips">
-        <i class="el-icon-circle-check"></i>
-        {{dialogtips}}
-        <p class="returnTips">自动返回系统中...</p>
-      </div>
-    </el-dialog>
+    <!--提示-->
+    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
   </el-row>
 </template>
 
 <script>
   import BMap from "BMap"
   import openHour from "../../../../components/form/openHour/index"
+  import dialogTips from "../../../../components/dialogTips/index.vue"
   import {BDVERIFY_FILLING_URL, BDVERIFY_EDITPASS_URL} from "../../../../common/interface"
   import {modalHide, compareArrData, compareObjArrData, getUrlParameters} from "../../../../common/common"
 
@@ -257,15 +252,16 @@
         rejectReason: "商家信息有误/不真实",
         rejectDialog: false,   // 驳回模态框
         passDialog: false,     // 驳回模态框
-        tipsVisible: false,    // 操作提示模态框
-        dialogtips: "",        // 操作提示
+        isRight: true,       // 提示框
+        tips: "驳回成功！",
+        tipsVisible: false,
         textarea: ""
       }
     },
     mounted() {
       var self = this
       self.get_info()
-      if (self.$route.name === "商家申请审核") {
+      if (self.$route.name === "商家信息修改") {
         self.showBtn = true
       } else {
         self.showBtn = false
@@ -396,14 +392,14 @@
           reject_reason: ""
         }
         if (flag) {   // 通过
-          self.dialogtips = "审核成功"
+          self.tips = "审核成功"
         } else {   // 驳回
           formdata.reject_reason = self.rejectReason
           if (self.rejectReason === "其他(请填写)") {
             if (self.textarea) {
               formdata.reject_reason = self.textarea
               self.error = ""
-              self.dialogtips = "发送成功"
+              self.tips = "发送成功"
             } else {
               self.error = "请选择驳回原因"
             }
@@ -437,7 +433,8 @@
       }
     },
     components: {
-      openHour
+      openHour,
+      dialogTips
     }
   }
 </script>

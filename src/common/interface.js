@@ -152,7 +152,26 @@ const CHECKVERIFY_APPLY_TODYDL_URL = HOST_URL + "/bus-manage/settlement/items/dt
 const EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
 // 结款申请记录(下载结款明细)
 const CHECKVERIFY_RECORD_DOWNLOAD_URL = HOST_URL + "/bus-manage/settlement/items/drecord/"
+// 结款成功（失败） post
+const CHECKVERIFY_SUCCESS_SEARCH_URL = HOST_URL + "/bus-manage/settlement/items/verify/"
+// 商家银行账户修改（记录） get
+const CHECKVERIFY_BANKEDIT_URL = HOST_URL + "/bus-manage/bank/items/"
+// 商家银行账户修改查看 get
+const CHECKVERIFY_FILLING_URL = HOST_URL + "/bus-manage/bank/detail/"
+// 商家银行账户修改 post
+const CHECKVERIFY_EDITINFO_URL = HOST_URL + "/bus-manage/bank/verify/"
+// 退款（记录）表格 get
+const CHECKVERIFY_REFUNDRECORD_URL = HOST_URL + "/bus-manage/settlement/coupons/refunds/"
+// 操作退款 团购券号码查询 get
+const CHECKVERIFY_REFUND_SEARCH_URL = HOST_URL + "/bus-manage/settlement/coupons/"
+// 操作退款 post
+const CHECKVERIFY_REFUND_URL = HOST_URL + "/bus-manage/settlement/coupons/refund/"
 
+
+/* 项目管理 */
+// 项目列表
+// 表格 get
+const PROLIST_TABLE_URL = HOST_URL + "/items/edit_up/"
 
 
 exports = module.exports = {
@@ -199,7 +218,15 @@ exports = module.exports = {
   CHECKVERIFY_APPLY_URL,
   CHECKVERIFY_RECORD_DOWNLOAD_URL,
   CHECKVERIFY_APPLY_TODYDL_URL,
+  CHECKVERIFY_SUCCESS_SEARCH_URL,
+  CHECKVERIFY_EDITINFO_URL,
   EXCEL_UPLOAD_URL,
+  CHECKVERIFY_BANKEDIT_URL,
+  CHECKVERIFY_FILLING_URL,
+  CHECKVERIFY_REFUNDRECORD_URL,
+  CHECKVERIFY_REFUND_SEARCH_URL,
+  CHECKVERIFY_REFUND_URL,
+  PROLIST_TABLE_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -223,42 +250,9 @@ exports = module.exports = {
  var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
  var EXCEL_UPLOAD_TYPE = "post"
 
- /!* ********** 结款审核（settleVerify） ********** *!/
-
- /!* 商家银行账户修改（记录） *!/
- var CHECKVERIFY_BANKEDIT_URL = HOST_URL + "/bus-manage/bank/items/"
- var CHECKVERIFY_BANKEDIT_TYPE = "get"
-
- /!* 退款（记录）表格 *!/
- var CHECKVERIFY_REFUNDRECORD_URL = HOST_URL + "/bus-manage/settlement/coupons/refunds/"
- var CHECKVERIFY_REFUNDRECORD_TYPE = "get"
-
- /!* 获取所有的项目 *!/
- var CHECKVERIFY_FILLING_URL = HOST_URL + "/bus-manage/bank/detail/"
- var CHECKVERIFY_FILLING_TYPE = "get"
-
- /!* 结款成功（失败） *!/
- var CHECKVERIFY_SUCCESS_SEARCH_URL = HOST_URL + "/bus-manage/settlement/items/verify/"
- var CHECKVERIFY_SUCCESS_SEARCH_TYPE = "post"
-
- /!* 操作退款 团购券号码查询 *!/
- var CHECKVERIFY_REFUND_SEARCH_URL = HOST_URL + "/bus-manage/settlement/coupons/"
- var CHECKVERIFY_REFUND_SEARCH_TYPE = "get"
-
- /!* 操作退款 *!/
- var CHECKVERIFY_REFUND_URL = HOST_URL + "/bus-manage/settlement/coupons/refund/"
- var CHECKVERIFY_REFUND_TYPE = "post"
-
- /!* 商家银行账户修改 *!/
- var CHECKVERIFY_EDITINFO_URL = HOST_URL + "/bus-manage/bank/verify/"
- var CHECKVERIFY_EDITINFO_TYPE = "post"
-
 
  /!* ********************* 项目管理 ************************* *!/
  /!* *****项目列表（projectList）**** *!/
- /!* 表格 *!/
- var PROLIST_TABLE_URL = HOST_URL + "/items/edit_up/"
- var PROLIST_TABLE_TYPE = "get"
 
  /!* 提交脉点 *!/
  var PROLIST_JM_URL = HOST_URL + "/items/image_words/add/"

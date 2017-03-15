@@ -19,6 +19,10 @@ import AuditReview from "../pages/Review/audit_review/index"
 import bankAccountContent from "../pages/Review/audit_review/bank_account/bank_account_view/index"
 import ProjectList from "../pages/PM/project_list/index"
 import ProjectListContent from "../pages/PM/project_list/content/index"
+import SystemNotice from "../pages/BM/system_notice/index"
+import TipsOff from "../pages/BM/tip_off/index"
+import CouponsManage from "../pages/AM/coupons_manage/index"
+import specifiedStores from "../pages/AM/coupons_manage/specified_stores/index"
 import Hello from "../pages/Hello"
 
 
@@ -232,11 +236,16 @@ const routes = [
     component: Main,
     children: [
       {
-        path: "/coupons_manage",
+        path: "/coupons_manage/:type",
         name: "优惠券管理",
         hidden: "Administrator",
-        component: Hello,
-        iconCls: "icon-youhuiquan"
+        component: CouponsManage,
+        iconCls: "icon-youhuiquan",
+        children: [
+          {path: "my_coupons", name: "我的优惠券"},
+          {path: "add_new_coupons", name: "新增优惠券"},
+          {path: "specified_stores", name: "指定门店"}
+        ]
       }, {
         path: "/add_activity",
         name: "新增活动",
@@ -252,6 +261,17 @@ const routes = [
       }
     ]
   },
+  {   // 指定门店查看
+    path: "/specified_stores",
+    hidden: "login",
+    component: Main,
+    children: [
+      {
+        path: "",
+        name: "查看指定门店",
+        component: specifiedStores
+      }]
+  },
   {
     path: "/",
     name: "商家管理",
@@ -262,13 +282,13 @@ const routes = [
         path: "/system_notice",
         name: "系统公告",
         hidden: "Administrator",
-        component: Hello,
+        component: SystemNotice,
         iconCls: "icon-yewuyeicon16"
       }, {
         path: "/tip_off",
         name: "举报",
         hidden: "Administrator",
-        component: Hello,
+        component: TipsOff,
         iconCls: "icon-dianpingjitousu"
       }
     ]

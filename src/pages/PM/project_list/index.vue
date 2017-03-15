@@ -3,7 +3,7 @@
     <!--筛选栏-->
     <el-col :span="24" class="toolbar">
       <el-form :inline="true" label-width="90px">
-        <el-form-item label="日期：" label-width="66px">
+        <el-form-item label="日期：" label-width="60px">
           <date-picker></date-picker>
         </el-form-item>
 

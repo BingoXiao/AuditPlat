@@ -173,7 +173,7 @@
         var self = this
         var formData = new FormData()
         formData.append("flag", flag)
-        formData.append("applynums", self.selectArr)
+        formData.append("applynums[]", self.selectArr)
         var title = "是否确定选择账号结款成功？"
         if (flag === "F") {
           title = "是否确定选择账号结款失败？"

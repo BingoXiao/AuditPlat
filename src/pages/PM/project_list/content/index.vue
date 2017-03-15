@@ -1,12 +1,12 @@
 <template>
   <el-row class="panel-center" type="flex" justify="center" style="top:80px;">
     <el-col :span="20" :offset="2">
-      <el-col :span="20" :offset="2">
-        <tab-component :tabs="tabs" :which="which" v-on:toggle="tabChange"></tab-component>
+      <el-col :span="20" :offset="1">
+        <el-col :span="24">
+          <tab-component :tabs="tabs" :which="which" v-on:toggle="tabChange"></tab-component>
 
-        <el-col :span="20" :offset="2">
-          <package-info v-show="currentView === 'packageInfo'" :id="item_id"></package-info>
-          <hot-spot v-show="currentView === 'hotSpot'"></hot-spot>
+          <package-info v-show="currentView === 'packageInfo'"></package-info>
+          <hot-spot ref="editor" v-show="currentView === 'hotSpot'"></hot-spot>
         </el-col>
       </el-col>
     </el-col>
@@ -15,7 +15,7 @@
 
 <script>
   import tabComponent from "../../../../components/tabs/inner/index"
-  import packageInfo from "../../../Review/project_review/inner/index"
+  import packageInfo from "../../../Review/project_review/module/index"
   import hotSpot from "./hotSpot/index"
   import {getUrlParameters} from "../../../../common/common"
 

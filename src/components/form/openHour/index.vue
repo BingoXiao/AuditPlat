@@ -63,8 +63,6 @@
       if (self.open_hours.begin === "00:00:00" && self.open_hours.end === "23:59:59") {
         self.wholeHour = true
       }
-    },
-    methods: {
     }
   }
 </script>

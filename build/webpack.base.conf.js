@@ -12,7 +12,8 @@ module.exports = {
     app: './src/main.js'
   },
   externals: {
-    "BMap": "window.BMap"
+    "BMap": "window.BMap",
+    "CKEDITOR": "window.CKEDITOR"
   },
   output: {
     path: config.build.assetsRoot,

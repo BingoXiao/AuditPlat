@@ -6,7 +6,7 @@
           <tab-component :tabs="tabs" :which="which"></tab-component>
           <div class="returnTop">
             <span @click="backTo" style="cursor: pointer">
-              <i class="el-icon-caret-left" style="font-size: 13px;"></i>
+              <i class="iconfont icon-xiangzuo" style="font-size: 15px;"></i>
               回到{{$route.name}}</span>
           </div>
         </el-row>

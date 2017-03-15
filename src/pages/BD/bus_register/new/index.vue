@@ -55,7 +55,7 @@
   import dialogTips from "../../../../components/dialogTips/index.vue"
   import {BDREGISTER_APPLFILLING_URL, BDREGISTER_EDITFILLING_URL,
     BDREGISTER_NEWREGISTER_URL} from "../../../../common/interface"
-  import {getUrlParameters} from "../../../../common/common"
+  import {getUrlParameters, modalHide} from "../../../../common/common"
 
   export default{
     data() {
@@ -139,7 +139,7 @@
                 }
                 if (step === "save") {       // 保存
                   self.tipsVisible = true
-                  setTimeout(function() {
+                  modalHide(function() {
                     self.tipsVisible = false
                     if (self.$route.name === "商家申请注册详情页") {
                       self.$router.push({path: "/bus_register/apply"})

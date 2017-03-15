@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row class="panel">
     <el-col :span="24">
       <tab-component :tabs="tabs" :type="$route.params.type"
                      v-on:toggle="tabChange"></tab-component>

@@ -2,12 +2,12 @@
   <el-row>
     <!--筛选栏-->
     <el-col :span="24" class="toolbar">
-      <el-form :inline="true" label-width="77px">
+      <el-form :inline="true" label-width="60px">
         <el-form-item label="日期：">
           <date-picker></date-picker>
         </el-form-item>
 
-        <el-form-item label="申请号：">
+        <el-form-item label="申请号：" label-width="80px">
           <input-search></input-search>
         </el-form-item>
 

@@ -193,3 +193,16 @@ button {
 .myupload ul {
   display: none;
 }
+
+/* 脉点预览 */
+.jinmai .el-dialog{
+  width:310px;
+  height:550px;
+  background-color:white;
+  word-wrap:break-word;
+  overflow: auto;
+}
+.jinmai .el-dialog__header{
+  padding-top: 40px;
+  padding-right: 20px;
+}

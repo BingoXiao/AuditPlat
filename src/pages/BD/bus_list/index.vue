@@ -2,7 +2,7 @@
   <el-row>
     <!--筛选栏-->
     <el-col :span="24" class="toolbar">
-      <el-form :inline="true" label-width="90px">
+      <el-form :inline="true" label-width="70px">
         <el-form-item label="申请号：">
           <input-search></input-search>
         </el-form-item>
@@ -11,7 +11,7 @@
           <select-search :options="search.state"></select-search>
         </el-form-item>
 
-        <el-form-item label="商家分类：">
+        <el-form-item label="商家分类：" label-width="100px">
           <classify-search></classify-search>
         </el-form-item>
 

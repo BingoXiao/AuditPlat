@@ -172,6 +172,36 @@ const CHECKVERIFY_REFUND_URL = HOST_URL + "/bus-manage/settlement/coupons/refund
 // 项目列表
 // 表格 get
 const PROLIST_TABLE_URL = HOST_URL + "/items/edit_up/"
+// 提交脉点 post
+const PROLIST_JM_URL = HOST_URL + "/items/image_words/add/"
+// 获取脉点 get
+const PROLIST_JMDATA_URL = HOST_URL + "/items/image_words/"
+
+
+/* 活动管理 */
+// 优惠券管理
+// 表格 get
+const EVENTS_CMTABLE_URL = HOST_URL + "/activities/coupons/"
+// 查看对应优惠券门店 get
+const EVENTS_CMVIEWSHOPS_URL = function(id) {
+  return HOST_URL + "/activities/coupons/" + id + "/buses/"
+}
+// 删除优惠券 post
+const EVENTS_CMDELETE_URL = function(id) {
+  return HOST_URL + "/activities/coupons/" + id + "/delete/"
+}
+
+
+
+/* 商家管理 */
+// 系统公告
+// 提交 post
+const SYSTEMINFO_SUBMIT_URL = HOST_URL + "/notice/"
+// 举报
+// 表格 get
+const COMPAINTS_TABLE_URL = HOST_URL + "/reports/"
+// 提交 post
+const COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/"
 
 
 exports = module.exports = {
@@ -227,6 +257,14 @@ exports = module.exports = {
   CHECKVERIFY_REFUND_SEARCH_URL,
   CHECKVERIFY_REFUND_URL,
   PROLIST_TABLE_URL,
+  PROLIST_JMDATA_URL,
+  PROLIST_JM_URL,
+  SYSTEMINFO_SUBMIT_URL,
+  COMPAINTS_TABLE_URL,
+  COMPAINTS_SUBMIT_URL,
+  EVENTS_CMTABLE_URL,
+  EVENTS_CMVIEWSHOPS_URL,
+  EVENTS_CMDELETE_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -244,31 +282,8 @@ exports = module.exports = {
 
 
 /*
-/* ***********基本通用资料********* */
-/*
- /!* 上传excel文件 *!/
- var EXCEL_UPLOAD_URL = HOST_URL + "/bus-manage/settlement/items/utasks/"
- var EXCEL_UPLOAD_TYPE = "post"
-
-
- /!* ********************* 项目管理 ************************* *!/
- /!* *****项目列表（projectList）**** *!/
-
- /!* 提交脉点 *!/
- var PROLIST_JM_URL = HOST_URL + "/items/image_words/add/"
- var PROLIST_JM_TYPE = "post"
-
- /!* 获取脉点 *!/
- var PROLIST_JMDATA_URL = HOST_URL + "/items/image_words/"
- var PROLIST_JMDATA_TYPE = "get"
-
-
  /!* ******************** 活动管理 ********************* *!/
  /!* *****优惠券管理（EMcouponsManage）****** *!/
- /!* 表格 *!/
- var EVENTS_CMTABLE_URL = HOST_URL + "/activities/coupons/"
- var EVENTS_CMTABLE_TYPE = "get"
-
  /!* 修改优惠券  *!/
  var EVENTS_CMEDIT_URL = new Function("coupon_id",'return HOST_URL + "/activities/coupons/"+coupon_id+"/update/"')
  var EVENTS_CMEDIT_TYPE = "post"
@@ -277,13 +292,6 @@ exports = module.exports = {
  var EVENTS_CMGETINFO_URL = new Function("coupon_id",'return HOST_URL + "/activities/coupons/"+coupon_id+"/info/"')
  var EVENTS_CMGETINFO_TYPE = "get"
 
- /!* 删除优惠券 *!/
- var EVENTS_CMDELETE_URL = new Function("coupon_id",'return HOST_URL + "/activities/coupons/"+coupon_id+"/delete/"')
- var EVENTS_CMDELETE_TYPE = "post"
-
- /!* 查看对应优惠券门店 (wholeShopsTable) *!/
- var EVENTS_CMVIEWSHOPS_URL = new Function("coupon_id",'return HOST_URL + "/activities/coupons/"+coupon_id+"/buses/"')
- var EVENTS_CMVIEWSHOPS_TYPE = "get"
 
  /!* 新增优惠券（门店搜索） *!/
  var EVENTS_CMSEARCHSHOPS_URL = HOST_URL + "/activities/buses/"
@@ -328,20 +336,4 @@ exports = module.exports = {
  //删除活动
  var EVENTS_ELDELETE_URL = new Function("activity_id",'return HOST_URL + "/activities/"+activity_id+"/delete/"')
  var EVENTS_ELDELETE_TYPE = "post"
-
-
- /!* ********************* 商家管理 ********************** *!/
- /!* ****系统公告（systemInform）***** *!/
- /!* 提交 *!/
- var SYSTEMINFO_SUBMIT_URL = HOST_URL + "/notice/"
- var SYSTEMINFO_SUBMIT_TYPE = "post"
-
- /!* *******举报（complaints）****** *!/
- /!* 表格 *!/
- var COMPAINTS_TABLE_URL = HOST_URL + "/reports/"
- var COMPAINTS_TABLE_TYPE = "get"
-
- /!* 提交 *!/
- var COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/"
- var COMPAINTS_SUBMIT_TYPE = "post"
- */
+*/

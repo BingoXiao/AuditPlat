@@ -1,5 +1,5 @@
 <template>
-  <el-select v-model="bd" clearable size="small"
+  <el-select v-model="bd" clearable size="small" ref="aaa"
              placeholder="请选择" @change="bd_filter">
     <el-option v-for="item in bdlist" :label="item.name" :value="item.bd_id"></el-option>
   </el-select>

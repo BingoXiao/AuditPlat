@@ -10,6 +10,7 @@
           </el-form-item>
         </el-form>
       </el-row>
+    </el-col>
 
     <!--表格-->
     <el-col :span="24">
@@ -39,7 +40,6 @@
                      @current-change="handleCurrentChange">
       </el-pagination>
     </el-col>
-    </el-dialog>
   </el-row>
 </template>
 

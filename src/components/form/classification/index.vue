@@ -29,7 +29,8 @@
     <el-col :span="5" class="selectOffset">
       <el-form-item>
         <el-select name="sclass" placeholder="子类别"
-                   v-model="sm_value" v-show="smallVisible" @change="get_sm_data">
+                   v-model="sm_value" v-show="smallVisible"
+                   @change="get_sm_data">
           <el-option
             v-for="item in sm_list"
             :label="item.name"

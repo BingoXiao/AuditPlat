@@ -66,7 +66,7 @@
   import dialogTips from "../../../../components/dialogTips/index.vue"
   import {BDREGISTER_BRAEDITFILLING_URL, BDREGISTER_BRAREGISTER_URL, BUSLIST_BASIC_URL,
     BUSLIST_ID_URL, BUSLIST_SETTLER_URL} from "../../../../common/interface"
-  import {getUrlParameters} from "../../../../common/common"
+  import {getUrlParameters, modalHide} from "../../../../common/common"
 
   export default{
     data() {
@@ -183,7 +183,7 @@
                   }
                   if (step === "save") {       // 保存
                     self.saveVisible = true
-                    setTimeout(function() {
+                    modalHide(function() {
                       self.saveVisible = false
                       self.$router.push({path: "/bus_register/branch"})
                     }, 1000)

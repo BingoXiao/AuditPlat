@@ -176,6 +176,9 @@ const PROLIST_TABLE_URL = HOST_URL + "/items/edit_up/"
 const PROLIST_JM_URL = HOST_URL + "/items/image_words/add/"
 // 获取脉点 get
 const PROLIST_JMDATA_URL = HOST_URL + "/items/image_words/"
+// 新增优惠券（门店搜索） get
+const EVENTS_CMSEARCHSHOPS_URL = HOST_URL + "/activities/buses/"
+
 
 
 /* 活动管理 */
@@ -189,6 +192,16 @@ const EVENTS_CMVIEWSHOPS_URL = function(id) {
 // 删除优惠券 post
 const EVENTS_CMDELETE_URL = function(id) {
   return HOST_URL + "/activities/coupons/" + id + "/delete/"
+}
+// 新增优惠券（新增）post
+const EVENTS_CMADDSHOPS_URL = HOST_URL + "/activities/coupons/add/"
+// 修改优惠券  post
+const EVENTS_CMEDIT_URL = function(id) {
+  return HOST_URL + "/activities/coupons/" + id + "/update/"
+}
+// 获取优惠券信息  get
+const EVENTS_CMGETINFO_URL = function(id) {
+  return HOST_URL + "/activities/coupons/" + id + "/info/"
 }
 
 
@@ -265,6 +278,10 @@ exports = module.exports = {
   EVENTS_CMTABLE_URL,
   EVENTS_CMVIEWSHOPS_URL,
   EVENTS_CMDELETE_URL,
+  EVENTS_CMSEARCHSHOPS_URL,
+  EVENTS_CMADDSHOPS_URL,
+  EVENTS_CMEDIT_URL,
+  EVENTS_CMGETINFO_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -284,23 +301,6 @@ exports = module.exports = {
 /*
  /!* ******************** 活动管理 ********************* *!/
  /!* *****优惠券管理（EMcouponsManage）****** *!/
- /!* 修改优惠券  *!/
- var EVENTS_CMEDIT_URL = new Function("coupon_id",'return HOST_URL + "/activities/coupons/"+coupon_id+"/update/"')
- var EVENTS_CMEDIT_TYPE = "post"
-
- /!* 获取优惠券信息  *!/
- var EVENTS_CMGETINFO_URL = new Function("coupon_id",'return HOST_URL + "/activities/coupons/"+coupon_id+"/info/"')
- var EVENTS_CMGETINFO_TYPE = "get"
-
-
- /!* 新增优惠券（门店搜索） *!/
- var EVENTS_CMSEARCHSHOPS_URL = HOST_URL + "/activities/buses/"
- var EVENTS_CMSEARCHSHOPS_TYPE = "get"
-
- /!* 新增优惠券（新增） *!/
- var EVENTS_CMADDSHOPS_URL = HOST_URL + "/activities/coupons/add/"
- var EVENTS_CMADDSHOPS_TYPE = "post"
-
 
  /!* *****新增活动（EMaddEvents）****** *!/
  /!* 优惠券列表(表格) *!/

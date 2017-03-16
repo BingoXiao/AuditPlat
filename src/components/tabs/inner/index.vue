@@ -25,6 +25,11 @@
     mounted() {
       this.active = this.which
     },
+    watch: {
+      which: function() {
+        this.active = this.which
+      }
+    },
     methods: {
       toggle(key) {
         var self = this

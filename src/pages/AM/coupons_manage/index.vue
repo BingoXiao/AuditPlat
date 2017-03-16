@@ -7,7 +7,7 @@
     </el-col>
 
     <el-col :span="24">
-      <component :is="view" :tab="tabActive"></component>
+      <component :is="view" :tab="tabActive" v-on:tabChange="tabChange"></component>
     </el-col>
   </el-row>
 </template>

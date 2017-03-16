@@ -40,7 +40,8 @@
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="160px">
           <template scope="scope">
-            <el-button size="small" icon="edit" class="tableButton"> 修改</el-button>
+            <el-button size="small" icon="edit" class="tableButton"
+                       @click="editCoupon(scope.row)"> 修改</el-button>
             <el-button size="small" icon="delete" class="tableButton"
                        @click="deleteCoupon(scope.row)"> 删除</el-button>
           </template>
@@ -106,6 +107,11 @@
       // 查看指定门店信息
       viewStores: function(row) {
         this.$router.push({path: "/specified_stores#id=" + row.id + "&name=" + row.name})
+      },
+      // 修改优惠券
+      editCoupon: function(row) {
+        this.$router.push({path: "/coupons_manage/add_new_coupons/#id=" + row.id})
+        this.$emit("tabChange")
       },
       // 删除优惠券
       deleteCoupon: function(row) {

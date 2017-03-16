@@ -1,9 +1,10 @@
 <template>
   <div class="block">
-    <el-date-picker :editable="false"
+    <el-date-picker
+      :editable="false"
       v-model="range"
       type="daterange"
-      range-separator=" ~ "
+      range-separator="~"
       size="small"
       placeholder="请选择日期范围"
       :picker-options="pickerOptions"

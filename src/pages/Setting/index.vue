@@ -33,7 +33,7 @@
       <br/>
       <el-table ref="table" border highlight-current-row v-loading.body="loading"
                 :data="tableDatas" :row-key="tableDatas.id" style="width: 100%"
-                @select="selectUsers" @select-all="selectUsers">
+                @select="selectUsers">
         <el-table-column type="selection" min-width="130px"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"  min-width="130px"></el-table-column>
         <el-table-column prop="account" label="用户账号" align="center" min-width="100px"></el-table-column>
@@ -49,7 +49,7 @@
             <el-switch v-model="scope.row.is_active"
                        on-color="#020202"
                        off-color="#C0CCDA"
-                       @change="freezeUsers(scope.row)"></el-switch>
+                       @change="freezeUsers(scope.row, false)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="150px">
@@ -71,7 +71,7 @@
               </el-col>
               <el-col :span="4">
                 <el-tooltip content="删除" effect="dark" placement="bottom">
-                  <el-button type="text" icon="delete2" @click="deleteUsers(scope.row)"></el-button>
+                  <el-button type="text" icon="delete2" @click="deleteUsers(scope.row, false)"></el-button>
                 </el-tooltip>
               </el-col>
             </el-row>
@@ -185,7 +185,7 @@
     </el-dialog>
 
     <!--修改用户密码-->
-    <el-dialog title="忘记密码" v-model="dialog.editPasswordVisible"
+    <el-dialog title="忘记密码" size="tiny" v-model="dialog.editPasswordVisible"
                :close-on-click-modal="false" @close="resetForm('editPasswordForm')">
       <div class="modal">
         <br/><br/>
@@ -291,10 +291,10 @@
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,           // 当前页
         table: {                  // 记录表格行数据
-          id: "",           // （冻结/删除）表格内操作的 id
-          ids: [],          // （冻结/删除）“按钮”操作的id数组
-          is_active: null,  // （冻结/删除）表格内操作的 flag
-          is_activeS: [],   // （冻结/删除）“按钮”操作的flag数组,判断删除前动作
+          id: "",           // 表格内操作的 id
+          ids: [],          // “按钮”操作的id数组
+          is_active: null,  // （冻结/启用）表格内操作的 flag
+          is_activeS: [],   // （冻结/启用）“按钮”操作的flag数组,判断删除前动作
           name: "",         // 用户姓名
           account: "",      // 用户账号
           perms: []         // 用户权限
@@ -303,9 +303,6 @@
           addUsersVisible: false,          // 添加用户
           editUsersVisible: false,         // 修改用户资料
           editPasswordVisible: false,      // 修改用户密码
-//          tipsVisible: false,              // 操作提示
-//          tips: "",                        // 操作后提示信息
-//          tipsIcon: ""                     // 操作后提示信息图标
           isRight: true,
           tips: "",
           tipsVisible: false
@@ -314,7 +311,7 @@
           name: "",
           account: "",
           password: "",
-          perms: ["bus_verify"]
+          perms: []
         },
         addUsersRules: {     // 添加用户
           name: [
@@ -395,16 +392,20 @@
         })
       },
 
-      /* 勾选用户 */
+      /* 表格内勾选用户 */
       selectUsers: function(selection, row) {
+        var self = this
         let ids = []
         let flag = []
+        // 暂时不考虑翻页选择的可能性 currentPage
         for (var i = 0; i < selection.length; i++) {
           ids.push(selection[i].id)
           flag.push(selection[i].is_active)
         }
-        this.table.ids = ids
-        this.table.is_activeS = flag
+        self.table.id = row.id         // 单个用户操作（用户id）
+        self.table.is_active = row.is_active  // 冻结状态
+        self.table.ids = ids           // 用户数组
+        self.table.is_activeS = flag
       },
 
       /* 改变当前页 */
@@ -436,7 +437,7 @@
                   self.dialog.tips = "添加成功！"
                   self.dialog.tipsVisible = true
                   modalHide(function() {
-                    self.dialog.isRight = false
+                    self.dialog.tipsVisible = false
                     self.getTables()
                   })
                 }
@@ -539,10 +540,20 @@
         var self = this
         var formData = new FormData()
         if (flag) {    // 按钮
-          for (let m = 0; m < row.length; m++) {
-            formData.append("ids[]", row[m])
+          if (row.length > 0) {    // 判断是否选择了账户
+            for (let m = 0; m < row.length; m++) {
+              formData.append("ids[]", row[m])
+            }
+            formData.append("flag", flag)      // 冻结为0，启用为1
+          } else {
+            self.dialog.isRight = false
+            self.dialog.tips = "请选择需要（冻结/启用）的账户！"
+            self.dialog.tipsVisible = true
+            modalHide(function() {
+              self.dialog.tipsVisible = false
+            })
+            return false
           }
-          formData.append("flag", flag)      // 冻结为0，启用为1
         } else {       // 表格
           formData.append("ids[]", row.id)
           formData.append("flag", row.is_active ? 1 : 0)
@@ -563,11 +574,11 @@
                   }
                 }
                 self.table.is_activeS = []     // 修改数组中状态
-                for (let k = 0; k < row.length; k++) {
+                for (let i = 0; i < row.length; i++) {
                   self.table.is_activeS.push(flag === "1")
                 }
               }
-            } else {
+            } else {   // 冻结/启用不成功（返回之前状态）
               if (!flag) {
                 row.is_active = !row.is_active
               }

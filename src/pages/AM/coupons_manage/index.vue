@@ -8,7 +8,6 @@
       <tab-component :tabs="tabs" :type="$route.params.type"
                      v-on:toggle="tabChange"></tab-component>
       <br/>
-
       <component :is="view"></component>
     </el-col>
   </el-row>

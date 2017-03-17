@@ -242,7 +242,7 @@ const routes = [
         component: CouponsManage,
         iconCls: "icon-youhuiquan",
         children: [
-          {path: "my_coupons", name: "我的优惠券"},
+          {path: "my_coupons", name: "我的优惠券", component: AddActivity},
           {path: "add_new_coupons", name: "新增优惠券"},
           {path: "specified_stores", name: "查看指定门店"}
         ]

@@ -7,7 +7,7 @@
     </el-col>
 
     <el-col :span="24">
-      <component :is="view" :tab="tabActive"></component>
+      <component :is="view"></component>
     </el-col>
   </el-row>
 </template>
@@ -48,10 +48,12 @@
             name: "退款记录"
           }
         ],
-        view: "",
-        tabActive: ""
+        view: ""
       }
     },
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当钩子执行前，组件实例还没被创建
     beforeRouteEnter(to, from, next) {
       if (to.path === "/checkout_verify/:type") {
         next({path: "/checkout_verify/check_apply"})
@@ -59,11 +61,19 @@
         next()
       }
     },
+    // 在当前路由改变，但是该组件被复用时调用
+    // 可以访问组件实例 `this`
+    beforeRouteUpdate(to, from, next) {
+      if (to.path === "/checkout_verify/:type") {
+        next({path: "/checkout_verify/check_apply"})
+      } else {
+        next()
+      }
+      this.tabChange()
+    },
     mounted() {
       var self = this
-      if (self.$route.params.type) {
-        self.tabChange()
-      }
+      self.tabChange()
     },
     methods: {
       // tab选择组件显示

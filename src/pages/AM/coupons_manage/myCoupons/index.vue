@@ -106,7 +106,7 @@
 
       // 查看指定门店信息
       viewStores: function(row) {
-        this.$router.push({path: "/specified_stores#id=" + row.id + "&name=" + row.name})
+        this.$router.push({path: "/coupons_manage/specified_stores#id=" + row.id + "&name=" + row.name})
       },
       // 修改优惠券
       editCoupon: function(row) {

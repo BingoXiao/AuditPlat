@@ -1,13 +1,15 @@
 <template>
   <el-row>
-    <el-col :span="24">
+    <el-col :span="24" v-if="$route.params.type==='specified_stores'">
+      <specified-stores></specified-stores>
+    </el-col>
+
+    <el-col :span="24" v-else>
       <tab-component :tabs="tabs" :type="$route.params.type"
                      v-on:toggle="tabChange"></tab-component>
       <br/>
-    </el-col>
 
-    <el-col :span="24">
-      <component :is="view" :tab="tabActive" v-on:tabChange="tabChange"></component>
+      <component :is="view"></component>
     </el-col>
   </el-row>
 </template>
@@ -16,6 +18,7 @@
   import tabComponent from "../../../components/tabs/router/index"
   import myCoupons from "./myCoupons/index"
   import addNewCoupons from "./addNewCoupons/index"
+  import specifiedStores from "./specified_stores/index"
 
   export default {
     data() {
@@ -30,10 +33,12 @@
             name: "新增优惠券"
           }
         ],
-        view: "",
-        tabActive: ""
+        view: ""
       }
     },
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当钩子执行前，组件实例还没被创建
     beforeRouteEnter(to, from, next) {
       if (to.path === "/coupons_manage/:type") {
         next({path: "/coupons_manage/my_coupons"})
@@ -41,15 +46,23 @@
         next()
       }
     },
+    // 在当前路由改变，但是该组件被复用时调用
+    // 可以访问组件实例 `this`
+    beforeRouteUpdate(to, from, next) {
+      if (to.path === "/coupons_manage/:type") {
+        next({path: "/coupons_manage/my_coupons"})
+      } else {
+        next()
+      }
+      this.tabChange()
+    },
     mounted() {
       var self = this
-      if (self.$route.params.type) {
-        self.tabChange()
-      }
+      self.tabChange()
     },
     methods: {
       // tab选择组件显示
-      tabChange: function() {
+      tabChange: function(name) {
         var self = this
         var type = self.$route.params.type
         if (type === "my_coupons") {
@@ -62,7 +75,8 @@
     components: {
       tabComponent,
       myCoupons,
-      addNewCoupons
+      addNewCoupons,
+      specifiedStores
     }
   }
 </script>

@@ -203,7 +203,33 @@ const EVENTS_CMEDIT_URL = function(id) {
 const EVENTS_CMGETINFO_URL = function(id) {
   return HOST_URL + "/activities/coupons/" + id + "/info/"
 }
-
+// 优惠券列表(表格) get
+const EVENTS_CLTABLE_URL = HOST_URL + "/activities/coupons/"
+// 新增活动 post
+const EVENTS_ONLINE_URL = HOST_URL + "/activities/add/"
+// 修改活动 post
+var EVENTS_EDITEVENT_URL = function(id) {
+  return HOST_URL + "/activities/" + id + "/update/"
+}
+// 修改活动（获取信息） get
+const EVENTS_EDITINFO_URL = function(id) {
+  return HOST_URL + "/activities/" + id + "/info/"
+}
+// 活动列表
+// 表格 get
+const EVENTS_ELTABLE_URL = HOST_URL + "/activities/"
+// 删除活动 post
+const EVENTS_ELDELETE_URL = function(id) {
+  return HOST_URL + "/activities/" + id + "/delete/"
+}
+// 下线活动 post
+const EVENTS_OFFLINEINFO_URL = function(id) {
+  return HOST_URL + "/activities/" + id + "/down/"
+}
+// 查看活动下的券（表格）get
+const EVENTS_VIEWEVENT_URL = function(id) {
+  return HOST_URL + "/activities/" + id + "/coupons/"
+}
 
 
 /* 商家管理 */
@@ -282,6 +308,14 @@ exports = module.exports = {
   EVENTS_CMADDSHOPS_URL,
   EVENTS_CMEDIT_URL,
   EVENTS_CMGETINFO_URL,
+  EVENTS_CLTABLE_URL,
+  EVENTS_ONLINE_URL,
+  EVENTS_EDITINFO_URL,
+  EVENTS_EDITEVENT_URL,
+  EVENTS_ELTABLE_URL,
+  EVENTS_ELDELETE_URL,
+  EVENTS_OFFLINEINFO_URL,
+  EVENTS_VIEWEVENT_URL,
   CATEGORY_URL,
   LCLASS_URL,
   SCLASS_URL,
@@ -296,44 +330,3 @@ exports = module.exports = {
   TEMP_PHOTOS_URL,
   FESTIVALS_URL
 }
-
-
-/*
- /!* ******************** 活动管理 ********************* *!/
- /!* *****优惠券管理（EMcouponsManage）****** *!/
-
- /!* *****新增活动（EMaddEvents）****** *!/
- /!* 优惠券列表(表格) *!/
- var EVENTS_CLTABLE_URL = HOST_URL + "/activities/coupons/"
- var EVENTS_CLTABLE_TYPE = "get"
-
- /!* 新增活动 *!/
- var EVENTS_ONLINE_URL = HOST_URL + "/activities/add/"
- var EVENTS_ONLINE_TYPE = "post"
-
-
- /!* *****活动列表（EMeventsList）****** *!/
- /!* 表格 *!/
- var EVENTS_ELTABLE_URL = HOST_URL + "/activities/"
- var EVENTS_ELTABLE_TYPE = "get"
-
- //查看活动下的券（表格）
- var EVENTS_VIEWEVENT_URL = new Function("activity_id",'return HOST_URL + "/activities/"+activity_id+"/coupons/"')
- var EVENTS_VIEWEVENT_TYPE = "get"
-
- //修改活动（获取信息）
- var EVENTS_EDITINFO_URL = new Function("activity_id",'return HOST_URL + "/activities/"+activity_id+"/info/"')
- var EVENTS_EDITINFO_TYPE = "get"
-
- //修改活动
- var EVENTS_EDITEVENT_URL = new Function("activity_id",'return HOST_URL + "/activities/"+activity_id+"/update/"')
- var EVENTS_EDITEVENT_TYPE = "post"
-
- //下线活动
- var EVENTS_OFFLINEINFO_URL = new Function("activity_id",'return HOST_URL + "/activities/"+activity_id+"/down/"')
- var EVENTS_OFFLINEINFO_TYPE = "POST"
-
- //删除活动
- var EVENTS_ELDELETE_URL = new Function("activity_id",'return HOST_URL + "/activities/"+activity_id+"/delete/"')
- var EVENTS_ELDELETE_TYPE = "post"
-*/

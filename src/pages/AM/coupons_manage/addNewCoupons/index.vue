@@ -87,7 +87,9 @@
     </el-col>
 
     <el-col :span="24" v-show="storeRadio === 'someStores'">
-      <tab-component :tabs="tabs" :which="which" v-on:toggle="tabChange"></tab-component>
+      <tab-badge-component :tabs="tabs" :which="which"
+                           :number="number" :onBadge="onBadge"
+                           v-on:toggle="tabChange"></tab-badge-component>
       <el-row style="margin-bottom:10px;">
         <el-col :span="5">
           <input-search :placeholder="placeholder"></input-search>
@@ -98,7 +100,7 @@
         <!--已选门店表格-->
         <el-col :span="16" v-show="which === 'selectedStores'">
           <el-table ref="table" :data="selected.tableDatas" border style="width: 100%;"
-                    highlight-current-row :row-kry="selected.tableDatas.bus_id">
+                    highlight-current-row :row-key="selected.tableDatas.bus_id">
             <el-table-column label="选择" align="center" width="90px">
               <template scope="scope">
                 <el-button type="danger" size="mini" icon="minus"
@@ -149,7 +151,10 @@
     </el-col>
 
     <el-col :span="24">
-      <el-button type="primary" size="large" @click="addCoupon">新 增</el-button>
+      <el-button type="primary" size="large" v-if="!urlID"
+                 @click="addCoupon">新 增</el-button>
+      <el-button type="primary" size="large" v-else
+                 @click="addCoupon">修 改</el-button>
     </el-col>
 
     <!--提示-->
@@ -158,7 +163,7 @@
 </template>
 
 <script>
-  import tabComponent from "../../../../components/tabs/inner/index"
+  import tabBadgeComponent from "../../../../components/tabs/badge/index"
   import inputSearch from "../../../../components/search/input/index"
   import dialogTips from "../../../../components/dialogTips/index.vue"
   import {EVENTS_CMSEARCHSHOPS_URL, EVENTS_CMADDSHOPS_URL,
@@ -206,6 +211,7 @@
             }
           }]
         },
+        urlID: "",       // url ID(按钮显示)
         isRight: true,       // 保存提示提示框
         tips: "",
         tipsVisible: false,
@@ -238,10 +244,13 @@
           "selectedStores": "已选门店",
           "storesSearch": "门店搜索"
         },
+        number: 0,
+        onBadge: "selectedStores",
         which: "selectedStores",
         placeholder: "请输入门店名称",
         selected: {         // 已选门店
           idArr: [],                // 门店id数组
+          totalDatas: [],           // 表格总数据
           tableDatas: [],           // 表格每页显示数据
           totalItems: 0,            // 总条目数
           pageSize: 10,             // 每页显示条目个数
@@ -259,7 +268,10 @@
       var self = this
       var id = getUrlParameters(window.location.hash, "id")
       if (id) {  // 修改（获取优惠券信息）
+        self.urlID = id
         self.getCouponInfo(id)
+      } else {
+        self.urlID = ""
       }
       self.getWholeTables()
     },
@@ -280,7 +292,7 @@
       tabChange: function(name) {
         var self = this
         self.which = name
-        if (name === "selectedStore") {
+        if (name === "selectedStores") {
           self.getSelectedTables()
         }
       },
@@ -299,11 +311,14 @@
           if (response.body.success) {
             var couponinfo = response.body.content.couponinfo
             var blist = response.body.content.blist
-            if (blist.length > 1) {
-              self.selected.tableDatas = blist    // 指定门店
+            if (blist.length > 0) {
+              self.storeRadio = "someStores"
               for (let i = 0; i < blist.length; i++) {
                 self.selected.idArr.push(blist[i].bus_id)
               }
+              self.selected.totalDatas = blist    // 指定门店
+              self.number = blist.length
+              self.getSelectedTables()
             }
             self.couponinfo.type = couponinfo.type   // 类型
             self.couponinfo.name = couponinfo.name   // 名称
@@ -324,15 +339,15 @@
           }
         })
       },
-      /* 获取已选门店数据（表格） */
+      /* 获取已选门店（表格） */
       getSelectedTables: function() {
         var self = this
-        var datas = self.selected.tableDatas
+        var datas = self.selected.totalDatas
         self.selected.tableDatas = datas.slice((self.selected.currentPage - 1) *
           self.selected.pageSize, self.selected.currentPage * self.selected.pageSize)
         self.selected.totalItems = parseInt(datas.length)
       },
-      /* 获取门店搜索数据（表格） */
+      /* 获取门店搜索（表格） */
       getWholeTables: function() {
         var self = this
         self.$http.get(EVENTS_CMSEARCHSHOPS_URL).then(function(response) {
@@ -356,7 +371,7 @@
         var arr = self.selected.idArr
         if (arr.length < 1) {
           self.selected.idArr.push(row.bus_id)
-          self.selected.tableDatas.push(row)
+          self.selected.totalDatas.push(row)
         } else {
           for (let i = 0; i < arr.length; i++) {
             if (arr[i] === row.bus_id) {
@@ -364,11 +379,12 @@
             } else {
               if (i === arr.length - 1) {
                 self.selected.idArr.push(row.bus_id)
-                self.selected.tableDatas.push(row)
+                self.selected.totalDatas.push(row)
               }
             }
           }
         }
+        self.number = self.selected.totalDatas.length
       },
       // 删除门店
       deleteStore: function(row) {
@@ -377,9 +393,19 @@
         for (let i = 0; i < arr.length; i++) {
           if (arr[i] === row.bus_id) {
             self.selected.idArr.splice(i, 1)
-            self.selected.tableDatas.splice(i, 1)
+            self.selected.totalDatas.splice(i, 1)
+            self.number = self.selected.totalDatas.length
             break
           }
+        }
+        for (let i = 0; i < self.selected.tableDatas.length; i++) {
+          if (self.selected.tableDatas[i].bus_id === row.bus_id) {
+            self.selected.tableDatas.splice(i, 1)
+          }
+        }
+        if (self.number % 10 === 0) {    // 删除到一页的最后一条，返回上一页
+          self.currentPage = self.currentPage - 1
+          self.handleSelectedChange()
         }
       },
       // 新增优惠券
@@ -418,8 +444,8 @@
             self.errorTip("date", false)
             let dateFrom = new Date(self.couponinfo.validDates[0])
             let dateTo = new Date(self.couponinfo.validDates[1])
-            datas.valid_startdate = dateFrom.getFullYear() + "-" + dateFrom.getMonth() + "-" + dateFrom.getDate()
-            datas.valid_enddate = dateTo.getFullYear() + "-" + dateTo.getMonth() + "-" + dateTo.getDate()
+            datas.valid_startdate = dateFrom.getFullYear() + "-" + (dateFrom.getMonth() + 1) + "-" + dateFrom.getDate()
+            datas.valid_enddate = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate()
           }
         }
         if (self.storeRadio === "someStores") {  // 已选门店
@@ -440,6 +466,7 @@
                   self.tipsVisible = true
                   modalHide(function() {
                     self.tipsVisible = false
+                    self.$router.push({path: "/coupons_manage/my_coupons"})
                   })
                 }
               })
@@ -460,7 +487,7 @@
       }
     },
     components: {
-      tabComponent,
+      tabBadgeComponent,
       inputSearch,
       dialogTips
     }

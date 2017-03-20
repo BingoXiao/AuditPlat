@@ -16,7 +16,7 @@
     <!--表格-->
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" v-loading.body="loading"
-                border :row-key="tableDatas.id" style="width: 100%;"
+                border row-key="id" style="width: 100%;"
                 highlight-current-row>
         <el-table-column prop="create_datetime" label="创建时间" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="type" label="类型" align="center" min-width="100px"></el-table-column>

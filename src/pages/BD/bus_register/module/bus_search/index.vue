@@ -13,7 +13,7 @@
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" v-loading.body="loading"
                 border highlight-current-row style="width: 100%;"
-                :row-key="''+tableDatas.bus_id" @row-click="getAcc">
+                row-key="bus_id" @row-click="getAcc">
         <el-table-column label="" width="55px">
           <template scope="scope">
             <el-radio v-model="busForm.bus_id" class="radio"

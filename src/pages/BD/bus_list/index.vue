@@ -24,8 +24,8 @@
     <!--表格-->
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" v-loading.body="loading"
-                border highlight-current-row
-                style="width: 100%;" :row-key="tableDatas.bususer_id">
+                border highlight-current-row style="width: 100%;"
+                row-key="bususer_id">
         <el-table-column prop="number" label="商家编号" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="account" label="商家账号" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="city" label="城市" align="center" min-width="100px"></el-table-column>

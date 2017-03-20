@@ -24,9 +24,9 @@
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
                 highlight-current-row style="width: 100%;"
-                :row-key="tableDatas.id"
-                @selection-change="getSelectedArr">
-        <el-table-column type="selection" width="70px" align="center"></el-table-column>
+                row-key="id" @selection-change="getSelectedArr">
+        <el-table-column type="selection" width="70px" align="center"
+                         :reserve-selection="true"></el-table-column>
         <el-table-column prop="time" label="举报时间" align="center" min-width="160px"></el-table-column>
         <el-table-column prop="busname" label="商家名称" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="rank" label="处理等级" align="center" min-width="100px"></el-table-column>
@@ -90,7 +90,7 @@
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,            // 当前页
         isRight: true,       // 提示框
-        tips: "",
+        tips: "操作成功！",
         tipsVisible: false
       }
     },
@@ -145,11 +145,6 @@
           self.isRight = true
           formData.append("ids[]", self.selectArr)
           formData.append("status", status)    // 已处理"HANDLED"，未处理UNHANDLED
-          if (status === "HANDLED") {
-            self.tips = "已处理！"
-          } else {
-            self.tips = "未处理！"
-          }
           self.$http.post(COMPAINTS_SUBMIT_URL, formData)
             .then(function(response) {
               if (response.data.success) {

@@ -24,7 +24,7 @@ import TipsOff from "../pages/BM/tip_off/index"
 import CouponsManage from "../pages/AM/coupons_manage/index"
 import AddActivity from "../pages/AM/add_activity/index"
 import ActivityList from "../pages/AM/activity_list/index"
-
+import CenterRegister from "../pages/center_register/index"
 
 const routes = [
   {
@@ -309,6 +309,13 @@ const routes = [
     name: "修改密码",
     hidden: "login",
     component: EDITPWD
+  },
+  /* 商家中心注册页面 */
+  {
+    path: "/center-site/register",
+    name: "商家中心注册",
+    hidden: "login",
+    component: CenterRegister
   },
   // 路由重定向:除了路由配置的地址，全部到/login页面
   {

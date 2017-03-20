@@ -95,48 +95,45 @@
         if (self.accountV() && self.passwordV()) {
           var loginform = document.getElementById("loginForm")
           var formData = new FormData(loginform)
-
           /*  记录登录状态 */
-          self.$http.post(ACCOUNTS_LOGIN_URL, formData)
-            .then(function(response) {
-              if (response.data.success) {
-                /*  记录状态 */
-                self.$store.commit("USER_NAME", self.account)
-                self.$store.commit("AUTH_LOGIN", true)
-                self.$store.commit("USER_DATA", response.data.content.perms)
+          self.$http.post(ACCOUNTS_LOGIN_URL, formData).then(function(response) {
+            if (response.data.success) {
+              /*  记录状态 */
+              var perms = response.data.content.perms
+              self.$store.commit("AUTH_LOGIN", true)
+              self.$store.commit("USER_ID", response.body.content.id)
+              self.$store.commit("USER_NAME", self.account)
+              self.$store.commit("USER_DATA", perms)
 
-                /* 自动登录 */
-                if (self.checked) {
-                  setCookie("REMEMBER", "1", 30)
-                }
+              /* 自动登录 */
+              if (self.checked) {
+                setCookie("REMEMBER", "1", 30)
+              }
 
-                /* 根据权限进入不同得页面 */
-                if (self.$store.state.user_data.item_list === 1) { /* 管理员账号 */
-                  self.$router.push({path: "/setting"})
-                } else {   /* BD */
-                  if (self.$store.state.user_data.bus_apply === 1 ||
-                    self.$store.state.user_data.bus_register === 1) {
-                    if (self.$store.state.user_data.bus_apply === 1) {
-                      self.$router.push({path: "/bus_apply"})
+              /* 根据权限进入不同得页面 */
+              if (perms.item_list === 1) { /* 管理员账号 */
+                self.$router.push({path: "/setting"})
+              } else {   /* BD */
+                if (perms.bus_apply === 1 || perms.bus_register === 1) {
+                  if (perms.bus_apply === 1) {
+                    self.$router.push({path: "/bus_apply"})
+                  } else {
+                    self.$router.push({path: "/bus_register/:type"})
+                  }
+                } else {  /* 审核人员 */
+                  if (perms.bus_verify === 1 || perms.checkout_verify === 1 || perms.project_verify === 1) {
+                    if (self.$store.state.user_data.bus_verify === 1) {
+                      self.$router.push({path: "/bus_review/:type"})
+                    } else if (perms.checkout_verify === 1) {
+                      self.$router.push({path: "/checkout_verify/:type"})
                     } else {
-                      self.$router.push({path: "/bus_register"})
-                    }
-                  } else {  /* 审核人员 */
-                    if (self.$store.state.user_data.bus_verify === 1 ||
-                      self.$store.state.user_data.checkout_verify === 1 ||
-                      self.$store.state.user_data.project_verify === 1) {
-                      if (self.$store.state.user_data.bus_verify === 1) {
-                        self.$router.push({path: "/bus_review"})
-                      } else if (self.$store.state.user_data.checkout_verify === 1) {
-                        self.$router.push({path: "/checkout_verify"})
-                      } else {
-                        self.$router.push({path: "/project_verify"})
-                      }
+                      self.$router.push({path: "/project_verify/:type"})
                     }
                   }
                 }
               }
-            })
+            }
+          })
         } else {
           return false
         }

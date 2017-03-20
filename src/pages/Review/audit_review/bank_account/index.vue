@@ -16,7 +16,7 @@
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
                 highlight-current-row style="width: 100%;"
-                :row-key="tableDatas.item_id">
+                row-key="item_id">
         <el-table-column prop="num" label="商家编号" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="account" label="BD联系人" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="bd_info" label="商家账号" align="center" min-width="160px"></el-table-column>

@@ -26,7 +26,7 @@
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
                 highlight-current-row style="width: 100%;"
-                :row-key="tableDatas.applynum"
+                row-key="applynum"
                 @selection-change="getSelectedArr">
         <el-table-column type="selection" width="48"></el-table-column>
         <el-table-column prop="submit_time" label="提交时间" align="center" min-width="180px"></el-table-column>

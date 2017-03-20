@@ -100,7 +100,7 @@
         <!--已选门店表格-->
         <el-col :span="16" v-show="which === 'selectedStores'">
           <el-table ref="table" :data="selected.tableDatas" border style="width: 100%;"
-                    highlight-current-row :row-key="selected.tableDatas.bus_id">
+                    highlight-current-row row-key="bus_id">
             <el-table-column label="选择" align="center" width="90px">
               <template scope="scope">
                 <el-button type="danger" size="mini" icon="minus"
@@ -125,7 +125,7 @@
         <!--门店搜索表格-->
         <el-col :span="16"  v-show="which !== 'selectedStores'">
           <el-table ref="table" :data="whole.tableDatas" border style="width: 100%;"
-                    highlight-current-row :row-kry="whole.tableDatas.bus_id">
+                    highlight-current-row row-kry="bus_id">
             <el-table-column label="选择" align="center" width="90px">
               <template scope="scope">
                 <el-button type="primary" size="mini" icon="plus"

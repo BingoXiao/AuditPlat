@@ -1,13 +1,17 @@
 <template>
   <el-row class="head" type="flex" justify="space-around" align="middle">
     <el-col :span="6">
-      <router-link to="/login">
+      <!--商家中心注册-->
+      <router-link to="/center-site/register" v-if="$route.path === '/center-site/register'">
+        <img src="../../assets/Blogo.png" alt="近脉商家中心"/>
+      </router-link>
+      <router-link to="/login" v-else>
         <img src="../../assets/logo.png" alt="近脉后台审核中心"/>
       </router-link>
     </el-col>
 
     <el-col :span="4" :offset="14">
-      <div v-if="$store.state.auth_login" class="topMenu">
+      <div v-if="$store.state.auth_login && $route.path !== '/center-site/register'" class="topMenu">
         <el-popover
           ref="menu"
           placement="bottom"
@@ -24,6 +28,15 @@
         <el-button type="text" v-popover:menu style="color: #fff">
           {{$store.state.user_name}}<i class="el-icon-arrow-down el-icon--right"
                                        style="font-size: 10px"></i>
+        </el-button>
+        <span style="margin-left: 8px;margin-right: 8px;">|</span>
+        <i class="iconfont icon-erweima"
+           style="font-size: 17px;vertical-align: middle"></i>
+      </div>
+      <!--商家中心注册-->
+      <div v-if="$route.path === '/center-site/register'" class="topMenu">
+        <el-button type="text" style="color: #fff">
+          近脉首页
         </el-button>
         <span style="margin-left: 8px;margin-right: 8px;">|</span>
         <i class="iconfont icon-erweima"

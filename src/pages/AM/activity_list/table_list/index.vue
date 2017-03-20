@@ -6,7 +6,7 @@
       <br/>
       <!--表格-->
       <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
-                highlight-current-row :row-key="tableDatas.id" style="width: 100%;">
+                highlight-current-row row-key="id" style="width: 100%;">
         <el-table-column label="活动时间" align="center" min-width="160px">
           <template scope="scope">
             <span>{{scope.row.startdate}}~{{scope.row.enddate}}</span>

@@ -19,7 +19,7 @@
       <el-col :span="24">
         <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
                   highlight-current-row style="width: 100%;"
-                  :row-key="tableDatas.item_id">
+                  row-key="item_id">
           <el-table-column prop="submit_time" label="提交时间" align="center" min-width="120px"></el-table-column>
           <el-table-column prop="number" label="退款号" align="center" min-width="150px"></el-table-column>
           <el-table-column prop="token" label="团购券号码" align="center" min-width="150px"></el-table-column>

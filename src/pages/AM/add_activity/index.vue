@@ -38,7 +38,7 @@
         <!--新增优惠券-->
         <el-col :span="24" v-show="which === 'addedCoupons'">
           <el-table ref="table" :data="added.tableDatas" border style="width: 100%;"
-                    highlight-current-row :row-key="added.tableDatas.id">
+                    highlight-current-row row-key="id">
             <el-table-column label="选择" align="center" width="90px">
               <template scope="scope">
                 <el-button type="danger" size="mini" icon="minus"

@@ -17,9 +17,9 @@
     <el-col :span="24">
       <el-col :span="19">
         <el-button-group>
-          <el-button type="primary" @click="freezeUsers(table.ids, '1')">启 用</el-button>
-          <el-button type="primary" @click="freezeUsers(table.ids, '0')">冻 结</el-button>
-          <el-button type="primary" @click="deleteUsers(table.ids, table.is_activeS)">删 除</el-button>
+          <el-button type="primary" @click="freezeUsers(table.multiple, 'multiple', '1')">启 用</el-button>
+          <el-button type="primary" @click="freezeUsers(table.multiple, 'multiple', '0')">冻 结</el-button>
+          <el-button type="primary" @click="deleteUsers(table.multiple, 'multiple')">删 除</el-button>
         </el-button-group>
       </el-col>
 
@@ -32,9 +32,10 @@
     <el-col :span="24">
       <br/>
       <el-table ref="table" border highlight-current-row v-loading.body="loading"
-                :data="tableDatas" :row-key="tableDatas.id" style="width: 100%"
-                @select="selectUsers">
-        <el-table-column type="selection" min-width="130px"></el-table-column>
+                :data="tableDatas" row-key="id" style="width: 100%"
+                @selection-change="selectUsers">
+        <el-table-column type="selection" min-width="130px"
+                         :reserve-selection="true"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"  min-width="130px"></el-table-column>
         <el-table-column prop="account" label="用户账号" align="center" min-width="100px"></el-table-column>
         <el-table-column label="已开通服务" align="center" min-width="150px">
@@ -49,7 +50,7 @@
             <el-switch v-model="scope.row.is_active"
                        on-color="#020202"
                        off-color="#C0CCDA"
-                       @change="freezeUsers(scope.row, false)"></el-switch>
+                       @change="freezeUsers(scope.row, 'single')"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center" min-width="150px">
@@ -71,7 +72,7 @@
               </el-col>
               <el-col :span="4">
                 <el-tooltip content="删除" effect="dark" placement="bottom">
-                  <el-button type="text" icon="delete2" @click="deleteUsers(scope.row, false)"></el-button>
+                  <el-button type="text" icon="delete2" @click="deleteUsers(scope.row, 'single')"></el-button>
                 </el-tooltip>
               </el-col>
             </el-row>
@@ -279,10 +280,10 @@
         search: {                // 搜索栏
           state: [               // 状态
             {
-              value: "冻结",
+              value: false,
               label: "冻结"
             }, {
-              value: "启用",
+              value: true,
               label: "启用"
             }]
         },
@@ -291,10 +292,8 @@
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,           // 当前页
         table: {                  // 记录表格行数据
-          id: "",           // 表格内操作的 id
-          ids: [],          // “按钮”操作的id数组
-          is_active: null,  // （冻结/启用）表格内操作的 flag
-          is_activeS: [],   // （冻结/启用）“按钮”操作的flag数组,判断删除前动作
+          single: {},       // 单项（表格内）:包含id和冻结状态is_active
+          multiple: [],     // 多项（按钮操作）
           name: "",         // 用户姓名
           account: "",      // 用户账号
           perms: []         // 用户权限
@@ -313,7 +312,7 @@
           password: "",
           perms: []
         },
-        addUsersRules: {     // 添加用户
+        addUsersRules: {     // 添加用户验证
           name: [
             { required: true, validator: nameV, trigger: "blur" }
           ],
@@ -330,7 +329,7 @@
         editUsersForm: {    // 修改用户资料
           perms: []
         },
-        editUsersRules: {
+        editUsersRules: {      // 修改用户验证
           perms: [
             { type: "array", required: true, max: 5, message: "请至少选择一个权限", trigger: "change" }
           ]
@@ -338,7 +337,7 @@
         editPasswordForm: {    // 修改用户密码
           newPwd: ""
         },
-        editPasswordRules: {
+        editPasswordRules: {     // 修改用户密码验证
           newPwd: [
             {required: true, validator: passwordV, trigger: "blur"}
           ],
@@ -393,25 +392,33 @@
       },
 
       /* 表格内勾选用户 */
-      selectUsers: function(selection, row) {
+      selectUsers: function(selection) {
         var self = this
-        let ids = []
-        let flag = []
-        // 暂时不考虑翻页选择的可能性 currentPage
-        for (var i = 0; i < selection.length; i++) {
-          ids.push(selection[i].id)
-          flag.push(selection[i].is_active)
+        var arr = []
+        if (selection.length > 0) {
+          for (var i = 0; i < selection.length; i++) {
+            let obj = {
+              "id": selection[i].id,
+              "is_active": selection[i].is_active         // true表示启用，false为冻结
+            }
+            arr.push(obj)
+          }
+          self.table.multiple = arr
+          self.table.single = {
+            "id": selection[selection.length - 1].id,
+            "is_active": selection[selection.length - 1].is_active
+          }
+        } else {
+          self.table.multiple = []
+          self.table.single = []
         }
-        self.table.id = row.id         // 单个用户操作（用户id）
-        self.table.is_active = row.is_active  // 冻结状态
-        self.table.ids = ids           // 用户数组
-        self.table.is_activeS = flag
       },
 
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        var self = this
+        self.currentPage = currentPage
+        self.getTables()
       },
 
       /* 添加用户 */
@@ -429,19 +436,18 @@
         }
         self.$refs[formName].validate((valid) => {
           if (valid) {
-            self.$http.post(ACCOUNTS_ADD_URL, formData)
-              .then(function(response) {
-                if (response.body.success) {
-                  self.dialog.addUsersVisible = false
-                  self.dialog.isRight = true
-                  self.dialog.tips = "添加成功！"
-                  self.dialog.tipsVisible = true
-                  modalHide(function() {
-                    self.dialog.tipsVisible = false
-                    self.getTables()
-                  })
-                }
-              })
+            self.$http.post(ACCOUNTS_ADD_URL, formData).then(function(response) {
+              if (response.body.success) {
+                self.dialog.addUsersVisible = false
+                self.dialog.isRight = true
+                self.dialog.tips = "添加成功！"
+                self.dialog.tipsVisible = true
+                modalHide(function() {
+                  self.dialog.tipsVisible = false
+                  self.getTables()
+                })
+              }
+            })
           } else {
             return false
           }
@@ -452,7 +458,10 @@
       editUsersVisible: function(row) {
         var self = this
         self.dialog.editUsersVisible = true
-        self.table.id = row.id
+        self.table.single = {
+          "id": row.id,
+          "is_active": row.is_active
+        }
         self.table.account = row.account
         self.table.name = row.name
         self.table.perms = row.service
@@ -474,25 +483,24 @@
         for (let i = 0; i < aa.length; i++) {
           formData.set(aa[i], "1")
         }
-        formData.set("id", self.table.id)
+        formData.set("id", self.table.single.id)
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
 //        }
         self.$refs[formName].validate((valid) => {
           if (valid) {
-            self.$http.post(ACCOUNTS_EDITINFO_URL, formData)
-              .then(function(response) {
-                if (response.body.success) {
-                  self.dialog.editUsersVisible = false
-                  self.dialog.isRight = true
-                  self.dialog.tips = "修改成功！"
-                  self.dialog.tipsVisible = true
-                  modalHide(function() {
-                    self.dialog.tipsVisible = false
-                    self.getTables()
-                  })
-                }
-              })
+            self.$http.post(ACCOUNTS_EDITINFO_URL, formData).then(function(response) {
+              if (response.body.success) {
+                self.dialog.editUsersVisible = false
+                self.dialog.isRight = true
+                self.dialog.tips = "修改成功！"
+                self.dialog.tipsVisible = true
+                modalHide(function() {
+                  self.dialog.tipsVisible = false
+                  self.getTables()
+                })
+              }
+            })
           } else {
             return false
           }
@@ -501,34 +509,34 @@
 
       /* 修改用户密码 */
       editPasswordVisible: function(row) {
-        this.dialog.editPasswordVisible = true
-        this.table.id = row.id
-        this.table.name = row.name
-        this.table.account = row.account
+        var self = this
+        self.dialog.editPasswordVisible = true
+        self.table.single.id = row.id
+        self.table.name = row.name
+        self.table.account = row.account
       },
       editUsersPassword: function(formName) {
         var self = this
         var form = document.getElementById("editPasswordForm")
         var formData = new FormData(form)
-        formData.set("id", self.table.id)
+        formData.set("id", self.table.single.id)
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
 //        }
         self.$refs[formName].validate((valid) => {
           if (valid) {
-            self.$http.post(ACCOUNTS_EDITPWD_URL, formData)
-              .then(function(response) {
-                if (response.body.success) {
-                  self.dialog.editPasswordVisible = false
-                  self.dialog.isRight = true
-                  self.dialog.tips = "修改成功！"
-                  self.dialog.tipsVisible = true
-                  modalHide(function() {
-                    self.dialog.tipsVisible = false
-                    self.getTables()
-                  })
-                }
-              })
+            self.$http.post(ACCOUNTS_EDITPWD_URL, formData).then(function(response) {
+              if (response.body.success) {
+                self.dialog.editPasswordVisible = false
+                self.dialog.isRight = true
+                self.dialog.tips = "修改成功！"
+                self.dialog.tipsVisible = true
+                modalHide(function() {
+                  self.dialog.tipsVisible = false
+                  self.getTables()
+                })
+              }
+            })
           } else {
             return false
           }
@@ -536,66 +544,95 @@
       },
 
       /* 冻结用户 */
-      freezeUsers: function(row, flag) {
+      freezeUsers: function(row, type, flag) {
+        // row 表示当前选中项(按钮操作数组table.multiple，表格内部操作对象table.single)
+        // type 表示为按钮操作（multiple）还是表格内部操作（single）
+        // flag 表示冻结（0）还是启用(1)
         var self = this
         var formData = new FormData()
-        if (flag) {    // 按钮
-          if (row.length > 0) {    // 判断是否选择了账户
-            for (let m = 0; m < row.length; m++) {
-              formData.append("ids[]", row[m])
+        if (row.length > 0 || row.id) {      // 有选中项
+          if (type === "multiple") {    // 按钮操作
+            let arr = []
+            for (let i = 0; i < row.length; i++) {
+              arr.push(row[i].id)
+              formData.append("ids[]", row[i].id)
             }
-            formData.append("flag", flag)      // 冻结为0，启用为1
-          } else {
-            self.dialog.isRight = false
-            self.dialog.tips = "请选择需要（冻结/启用）的账户！"
-            self.dialog.tipsVisible = true
-            modalHide(function() {
-              self.dialog.tipsVisible = false
-            })
-            return false
+            formData.set("flag", flag)
+          } else {    // 表格操作
+            formData.append("ids[]", row.id)
+            formData.append("flag", row.is_active ? 1 : 0)
           }
-        } else {       // 表格
-          formData.append("ids[]", row.id)
-          formData.append("flag", row.is_active ? 1 : 0)
+        } else {  // 无选中账户，操作提示错误
+          self.dialog.isRight = false
+          self.dialog.tips = "请选择需要（冻结/启用）的账户！"
+          self.dialog.tipsVisible = true
+          modalHide(function() {
+            self.dialog.tipsVisible = false
+          })
+          return false
         }
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
 //        }
-        self.$http.post(ACCOUNTS_FROZEN_URL, formData)
-          .then(function(response) {
-            if (response.body.success) {
-              if (flag) {      // 按钮点击后状态改变
-                for (let i = 0; i < row.length; i++) {
-                  for (let j = 0; j < self.tableDatas.length; j++) {
-                    if (self.tableDatas[j].id === row[i]) {
-                      self.tableDatas[j].is_active = (flag === "1")
-                      continue
-                    }
+        self.$http.post(ACCOUNTS_FROZEN_URL, formData).then(function(response) {
+          if (response.body.success) {  // 操作成功
+            if (type === "multiple") {     // 按钮操作改变冻结状态
+              for (let i = 0; i < row.length; i++) {
+                for (let j = 0; j < self.tableDatas.length; j++) {
+                  if (self.tableDatas[j].id === row[i].id) {
+                    self.tableDatas[j].is_active = (flag === "1")
+                    continue
                   }
                 }
-                self.table.is_activeS = []     // 修改数组中状态
-                for (let i = 0; i < row.length; i++) {
-                  self.table.is_activeS.push(flag === "1")
+              }
+            } else {   // 表格操作(操作成功后改变选中组中对应状态)
+              for (let i = 0; i < self.table.multiple.length; i++) {
+                if (self.table.multiple[i].id === row.id) {
+                  self.table.multiple[i].is_active = (flag === "1")
+                  break
                 }
               }
-            } else {   // 冻结/启用不成功（返回之前状态）
-              if (!flag) {
-                row.is_active = !row.is_active
-              }
             }
-          })
+          } else {   // 冻结/启用不成功（表格内部操作，返回之前状态）
+            if (row.id) {
+              row.is_active = !row.is_active
+            }
+          }
+        })
       },
 
       /* 删除用户 */
-      deleteUsers: function(row, flags) {
+      deleteUsers: function(row, type) {
+        // row 表示当前选中项(按钮操作数组table.multiple，表格内部操作对象table.single)
+        // type 表示为按钮操作（multiple）还是表格内部操作（single）
         var self = this
         var formData = new FormData()
-        if (flags) {    // 按钮 删除
-          if (flags.length > 0) {
-            for (let i = 0; i < flags.length; i++) {
-              if (flags[i]) {
+        if (row.length > 0 || row.id) {   // 有选中项
+          if (type === "single") {   // 表格内部
+            if (row.is_active) {
+              self.dialog.isRight = false
+              self.dialog.tips = "请先冻结账户！"
+              self.dialog.tipsVisible = true
+              modalHide(function() {
+                self.dialog.tipsVisible = false
+              })
+              return false
+            } else {
+              console.log(self.table.multiple)
+              for (let i = 0; i < self.table.multiple.length; i++) {   // 去掉table.multiple中删除项
+                if (self.table.multiple[i].id === row.id) {
+                  self.table.multiple.splice(i, 1)
+                }
+              }
+              self.table.single = []
+              formData.append("ids[]", row.id)
+            }
+          } else {   // 按钮操作
+            let arr = []
+            for (let i = 0; i < row.length; i++) {
+              if (row[i].is_active) {   // 有启用状态
                 self.dialog.isRight = false
-                self.dialog.tips = "请先冻结您的账户！"
+                self.dialog.tips = "请先冻结账户！"
                 self.dialog.tipsVisible = true
                 modalHide(function() {
                   self.dialog.tipsVisible = false
@@ -603,41 +640,27 @@
                 return false
               }
             }
-            for (let n = 0; n < row.length; n++) {
-              formData.append("ids[]", row[n])
+            for (let i = 0; i < row.length; i++) {
+              arr.push(row[i].id)
+              formData.append("ids[]", row[i].id)
             }
-          } else {
-            return false
-          }
-        } else {        // 表格
-          if (row.is_active) {
-            self.dialog.isRight = false
-            self.dialog.tips = "请先冻结您的账户！"
-            self.dialog.tipsVisible = true
-            modalHide(function() {
-              self.dialog.tipsVisible = false
-            })
-            return false
-          } else {
-            formData.append("ids[]", row.id)
           }
         }
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
 //        }
-        self.$http.post(ACCOUNTS_DELETE_URL, formData)
-          .then(function(response) {
-            if (response.body.success) {
-              self.dialog.editUsersVisible = false
-              self.dialog.isRight = true
-              self.dialog.tips = "删除成功！"
-              self.dialog.tipsVisible = true
-              modalHide(function() {
-                self.dialog.tipsVisible = false
-                self.getTables()
-              })
-            }
-          })
+        self.$http.post(ACCOUNTS_DELETE_URL, formData).then(function(response) {
+          if (response.body.success) {
+            self.dialog.editUsersVisible = false
+            self.dialog.isRight = true
+            self.dialog.tips = "删除成功！"
+            self.dialog.tipsVisible = true
+            modalHide(function() {
+              self.dialog.tipsVisible = false
+              self.getTables()
+            })
+          }
+        })
       },
 
       /* 清空添加用户表单 */

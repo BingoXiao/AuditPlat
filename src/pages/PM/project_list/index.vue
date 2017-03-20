@@ -29,7 +29,7 @@
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" v-loading.body="loading"
                 border highlight-current-row
-                style="width: 100%;" :row-key="tableDatas.item_id">
+                style="width: 100%;" row-key="item_id">
         <el-table-column prop="submit_time" label="申请时间" align="center" min-width="120px"></el-table-column>
         <el-table-column label="门店名称" align="center" min-width="130px">
           <template scope="scope">

@@ -12,7 +12,7 @@ import "./assets/font/iconfont.css"
 import "./common/style.css"
 import App from "App"
 import {AUTO_LOGIN_URL} from "./common/interface"
-import {getCookie} from "./common/common"
+import {getCookie, clearCookie} from "./common/common"
 
 // Router
 Vue.use(VueRouter)
@@ -31,36 +31,34 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   var remember = getCookie("REMEMBER")
-  /* 进入首页 */
-  if (to.path === "/login") {
-    // 自动登陆
-    if (remember === "1") {
+  if (to.path === "/login") {    /* 进入首页 */
+    if (remember === "1") {   // 自动登陆
       Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
         if (response.body.success) {
           /*  记录状态 */
+          var perms = response.body.content.perms
           store.commit("USER_ID", response.body.content.id)
           store.commit("USER_NAME", response.body.content.account)
           store.commit("AUTH_LOGIN", true)
-          store.commit("USER_DATA", response.body.content.perms)
-          var pp = response.body.content.perms
+          store.commit("USER_DATA", perms)
           /* 根据权限进入不同得页面 */
-          if (pp.item_list === 1) { /* 管理员账号 */
+          if (perms.item_list === 1) { /* 管理员账号 */
             next({path: "/setting"})
           } else {   /* BD */
-            if (pp === 1 || pp.bus_register === 1) {
-              if (pp.bus_apply === 1) {
+            if (perms.bus_apply === 1 || perms.bus_register === 1) {
+              if (perms.bus_apply === 1) {
                 next({path: "/bus_apply"})
               } else {
-                next({path: "/bus_register"})
+                next({path: "/bus_register/:type"})
               }
             } else {  /* 审核人员 */
-              if (pp === 1 || pp.checkout_verify === 1 || pp.project_verify === 1) {
-                if (pp.bus_verify === 1) {
-                  next({path: "/bus_review"})
-                } else if (pp.checkout_verify === 1) {
-                  next({path: "/checkout_verify"})
+              if (perms.bus_verify === 1 || perms.checkout_verify === 1 || perms.project_verify === 1) {
+                if (perms.bus_verify === 1) {
+                  next({path: "/bus_review/:type"})
+                } else if (perms.checkout_verify === 1) {
+                  next({path: "/checkout_verify/:type"})
                 } else {
-                  next({path: "/project_verify"})
+                  next({path: "/project_verify/:type"})
                 }
               }
             }
@@ -70,21 +68,23 @@ router.beforeEach((to, from, next) => {
     } else {
       next()
     }
-  } else {
-    if (!store.state.auth_login) {
-      Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
-        if (response.body.success) {
-          store.commit("USER_ID", response.body.content.id)
-          store.commit("USER_NAME", response.body.content.account)
-          store.commit("AUTH_LOGIN", true)
-          store.commit("USER_DATA", response.body.content.perms)
-          next()
-        } else {
-          next({path: "/login"})
-        }
-      })
-    } else {
+  } else {   // 其他页面
+    if (to.path === "/center-site/register") {  // 商家中心注册
       next()
+    } else {
+      if (!store.state.auth_login) {   // 未登录状态
+        Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
+          if (response.body.success) {
+            store.commit("AUTH_LOGIN", true)
+            store.commit("USER_ID", response.body.content.id)
+            store.commit("USER_NAME", response.body.content.account)
+            store.commit("USER_DATA", response.body.content.perms)
+            next()
+          }
+        })
+      } else {
+        next()
+      }
     }
   }
 })
@@ -102,10 +102,11 @@ Vue.http.interceptors.push(function(request, next) {
       }).then(() => {
       }).catch(() => {
       })
-    } else {
-      if (!response.body.success) {  // success:false
-        if (response.body.error_info === "logout") {
-          store.state.auth_login = false
+    } else {   // 请求成功
+      if (!response.body.success) {     // success:false
+        if (response.body.error_info === "logout") {    // 自动登出
+          store.commit("AUTH_LOGIN", false)
+          clearCookie("REMEMBER")
           router.replace("/login")
         } else if (response.body.error_info !== "") {
           Vue.prototype.$confirm(response.body.error_info, "提示", {

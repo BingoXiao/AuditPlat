@@ -4,11 +4,19 @@
     <el-col :span="24" class="toolbar">
       <el-form :inline="true" label-width="85px">
         <el-form-item label="用户账号：">
-          <input-search></input-search>
+          <input-search ref="account" name="account"
+                        v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
 
         <el-form-item label="状态：" class="select">
-          <select-search :options="search.state"></select-search>
+          <select-search ref="state" name="status"
+                         :options="search.state"
+                         v-on:getRules="getFilterRules"></select-search>
+        </el-form-item>
+
+        <el-form-item label="" label-width="10px">
+          <el-button type="primary" size="small" icon="search"
+                     @click="filterTable">查询</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -226,12 +234,14 @@
 </template>
 
 <script>
+  import alasql from "alasql"
   import inputSearch from "../../components/search/input/index"
   import selectSearch from "../../components/search/select/index"
   import dialogTips from "../../components/dialogTips/index.vue"
   import {ACCOUNTS_TABLE_URL, ACCOUNTS_ADD_URL, ACCOUNTS_EDITINFO_URL,
     ACCOUNTS_EDITPWD_URL, ACCOUNTS_DELETE_URL, ACCOUNTS_FROZEN_URL} from "../../common/interface"
   import {isName, isAccount, isPassword, modalHide} from "../../common/common"
+
   export default{
     data() {
       // 姓名验证
@@ -277,16 +287,20 @@
       }
       return {
         loading: false,
-        search: {                // 搜索栏
-          state: [               // 状态
+        search: {          // 搜索栏
+          account: "",       // 用户账号
+          status: "",        // 状态
+          state: [
             {
               value: false,
               label: "冻结"
             }, {
               value: true,
               label: "启用"
-            }]
+            }
+          ]
         },
+        totalDatas: [],           // 表格总数据
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
@@ -348,47 +362,83 @@
       }
     },
     mounted: function() {
-      this.getTables()
+      var self = this
+      self.getTables(function(datas) {
+        self.fillTable(datas)
+      })
     },
     methods: {
       /* 获取用户数据（表格） */
-      getTables: function() {
+      getTables: function(func) {
         var self = this
         self.loading = true
         self.$http.get(ACCOUNTS_TABLE_URL).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
-            for (var i = 0; i < datas.length; i++) {
-              var item = datas[i]
-              var service = []
-              /* 已开通服务 */
-              if (item.bus_verify) {   // 商家审核权限
-                service.push("icon-kaidianchenggong")
-              }
-              if (item.project_verify) { // 项目审核权限
-                service.push("icon-gendan")
-              }
-              if (item.checkout_verify) {  // 结款审核权限
-                service.push("icon-shiliangzhinengduixiang")
-              }
-              if (item.bus_apply) { // 商家申请权限
-                service.push("icon-audit")
-              }
-              if (item.bus_register) {  // 商家注册权限
-                service.push("icon-xiangmushu")
-              }
-              if (item.item_list) {  // 项目注册权限
-                service.push("icon-xiangmu")
-              }
-              datas[i].service = service
-            }
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
-            setTimeout(function() {
-              self.loading = false
-            })
+            func(datas)
           }
         })
+      },
+      /* 填充表格 */
+      fillTable: function(datas) {
+        var self = this
+        self.totalDatas = datas
+        for (var i = 0; i < datas.length; i++) {
+          var item = datas[i]
+          var service = []
+          /* 已开通服务 */
+          if (item.bus_verify) {   // 商家审核权限
+            service.push("icon-kaidianchenggong")
+          }
+          if (item.project_verify) {  // 项目审核权限
+            service.push("icon-gendan")
+          }
+          if (item.checkout_verify) {  // 结款审核权限
+            service.push("icon-shiliangzhinengduixiang")
+          }
+          if (item.bus_apply) {  // 商家申请权限
+            service.push("icon-audit")
+          }
+          if (item.bus_register) {  // 商家注册权限
+            service.push("icon-xiangmushu")
+          }
+          if (item.item_list) {  // 项目注册权限
+            service.push("icon-xiangmu")
+          }
+          datas[i].service = service
+        }
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
+        self.totalItems = parseInt(datas.length)
+        setTimeout(function() {
+          self.loading = false
+        })
+      },
+
+      /* 获取过滤条件 */
+      getFilterRules: function(name, value) {
+        var self = this
+        self.search[name] = value
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this
+        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'"
+        if (self.search.status !== "") {
+          rules += "and is_active = ?"
+        }
+        self.getTables(function(datas) {
+          var res = alasql(rules, [datas, self.search.status])
+          self.totalDatas = res
+          self.currentPage = 1
+          self.fillTable(res)
+        })
+      },
+
+      /* 翻页 */
+      handleCurrentChange(currentPage) {
+        var self = this
+        self.currentPage = currentPage
+        self.fillTable(self.totalDatas)
       },
 
       /* 表格内勾选用户 */
@@ -414,13 +464,6 @@
         }
       },
 
-      /* 改变当前页 */
-      handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.getTables()
-      },
-
       /* 添加用户 */
       addUsers: function(formName) {
         var self = this
@@ -444,7 +487,10 @@
                 self.dialog.tipsVisible = true
                 modalHide(function() {
                   self.dialog.tipsVisible = false
-                  self.getTables()
+                  self.getTables(function(datas) {
+                    self.fillTable(datas)
+                    self.rulesReset()
+                  })
                 })
               }
             })
@@ -474,7 +520,7 @@
         var aa = []
         var arr = ["bus_verify", "bus_verify", "project_verify", "checkout_verify",
           "bus_apply", "bus_register", "item_list"]
-        for (var p of formData.entries()) {
+        for (let p of formData.entries()) {
           aa.push(p[0])
         }
         for (let j = 0; j < arr.length; j++) {
@@ -497,7 +543,40 @@
                 self.dialog.tipsVisible = true
                 modalHide(function() {
                   self.dialog.tipsVisible = false
-                  self.getTables()
+                  var bb = {}
+                  for (let i = 0; i < aa.length; i++) {
+                    bb[aa[i]] = 1
+                  }
+                  for (let i = 0; i < self.tableDatas.length; i++) {
+                    var item = self.tableDatas[i]
+                    if (self.table.single.id === item.id) {   // 修改权限
+                      let ser = []
+                      for (let j = 0; j < arr.length; j++) {
+                        delete item[arr[j]]
+                      }
+                      if (bb.bus_verify) {   // 商家审核权限
+                        item.bus_verify = 1
+                      }
+                      if (bb.project_verify) { // 项目审核权限
+                        item.project_verify = 1
+                      }
+                      if (bb.checkout_verify) {  // 结款审核权限
+                        item.checkout_verify = 1
+                      }
+                      if (bb.bus_apply) { // 商家申请权限
+                        item.bus_apply = 1
+                      }
+                      if (bb.bus_register) {  // 商家注册权限
+                        item.bus_apply = 1
+                      }
+                      if (bb.item_list) {  // 项目注册权限
+                        item.item_list = 1
+                      }
+                      item.service = ser
+                      break
+                    }
+                  }
+                  self.fillTable(self.tableDatas)
                 })
               }
             })
@@ -533,7 +612,6 @@
                 self.dialog.tipsVisible = true
                 modalHide(function() {
                   self.dialog.tipsVisible = false
-                  self.getTables()
                 })
               }
             })
@@ -618,7 +696,6 @@
               })
               return false
             } else {
-              console.log(self.table.multiple)
               for (let i = 0; i < self.table.multiple.length; i++) {   // 去掉table.multiple中删除项
                 if (self.table.multiple[i].id === row.id) {
                   self.table.multiple.splice(i, 1)
@@ -657,14 +734,25 @@
             self.dialog.tipsVisible = true
             modalHide(function() {
               self.dialog.tipsVisible = false
-              self.getTables()
+              self.getTables(function(datas) {
+                self.fillTable(datas)
+                self.rulesReset()
+              })
             })
           }
         })
       },
 
-      /* 清空添加用户表单 */
-      resetForm: function(formName) {
+      /* 清空筛选 */
+      rulesReset: function() {
+        var self = this
+        self.currentPage = 1
+        self.$refs.account.reset()
+        self.$refs.state.reset()
+      },
+
+      // 重置表单
+      resetForm(formName) {
         this.$refs[formName].resetFields()
       }
     },

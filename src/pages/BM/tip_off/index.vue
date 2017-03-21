@@ -5,11 +5,20 @@
       <el-row>
         <el-form :inline="true" label-width="85px">
           <el-form-item label="举报等级：" class="select">
-            <select-search :options="search.rank"></select-search>
+            <select-search name="ranking"
+                           :options="search.rank"
+                           v-on:getRules="getFilterRules"></select-search>
           </el-form-item>
 
           <el-form-item label="状态：" class="select">
-            <select-search :options="search.state"></select-search>
+            <select-search name="status"
+                           :options="search.state"
+                           v-on:getRules="getFilterRules"></select-search>
+          </el-form-item>
+
+          <el-form-item label="" label-width="10px">
+            <el-button type="primary" size="small" icon="search"
+                       @click="filterTable">查询</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -24,7 +33,8 @@
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" border v-loading.body="loading"
                 highlight-current-row style="width: 100%;"
-                row-key="id" @selection-change="getSelectedArr">
+                row-key="id"
+                @selection-change="getSelectedArr">
         <el-table-column type="selection" width="70px" align="center"
                          :reserve-selection="true"></el-table-column>
         <el-table-column prop="time" label="举报时间" align="center" min-width="160px"></el-table-column>
@@ -54,6 +64,7 @@
 </template>
 
 <script>
+  import alasql from "alasql"
   import selectSearch from "../../../components/search/select/index"
   import dialogTips from "../../../components/dialogTips/index.vue"
   import {modalHide} from "../../../common/common"
@@ -63,7 +74,9 @@
     data() {
       return {
         loading: false,
-        search: {                // 搜索栏
+        search: {           // 搜索栏
+          ranking: "",      // 等级
+          status: "",       // 状态
           rank: [               // 等级
             {
               value: "一级",
@@ -85,39 +98,76 @@
             }]
         },
         selectArr: [],            // 选中数组
+        totalDatas: [],           // 表格总数据
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
-        currentPage: 1,            // 当前页
+        currentPage: 1,           // 当前页
         isRight: true,       // 提示框
         tips: "操作成功！",
         tipsVisible: false
       }
     },
     mounted() {
-      this.getTables()
+      var self = this
+      self.getTables(function(datas) {
+        self.fillTable(datas)
+      })
     },
     methods: {
       /* 获取数据（表格） */
-      getTables: function() {
+      getTables: function(func) {
         var self = this
         self.loading = true
         self.$http.get(COMPAINTS_TABLE_URL).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
-            setTimeout(function() {
-              self.loading = false
-            })
+            func(datas)
           }
         })
+      },
+      /* 填充（表格） */
+      fillTable: function(datas) {
+        var self = this
+        self.totalDatas = datas
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
+        self.totalItems = parseInt(datas.length)
+        setTimeout(function() {
+          self.loading = false
+        })
+      },
+
+      /* 获取过滤条件 */
+      getFilterRules: function(name, value) {
+        var self = this
+        self.search[name] = value
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this
+        var rules = "SELECT * FROM ? WHERE rank LIKE '%" + self.search.ranking + "%'"
+        if (self.search.status !== "") {    // 状态
+          rules += " AND status = ?"
+        }
+        self.getTables(function(datas) {
+          var res = alasql(rules, [datas, self.search.status])
+          self.currentPage = 1
+          self.fillTable(res)
+        })
+      },
+
+      /* 改变当前页 */
+      handleCurrentChange(currentPage) {
+        var self = this
+        this.currentPage = currentPage
+        self.fillTable(self.totalDatas)
       },
 
       /* 每页条数改变时 */
       pageSizesChange: function(size) {
+        var self = this
         this.pageSize = size
-        this.getTables()
+        self.fillTable(self.totalDatas)
       },
 
       /* 获取选中项 */
@@ -156,12 +206,6 @@
               }
             })
         }
-      },
-
-      /* 改变当前页 */
-      handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
       }
     },
     components: {

@@ -4,20 +4,20 @@
       <steps-component :steps="steps" :active="active"></steps-component>
 
       <!--门店信息-->
-      <el-col :span="20" :offset="2" v-show="currentView === 'basicInfo'">
-        <store-info ref="basicChild"></store-info>
+      <el-col :span="20" :offset="2" v-show="currentView === 'storeInfo'">
+        <store-info ref="storeChild" v-on:storeValidate="get_formDatas"></store-info>
         <el-col :span="24" class="bottomButton" style="padding-left: 20px;">
-          <el-button size="large" type="primary" @click="next_step('qualificationInfo')">下一步</el-button>
+          <el-button size="large" type="primary" @click="next_step('coopInfo')">下一步</el-button>
         </el-col>
       </el-col>
 
 
-      <!--资质信息-->
-      <el-col :span="20" :offset="2" v-show="currentView === 'qualificationInfo'">
-        <qualification-info ref="quaChild" :filling="filling"></qualification-info>
+      <!--结款信息-->
+      <el-col :span="20" :offset="2" v-show="currentView === 'coopInfo'">
+        <coop-info ref="coopChild" v-on:coopValidate="get_formDatas"></coop-info>
         <el-col :span="24" class="bottomButton">
-          <el-button size="large" type="primary" @click="previous_step('basicInfo')">上一步</el-button>
-          <el-button size="large" type="primary" @click="next_step('checkoutInfo')">下一步</el-button>
+          <el-button size="large" type="primary" @click="previous_step('storeInfo')">上一步</el-button>
+          <el-button size="large" type="primary" @click="next_step('submitSuccess')">下一步</el-button>
         </el-col>
       </el-col>
 
@@ -27,30 +27,22 @@
         <submit-success></submit-success>
       </el-col>
     </el-col>
-
-
-    <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
   </el-row>
 </template>
 
 <script>
   import stepsComponent from "../../components/steps/index"
   import storeInfo from "./module/store_info/index"
-  import dialogTips from "../../components/dialogTips/index.vue"
-  import {BDREGISTER_APPLFILLING_URL, BDREGISTER_EDITFILLING_URL,
-    BDREGISTER_NEWREGISTER_URL} from "../../common/interface"
-  import {getUrlParameters, modalHide} from "../../common/common"
+  import coopInfo from "./module/coop_info/index"
+  import submitSuccess from "./module/submit_success/index"
+  import {CNTER_REGISTER} from "../../common/interface"
 
   export default{
     data() {
       return {
         flag: false,          // 验证结果反馈
-        isRight: true,       // 保存提示提示框
-        tips: "保存成功！",
-        tipsVisible: false,
         active: 1,                 // 激活步骤
-        currentView: "basicInfo",  // 当前步骤
+        currentView: "storeInfo",  // 当前步骤
         steps: [                   // 步骤条
           {
             index: 1,
@@ -61,95 +53,72 @@
           }, {
             index: 3,
             title: "提交成功"
-          }]
+          }],
+        formDatas: {      // 表格数据
+          userinfo: {},
+          businfo: {},
+          blinfo: {},
+          slinfo: {}
+        }
       }
     },
-    mounted() {
-      this.getNewInfo()
-    },
     methods: {
-      // 获取新店注册信息
-      getNewInfo: function() {
+      // 获取数据
+      get_formDatas: function(flag, datas) {
         var self = this
-        let id = getUrlParameters(window.location.hash, "id")
-        if (id) {   // 有填充信息
-          if (self.$route.name === "商家申请注册详情页") {
-            self.$http.get(BDREGISTER_APPLFILLING_URL + "?applynum=" + id)
+        if (flag) {   // 门店信息
+          self.formDatas.businfo = datas
+        } else {      // 合作信息
+          self.formDatas.userinfo = datas.userinfo
+          self.formDatas.blinfo = datas.blinfo
+          self.formDatas.slinfo = datas.slinfo
+          self.$set(self.formDatas.businfo, "group_buying_info", datas.businfo.group_buying_info)   // 团购
+          self.$set(self.formDatas.businfo, "cost_per_person", datas.businfo.cost_per_person)       // 人均
+          self.$set(self.formDatas.businfo, "sale_per_month", datas.businfo.sale_per_month)         // 月销售额
+        }
+      },
+      // 下一步
+      next_step: function(step) {
+        var self = this
+        if (step === "coopInfo") {
+          self.$refs.storeChild.storeValidate()
+        } else if (step === "submitSuccess") {
+          self.$refs.coopChild.coopValidate()
+        }
+        if (self.$store.state.vflag) {    // 验证成功
+          if (step === "submitSuccess") {  // 提交数据
+            self.$http.post(CNTER_REGISTER,
+              JSON.stringify(self.$store.state.form_data),
+              {emulateJSON: true})
               .then(function(response) {
                 if (response.body.success) {
-                  self.filling = response.body.content
-                  self.PAN.name = response.body.content.userinfo.name
-                  self.PAN.phonenum = response.body.content.userinfo.phonenum
+                  self.active = self.active + 1
+                  self.currentView = step
+                  self.$store.commit("V_FLAG", false)
                 }
               })
           } else {
-            self.$http.get(BDREGISTER_EDITFILLING_URL + "?applynum=" + id)
-              .then(function(response) {
-                if (response.body.success) {
-                  self.filling = response.body.content
-                  self.PAN.name = response.body.content.userinfo.name
-                  self.PAN.phonenum = response.body.content.userinfo.phonenum
-                }
-              })
+            self.currentView = step
+            self.active = self.active + 1
+            self.$store.commit("V_FLAG", false)
           }
         }
       },
 
-      // 下一步
-      next_step: function(step, flag) {
-        var self = this
-        if (self.active === 1) {          // 基本信息验证
-          self.$refs.basicChild.basicValidate()
-        } else if (self.active === 2) {   // 资质信息验证
-          self.$refs.quaChild.quaValidate()
-        } else if (self.active === 3) {   // 结款信息验证
-          self.$refs.checkChild.checkValidate(flag)
-        }
-        if (self.$store.state.vflag) {    // 验证成功
-          self.$http.post(BDREGISTER_NEWREGISTER_URL,
-            JSON.stringify(self.$store.state.form_data),
-            {emulateJSON: true})
-            .then(function(response) {
-              if (response.body.success) {
-                if (!getUrlParameters(window.location.hash, "id")) {
-                  window.location.hash += "#id=" + response.body.content.applynum
-                }
-                if (step === "save") {       // 保存
-                  self.tipsVisible = true
-                  modalHide(function() {
-                    self.tipsVisible = false
-                    if (self.$route.name === "商家申请注册详情页") {
-                      self.$router.push({path: "/bus_register/apply"})
-                    } else if (self.$route.name === "新店注册详情页") {
-                      self.$router.push({path: "/bus_register/new"})
-                    }
-                  }, 1000)
-                } else {                    // 送审
-                  self.active = self.active + 1
-                  self.currentView = step
-                }
-                self.$store.commit("V_FLAG", false)
-              }
-            })
-        }
-      },
-
       // 上一步
-      previous_step: function(step) {
+      previous_step: function() {
         var self = this
-        if (self.active === 3) {
+        if (self.active === 2) {
           self.active = self.active - 1
-          self.currentView = "qualificationInfo"
-        } else if (self.active === 2) {
-          self.active = self.active - 1
-          self.currentView = "basicInfo"
+          self.currentView = "storeInfo"
         }
       }
     },
     components: {
       stepsComponent,
       storeInfo,
-      dialogTips
+      coopInfo,
+      submitSuccess
     }
   }
 </script>

@@ -26,7 +26,6 @@
   import busAddress from "../../../../components/form/address/index"
   import busClassification from "../../../../components/form/classification/index"
   import telComponent from "../../../../components/form/tel/index"
-  import {isName, isPhone, getUrlParameters} from "../../../../common/common"
 
   export default{
     data() {
@@ -57,32 +56,24 @@
         self.basicForm[name] = value   // 返回模块数据
       },
       // 基本信息验证
-      basicValidate: function() {
+      storeValidate: function() {
         var self = this
-        self.$refs.bus_class_children.classValidate()    // 分类验证
         self.$refs.tel_children.telValidate()            // 座机验证
         self.$refs.address_children.addressValidate()    // 地址验证
         self.$refs.basicForm.validate((valid) => {
-          if (valid && self.moduleV.class && self.moduleV.tel && self.moduleV.address) {
-            var formData = {
-              "step": "BASE",
-              "applynum": "",
-              "businfo": {
-                "tel": self.basicForm.tel,                          // 店铺座机
-                "busname": self.basicForm.busname,      // 店铺名称
-                "province_id": self.basicForm.address.selectArr[0],  // 所在省
-                "city_id": self.basicForm.address.selectArr[1],      // 所在城市
-                "district_id": self.basicForm.address.selectArr[2],  // 所在区县
-                "city_near_id": self.basicForm.address.selectArr[3], // 所属商圈
-                "address_details": self.basicForm.address.detail, // 详细地址
-                "address_point": self.basicForm.address.point,    // 百度地图坐标
-                "lclass_id": self.basicForm.class[0],             // 一级分类
-                "mclass_id": self.basicForm.class[1],             // 二级分类
-                "sclass_id": self.basicForm.class[2]              // 三级分类
-              }
+          if (valid && self.moduleV.tel && self.moduleV.address) {
+            var businfo = {
+              "busname": self.basicForm.busname,      // 店铺名称
+              "tel": self.basicForm.tel,                          // 店铺座机
+              "province_id": self.basicForm.address.selectArr[0],  // 所在省
+              "city_id": self.basicForm.address.selectArr[1],      // 所在城市
+              "district_id": self.basicForm.address.selectArr[2],  // 所在区县
+              "city_near_id": self.basicForm.address.selectArr[3], // 所属商圈
+              "address_details": self.basicForm.address.detail, // 详细地址
+              "address_point": self.basicForm.address.point     // 百度地图坐标
             }
-            self.$store.commit("FORM_DATA", formData)
             self.$store.commit("V_FLAG", true)
+            self.$emit("storeValidate", true, businfo)
           }
         })
       }

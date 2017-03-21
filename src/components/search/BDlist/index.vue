@@ -1,7 +1,13 @@
 <template>
-  <el-select v-model="bd" clearable size="small" ref="aaa"
-             placeholder="请选择" @change="bd_filter">
-    <el-option v-for="item in bdlist" :label="item.name" :value="item.bd_id"></el-option>
+  <el-select v-model="bd"
+             ref="bdChild"
+             clearable
+             size="small"
+             placeholder="请选择"
+             @change="getRules">
+    <el-option v-for="item in bdlist"
+               :label="item.name"
+               :value="item.bd_id"></el-option>
   </el-select>
 </template>
 
@@ -9,6 +15,9 @@
   import {BDAPPLY_LIST_URL} from "../../../common/interface"
 
   export default{
+    props: {
+      name: String
+    },
     data() {
       return {
         bdlist: [],
@@ -28,10 +37,14 @@
           }
         })
       },
-      bd_filter: function(value) {
+      getRules: function(value) {
         var self = this
-        self.bd = value
-        self.$emit("bd_filter", value)
+        var val = self.$refs.bdChild.selectedLabel
+        self.$emit("getRules", self.name, val)
+      },
+      reset: function() {
+        var self = this
+        self.bd = ""
       }
     }
   }

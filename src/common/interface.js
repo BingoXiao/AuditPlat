@@ -242,6 +242,8 @@ const COMPAINTS_TABLE_URL = HOST_URL + "/reports/"
 // 提交 post
 const COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/"
 
+/* 商家中心注册 */
+const CNTER_REGISTER = HOST_URL + "/register/save-bus/"
 
 exports = module.exports = {
   ACCOUNTS_LOGIN_URL,
@@ -328,5 +330,6 @@ exports = module.exports = {
   BANKS_URL,
   SUBBANKS_URL,
   TEMP_PHOTOS_URL,
-  FESTIVALS_URL
+  FESTIVALS_URL,
+  CNTER_REGISTER
 }

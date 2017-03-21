@@ -4,15 +4,24 @@
     <el-col :span="24" class="toolbar">
       <el-form :inline="true" label-width="70px">
         <el-form-item label="申请号：">
-          <input-search></input-search>
+          <input-search ref="number" name="number"
+                        v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
 
         <el-form-item class="select" label="状态：">
-          <select-search :options="search.state"></select-search>
+          <select-search ref="status" name="status"
+                         :options="search.state"
+                         v-on:getRules="getFilterRules"></select-search>
         </el-form-item>
 
         <el-form-item label="商家分类：" label-width="100px">
-          <classify-search></classify-search>
+          <classify-search ref="class" name="class"
+                           v-on:getRules="getFilterRules"></classify-search>
+        </el-form-item>
+
+        <el-form-item label="" label-width="10px">
+          <el-button type="primary" size="small" icon="search"
+                     @click="filterTable">查询</el-button>
         </el-form-item>
 
         <el-form-item style="float: right">
@@ -54,6 +63,7 @@
 </template>
 
 <script>
+  import alasql from "alasql"
   import inputSearch from "../../../components/search/input/index"
   import selectSearch from "../../../components/search/select/index"
   import classifySearch from "../../../components/search/classify/index"
@@ -78,6 +88,9 @@
           }
         ],
         search: {                 // 搜索栏
+          number: "",   // 申请号
+          status: "",     // 状态
+          class: "",      // 分类
           state: [                // 状态列表
             {
               value: "筹备中",
@@ -96,6 +109,7 @@
         table: {
           bususer_id: ""
         },
+        totalDatas: [],           // 表格总数据
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
@@ -104,23 +118,68 @@
     },
     mounted: function() {
       var self = this
-      self.getTables()  // APPLY,NEW,BRANCH
+      self.getTables(function(datas) {
+        self.fillTable(datas)
+      })
     },
     methods: {
       /* 获取数据（表格） */
-      getTables: function() {
+      getTables: function(func) {
         var self = this
         self.loading = true
         self.$http.get(BUSLIST_TABLE_URL).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
-            setTimeout(function() {
-              self.loading = false
-            })
+            func(datas)
           }
         })
+      },
+      /* 填充（表格） */
+      fillTable: function(datas) {
+        var self = this
+        self.totalDatas = datas
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
+        self.totalItems = parseInt(datas.length)
+        setTimeout(function() {
+          self.loading = false
+        })
+      },
+
+      /* 获取过滤条件 */
+      getFilterRules: function(name, value) {
+        var self = this
+        self.search[name] = value
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this
+        var rules = "SELECT * FROM ? WHERE number LIKE '%" + self.search.number + "%'"
+        if (self.search.status !== "") {    // 状态
+          rules += " AND status = ?"
+        }
+        if (self.search.class !== "") {    // 分类
+          rules += " AND `class` LIKE '%" + self.search.class + "%'"
+        }
+        self.getTables(function(datas) {
+          var res = alasql(rules, [datas, self.search.status])
+          self.currentPage = 1
+          self.fillTable(res)
+        })
+      },
+      /* 清空筛选 */
+      rulesReset: function() {
+        var self = this
+        self.$refs.class.reset()
+        self.$refs.number.reset()
+        self.$refs.status.reset()
+        self.currentPage = 1
+      },
+
+      /* 改变当前页 */
+      handleCurrentChange(currentPage) {
+        var self = this
+        self.currentPage = currentPage
+        self.fillTable(self.totalDatas)
       },
 
       // 查看
@@ -135,12 +194,6 @@
         var href = BUSLIST_DOWNLOAD_URL
         var otherWindow = window.open(href, "_self")
         otherWindow.opener = null
-      },
-
-      /* 改变当前页 */
-      handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
       }
     },
     components: {

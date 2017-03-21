@@ -2,6 +2,7 @@ var path = require('path')
 var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
+var IgnorePlugin =  require("webpack").IgnorePlugin
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -36,6 +37,7 @@ module.exports = {
     }
   },
   module: {
+    noParse:[/alasql/],
     rules: [
       {
         test: /\.(js|vue)$/,
@@ -73,5 +75,7 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  //Will ignore the modules fs, path, xlsx
+  plugins:[new IgnorePlugin(/(^fs$|cptable|jszip|xlsx|^es6-promise$|^net$|^tls$|^forever-agent$|^tough-cookie$|cpexcel|^path$)/)]
 }

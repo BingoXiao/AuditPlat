@@ -1,7 +1,11 @@
 <template>
   <div>
-    <el-select v-model="lg_value" placeholder="合作行业" size="small"
-               class="small" clearable @change="get_md_list">
+    <el-select v-model="lg_value"
+               placeholder="合作行业"
+               size="small"
+               class="small"
+               clearable
+               @change="get_md_list">
       <el-option
         v-for="item in lg_list"
         :label="item.name"
@@ -9,8 +13,13 @@
       </el-option>
     </el-select>
 
-    <el-select v-model="md_value" placeholder="品类" size="small"
-               class="small" clearable @change="get_sm_list">
+    <el-select ref="mdlist"
+               v-model="md_value"
+               placeholder="品类"
+               size="small"
+               class="small"
+               clearable
+               @change="get_sm_list">
       <el-option
         v-for="item in md_list"
         :label="item.name"
@@ -18,8 +27,14 @@
       </el-option>
     </el-select>
 
-    <el-select v-model="sm_value" placeholder="子类别" size="small"
-               class="small" clearable v-show="smallVisible" @change="get_sm_data">
+    <el-select ref="smlist"
+               v-model="sm_value"
+               placeholder="子类别"
+               size="small"
+               class="small"
+               clearable
+               v-show="smallVisible"
+               @change="get_sm_data">
       <el-option
         v-for="item in sm_list"
         :label="item.name"
@@ -34,6 +49,9 @@
   import {CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../common/interface"
 
   export default{
+    props: {
+      name: String
+    },
     data() {
       return {
         smallVisible: true,   // 三级分类显示
@@ -97,9 +115,17 @@
             }
           })
         }
+        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel)
       },
       get_sm_data: function(value) {
-        console.log(value)
+        var self = this
+        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel + self.$refs.smlist.selectedLabel)
+      },
+      reset: function() {
+        var self = this
+        self.lg_value = ""
+        self.md_value = ""
+        self.sm_value = ""
       }
     }
   }

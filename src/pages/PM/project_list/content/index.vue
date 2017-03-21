@@ -17,7 +17,6 @@
   import tabComponent from "../../../../components/tabs/inner/index"
   import packageInfo from "../../../Review/project_review/module/index"
   import hotSpot from "./hotSpot/index"
-  import {getUrlParameters} from "../../../../common/common"
 
   export default{
     data() {

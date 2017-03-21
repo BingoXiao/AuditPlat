@@ -11,24 +11,37 @@
       <el-form :inline="true" label-width="90px">
         <el-form-item label="日期：" label-width="60px"
                       v-show="$route.params.type==='record'">
-          <date-picker></date-picker>
+          <date-picker ref="dateRange" name="dateRange"
+                       v-on:getRules="getFilterRules"></date-picker>
         </el-form-item>
 
         <el-form-item class="select" label="状态：" label-width="60px"
                       v-show="$route.params.type==='record'">
-          <select-search :options="search.state"></select-search>
+          <select-search ref="status" name="status"
+                         :options="search.state"
+                         v-on:getRules="getFilterRules"></select-search>
         </el-form-item>
 
         <el-form-item label="商家分类：">
-          <classify-search></classify-search>
+          <classify-search ref="class" name="class"
+                           v-on:getRules="getFilterRules"></classify-search>
         </el-form-item>
 
-        <el-form-item label="申请号：" label-width="70px">
-          <input-search></input-search>
+        <el-form-item label="门店名称：" label-width="90px">
+          <input-search ref="name" name="name"
+                        :placeholder="search.placeholder"
+                        v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
 
         <el-form-item class="select" label="项目类型：">
-          <select-search :options="search.type"></select-search>
+          <select-search ref="typein" name="typein"
+                         :options="search.type"
+                         v-on:getRules="getFilterRules"></select-search>
+        </el-form-item>
+
+        <el-form-item label="" label-width="10px">
+          <el-button type="primary" size="small" icon="search"
+                     @click="filterTable">查询</el-button>
         </el-form-item>
       </el-form>
     </el-col>
@@ -77,6 +90,7 @@
 </template>
 
 <script>
+  import alasql from "alasql"
   import tabComponent from "../../../components/tabs/router/index"
   import datePicker from "../../../components/search/datePicker/index"
   import classifySearch from "../../../components/search/classify/index"
@@ -106,7 +120,13 @@
             name: "记录"
           }
         ],
-        search: {                 // 搜索栏
+        search: {          // 搜索栏
+          name: "",    // 申请号
+          placeholder: "门店名称/项目名称",
+          dateRange: [],   // 日期
+          status: "",      // 状态
+          class: "",       // 分类
+          typein: "",      // 项目类型
           state: [               // 状态列表
             {
               value: "通过",
@@ -124,6 +144,7 @@
               label: "商品券"
             }]
         },
+        totalDatas: [],           // 表格总数据
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
@@ -143,19 +164,34 @@
     // 在当前路由改变，但是该组件被复用时调用
     // 可以访问组件实例 `this`
     beforeRouteUpdate(to, from, next) {
+      var self = this
       if (to.path === "/project_verify/:type") {
         next({path: "/project_verify/online"})
       } else {
         next()
       }
-      this.getTables()
+      self.getTables(function(datas) {
+        self.fillTable(datas)
+      })
     },
     mounted: function() {
-      this.getTables()  // APPLY,NEW,BRANCH
+      var self = this
+      self.getTables(function(datas) {
+        self.fillTable(datas)
+      })
     },
     methods: {
+      /* tab改变时，表格内容切换(父子组件通信) */
+      tabChange: function() {
+        var self = this
+        self.rulesReset()
+        self.getTables(function(datas) {
+          self.fillTable(datas)
+        })
+      },
+
       /* 获取数据（表格） */
-      getTables: function() {
+      getTables: function(func) {
         var self = this
         self.loading = true
         let arr = {
@@ -176,27 +212,66 @@
                 item.class[i] = item.class[i] + " > "
               }
             }
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
-            setTimeout(function() {
-              self.loading = false
-            })
+            func(datas)
           }
         })
       },
-
-      /* tab改变时，表格内容切换(父子组件通信) */
-      tabChange: function() {
+      /* 填充（表格） */
+      fillTable: function(datas) {
         var self = this
-        self.currentPage = 1
-        self.getTables()
+        self.totalDatas = datas
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
+        self.totalItems = parseInt(datas.length)
+        setTimeout(function() {
+          self.loading = false
+        })
       },
 
-      /* 改变当前页 */
+      /* 获取过滤条件 */
+      getFilterRules: function(name, value) {
+        var self = this
+        self.search[name] = value
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this
+        var rules = "SELECT * FROM ? WHERE bus_names LIKE '%" + self.search.name + "%'" +
+          " OR name LIKE '%" + self.search.name + "%'"
+        if (self.search.status !== "") {    // 状态
+          rules += " AND status = ?"
+        }
+        if (self.search.typein !== "") {    // 项目类型
+          rules += " AND item_type LIKE '%" + self.search.typein + "%'"
+        }
+        if (self.search.class !== "") {    // 分类
+          rules += " AND `class` LIKE '%" + self.search.class + "%'"
+        }
+        if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
+          rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+        }
+        self.getTables(function(datas) {
+          var res = alasql(rules, [datas, self.search.status])
+          self.currentPage = 1
+          self.fillTable(res)
+        })
+      },
+      /* 清空筛选 */
+      rulesReset: function() {
+        var self = this
+        self.$refs.class.reset()
+        self.$refs.dateRange.reset()
+        self.$refs.name.reset()
+        self.$refs.status.reset()
+        self.$refs.typein.reset()
+        self.currentPage = 1
+      },
+
+      /* 翻页 */
       handleCurrentChange(currentPage) {
         var self = this
         self.currentPage = currentPage
-        self.getTables()
+        self.fillTable(self.totalDatas)
       },
 
       /* 查看 */

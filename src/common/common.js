@@ -26,7 +26,6 @@ function setCookie(cookieName, value, days) {
     document.cookie = cookieName + "=" + value
   }
 }
-
 // 读取cookie
 function getCookie(cookieName) {
   var acookie = document.cookie.split("; ")
@@ -41,7 +40,6 @@ function getCookie(cookieName) {
     }
   }
 }
-
 // 删除cookie
 function clearCookie(cookieName) {
   if (document.cookie.indexOf(cookieName + "=") !== -1) {
@@ -51,6 +49,7 @@ function clearCookie(cookieName) {
     document.cookie = cookieName + "=" + "" + ";expires=" + date.toUTCString()
   }
 }
+
 
 // 获取对象数组中指定属性下的值
 function getValue(arr, ser, id, name) {
@@ -64,6 +63,7 @@ function getValue(arr, ser, id, name) {
   }
   return value
 }
+
 
 /* ************ 验证 ************ */
 // 姓名验证
@@ -140,7 +140,6 @@ function isPassword(value) {
   return obj
 }
 
-
 // 营业执照,餐饮许可证名称
 function isLicName(value, str) {
   var obj = {}
@@ -215,6 +214,40 @@ function isbankNumber(value) {
   return obj
 }
 
+// 人均
+function isCostPerPerson(value) {
+  var obj = {}
+  if (value === "") {
+    obj = {flag: false, error: "请填写人均"}
+  } else {
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: "请填写人均"}
+    } else {
+      if (!(/^\d{1,4}$|^(\d{1,4})\.(\d{1,2})$/.test(value))) {
+        obj = {flag: false, error: "人均为不高于4位且最多包含两位小数的数字"}
+      } else {
+        obj = {flag: true, error: ""}
+      }
+    }
+  }
+  return obj
+}
+// 月销售额
+function isSalePerMonth(value) {
+  var obj = {}
+  if (/^\s+$/.test(value)) {
+    obj = {flag: false, error: "请填写月销售额"}
+  } else {
+    if (!(/^\d{1,9}$|^(\d{1,9})\.(\d{1,2})$/.test(value))) {
+      obj = {flag: false, error: "月销售额为不高于9位且最多包含两位小数的数字"}
+    } else {
+      obj = {flag: true, error: ""}
+    }
+  }
+  return obj
+}
+
+
 /* 模态框 */
 function modalHide(fun) {
   setTimeout(fun, 2000)
@@ -286,6 +319,8 @@ module.exports = {
   isLicNumber,
   isLicAdd,
   isbankNumber,
+  isCostPerPerson,
+  isSalePerMonth,
   modalHide,
   compareArrData,
   compareObjArrData,

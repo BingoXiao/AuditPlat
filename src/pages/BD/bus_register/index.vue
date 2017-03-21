@@ -10,19 +10,29 @@
     <el-col :span="24" class="toolbar">
       <el-form :inline="true" label-width="60px">
         <el-form-item label="日期：">
-          <date-picker></date-picker>
+          <date-picker ref="dateRange" name="dateRange"
+                       v-on:getRules="getFilterRules"></date-picker>
         </el-form-item>
 
         <el-form-item label="申请号：" label-width="80px">
-          <input-search></input-search>
+          <input-search ref="applynum" name="applynum"
+                        v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
 
         <el-form-item class="select" label="状态：">
-          <select-search :options="search.state"></select-search>
+          <select-search ref="status" name="status"
+                         :options="search.state"
+                         v-on:getRules="getFilterRules"></select-search>
         </el-form-item>
 
         <el-form-item class="select" label="BD：">
-          <bd-list v-on:bd_filter="bd_filter"></bd-list>
+          <bd-list ref="bd" name="bd"
+                   v-on:getRules="getFilterRules"></bd-list>
+        </el-form-item>
+
+        <el-form-item label="" label-width="10px">
+          <el-button type="primary" size="small" icon="search"
+                     @click="filterTable">查询</el-button>
         </el-form-item>
 
         <el-form-item v-show="$route.params.type !== 'apply'" style="float: right">
@@ -82,6 +92,7 @@
 </template>
 
 <script>
+  import alasql from "alasql"
   import tabComponent from "../../../components/tabs/router/index"
   import datePicker from "../../../components/search/datePicker/index"
   import inputSearch from "../../../components/search/input/index"
@@ -107,11 +118,15 @@
             name: "商家申请注册"
           }
         ],
-        search: {                 // 搜索栏
+        search: {         // 搜索栏
+          dateRange: [],  // 日期
+          applynum: "",   // 申请号
+          status: "",     // 状态
+          bd: "",         // BD
           state: [               // 状态列表
             {
               value: "未处理",
-              label: "已分配"
+              label: "未处理"
             }, {
               value: "处理中",
               label: "处理中"
@@ -123,6 +138,7 @@
               label: "驳回"
             }]
         },
+        totalDatas: [],           // 表格总数据
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
@@ -142,49 +158,99 @@
     // 在当前路由改变，但是该组件被复用时调用
     // 可以访问组件实例 `this`
     beforeRouteUpdate(to, from, next) {
+      var self = this
       if (to.path === "/bus_register/:type") {
         next({path: "/bus_register/new"})
       } else {
         next()
       }
-      this.getTables()
+      self.getTables(function(datas) {  // APPLY,NEW,BRANCH
+        self.totalDatas = datas
+        self.fillTable(datas)
+        self.rulesReset()
+      })
     },
     mounted: function() {
-      this.getTables()    // APPLY,NEW,BRANCH
+      var self = this
+      self.getTables(function(datas) {  // APPLY,NEW,BRANCH
+        self.totalDatas = datas
+        self.fillTable(datas)
+      })
     },
     methods: {
+      /* tab改变时，表格内容切换(父子组件通信) */
+      tabChange: function() {
+        var self = this
+        self.rulesReset()
+        self.getTables(function(datas) {  // APPLY,NEW,BRANCH
+          self.totalDatas = datas
+          self.fillTable(datas)
+        })
+      },
+
       /* 获取数据（表格） */
-      getTables: function() {
+      getTables: function(func) {
         var self = this
         self.loading = true
         var type = (self.$route.params.type).toUpperCase()
         self.$http.get(BDREGISTER_TABLE_URL + "?type=" + type).then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
-            setTimeout(function() {
-              self.loading = false
-            })
+            func(datas)
           }
         })
       },
-
-      /* tab改变时，表格内容切换(父子组件通信) */
-      tabChange: function() {
-        this.currentPage = 1
-        this.getTables()
+      /* 填充（表格） */
+      fillTable: function(datas) {
+        var self = this
+        self.totalDatas = datas
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
+        self.totalItems = parseInt(datas.length)
+        setTimeout(function() {
+          self.loading = false
+        })
       },
 
-      /* 改变当前页 */
+      /* 获取过滤条件 */
+      getFilterRules: function(name, value) {
+        var self = this
+        self.search[name] = value
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this
+        var rules = "SELECT * FROM ? WHERE applynum LIKE '%" + self.search.applynum + "%'"
+        if (self.search.status !== "") {    // 状态
+          rules += " AND status = ?"
+        }
+        if (self.search.bd !== "") {    // bd
+          rules += " AND bd LIKE '%" + self.search.bd + "%'"
+        }
+        if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
+          rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+        }
+        self.getTables(function(datas) {
+          var res = alasql(rules, [datas, self.search.status])
+          self.currentPage = 1
+          self.fillTable(res)
+        })
+      },
+      /* 清空筛选 */
+      rulesReset: function() {
+        var self = this
+        self.$refs.dateRange.reset()
+        self.$refs.applynum.reset()
+        self.$refs.bd.reset()
+        self.$refs.status.reset()
+        self.currentPage = 1
+      },
+
+      /* 翻页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
-      },
-
-      // BD下拉框筛选
-      bd_filter: function(value) {
-        alert(value)
+        var self = this
+        self.currentPage = currentPage
+        self.fillTable(self.totalDatas)
       },
 
       /* 查看 */
@@ -194,7 +260,6 @@
         otherWindow = window.open(href)
         otherWindow.opener = null
       },
-
       /* 商家申请注册 */
       applyRe: function(row) {
         var href, otherWindow
@@ -225,7 +290,6 @@
         otherWindow = window.open(href)
         otherWindow.opener = null
       },
-
       /* 删除（新店、分店） */
       deleteBus: function(row) {
         var self = this
@@ -237,7 +301,10 @@
           self.$http.post(BDREGISTER_DELETE_URL(row.applynum))
           .then(function(response) {
             if (response.body.success) {
-              self.getTables()
+              self.getTables(function(datas) {
+                self.fillTable(datas)
+                self.rulesReset()
+              })
             }
           })
         })

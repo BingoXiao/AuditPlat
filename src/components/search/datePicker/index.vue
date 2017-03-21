@@ -8,13 +8,16 @@
       size="small"
       placeholder="请选择日期范围"
       :picker-options="pickerOptions"
-      @change="getDate">
+      @change="getRules">
     </el-date-picker>
   </div>
 </template>
 
 <script>
   export default{
+    props: {
+      name: String
+    },
     data() {
       return {
         range: "",     // 时间范围
@@ -48,9 +51,14 @@
       }
     },
     methods: {
-      getDate: function(value) {   // 获取时间范围
-        self.range = value
-//        console.log(self.range.split("~")[1])
+      reset: function() {
+        var self = this
+        self.range = ""
+      },
+      getRules: function(value) {
+        var self = this
+        var arr = value.split("~")
+        self.$emit("getRules", self.name, arr)
       }
     }
   }

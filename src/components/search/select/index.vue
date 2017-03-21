@@ -1,6 +1,9 @@
 <template>
-  <el-select v-model="value" clearable size="small"
-             placeholder="全部" @change="filter">
+  <el-select v-model="value"
+             clearable
+             size="small"
+             placeholder="全部"
+             @change="getRules">
     <el-option
       v-for="item in options"
       :label="item.label"
@@ -11,15 +14,23 @@
 
 <script>
   export default{
-    props: ["options"],
+    props: {
+      options: Array,
+      name: String
+    },
     data() {
       return {
         value: ""
       }
     },
     methods: {
-      filter: function(value) {
-        console.log(value)
+      reset: function() {
+        var self = this
+        self.value = ""
+      },
+      getRules: function(value) {
+        var self = this
+        self.$emit("getRules", self.name, value)
       }
     }
   }

@@ -56,9 +56,9 @@
 </template>
 
 <script>
-  import tabComponent from "../../../../components/tabs/inner/index"
-  import {EVENTS_VIEWEVENT_URL} from "../../../../common/interface"
-  import {getUrlParameters} from "../../../../common/common"
+  import tabComponent from "../../../../components/tabs/inner/index";
+  import {EVENTS_VIEWEVENT_URL} from "../../../../common/interface";
+  import {getUrlParameters} from "../../../../common/common";
 
   export default{
     data() {
@@ -72,39 +72,39 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.getTables()
+      var self = this;
+      self.getTables();
     },
     methods: {
       /* 获取表格数据 */
       getTables: function() {
-        var self = this
-        var id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        var id = getUrlParameters(window.location.hash, "id");
         self.$http.get(EVENTS_VIEWEVENT_URL(id)).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content.clist
-            self.tableDatas = datas
+            var datas = response.body.content.clist;
+            self.tableDatas = datas;
           }
-        })
+        });
       },
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        this.currentPage = currentPage;
+        this.getTables();
       },
       // 返回活动列表
       backTo: function() {
-        var self = this
-        self.$router.push({path: "/activity_list/all"})
+        var self = this;
+        self.$router.push({path: "/activity_list/all"});
       }
     },
     components: {
       tabComponent
     }
-  }
+  };
 </script>
 
 <style scoped>

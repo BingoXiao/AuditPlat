@@ -41,9 +41,9 @@
 </template>
 
 <script>
-  import headerMenu from "../../components/headerMenu/index"
-  import {ACCOUNTS_LOGIN_URL} from "../../common/interface"
-  import {setCookie, isAccount, isPassword} from "../../common/common"
+  import headerMenu from "../../components/headerMenu/index";
+  import {ACCOUNTS_LOGIN_URL} from "../../common/interface";
+  import {setCookie, isAccount, isPassword} from "../../common/common";
 
   export default {
     data() {
@@ -53,94 +53,94 @@
         checked: true, // 下次自动登录
         accErr: "",   // 账号验证
         pwdErr: ""   // 密码验证
-      }
+      };
     },
     methods: {
       /* 账号验证 */
       accountV: function() {
-        var self = this
-        var Account = isAccount(self.account)
+        var self = this;
+        var Account = isAccount(self.account);
         if (Account.flag) {
-          self.accErr = ""
-          document.getElementsByName("account")[0].style.borderColor = "rgb(191, 203, 217)"
+          self.accErr = "";
+          document.getElementsByName("account")[0].style.borderColor = "rgb(191, 203, 217)";
         } else {
-          self.accErr = Account.error
-          document.getElementsByName("account")[0].style.borderColor = "#ff4949"
+          self.accErr = Account.error;
+          document.getElementsByName("account")[0].style.borderColor = "#ff4949";
         }
-        return Account.flag
+        return Account.flag;
       },
       /* 密码验证 */
       passwordV: function() {
-        var self = this
-        var Password = isPassword(self.password)
+        var self = this;
+        var Password = isPassword(self.password);
         if (self.password === "") {
-          self.pwdErr = "请输入密码"
-          document.getElementsByName("password")[0].style.borderColor = "#ff4949"
-          Password.flag = false
+          self.pwdErr = "请输入密码";
+          document.getElementsByName("password")[0].style.borderColor = "#ff4949";
+          Password.flag = false;
         } else {
           if (Password.flag) {
-            self.pwdErr = ""
-            document.getElementsByName("password")[0].style.borderColor = "rgb(191, 203, 217)"
+            self.pwdErr = "";
+            document.getElementsByName("password")[0].style.borderColor = "rgb(191, 203, 217)";
           } else {
-            self.pwdErr = Password.error
-            document.getElementsByName("password")[0].style.borderColor = "#ff4949"
+            self.pwdErr = Password.error;
+            document.getElementsByName("password")[0].style.borderColor = "#ff4949";
           }
         }
 
-        return Password.flag
+        return Password.flag;
       },
       /* 登录提交 */
       onSubmit: function() {
-        var self = this
+        var self = this;
         if (self.accountV() && self.passwordV()) {
-          var loginform = document.getElementById("loginForm")
-          var formData = new FormData(loginform)
+          var loginform = document.getElementById("loginForm");
+          var formData = new FormData(loginform);
           /*  记录登录状态 */
           self.$http.post(ACCOUNTS_LOGIN_URL, formData).then(function(response) {
             if (response.data.success) {
               /*  记录状态 */
-              var perms = response.data.content.perms
-              self.$store.commit("AUTH_LOGIN", true)
-              self.$store.commit("USER_ID", response.body.content.id)
-              self.$store.commit("USER_NAME", self.account)
-              self.$store.commit("USER_DATA", perms)
+              var perms = response.data.content.perms;
+              self.$store.commit("AUTH_LOGIN", true);
+              self.$store.commit("USER_ID", response.body.content.id);
+              self.$store.commit("USER_NAME", self.account);
+              self.$store.commit("USER_DATA", perms);
 
               /* 自动登录 */
               if (self.checked) {
-                setCookie("REMEMBER", "1", 30)
+                setCookie("REMEMBER", "1", 30);
               }
 
               /* 根据权限进入不同得页面 */
               if (perms.item_list === 1) { /* 管理员账号 */
-                self.$router.push({path: "/setting"})
+                self.$router.push({path: "/setting"});
               } else {   /* BD */
                 if (perms.bus_apply === 1 || perms.bus_register === 1) {
                   if (perms.bus_apply === 1) {
-                    self.$router.push({path: "/bus_apply"})
+                    self.$router.push({path: "/bus_apply"});
                   } else {
-                    self.$router.push({path: "/bus_register/:type"})
+                    self.$router.push({path: "/bus_register/:type"});
                   }
                 } else {  /* 审核人员 */
                   if (perms.bus_verify === 1 || perms.checkout_verify === 1 || perms.project_verify === 1) {
                     if (self.$store.state.user_data.bus_verify === 1) {
-                      self.$router.push({path: "/bus_review/:type"})
+                      self.$router.push({path: "/bus_review/:type"});
                     } else if (perms.checkout_verify === 1) {
-                      self.$router.push({path: "/checkout_verify/:type"})
+                      self.$router.push({path: "/checkout_verify/:type"});
                     } else {
-                      self.$router.push({path: "/project_verify/:type"})
+                      self.$router.push({path: "/project_verify/:type"});
                     }
                   }
                 }
               }
             }
-          })
+          });
         } else {
-          return false
+          return false;
         }
       }
     },
     components: {
       headerMenu
     }
-  }
+  };
 </script>

@@ -11,8 +11,8 @@
 </template>
 
 <script>
-  import tableList from "./table_list/index"
-  import viewActivity from "./view_activity/index"
+  import tableList from "./table_list/index";
+  import viewActivity from "./view_activity/index";
 
   export default {
     // 在渲染该组件的对应路由被 confirm 前调用
@@ -20,25 +20,25 @@
     // 因为当钩子执行前，组件实例还没被创建
     beforeRouteEnter(to, from, next) {
       if (to.path === "/activity_list/:type") {
-        next({path: "/activity_list/all"})
+        next({path: "/activity_list/all"});
       } else {
-        next()
+        next();
       }
     },
     // 在当前路由改变，但是该组件被复用时调用
     // 可以访问组件实例 `this`
     beforeRouteUpdate(to, from, next) {
       if (to.path === "/activity_list/:type") {
-        next({path: "/activity_list/all"})
+        next({path: "/activity_list/all"});
       } else {
-        next()
+        next();
       }
     },
     components: {
       tableList,
       viewActivity
     }
-  }
+  };
 </script>
 
 <style scoped>

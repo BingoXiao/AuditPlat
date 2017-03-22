@@ -234,57 +234,58 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import inputSearch from "../../components/search/input/index"
-  import selectSearch from "../../components/search/select/index"
-  import dialogTips from "../../components/dialogTips/index.vue"
+  import alasql from "alasql";
+  import inputSearch from "../../components/search/input/index";
+  import selectSearch from "../../components/search/select/index";
+  import dialogTips from "../../components/dialogTips/index.vue";
   import {ACCOUNTS_TABLE_URL, ACCOUNTS_ADD_URL, ACCOUNTS_EDITINFO_URL,
-    ACCOUNTS_EDITPWD_URL, ACCOUNTS_DELETE_URL, ACCOUNTS_FROZEN_URL} from "../../common/interface"
-  import {isName, isAccount, isPassword, modalHide} from "../../common/common"
+    ACCOUNTS_EDITPWD_URL, ACCOUNTS_DELETE_URL,
+    ACCOUNTS_FROZEN_URL} from "../../common/interface";
+  import {isName, isAccount, isPassword, modalHide} from "../../common/common";
 
   export default{
     data() {
       // 姓名验证
       var nameV = (rule, value, callback) => {
-        var Name = isName(value)
+        var Name = isName(value);
         if (Name.flag) {
-          callback()
+          callback();
         } else {
-          callback(new Error(Name.error))
+          callback(new Error(Name.error));
         }
-      }
+      };
       // 账号验证
       var accountV = (rule, value, callback) => {
-        var Account = isAccount(value)
+        var Account = isAccount(value);
         if (Account.flag) {
-          callback()
+          callback();
         } else {
-          callback(new Error(Account.error))
+          callback(new Error(Account.error));
         }
-      }
+      };
       // 密码验证
       var passwordV = (rule, value, callback) => {
-        var Password = isPassword(value)
+        var Password = isPassword(value);
         if (value === "") {
-          callback(new Error("请输入密码"))
+          callback(new Error("请输入密码"));
         } else {
           if (Password.flag) {
-            callback()
+            callback();
           } else {
-            callback(new Error(Password.error))
+            callback(new Error(Password.error));
           }
         }
-      }
+      };
       // 确认密码
       var confirmPwdV = (rule, value, callback) => {
         if (value === "") {
-          callback(new Error("请再次输入密码"))
+          callback(new Error("请再次输入密码"));
         } else if (value !== this.editPasswordForm.newPwd) {
-          callback(new Error("两次输入密码不一致!"))
+          callback(new Error("两次输入密码不一致!"));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       return {
         loading: false,
         search: {          // 搜索栏
@@ -359,177 +360,178 @@
             {required: true, validator: confirmPwdV, trigger: "blur"}
           ]
         }
-      }
+      };
     },
     mounted: function() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取用户数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(ACCOUNTS_TABLE_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充表格 */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY id ASC", [data]);
+        self.totalDatas = datas;
         for (var i = 0; i < datas.length; i++) {
-          var item = datas[i]
-          var service = []
+          var item = datas[i];
+          var service = [];
           /* 已开通服务 */
           if (item.bus_verify) {   // 商家审核权限
-            service.push("icon-kaidianchenggong")
+            service.push("icon-kaidianchenggong");
           }
           if (item.project_verify) {  // 项目审核权限
-            service.push("icon-gendan")
+            service.push("icon-gendan");
           }
           if (item.checkout_verify) {  // 结款审核权限
-            service.push("icon-shiliangzhinengduixiang")
+            service.push("icon-shiliangzhinengduixiang");
           }
           if (item.bus_apply) {  // 商家申请权限
-            service.push("icon-audit")
+            service.push("icon-audit");
           }
           if (item.bus_register) {  // 商家注册权限
-            service.push("icon-xiangmushu")
+            service.push("icon-xiangmushu");
           }
           if (item.item_list) {  // 项目注册权限
-            service.push("icon-xiangmu")
+            service.push("icon-xiangmu");
           }
-          datas[i].service = service
+          datas[i].service = service;
         }
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'";
         if (self.search.status !== "") {
-          rules += "and is_active = ?"
+          rules += "and is_active = ?";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.totalDatas = res
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.totalDatas = res;
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       /* 表格内勾选用户 */
       selectUsers: function(selection) {
-        var self = this
-        var arr = []
+        var self = this;
+        var arr = [];
         if (selection.length > 0) {
           for (var i = 0; i < selection.length; i++) {
             let obj = {
               "id": selection[i].id,
               "is_active": selection[i].is_active         // true表示启用，false为冻结
-            }
-            arr.push(obj)
+            };
+            arr.push(obj);
           }
-          self.table.multiple = arr
+          self.table.multiple = arr;
           self.table.single = {
             "id": selection[selection.length - 1].id,
             "is_active": selection[selection.length - 1].is_active
-          }
+          };
         } else {
-          self.table.multiple = []
-          self.table.single = []
+          self.table.multiple = [];
+          self.table.single = [];
         }
       },
 
       /* 添加用户 */
       addUsers: function(formName) {
-        var self = this
-        var form = document.getElementById("addUsersform")
-        var formData = new FormData(form)
+        var self = this;
+        var form = document.getElementById("addUsersform");
+        var formData = new FormData(form);
         var arr = ["bus_verify", "bus_verify", "project_verify", "checkout_verify",
-          "bus_apply", "bus_register", "item_list"]
+          "bus_apply", "bus_register", "item_list"];
         for (let j = 0; j < arr.length; j++) {
-          formData.set(arr[j], "0")
+          formData.set(arr[j], "0");
         }
         for (let i = 0; i < self.addUsersForm.perms.length; i++) {
-          formData.set(self.addUsersForm.perms[i], "1")
+          formData.set(self.addUsersForm.perms[i], "1");
         }
         self.$refs[formName].validate((valid) => {
           if (valid) {
             self.$http.post(ACCOUNTS_ADD_URL, formData).then(function(response) {
               if (response.body.success) {
-                self.dialog.addUsersVisible = false
-                self.dialog.isRight = true
-                self.dialog.tips = "添加成功！"
-                self.dialog.tipsVisible = true
+                self.dialog.addUsersVisible = false;
+                self.dialog.isRight = true;
+                self.dialog.tips = "添加成功！";
+                self.dialog.tipsVisible = true;
                 modalHide(function() {
-                  self.dialog.tipsVisible = false
+                  self.dialog.tipsVisible = false;
                   self.getTables(function(datas) {
-                    self.fillTable(datas)
-                    self.rulesReset()
-                  })
-                })
+                    self.fillTable(datas);
+                    self.rulesReset();
+                  });
+                });
               }
-            })
+            });
           } else {
-            return false
+            return false;
           }
-        })
+        });
       },
 
       /* 修改用户资料 */
       editUsersVisible: function(row) {
-        var self = this
-        self.dialog.editUsersVisible = true
+        var self = this;
+        self.dialog.editUsersVisible = true;
         self.table.single = {
           "id": row.id,
           "is_active": row.is_active
-        }
-        self.table.account = row.account
-        self.table.name = row.name
-        self.table.perms = row.service
-        self.editUsersForm.perms = row.service
+        };
+        self.table.account = row.account;
+        self.table.name = row.name;
+        self.table.perms = row.service;
+        self.editUsersForm.perms = row.service;
       },
       editUsersInfo: function(formName) {
-        var self = this
-        var form = document.getElementById("editUsersForm")
-        var formData = new FormData(form)
-        var aa = []
+        var self = this;
+        var form = document.getElementById("editUsersForm");
+        var formData = new FormData(form);
+        var aa = [];
         var arr = ["bus_verify", "bus_verify", "project_verify", "checkout_verify",
-          "bus_apply", "bus_register", "item_list"]
+          "bus_apply", "bus_register", "item_list"];
         for (let p of formData.entries()) {
-          aa.push(p[0])
+          aa.push(p[0]);
         }
         for (let j = 0; j < arr.length; j++) {
-          formData.set(arr[j], "0")
+          formData.set(arr[j], "0");
         }
         for (let i = 0; i < aa.length; i++) {
-          formData.set(aa[i], "1")
+          formData.set(aa[i], "1");
         }
-        formData.set("id", self.table.single.id)
+        formData.set("id", self.table.single.id);
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
 //        }
@@ -537,68 +539,68 @@
           if (valid) {
             self.$http.post(ACCOUNTS_EDITINFO_URL, formData).then(function(response) {
               if (response.body.success) {
-                self.dialog.editUsersVisible = false
-                self.dialog.isRight = true
-                self.dialog.tips = "修改成功！"
-                self.dialog.tipsVisible = true
+                self.dialog.editUsersVisible = false;
+                self.dialog.isRight = true;
+                self.dialog.tips = "修改成功！";
+                self.dialog.tipsVisible = true;
                 modalHide(function() {
-                  self.dialog.tipsVisible = false
-                  var bb = {}
+                  self.dialog.tipsVisible = false;
+                  var bb = {};
                   for (let i = 0; i < aa.length; i++) {
-                    bb[aa[i]] = 1
+                    bb[aa[i]] = 1;
                   }
                   for (let i = 0; i < self.tableDatas.length; i++) {
-                    var item = self.tableDatas[i]
+                    var item = self.tableDatas[i];
                     if (self.table.single.id === item.id) {   // 修改权限
-                      let ser = []
+                      let ser = [];
                       for (let j = 0; j < arr.length; j++) {
-                        delete item[arr[j]]
+                        delete item[arr[j]];
                       }
                       if (bb.bus_verify) {   // 商家审核权限
-                        item.bus_verify = 1
+                        item.bus_verify = 1;
                       }
                       if (bb.project_verify) { // 项目审核权限
-                        item.project_verify = 1
+                        item.project_verify = 1;
                       }
                       if (bb.checkout_verify) {  // 结款审核权限
-                        item.checkout_verify = 1
+                        item.checkout_verify = 1;
                       }
                       if (bb.bus_apply) { // 商家申请权限
-                        item.bus_apply = 1
+                        item.bus_apply = 1;
                       }
                       if (bb.bus_register) {  // 商家注册权限
-                        item.bus_apply = 1
+                        item.bus_apply = 1;
                       }
                       if (bb.item_list) {  // 项目注册权限
-                        item.item_list = 1
+                        item.item_list = 1;
                       }
-                      item.service = ser
-                      break
+                      item.service = ser;
+                      break;
                     }
                   }
-                  self.fillTable(self.tableDatas)
-                })
+                  self.fillTable(self.tableDatas);
+                });
               }
-            })
+            });
           } else {
-            return false
+            return false;
           }
-        })
+        });
       },
 
       /* 修改用户密码 */
       editPasswordVisible: function(row) {
-        var self = this
-        self.dialog.editPasswordVisible = true
-        self.table.single.id = row.id
-        self.table.name = row.name
-        self.table.account = row.account
+        var self = this;
+        self.dialog.editPasswordVisible = true;
+        self.table.single.id = row.id;
+        self.table.name = row.name;
+        self.table.account = row.account;
       },
       editUsersPassword: function(formName) {
-        var self = this
-        var form = document.getElementById("editPasswordForm")
-        var formData = new FormData(form)
-        formData.set("id", self.table.single.id)
+        var self = this;
+        var form = document.getElementById("editPasswordForm");
+        var formData = new FormData(form);
+        formData.set("id", self.table.single.id);
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
 //        }
@@ -606,19 +608,19 @@
           if (valid) {
             self.$http.post(ACCOUNTS_EDITPWD_URL, formData).then(function(response) {
               if (response.body.success) {
-                self.dialog.editPasswordVisible = false
-                self.dialog.isRight = true
-                self.dialog.tips = "修改成功！"
-                self.dialog.tipsVisible = true
+                self.dialog.editPasswordVisible = false;
+                self.dialog.isRight = true;
+                self.dialog.tips = "修改成功！";
+                self.dialog.tipsVisible = true;
                 modalHide(function() {
-                  self.dialog.tipsVisible = false
-                })
+                  self.dialog.tipsVisible = false;
+                });
               }
-            })
+            });
           } else {
-            return false
+            return false;
           }
-        })
+        });
       },
 
       /* 冻结用户 */
@@ -626,28 +628,28 @@
         // row 表示当前选中项(按钮操作数组table.multiple，表格内部操作对象table.single)
         // type 表示为按钮操作（multiple）还是表格内部操作（single）
         // flag 表示冻结（0）还是启用(1)
-        var self = this
-        var formData = new FormData()
+        var self = this;
+        var formData = new FormData();
         if (row.length > 0 || row.id) {      // 有选中项
           if (type === "multiple") {    // 按钮操作
-            let arr = []
+            let arr = [];
             for (let i = 0; i < row.length; i++) {
-              arr.push(row[i].id)
-              formData.append("ids[]", row[i].id)
+              arr.push(row[i].id);
+              formData.append("ids[]", row[i].id);
             }
-            formData.set("flag", flag)
+            formData.set("flag", flag);
           } else {    // 表格操作
-            formData.append("ids[]", row.id)
-            formData.append("flag", row.is_active ? 1 : 0)
+            formData.append("ids[]", row.id);
+            formData.append("flag", row.is_active ? 1 : 0);
           }
         } else {  // 无选中账户，操作提示错误
-          self.dialog.isRight = false
-          self.dialog.tips = "请选择需要（冻结/启用）的账户！"
-          self.dialog.tipsVisible = true
+          self.dialog.isRight = false;
+          self.dialog.tips = "请选择需要（冻结/启用）的账户！";
+          self.dialog.tipsVisible = true;
           modalHide(function() {
-            self.dialog.tipsVisible = false
-          })
-          return false
+            self.dialog.tipsVisible = false;
+          });
+          return false;
         }
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
@@ -658,68 +660,68 @@
               for (let i = 0; i < row.length; i++) {
                 for (let j = 0; j < self.tableDatas.length; j++) {
                   if (self.tableDatas[j].id === row[i].id) {
-                    self.tableDatas[j].is_active = (flag === "1")
-                    continue
+                    self.tableDatas[j].is_active = (flag === "1");
+                    continue;
                   }
                 }
               }
             } else {   // 表格操作(操作成功后改变选中组中对应状态)
               for (let i = 0; i < self.table.multiple.length; i++) {
                 if (self.table.multiple[i].id === row.id) {
-                  self.table.multiple[i].is_active = (flag === "1")
-                  break
+                  self.table.multiple[i].is_active = (flag === "1");
+                  break;
                 }
               }
             }
           } else {   // 冻结/启用不成功（表格内部操作，返回之前状态）
             if (row.id) {
-              row.is_active = !row.is_active
+              row.is_active = !row.is_active;
             }
           }
-        })
+        });
       },
 
       /* 删除用户 */
       deleteUsers: function(row, type) {
         // row 表示当前选中项(按钮操作数组table.multiple，表格内部操作对象table.single)
         // type 表示为按钮操作（multiple）还是表格内部操作（single）
-        var self = this
-        var formData = new FormData()
+        var self = this;
+        var formData = new FormData();
         if (row.length > 0 || row.id) {   // 有选中项
           if (type === "single") {   // 表格内部
             if (row.is_active) {
-              self.dialog.isRight = false
-              self.dialog.tips = "请先冻结账户！"
-              self.dialog.tipsVisible = true
+              self.dialog.isRight = false;
+              self.dialog.tips = "请先冻结账户！";
+              self.dialog.tipsVisible = true;
               modalHide(function() {
-                self.dialog.tipsVisible = false
-              })
-              return false
+                self.dialog.tipsVisible = false;
+              });
+              return false;
             } else {
               for (let i = 0; i < self.table.multiple.length; i++) {   // 去掉table.multiple中删除项
                 if (self.table.multiple[i].id === row.id) {
-                  self.table.multiple.splice(i, 1)
+                  self.table.multiple.splice(i, 1);
                 }
               }
-              self.table.single = []
-              formData.append("ids[]", row.id)
+              self.table.single = [];
+              formData.append("ids[]", row.id);
             }
           } else {   // 按钮操作
-            let arr = []
+            let arr = [];
             for (let i = 0; i < row.length; i++) {
               if (row[i].is_active) {   // 有启用状态
-                self.dialog.isRight = false
-                self.dialog.tips = "请先冻结账户！"
-                self.dialog.tipsVisible = true
+                self.dialog.isRight = false;
+                self.dialog.tips = "请先冻结账户！";
+                self.dialog.tipsVisible = true;
                 modalHide(function() {
-                  self.dialog.tipsVisible = false
-                })
-                return false
+                  self.dialog.tipsVisible = false;
+                });
+                return false;
               }
             }
             for (let i = 0; i < row.length; i++) {
-              arr.push(row[i].id)
-              formData.append("ids[]", row[i].id)
+              arr.push(row[i].id);
+              formData.append("ids[]", row[i].id);
             }
           }
         }
@@ -728,32 +730,32 @@
 //        }
         self.$http.post(ACCOUNTS_DELETE_URL, formData).then(function(response) {
           if (response.body.success) {
-            self.dialog.editUsersVisible = false
-            self.dialog.isRight = true
-            self.dialog.tips = "删除成功！"
-            self.dialog.tipsVisible = true
+            self.dialog.editUsersVisible = false;
+            self.dialog.isRight = true;
+            self.dialog.tips = "删除成功！";
+            self.dialog.tipsVisible = true;
             modalHide(function() {
-              self.dialog.tipsVisible = false
+              self.dialog.tipsVisible = false;
               self.getTables(function(datas) {
-                self.fillTable(datas)
-                self.rulesReset()
-              })
-            })
+                self.fillTable(datas);
+                self.rulesReset();
+              });
+            });
           }
-        })
+        });
       },
 
       /* 清空筛选 */
       rulesReset: function() {
-        var self = this
-        self.currentPage = 1
-        self.$refs.account.reset()
-        self.$refs.state.reset()
+        var self = this;
+        self.currentPage = 1;
+        self.$refs.account.reset();
+        self.$refs.state.reset();
       },
 
       // 重置表单
       resetForm(formName) {
-        this.$refs[formName].resetFields()
+        this.$refs[formName].resetFields();
       }
     },
     components: {
@@ -761,7 +763,7 @@
       selectSearch,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -76,9 +76,10 @@
 </template>
 
 <script>
-  import busClassification from "../../../../components/form/classification/index"
-  import uploadImage from "../../../../components/form/uploadImg/index"
-  import {isName, isCostPerPerson, isSalePerMonth, getUrlParameters} from "../../../../common/common"
+  import busClassification from "../../../../components/form/classification/index";
+  import uploadImage from "../../../../components/form/uploadImg/index";
+  import {isName, isCostPerPerson, isSalePerMonth,
+    getUrlParameters} from "../../../../common/common";
 
   export default{
     props: {
@@ -87,35 +88,35 @@
     data() {
       // 商家姓名
       var nameV = (rule, value, callback) => {
-        var Name = isName(value)
+        var Name = isName(value);
         if (!Name.flag) {
-          callback(new Error(Name.error))
+          callback(new Error(Name.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       // 人均
       var personV = (rule, value, callback) => {
-        var Person = isCostPerPerson(value)
+        var Person = isCostPerPerson(value);
         if (!Person.flag) {
-          callback(new Error(Person.error))
+          callback(new Error(Person.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       // 月销售额
       var MonthV = (rule, value, callback) => {
-        var MonthPay = isSalePerMonth(value)
+        var MonthPay = isSalePerMonth(value);
         if (value !== "") {
           if (!MonthPay.flag) {
-            callback(new Error(MonthPay.error))
+            callback(new Error(MonthPay.error));
           } else {
-            callback()
+            callback();
           }
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       return {
         moduleV: {         // 模块验证结果
           class: false     // 分类
@@ -140,26 +141,26 @@
             {validator: MonthV, trigger: "blur"}
           ]
         }
-      }
+      };
     },
     mounted() {
-      this.quaForm.phonenum = getUrlParameters(window.location.hash, "phonenum")
+      this.quaForm.phonenum = getUrlParameters(window.location.hash, "phonenum");
     },
     methods: {
       // 模块验证结果及取值(分类)
       module_res: function(name, value, flag) {
-        var self = this
-        self.moduleV[name] = flag      // 返回模块验证结果
-        self.quaForm[name] = value   // 返回模块数据
+        var self = this;
+        self.moduleV[name] = flag;      // 返回模块验证结果
+        self.quaForm[name] = value;   // 返回模块数据
       },
       // 获取子模块数据（图片）
       addFormData: function(value, name) {
-        this.quaForm[name] = value
+        this.quaForm[name] = value;
       },
       // 资质信息验证
       coopValidate: function() {
-        var self = this
-        self.$refs.bus_class_children.classValidate()    // 分类验证
+        var self = this;
+        self.$refs.bus_class_children.classValidate();    // 分类验证
         self.$refs.quaForm.validate((valid) => {
           if (valid && self.moduleV.class) {
             var datas = {
@@ -178,18 +179,18 @@
                 cost_per_person: self.quaForm.cost_per_person,   // 人均
                 sale_per_month: self.quaForm.sale_per_month      // 月销售额
               }
-            }
-            self.$store.commit("V_FLAG", true)
-            self.$emit("coopValidate", false, datas)
+            };
+            self.$store.commit("V_FLAG", true);
+            self.$emit("coopValidate", false, datas);
           }
-        })
+        });
       }
     },
     components: {
       uploadImage,
       busClassification
     }
-  }
+  };
 </script>
 
 <style scoped>

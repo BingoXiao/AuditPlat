@@ -26,8 +26,8 @@
 </template>
 
 <script>
-  import showImage from "../../../../../components/form/previewImg/index.vue"
-  import radioCheck from "../../../../../components/radio/index.vue"
+  import showImage from "../../../../../components/form/previewImg/index.vue";
+  import radioCheck from "../../../../../components/radio/index.vue";
 
   export default{
     props: {
@@ -40,24 +40,24 @@
         sl_name: "",       // 许可证名称
         sl_expire: "",     // 许可证有效期
         sl_address: ""     // 许可证地址
-      }
+      };
     },
     watch: {
       filling: function() {
-        var self = this
-        var slinfo = self.filling
-        self.sl_code = slinfo.sl_code
-        self.sl_image_url = slinfo.sl_image_url
-        self.sl_name = slinfo.sl_name
-        self.sl_address = slinfo.sl_address
-        self.sl_expire = slinfo.sl_expire
+        var self = this;
+        var slinfo = self.filling;
+        self.sl_code = slinfo.sl_code;
+        self.sl_image_url = slinfo.sl_image_url;
+        self.sl_name = slinfo.sl_name;
+        self.sl_address = slinfo.sl_address;
+        self.sl_expire = slinfo.sl_expire;
       }
     },
     components: {
       showImage,
       radioCheck
     }
-  }
+  };
 </script>
 
 <style scoped>

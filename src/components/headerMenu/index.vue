@@ -2,7 +2,8 @@
   <el-row class="head" type="flex" justify="space-around" align="middle">
     <el-col :span="6">
       <!--商家中心注册-->
-      <router-link to="/center-site/register" v-if="$route.path === '/center-site/register'">
+      <router-link to="/center-site/register"
+                   v-if="$route.path === '/center-site/register'">
         <img src="../../assets/Blogo.png" alt="近脉商家中心"/>
       </router-link>
       <router-link to="/login" v-else>
@@ -47,27 +48,27 @@
 </template>
 
 <script>
-  import {ACCOUNTS_LOGOUT_URL} from "../../common/interface"
-  import {clearCookie} from "../../common/common"
+  import {ACCOUNTS_LOGOUT_URL} from "../../common/interface";
+  import {clearCookie} from "../../common/common";
 
   export default{
     name: "header",
     data() {
       return {
         visible: false
-      }
+      };
     },
     methods: {
       // 修改密码
       editPassword: function() {
-        var self = this
-        self.visible = false
-        self.$router.push("/editPassword")
+        var self = this;
+        self.visible = false;
+        self.$router.push("/editPassword");
       },
       // 退出登录
       logOut: function() {
-        var self = this
-        self.visible = false
+        var self = this;
+        self.visible = false;
         this.$confirm("确认退出系统吗?", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -76,18 +77,18 @@
           self.$http.post(ACCOUNTS_LOGOUT_URL)
             .then(function(response) {
               if (response.data.success) {
-                self.$store.commit("AUTH_LOGIN", false)
-                clearCookie("REMEMBER")
+                self.$store.commit("AUTH_LOGIN", false);
+                clearCookie("REMEMBER");
 
-                self.$router.push("/login")
+                self.$router.push("/login");
               }
             }, function(response) {
-              alert("无法连接，请稍后再试！")
-            })
-        })
+              alert("无法连接，请稍后再试！");
+            });
+        });
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -47,10 +47,10 @@
 </template>
 
 <script>
-  import uploadMoreImage from "../../../../../components/form/uploadMoreImg/index"
-  import dialogTips from "../../../../../components/dialogTips/index.vue"
-  import {BUSLIST_SUBMITCONSTRA_URL} from "../../../../../common/interface"
-  import {modalHide} from "../../../../../common/common"
+  import uploadMoreImage from "../../../../../components/form/uploadMoreImg/index";
+  import dialogTips from "../../../../../components/dialogTips/index.vue";
+  import {BUSLIST_SUBMITCONSTRA_URL} from "../../../../../common/interface";
+  import {modalHide} from "../../../../../common/common";
 
   export default{
     props: {
@@ -61,7 +61,7 @@
       return {
         pickerOptions: {
           disabledDate(time) {
-            return time.getTime() < Date.now() - 8.64e7
+            return time.getTime() < Date.now() - 8.64e7;
           }
         },
         isRight: true,       // 保存提示提示框
@@ -82,48 +82,48 @@
             {required: true, message: "请选择合同有效期", trigger: "change"}
           ]
         }
-      }
+      };
     },
     watch: {
       filling: function() {
-        var self = this
-        var cons = self.filling
+        var self = this;
+        var cons = self.filling;
         if (cons) {
-          self.consForm.name = cons.name       // 合同名称
-          self.consForm.date = cons.date   // 合同过有效期
-          let arr = []
+          self.consForm.name = cons.name;       // 合同名称
+          self.consForm.date = cons.date;   // 合同过有效期
+          let arr = [];
           for (let i = 1; i <= 3; i++) {
-            let item = "image" + i + "_url"
+            let item = "image" + i + "_url";
             if (cons[item] !== "") {
-              arr.push(cons[item])
+              arr.push(cons[item]);
             }
           }
-          self.consForm.imageList = arr
+          self.consForm.imageList = arr;
         }
       }
     },
     methods: {
       // 获取合约图片列表
       get_data: function(value, name) {
-        var self = this
-        self.consForm[name] = value
+        var self = this;
+        self.consForm[name] = value;
       },
       // 获取日期
       getDate: function(value) {
-        var self = this
-        self.consForm.date = value
+        var self = this;
+        self.consForm.date = value;
       },
       // 保存合同该内容
       saveConstract: function() {
-        var self = this
-        self.$refs.imageChild.get_image_list()
+        var self = this;
+        self.$refs.imageChild.get_image_list();
         if (self.consForm.consImage.length > 0) {
-          var consForm = document.getElementById("consForm")
-          var formData = new FormData(consForm)
-          formData.append("date", self.consForm.date)
-          formData.append("account", self.account)
+          var consForm = document.getElementById("consForm");
+          var formData = new FormData(consForm);
+          formData.append("date", self.consForm.date);
+          formData.append("account", self.account);
           for (let i = 1; i <= self.consForm.consImage.length; i++) {
-            formData.append("image" + [i] + "_url", self.consForm.consImage[i - 1])
+            formData.append("image" + [i] + "_url", self.consForm.consImage[i - 1]);
           }
 //          for (var pair of formData.entries()) {
 //            console.log(pair[0] + ", " + pair[1])
@@ -133,16 +133,16 @@
               self.$http.post(BUSLIST_SUBMITCONSTRA_URL, formData)
                 .then(function(response) {
                   if (response.data.success) {
-                    self.tipsVisible = true
+                    self.tipsVisible = true;
                     modalHide(function() {
-                      self.tipsVisible = false
-                    })
+                      self.tipsVisible = false;
+                    });
                   }
-                })
+                });
             }
-          })
+          });
         } else {
-          self.error = "#ff4949"
+          self.error = "#ff4949";
         }
       }
     },
@@ -150,7 +150,7 @@
       uploadMoreImage,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -26,11 +26,11 @@
 </template>
 
 <script>
-  import CKEDITOR from "CKEDITOR"
-  import tabComponent from "../../../components/tabs/inner/index"
-  import dialogTips from "../../../components/dialogTips/index.vue"
-  import {SYSTEMINFO_SUBMIT_URL} from "../../../common/interface"
-  import {modalHide} from "../../../common/common"
+  import CKEDITOR from "CKEDITOR";
+  import tabComponent from "../../../components/tabs/inner/index";
+  import dialogTips from "../../../components/dialogTips/index.vue";
+  import {SYSTEMINFO_SUBMIT_URL} from "../../../common/interface";
+  import {modalHide} from "../../../common/common";
 
   export default{
     data() {
@@ -52,54 +52,54 @@
             {required: true, message: "请输入标题", trigger: "blur"}
           ]
         }
-      }
+      };
     },
     mounted() {
-      var self = this
-      CKEDITOR.replace("editor1", {height: "180px", width: "100%", toolbar: "MyToolbar"})
-      self.editor = CKEDITOR.instances.editor1
+      var self = this;
+      CKEDITOR.replace("editor1", {height: "180px", width: "100%", toolbar: "MyToolbar"});
+      self.editor = CKEDITOR.instances.editor1;
     },
     methods: {
       // 发送
       sendNotice: function() {
-        var self = this
-        var formData = new FormData()
+        var self = this;
+        var formData = new FormData();
         self.$refs.ruleForm.validate((valid) => {
           if (valid) {       // 获取标题
-            formData.set("title", self.ruleForm.title)
-            self.content = self.editor.getData()   // 获取内容
+            formData.set("title", self.ruleForm.title);
+            self.content = self.editor.getData();         // 获取内容
             if (!self.content) {
-              self.isRight = false
-              self.tips = "请填写内容！"
-              self.tipsVisible = true
+              self.isRight = false;
+              self.tips = "请填写内容！";
+              self.tipsVisible = true;
               modalHide(function() {
-                self.tipsVisible = false
-              })
+                self.tipsVisible = false;
+              });
             } else {
-              var str = (self.content).replace(/<br\s*\/?>/g, "\r\\n").replace(/\s/g, "&nbsp;")
-              formData.set("content", str)
-              self.isRight = true
-              self.tips = "发送成功！"
+              var str = (self.content).replace(/<br\s*\/?>/g, "\r\\n").replace(/\s/g, "&nbsp;");
+              formData.set("content", str);
+              self.isRight = true;
+              self.tips = "发送成功！";
               self.$http.post(SYSTEMINFO_SUBMIT_URL, formData).then(function(response) {
                 if (response.body.success) {
-                  self.tipsVisible = true
+                  self.tipsVisible = true;
                   modalHide(function() {
-                    self.tipsVisible = false
-                  })
+                    self.tipsVisible = false;
+                  });
                 }
-              })
+              });
             }
           } else {
-            return false
+            return false;
           }
-        })
+        });
       }
     },
     components: {
       tabComponent,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

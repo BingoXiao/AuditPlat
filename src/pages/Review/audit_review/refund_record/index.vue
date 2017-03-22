@@ -73,10 +73,10 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import inputSearch from "../../../../components/search/input/index"
-  import datePicker from "../../../../components/search/datePicker/index"
-  import {CHECKVERIFY_REFUNDRECORD_URL} from "../../../../common/interface"
+  import alasql from "alasql";
+  import inputSearch from "../../../../components/search/input/index";
+  import datePicker from "../../../../components/search/datePicker/index";
+  import {CHECKVERIFY_REFUNDRECORD_URL} from "../../../../common/interface";
 
   export default {
     props: {
@@ -96,85 +96,86 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(CHECKVERIFY_REFUNDRECORD_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY consume_time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE number LIKE '%" + self.search.number + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE number LIKE '%" + self.search.number + "%'";
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
 
       /* 获取选中项 */
       getSelectedArr: function(selection) {
-        var self = this
-        var arr = []
+        var self = this;
+        var arr = [];
         for (let i = 0; i < selection.length; i++) {
-          arr.push(selection[i].applynum)
+          arr.push(selection[i].applynum);
         }
-        self.selectArr = arr
+        self.selectArr = arr;
       },
 
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        this.currentPage = currentPage;
+        this.getTables();
       },
 
       // 查看
       view: function(row) {
-        var self = this
-        self.content = row.refund_reason
-        self.dialogVisible = true
+        var self = this;
+        self.content = row.refund_reason;
+        self.dialogVisible = true;
       }
     },
     components: {
       inputSearch,
       datePicker
     }
-  }
+  };
 </script>
 
 <style scoped>

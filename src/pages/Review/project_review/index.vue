@@ -90,13 +90,13 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import tabComponent from "../../../components/tabs/router/index"
-  import datePicker from "../../../components/search/datePicker/index"
-  import classifySearch from "../../../components/search/classify/index"
-  import inputSearch from "../../../components/search/input/index"
-  import selectSearch from "../../../components/search/select/index"
-  import {PROVERIFY_TABLE_URL} from "../../../common/interface"
+  import alasql from "alasql";
+  import tabComponent from "../../../components/tabs/router/index";
+  import datePicker from "../../../components/search/datePicker/index";
+  import classifySearch from "../../../components/search/classify/index";
+  import inputSearch from "../../../components/search/input/index";
+  import selectSearch from "../../../components/search/select/index";
+  import {PROVERIFY_TABLE_URL} from "../../../common/interface";
 
   export default {
     data() {
@@ -149,135 +149,136 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     // 在渲染该组件的对应路由被 confirm 前调用
     // 不！能！获取组件实例 `this`
     // 因为当钩子执行前，组件实例还没被创建
     beforeRouteEnter(to, from, next) {
       if (to.path === "/project_verify/:type") {
-        next({path: "/project_verify/online"})
+        next({path: "/project_verify/online"});
       } else {
-        next()
+        next();
       }
     },
     // 在当前路由改变，但是该组件被复用时调用
     // 可以访问组件实例 `this`
     beforeRouteUpdate(to, from, next) {
-      var self = this
+      var self = this;
       if (to.path === "/project_verify/:type") {
-        next({path: "/project_verify/online"})
+        next({path: "/project_verify/online"});
       } else {
-        next()
+        next();
       }
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     mounted: function() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function() {
-        var self = this
-        self.rulesReset()
+        var self = this;
+        self.rulesReset();
         self.getTables(function(datas) {
-          self.fillTable(datas)
-        })
+          self.fillTable(datas);
+        });
       },
 
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         let arr = {
           "online": "UP",
           "edit": "EDIT",
           "offline": "DOWN",
           "record": "HIS"
-        }
-        var type = arr[self.$route.params.type]
+        };
+        var type = arr[self.$route.params.type];
         self.$http.get(PROVERIFY_TABLE_URL + "?operate_type=" + type).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
+            var datas = response.body.content;
             for (let i = 0; i < datas.length; i++) {
-              var item = datas[i]
-              item.bus_names = item.bus_names.split(" ")  // 门店名称
-              item.class = item.class.split(" ")          // 项目分类
+              var item = datas[i];
+              item.bus_names = item.bus_names.split(" ");  // 门店名称
+              item.class = item.class.split(" ");          // 项目分类
               for (let i = 0; i < item.class.length - 1; i++) {
-                item.class[i] = item.class[i] + " > "
+                item.class[i] = item.class[i] + " > ";
               }
             }
-            func(datas)
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY submit_time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
+        var self = this;
         var rules = "SELECT * FROM ? WHERE (bus_names LIKE '%" + self.search.name + "%'" +
-          " OR name LIKE '%" + self.search.name + "%')"
+          " OR name LIKE '%" + self.search.name + "%')";
         if (self.search.status !== "") {    // 状态
-          rules += " AND status = ?"
+          rules += " AND status = ?";
         }
         if (self.search.typein !== "") {    // 项目类型
-          rules += " AND item_type LIKE '%" + self.search.typein + "%'"
+          rules += " AND item_type LIKE '%" + self.search.typein + "%'";
         }
         if (self.search.class !== "") {    // 分类
-          rules += " AND `class` LIKE '%" + self.search.class + "%'"
+          rules += " AND `class` LIKE '%" + self.search.class + "%'";
         }
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
       /* 清空筛选 */
       rulesReset: function() {
-        var self = this
-        self.$refs.class.reset()
-        self.$refs.dateRange.reset()
-        self.$refs.name.reset()
-        self.$refs.status.reset()
-        self.$refs.typein.reset()
-        self.currentPage = 1
+        var self = this;
+        self.$refs.class.reset();
+        self.$refs.dateRange.reset();
+        self.$refs.name.reset();
+        self.$refs.status.reset();
+        self.$refs.typein.reset();
+        self.currentPage = 1;
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       /* 查看 */
       viewInfo: function(row) {
-        var self = this
-        self.$router.push({path: self.$route.path + "/content#id=" + row.item_id})
+        var self = this;
+        self.$router.push({path: self.$route.path + "/content#id=" + row.item_id});
       }
     },
     components: {
@@ -287,7 +288,7 @@
       selectSearch,
       datePicker
     }
-  }
+  };
 </script>
 
 <style scoped>

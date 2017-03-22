@@ -9,13 +9,13 @@
 </template>
 
 <script>
-  import mainContent from "../module/index.vue"
+  import mainContent from "../module/index.vue";
 
   export default{
     components: {
       mainContent
     }
-  }
+  };
 </script>
 
 <style scoped>

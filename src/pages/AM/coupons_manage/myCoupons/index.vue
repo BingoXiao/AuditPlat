@@ -72,12 +72,12 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import datePicker from "../../../../components/search/datePicker/index"
-  import inputSearch from "../../../../components/search/input/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
-  import {EVENTS_CMTABLE_URL, EVENTS_CMDELETE_URL} from "../../../../common/interface"
-  import {modalHide} from "../../../../common/common"
+  import alasql from "alasql";
+  import datePicker from "../../../../components/search/datePicker/index";
+  import inputSearch from "../../../../components/search/input/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
+  import {EVENTS_CMTABLE_URL, EVENTS_CMDELETE_URL} from "../../../../common/interface";
+  import {modalHide} from "../../../../common/common";
 
   export default{
     data() {
@@ -95,84 +95,86 @@
         isRight: true,       // 保存提示提示框
         tips: "删除成功！",
         tipsVisible: false
-      }
+      };
     },
     mounted() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(EVENTS_CMTABLE_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content.coupons
-            func(datas)
+            var datas = response.body.content.coupons;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY create_datetime DESC", [data]);
+        self.totalDatas = datas;
         self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize,
-          self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+          self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE name LIKE '%" + self.search.coupon + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE name LIKE '%" + self.search.coupon + "%'";
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND create_datetime >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND create_datetime <= '" + self.search.dateRange[1] + " 23:59:59'"
+            " AND create_datetime <= '" + self.search.dateRange[1] + " 23:59:59'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
       /* 清空筛选 */
       rulesReset: function() {
-        var self = this
-        self.$refs.dateRange.reset()
-        self.$refs.coupon.reset()
-        self.currentPage = 1
+        var self = this;
+        self.$refs.dateRange.reset();
+        self.$refs.coupon.reset();
+        self.currentPage = 1;
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       // 查看指定门店信息
       viewStores: function(row) {
-        this.$router.push({path: "/coupons_manage/specified_stores#id=" + row.id + "&name=" + row.name})
+        this.$router.push({path: "/coupons_manage/specified_stores#id=" +
+        row.id + "&name=" + row.name});
       },
       // 修改优惠券
       editCoupon: function(row) {
-        this.$router.push({path: "/coupons_manage/add_new_coupons/#id=" + row.id})
-        this.$emit("tabChange")
+        this.$router.push({path: "/coupons_manage/add_new_coupons/#id=" + row.id});
+        this.$emit("tabChange");
       },
       // 删除优惠券
       deleteCoupon: function(row) {
-        var self = this
+        var self = this;
         self.$confirm("请确认是否删除该优惠券？", "提示", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -180,17 +182,17 @@
         }).then(() => {
           self.$http.post(EVENTS_CMDELETE_URL(row.id)).then(function(response) {
             if (response.body.success) {
-              self.tipsVisible = true
+              self.tipsVisible = true;
               modalHide(function() {
-                self.tipsVisible = false
+                self.tipsVisible = false;
                 self.getTables(function(datas) {
-                  self.fillTable(datas)
-                  self.rulesReset()
-                })
-              })
+                  self.fillTable(datas);
+                  self.rulesReset();
+                });
+              });
             }
-          })
-        }).catch(() => {})
+          });
+        }).catch(() => {});
       }
     },
     components: {
@@ -198,7 +200,7 @@
       inputSearch,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

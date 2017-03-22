@@ -47,24 +47,24 @@
         wholeHour: false,  // 24小时
         begin: "",         // 开始时间
         end: ""            // 结束时间
-      }
+      };
     },
     mounted() {
-      var self = this
-      var arr = self.open_hours.week.split("")
+      var self = this;
+      var arr = self.open_hours.week.split("");
       for (let i = 0; i < arr.length; i++) {
         if (arr[i] === "1") {
-          self.checkList.push((i + 1) + "")
+          self.checkList.push((i + 1) + "");
         }
       }
       if (self.checkList.length === 7) {
-        self.checkAll = true
+        self.checkAll = true;
       }
       if (self.open_hours.begin === "00:00:00" && self.open_hours.end === "23:59:59") {
-        self.wholeHour = true
+        self.wholeHour = true;
       }
     }
-  }
+  };
 </script>
 
 <style>

@@ -43,8 +43,8 @@
 </template>
 
 <script>
-  import {getUrlParameters} from "../../../../../common/common"
-  import {BDREGISTER_BRALIST_URL} from "../../../../../common/interface"
+  import {getUrlParameters} from "../../../../../common/common";
+  import {BDREGISTER_BRALIST_URL} from "../../../../../common/interface";
 
   export default{
     props: {
@@ -62,73 +62,73 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted() {
       if (!getUrlParameters(window.location.hash, "id")) {
-        this.search_bus()
+        this.search_bus();
       }
     },
     watch: {
       filling: function() {
-        var self = this
+        var self = this;
         if (getUrlParameters(window.location.hash, "id")) {
-          self.tableDatas = []
-          self.tableDatas.push(self.filling.parentbus)
-          self.totalItems = 1
-          self.busForm.bus_id = self.filling.parentbus.bus_id
-          self.busForm.account = self.filling.parentbus.account
-          this.$store.commit("BUS_ACCOUNT", self.filling.parentbus.account)
+          self.tableDatas = [];
+          self.tableDatas.push(self.filling.parentbus);
+          self.totalItems = 1;
+          self.busForm.bus_id = self.filling.parentbus.bus_id;
+          self.busForm.account = self.filling.parentbus.account;
+          this.$store.commit("BUS_ACCOUNT", self.filling.parentbus.account);
           setTimeout(function() {
-            self.loading = false
-          })
+            self.loading = false;
+          });
         }
       }
     },
     methods: {
       /* 商家搜索（表格） */
       search_bus: function() {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(BDREGISTER_BRALIST_URL + "?account=" + self.busForm.bus).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
+            var datas = response.body.content;
+            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+            self.totalItems = parseInt(datas.length);
             setTimeout(function() {
-              self.loading = false
-            })
+              self.loading = false;
+            });
           }
-        })
+        });
       },
       // 获取商家账号(表格行点击事件)
       getAcc: function(row) {
-        var self = this
-        self.$store.commit("BUS_ACCOUNT", row.account)
-        self.busForm.account = row.account
-        self.busForm.bus_id = row.bus_id
+        var self = this;
+        self.$store.commit("BUS_ACCOUNT", row.account);
+        self.busForm.account = row.account;
+        self.busForm.bus_id = row.bus_id;
       },
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        this.currentPage = currentPage;
+        this.getTables();
       },
       // 商家搜索验证
       busValidate: function(func) {
-        var self = this
+        var self = this;
         if (self.busForm.bus_id) {
           // 初始id和选择商家id不同
           if (getUrlParameters(window.location.hash, "id")) {
             if (self.busForm.bus_id !== self.filling.parentbus.bus_id) {
-              self.$emit("getPAN", self.busForm.bus_id)
+              self.$emit("getPAN", self.busForm.bus_id);
             }
           }
-          self.$emit("getCheck", self.busForm.account)
-          func()
+          self.$emit("getCheck", self.busForm.account);
+          func();
         }
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

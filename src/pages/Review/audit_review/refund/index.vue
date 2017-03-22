@@ -78,10 +78,11 @@
 </template>
 
 <script>
-  import inputSearch from "../../../../components/search/input/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
-  import {CHECKVERIFY_REFUND_SEARCH_URL, CHECKVERIFY_REFUND_URL} from "../../../../common/interface"
-  import {modalHide} from "../../../../common/common"
+  import inputSearch from "../../../../components/search/input/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
+  import {CHECKVERIFY_REFUND_SEARCH_URL,
+    CHECKVERIFY_REFUND_URL} from "../../../../common/interface";
+  import {modalHide} from "../../../../common/common";
 
   export default {
     props: {
@@ -104,69 +105,69 @@
         billing_time: "",    // 结算时间
         deserve: "",      // 消费者购买金额
         create_time: ""   // 上线日期
-      }
+      };
     },
     computed: {
       textColor: function() {
-        var self = this
-        var res = "#13CE66"
+        var self = this;
+        var res = "#13CE66";
         if (self.status === "S") {   // 已退款
-          res = "#FF4949"
+          res = "#FF4949";
         }
-        return res
+        return res;
       }
     },
     methods: {
       /* 获取数据 */
       getDatas: function() {
-        var self = this
+        var self = this;
         self.$http.get(CHECKVERIFY_REFUND_SEARCH_URL + "?token=" + self.token).then(function(response) {
           if (response.body.success) {
-            self.tokenInfo = true
-            var datas = response.body.content
-            self.status = datas.status     // 团购券状态
+            self.tokenInfo = true;
+            var datas = response.body.content;
+            self.status = datas.status;     // 团购券状态
             if (datas.status === "S") {    // 已退款
-              self.refundnum = datas.refundnum          // 项目id
-              self.consume_time = datas.consume_time    // 消费时间
-              self.billing_time = datas.billing_time    // 结算时间
+              self.refundnum = datas.refundnum;          // 项目id
+              self.consume_time = datas.consume_time;    // 消费时间
+              self.billing_time = datas.billing_time;    // 结算时间
             }
             // datas.status === "UN" 验证
-            self.item = datas.item         // 项目名称
-            self.buy_time = datas.buy_time        // 购买时间
-            self.deserve = datas.deserve           // 消费者购买金额
-            self.create_time = datas.create_time   // 上线日期
+            self.item = datas.item;        // 项目名称
+            self.buy_time = datas.buy_time;        // 购买时间
+            self.deserve = datas.deserve;           // 消费者购买金额
+            self.create_time = datas.create_time;   // 上线日期
           }
-        })
+        });
       },
 
       // 退款
       refund: function() {
-        var self = this
-        var formData = new FormData()
-        formData.append("token", self.token)
-        formData.append("refundnum", self.refundnum)
+        var self = this;
+        var formData = new FormData();
+        formData.append("token", self.token);
+        formData.append("refundnum", self.refundnum);
         if (self.refund_reason) {
 
         } else {
-          formData.append("refund_reason", self.refund_reason)
+          formData.append("refund_reason", self.refund_reason);
         }
         self.$http.post(CHECKVERIFY_REFUND_URL, formData)
           .then(function(response) {
             if (response.body.success) {
-              self.refundDialog = false
-              self.tipsVisible = true
+              self.refundDialog = false;
+              self.tipsVisible = true;
               modalHide(function() {
-                self.tipsVisible = false
-              })
+                self.tipsVisible = false;
+              });
             }
-          })
+          });
       }
     },
     components: {
       inputSearch,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import {CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../common/interface"
+  import {CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../common/interface";
 
   export default{
     props: {
@@ -61,74 +61,74 @@
         lg_list: [],
         md_list: [],
         sm_list: []
-      }
+      };
     },
     mounted: function() {
-      var self = this
-      self.get_lg_list()
+      var self = this;
+      self.get_lg_list();
     },
     methods: {
       /* 获取合作行业列表 */
       get_lg_list: function() {
-        var self = this
+        var self = this;
         self.$http.get(CATEGORY_URL).then(function(response) {
           if (response.body.success) {
-            self.lg_list = response.body.content
+            self.lg_list = response.body.content;
           }
-        })
+        });
       },
 
       /* 获取品类列表 */
       get_md_list: function(value) {
-        var self = this
-        self.smallVisible = true
+        var self = this;
+        self.smallVisible = true;
         if (!value) {    // 清空"合作行业"
-          self.md_list = []
-          self.sm_list = []
-          self.md_value = ""
-          self.sm_value = ""
+          self.md_list = [];
+          self.sm_list = [];
+          self.md_value = "";
+          self.sm_value = "";
         } else {         // 选择
           self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
             if (response.body.success) {
-              self.md_list = response.body.content
+              self.md_list = response.body.content;
             }
-          })
+          });
         }
       },
 
       /* 获取子类别列表 */
       get_sm_list: function(value) {
-        var self = this
+        var self = this;
         if (!value) {         // 清空"品类"
-          self.sm_list = []
-          self.sm_value = ""
+          self.sm_list = [];
+          self.sm_value = "";
         } else {         // 选择
           self.$http.get(SCLASS_URL + "?mclass_id=" + value).then(function(response) {
             if (response.body.success) {
-              var list = response.body.content
+              var list = response.body.content;
               if (!list.length) {
-                self.smallVisible = false
+                self.smallVisible = false;
               } else {
-                self.smallVisible = true
-                self.sm_list = response.body.content
+                self.smallVisible = true;
+                self.sm_list = response.body.content;
               }
             }
-          })
+          });
         }
-        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel)
+        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel);
       },
       get_sm_data: function(value) {
-        var self = this
-        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel + self.$refs.smlist.selectedLabel)
+        var self = this;
+        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel + self.$refs.smlist.selectedLabel);
       },
       reset: function() {
-        var self = this
-        self.lg_value = ""
-        self.md_value = ""
-        self.sm_value = ""
+        var self = this;
+        self.lg_value = "";
+        self.md_value = "";
+        self.sm_value = "";
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

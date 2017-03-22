@@ -42,9 +42,9 @@
           project_verify: this.$store.state.user_data.project_verify === 1,
           item_list: this.$store.state.user_data.item_list === 1
         }
-      }
+      };
     }
-  }
+  };
 </script>
 
 <style scoped>

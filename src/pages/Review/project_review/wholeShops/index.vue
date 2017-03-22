@@ -34,8 +34,8 @@
 </template>
 
 <script>
-  import {PROVERIFY_FILLING_URL} from "../../../../common/interface"
-  import {getUrlParameters} from "../../../../common/common"
+  import {PROVERIFY_FILLING_URL} from "../../../../common/interface";
+  import {getUrlParameters} from "../../../../common/common";
 
   export default{
     data() {
@@ -44,43 +44,43 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.get_info()
+      var self = this;
+      self.get_info();
     },
     methods: {
       // 获取信息
       get_info: function() {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         self.$http.get(PROVERIFY_FILLING_URL + "?item_id=" + id)
           .then(function(response) {
             if (response.body.success) {
-              var data = response.body.content.data
+              var data = response.body.content.data;
               for (let j = 0; j < data.shops.length; j++) {     // 新电话
-                let item = data.shops[j]
-                let str = ""
+                let item = data.shops[j];
+                let str = "";
                 for (let i = 1; i <= 5; i++) {
                   if (item["tel_" + i]) {
-                    str += item["tel_" + i] + ","
+                    str += item["tel_" + i] + ",";
                   }
                 }
-                item.tel = str.split(",")
+                item.tel = str.split(",");
               }
-              self.shopTable = data.shops
+              self.shopTable = data.shops;
               if (self.shopTable.length > 5) {
-                self.moreShops = true
+                self.moreShops = true;
               }
             }
-          })
+          });
       },
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        this.currentPage = currentPage;
+        this.getTables();
       }
     }
-  }
+  };
 </script>

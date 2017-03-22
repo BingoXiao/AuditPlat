@@ -67,13 +67,13 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import tabComponent from "../../../components/tabs/router/index"
-  import datePicker from "../../../components/search/datePicker/index"
-  import inputSearch from "../../../components/search/input/index"
-  import selectSearch from "../../../components/search/select/index"
-  import bdList from "../../../components/search/BDlist/index"
-  import {BDVERIFY_APPLYTABLE_URL, BDVERIFY_EDITTABLE_URL} from "../../../common/interface"
+  import alasql from "alasql";
+  import tabComponent from "../../../components/tabs/router/index";
+  import datePicker from "../../../components/search/datePicker/index";
+  import inputSearch from "../../../components/search/input/index";
+  import selectSearch from "../../../components/search/select/index";
+  import bdList from "../../../components/search/BDlist/index";
+  import {BDVERIFY_APPLYTABLE_URL, BDVERIFY_EDITTABLE_URL} from "../../../common/interface";
 
   export default {
     data() {
@@ -108,134 +108,136 @@
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,           // 当前页
         statusShow: false
-      }
+      };
     },
     // 在渲染该组件的对应路由被 confirm 前调用
     // 不！能！获取组件实例 `this`
     // 因为当钩子执行前，组件实例还没被创建
     beforeRouteEnter(to, from, next) {
       if (to.path === "/bus_review/:type") {
-        next({path: "/bus_review/bus_apply"})
+        next({path: "/bus_review/bus_apply"});
       } else {
-        next()
+        next();
       }
     },
     // 在当前路由改变，但是该组件被复用时调用
     // 可以访问组件实例 `this`
     beforeRouteUpdate(to, from, next) {
-      var self = this
+      var self = this;
       if (to.path === "/bus_review/:type") {
-        next({path: "/bus_review/bus_apply"})
+        next({path: "/bus_review/bus_apply"});
       } else {
-        next()
+        next();
       }
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     mounted() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
-        var type = (self.$route.params.type)
-        var url = ""
-        var Type = "V"
+        var self = this;
+        self.loading = true;
+        var type = (self.$route.params.type);
+        var url = "";
+        var Type = "V";
         if (type === "bus_apply" || type === "businfo_edit") {
           if (type === "bus_apply") {
-            url = BDVERIFY_APPLYTABLE_URL
+            url = BDVERIFY_APPLYTABLE_URL;
           } else if (type === "businfo_edit") {
-            url = BDVERIFY_EDITTABLE_URL
+            url = BDVERIFY_EDITTABLE_URL;
           }
-          self.statusShow = false
+          self.statusShow = false;
         } else if (type === "bus_apply_record" || type === "businfo_edit_record") {
           if (type === "bus_apply_record") {
-            url = BDVERIFY_APPLYTABLE_URL
+            url = BDVERIFY_APPLYTABLE_URL;
           } else if (type === "businfo_edit_record") {
-            url = BDVERIFY_EDITTABLE_URL
+            url = BDVERIFY_EDITTABLE_URL;
           }
-          self.statusShow = true
-          Type = "H"
+          self.statusShow = true;
+          Type = "H";
         }
         self.$http.get(url + "?type=" + Type).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY submit_time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE applynum LIKE '%" + self.search.applynum + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE applynum LIKE '%" + self.search.applynum + "%'";
         if (self.search.bd !== "") {    // bd
-          rules += " AND bd LIKE '%" + self.search.bd + "%'"
+          rules += " AND bd LIKE '%" + self.search.bd + "%'";
         }
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
       /* 清空筛选 */
       rulesReset: function() {
-        var self = this
-        self.$refs.dateRange.reset()
-        self.$refs.applynum.reset()
-        self.$refs.bd.reset()
-        self.currentPage = 1
+        var self = this;
+        self.$refs.dateRange.reset();
+        self.$refs.applynum.reset();
+        self.$refs.bd.reset();
+        self.currentPage = 1;
       },
 
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function() {
-        var self = this
-        self.rulesReset()
+        var self = this;
+        self.rulesReset();
         self.getTables(function(datas) {
-          self.fillTable(datas)
-        })
+          self.fillTable(datas);
+        });
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       /* 审核（查看） */
       checkinfo: function(row) {
-        var self = this
-        var type = self.$route.params.type
+        var self = this;
+        var type = self.$route.params.type;
         if (type === "businfo_edit" || type === "businfo_edit_record") {     // 商家信息修改
-          self.$router.push({path: self.$route.path + "/content#id=" + row.item_id + "&applynum=" + row.applynum})
+          self.$router.push({path: self.$route.path + "/content#id=" + row.item_id +
+          "&applynum=" + row.applynum});
         } else {
-          self.$router.push({path: self.$route.path + "/content#id=" + row.applynum})
+          self.$router.push({path: self.$route.path + "/content#id=" + row.applynum});
         }
       }
     },
@@ -246,7 +248,7 @@
       selectSearch,
       bdList
     }
-  }
+  };
 </script>
 
 <style scoped>

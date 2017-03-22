@@ -38,7 +38,7 @@
 </template>
 
 <script>
-  import {TEMP_PHOTOS_URL} from "../../../common/interface"
+  import {TEMP_PHOTOS_URL} from "../../../common/interface";
 
   export default{
     props: {
@@ -56,58 +56,58 @@
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
         imageUrl: "",                  // 图片的URL
         tipsFlag: true                 // 上传错误标志
-      }
+      };
     },
     watch: {
       // 图片展示
       imgFill: function() {
-        var self = this
+        var self = this;
         if (self.imgFill !== "") {
-          self.$refs.upload_tips.style.display = "none"
-          self.imageUrl = self.http + self.imgFill
+          self.$refs.upload_tips.style.display = "none";
+          self.imageUrl = self.http + self.imgFill;
         }
       }
     },
     methods: {
       // 上传图片验证
       validate: function() {
-        var self = this
+        var self = this;
         if (self.imageUrl === "") {
-          self.tipsFlag = false
+          self.tipsFlag = false;
         } else {
-          self.tipsFlag = true
+          self.tipsFlag = true;
         }
       },
       // 上传图片前验证
       beforeUpload(file) {
-        var self = this
-        const isJPG = (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png")
-        const isLt2M = file.size / 1024 / 1024 < 2
+        var self = this;
+        const isJPG = (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png");
+        const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG || !isLt2M) {
           if (self.imageUrl !== "") {
-            self.tipsFlag = false
+            self.tipsFlag = false;
             setTimeout(function() {
-              self.tipsFlag = true
-            }, 2000)
+              self.tipsFlag = true;
+            }, 2000);
           } else {
-            self.tipsFlag = false
+            self.tipsFlag = false;
           }
         } else {
-          self.tipsFlag = true
+          self.tipsFlag = true;
         }
-        return isJPG && isLt2M
+        return isJPG && isLt2M;
       },
       // 上传成功（返回父组件相关信息）
       handleSuccess(res, file) {
-        var self = this
-        self.$refs.upload_tips.style.display = "none"
-        self.imageUrl = "" + file.url
+        var self = this;
+        self.$refs.upload_tips.style.display = "none";
+        self.imageUrl = "" + file.url;
         // 图片url 及 对应名称
-        self.$emit("handleSuccess", res.content.url, self.suffix_name)
+        self.$emit("handleSuccess", res.content.url, self.suffix_name);
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

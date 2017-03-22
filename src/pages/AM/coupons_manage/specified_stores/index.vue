@@ -35,9 +35,9 @@
 </template>
 
 <script>
-  import {EVENTS_CMVIEWSHOPS_URL} from "../../../../common/interface"
-  import {getUrlParameters} from "../../../../common/common"
-  import tabComponent from "../../../../components/tabs/inner/index"
+  import {EVENTS_CMVIEWSHOPS_URL} from "../../../../common/interface";
+  import {getUrlParameters} from "../../../../common/common";
+  import tabComponent from "../../../../components/tabs/inner/index";
 
   export default{
     data() {
@@ -51,39 +51,39 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.getTables()
+      var self = this;
+      self.getTables();
     },
     methods: {
       /* 获取表格数据 */
       getTables: function() {
-        var self = this
-        var id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        var id = getUrlParameters(window.location.hash, "id");
         self.$http.get(EVENTS_CMVIEWSHOPS_URL(id)).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            self.tableDatas = datas.blist
+            var datas = response.body.content;
+            self.tableDatas = datas.blist;
           }
-        })
+        });
       },
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        this.currentPage = currentPage;
+        this.getTables();
       },
       // 返回商家银行账户修改（记录）
       backTo: function() {
-        var self = this
-        self.$router.push({path: "/coupons_manage/my_coupons"})
+        var self = this;
+        self.$router.push({path: "/coupons_manage/my_coupons"});
       }
     },
     components: {
       tabComponent
     }
-  }
+  };
 </script>
 
 <style scoped>

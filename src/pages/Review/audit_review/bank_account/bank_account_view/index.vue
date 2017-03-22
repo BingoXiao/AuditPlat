@@ -105,11 +105,11 @@
 </template>
 
 <script>
-  import {CHECKVERIFY_FILLING_URL, CHECKVERIFY_EDITINFO_URL} from "../../../../../common/interface"
-  import {getUrlParameters, modalHide} from "../../../../../common/common"
-  import tabComponent from "../../../../../components/tabs/inner/index"
-  import showImage from "../../../../../components/form/previewImg/index.vue"
-  import dialogTips from "../../../../../components/dialogTips/index.vue"
+  import {CHECKVERIFY_FILLING_URL, CHECKVERIFY_EDITINFO_URL} from "../../../../../common/interface";
+  import {getUrlParameters, modalHide} from "../../../../../common/common";
+  import tabComponent from "../../../../../components/tabs/inner/index";
+  import showImage from "../../../../../components/form/previewImg/index.vue";
+  import dialogTips from "../../../../../components/dialogTips/index.vue";
 
   export default{
     data() {
@@ -138,52 +138,52 @@
         card_code: "",    // 证件号码
         card_front: "",   // 正面照
         card_back: ""     // 背面照
-      }
+      };
     },
     mounted() {
-      var self = this
+      var self = this;
       if (self.$route.name === "商家银行账户修改") {
-        self.showBtn = true
+        self.showBtn = true;
       }
-      var id = getUrlParameters(window.location.hash, "id")
+      var id = getUrlParameters(window.location.hash, "id");
       self.$http.get(CHECKVERIFY_FILLING_URL + "?item_id=" + id)
         .then(function(response) {
           if (response.body.success) {
-            var data = response.body.content
-            var bankinfo = data.bankinfo
-            self.account = data.account              // 商家账号
-            self.items_name = data.items_name      // 项目名称
-            self.billing_account_name = bankinfo.billing_account_name   // 财务联系人
-            self.billing_account_tel = bankinfo.billing_account_tel     // 财务联系人电话
-            self.bank_account_type = bankinfo.bank_account_type         // 财务类型
-            self.bank_account_name = bankinfo.bank_account_name         // 开户名称
-            self.bank_account_number = bankinfo.bank_account_number     // 银行账号
-            self.province_name = bankinfo.province_name                 // 开户银行城市
-            self.city_name = bankinfo.city_name
-            self.bank_name = bankinfo.bank_name         // 开户银行
-            self.bank_branch_name = bankinfo.bank_branch_name    // 开户行名称
-            self.real_name = bankinfo.real_name     // 证件姓名
-            self.cert_type = bankinfo.cert_type     // 证件类型
-            self.card_code = bankinfo.card_code     // 证件号码
-            self.card_front = bankinfo.card_front   // 正面照
-            self.card_back = bankinfo.card_back     // 背面照
+            var data = response.body.content;
+            var bankinfo = data.bankinfo;
+            self.account = data.account;           // 商家账号
+            self.items_name = data.items_name;      // 项目名称
+            self.billing_account_name = bankinfo.billing_account_name;   // 财务联系人
+            self.billing_account_tel = bankinfo.billing_account_tel;     // 财务联系人电话
+            self.bank_account_type = bankinfo.bank_account_type;         // 财务类型
+            self.bank_account_name = bankinfo.bank_account_name;         // 开户名称
+            self.bank_account_number = bankinfo.bank_account_number;     // 银行账号
+            self.province_name = bankinfo.province_name;                 // 开户银行城市
+            self.city_name = bankinfo.city_name;
+            self.bank_name = bankinfo.bank_name;         // 开户银行
+            self.bank_branch_name = bankinfo.bank_branch_name;    // 开户行名称
+            self.real_name = bankinfo.real_name;     // 证件姓名
+            self.cert_type = bankinfo.cert_type;     // 证件类型
+            self.card_code = bankinfo.card_code;     // 证件号码
+            self.card_front = bankinfo.card_front;   // 正面照
+            self.card_back = bankinfo.card_back;     // 背面照
           }
-        })
+        });
     },
     methods: {
       // 审核
       // 审核
       pass: function(flag) {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         var formdata = {
           flag: flag,
           item_id: id,
           reject_reason: ""
-        }
-        var title = "是否驳回该商户银行账户修改？"
+        };
+        var title = "是否驳回该商户银行账户修改？";
         if (flag) {
-          title = "是否通过该商户银行账户修改？"
+          title = "是否通过该商户银行账户修改？";
         }
         this.$confirm(title, {
           confirmButtonText: "确定",
@@ -195,20 +195,20 @@
           {emulateJSON: true})
           .then(function(response) {
             if (response.body.success) {
-              self.tipsVisible = true
+              self.tipsVisible = true;
               modalHide(function() {
-                self.tipsVisible = false
-                self.backTo()
-              })
+                self.tipsVisible = false;
+                self.backTo();
+              });
             }
-          })
-        }).catch(() => {})
+          });
+        }).catch(() => {});
       },
       // 返回商家银行账户修改（记录）
       backTo: function() {
-        var self = this
-        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
-        self.$router.push({path: htmlSrc})
+        var self = this;
+        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"));
+        self.$router.push({path: htmlSrc});
       }
     },
     components: {
@@ -216,7 +216,7 @@
       showImage,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

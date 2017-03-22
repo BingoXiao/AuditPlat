@@ -22,10 +22,10 @@
 </template>
 
 <script>
-  import CKEDITOR from "CKEDITOR"
-  import dialogTips from "../../../../../components/dialogTips/index.vue"
-  import {getUrlParameters, modalHide} from "../../../../../common/common"
-  import {PROLIST_JM_URL, PROLIST_JMDATA_URL} from "../../../../../common/interface"
+  import CKEDITOR from "CKEDITOR";
+  import dialogTips from "../../../../../components/dialogTips/index.vue";
+  import {getUrlParameters, modalHide} from "../../../../../common/common";
+  import {PROLIST_JM_URL, PROLIST_JMDATA_URL} from "../../../../../common/interface";
 
   export default{
     data() {
@@ -36,69 +36,69 @@
         isRight: true,       // 提示框
         tips: "",
         tipsVisible: false
-      }
+      };
     },
     mounted() {
-      var self = this
-      var id = getUrlParameters(window.location.hash, "id")
-      CKEDITOR.replace("editor2", {height: "300px", width: "100%", toolbar: "Full"})
-      self.editor = CKEDITOR.instances.editor2
+      var self = this;
+      var id = getUrlParameters(window.location.hash, "id");
+      CKEDITOR.replace("editor2", {height: "300px", width: "100%", toolbar: "Full"});
+      self.editor = CKEDITOR.instances.editor2;
       self.$http.get(PROLIST_JMDATA_URL + "?item_id=" + id)
         .then(function(response) {
           if (response.body.success) {
-            self.editor.setData(response.body.content)
-            self.data = response.body.content
+            self.editor.setData(response.body.content);
+            self.data = response.body.content;
           }
-        })
+        });
     },
     methods: {
       // 预览图
       preview: function() {
-        var self = this
-        self.spotVisible = true
-        self.getData()
+        var self = this;
+        self.spotVisible = true;
+        self.getData();
       },
       // 保存脉点
       saveSpot: function(type) {
-        var self = this
-        var formData = new FormData()
-        self.getData()
+        var self = this;
+        var formData = new FormData();
+        self.getData();
         if (!self.data) {
-          self.isRight = false
-          self.tips = "请填写脉点！"
-          self.tipsVisible = true
+          self.isRight = false;
+          self.tips = "请填写脉点！";
+          self.tipsVisible = true;
           modalHide(function() {
-            self.tipsVisible = false
-          })
+            self.tipsVisible = false;
+          });
         } else {
           if (type === "S") {
-            self.tips = "保存成功！"
+            self.tips = "保存成功！";
           } else {
-            self.tips = "上线成功！"
+            self.tips = "上线成功！";
           }
-          formData.set("item_id", getUrlParameters(window.location.hash, "id"))
-          formData.set("data", self.editor.getData())
-          formData.set("type", type)
+          formData.set("item_id", getUrlParameters(window.location.hash, "id"));
+          formData.set("data", self.editor.getData());
+          formData.set("type", type);
           self.$http.post(PROLIST_JM_URL, formData).then(function(response) {
             if (response.body.success) {
-              self.tipsVisible = true
+              self.tipsVisible = true;
               modalHide(function() {
-                self.tipsVisible = false
-              })
+                self.tipsVisible = false;
+              });
             }
-          })
+          });
         }
       },
       // 获取脉点
       getData: function() {
-        var self = this
-        self.data = self.editor.getData()
+        var self = this;
+        self.data = self.editor.getData();
 //        self.$emit("getData", self.editor.getData())
       }
     },
     components: {
       dialogTips
     }
-  }
+  };
 </script>
 

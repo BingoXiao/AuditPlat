@@ -17,18 +17,14 @@
       tabs: Array,
       type: String
     },
-    data() {
-      return {
-      }
-    },
     methods: {
       toggle(i) {
-        var self = this
-        self.active = i
-        self.$emit("toggle")
+        var self = this;
+        self.active = i;
+        self.$emit("toggle");
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

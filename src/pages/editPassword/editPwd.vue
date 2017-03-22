@@ -45,9 +45,9 @@
 </template>
 
 <script>
-  import {ACCOUNTS_PASSWORD_URL} from "../../common/interface"
-  import {clearCookie, isPassword} from "../../common/common"
-  import headerMenu from "../../components/headerMenu/index"
+  import {ACCOUNTS_PASSWORD_URL} from "../../common/interface";
+  import {clearCookie, isPassword} from "../../common/common";
+  import headerMenu from "../../components/headerMenu/index";
 
   export default {
     components: {
@@ -55,31 +55,31 @@
     },
     data() {
       var newPwdV = (rule, value, callback) => {
-        var pwd = isPassword(value)
+        var pwd = isPassword(value);
         if (value === "") {
-          callback(new Error("请输入密码"))
+          callback(new Error("请输入密码"));
         } else {
           if (pwd.flag) {
             if (value === this.pwdForm.oldPwd) {
-              callback(new Error("新密码不能与原密码相同"))
+              callback(new Error("新密码不能与原密码相同"));
             } else {
-              this.$refs.pwdForm.validateField("confirmPwd")
-              callback()
+              this.$refs.pwdForm.validateField("confirmPwd");
+              callback();
             }
           } else {
-            callback(new Error(pwd.error))
+            callback(new Error(pwd.error));
           }
         }
-      }
+      };
       var confirmPwdV = (rule, value, callback) => {
         if (value === "") {
-          callback(new Error("请再次输入密码"))
+          callback(new Error("请再次输入密码"));
         } else if (value !== this.pwdForm.newPwd) {
-          callback(new Error("两次输入密码不一致!"))
+          callback(new Error("两次输入密码不一致!"));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       return {
         pwdForm: {
           oldPwd: "",
@@ -97,37 +97,37 @@
             {required: true, validator: confirmPwdV, trigger: "blur"}
           ]
         }
-      }
+      };
     },
     methods: {
       /* 密码修改提交 */
       confirmEdit: function(formName) {
-        var self = this
+        var self = this;
 
         self.$refs[formName].validate((valid) => {
           if (valid) {
-            var form = document.getElementById("pwdForm")
-            var formData = new FormData(form)
-            formData.append("id", self.$store.state.user_id)
+            var form = document.getElementById("pwdForm");
+            var formData = new FormData(form);
+            formData.append("id", self.$store.state.user_id);
             self.$http.post(ACCOUNTS_PASSWORD_URL, formData)
               .then(function(response) {
                 if (response.data.success) {
-                  self.$store.commit("AUTH_LOGIN", false)
-                  clearCookie("REMEMBER")
+                  self.$store.commit("AUTH_LOGIN", false);
+                  clearCookie("REMEMBER");
 
                   self.$message({
                     message: "请重新登录！",
                     type: "warning"
-                  })
+                  });
 
-                  self.$router.push({path: "/login"})
+                  self.$router.push({path: "/login"});
                 }
-              })
+              });
           }
-        })
+        });
       }
     }
-  }
+  };
 </script>
 
 

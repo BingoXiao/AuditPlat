@@ -14,9 +14,9 @@
 </template>
 
 <script>
-  import tabComponent from "../../../../components/tabs/inner/index"
-  import packageInfo from "../../../Review/project_review/module/index"
-  import hotSpot from "./hotSpot/index"
+  import tabComponent from "../../../../components/tabs/inner/index";
+  import packageInfo from "../../../Review/project_review/module/index";
+  import hotSpot from "./hotSpot/index";
 
   export default{
     data() {
@@ -28,12 +28,12 @@
         which: "packageInfo",
         currentView: "packageInfo",
         item_id: ""
-      }
+      };
     },
     methods: {
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function(name) {
-        this.currentView = name
+        this.currentView = name;
       }
     },
     components: {
@@ -41,7 +41,7 @@
       packageInfo,
       hotSpot
     }
-  }
+  };
 </script>
 
 <style scoped>

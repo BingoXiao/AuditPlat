@@ -28,24 +28,24 @@
 </template>
 
 <script>
-  import {getUrlParameters} from "../../../../common/common"
+  import {getUrlParameters} from "../../../../common/common";
 
   export default{
     data() {
       return {
         phonenum: ""
-      }
+      };
     },
     mounted() {
-      this.phonenum = getUrlParameters(window.location.hash, "phonenum")
+      this.phonenum = getUrlParameters(window.location.hash, "phonenum");
     },
     methods: {
       BackTo: function() {
 //        this.$router.push({path: "/bus_register/new"})
-        alert("return!")
+        alert("return!");
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -47,15 +47,15 @@
 </template>
 
 <script>
-  import stepsComponent from "../../../../components/steps/index"
-  import basicInfo from "../module/basic_info/index"
-  import qualificationInfo from "../module/qualification_info/index"
-  import checkoutInfo from "../module/checkout_info/index"
-  import submitSuccess from "../module/submit_success/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
+  import stepsComponent from "../../../../components/steps/index";
+  import basicInfo from "../module/basic_info/index";
+  import qualificationInfo from "../module/qualification_info/index";
+  import checkoutInfo from "../module/checkout_info/index";
+  import submitSuccess from "../module/submit_success/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
   import {BDREGISTER_APPLFILLING_URL, BDREGISTER_EDITFILLING_URL,
-    BDREGISTER_NEWREGISTER_URL} from "../../../../common/interface"
-  import {getUrlParameters, modalHide} from "../../../../common/common"
+    BDREGISTER_NEWREGISTER_URL} from "../../../../common/interface";
+  import {getUrlParameters, modalHide} from "../../../../common/common";
 
   export default{
     data() {
@@ -85,48 +85,48 @@
             index: 4,
             title: "送审成功"
           }]
-      }
+      };
     },
     mounted() {
-      this.getNewInfo()
+      this.getNewInfo();
     },
     methods: {
       // 获取新店注册信息
       getNewInfo: function() {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         if (id) {   // 有填充信息
           if (self.$route.name === "商家申请注册详情页") {
             self.$http.get(BDREGISTER_APPLFILLING_URL + "?applynum=" + id)
               .then(function(response) {
                 if (response.body.success) {
-                  self.filling = response.body.content
-                  self.PAN.name = response.body.content.userinfo.name
-                  self.PAN.phonenum = response.body.content.userinfo.phonenum
+                  self.filling = response.body.content;
+                  self.PAN.name = response.body.content.userinfo.name;
+                  self.PAN.phonenum = response.body.content.userinfo.phonenum;
                 }
-              })
+              });
           } else {
             self.$http.get(BDREGISTER_EDITFILLING_URL + "?applynum=" + id)
               .then(function(response) {
                 if (response.body.success) {
-                  self.filling = response.body.content
-                  self.PAN.name = response.body.content.userinfo.name
-                  self.PAN.phonenum = response.body.content.userinfo.phonenum
+                  self.filling = response.body.content;
+                  self.PAN.name = response.body.content.userinfo.name;
+                  self.PAN.phonenum = response.body.content.userinfo.phonenum;
                 }
-              })
+              });
           }
         }
       },
 
       // 下一步
       next_step: function(step, flag) {
-        var self = this
+        var self = this;
         if (self.active === 1) {          // 基本信息验证
-          self.$refs.basicChild.basicValidate()
+          self.$refs.basicChild.basicValidate();
         } else if (self.active === 2) {   // 资质信息验证
-          self.$refs.quaChild.quaValidate()
+          self.$refs.quaChild.quaValidate();
         } else if (self.active === 3) {   // 结款信息验证
-          self.$refs.checkChild.checkValidate(flag)
+          self.$refs.checkChild.checkValidate(flag);
         }
         if (self.$store.state.vflag) {    // 验证成功
           self.$http.post(BDREGISTER_NEWREGISTER_URL,
@@ -135,37 +135,37 @@
             .then(function(response) {
               if (response.body.success) {
                 if (!getUrlParameters(window.location.hash, "id")) {
-                  window.location.hash += "#id=" + response.body.content.applynum
+                  window.location.hash += "#id=" + response.body.content.applynum;
                 }
                 if (step === "save") {       // 保存
-                  self.tipsVisible = true
+                  self.tipsVisible = true;
                   modalHide(function() {
-                    self.tipsVisible = false
+                    self.tipsVisible = false;
                     if (self.$route.name === "商家申请注册详情页") {
-                      self.$router.push({path: "/bus_register/apply"})
+                      self.$router.push({path: "/bus_register/apply"});
                     } else if (self.$route.name === "新店注册详情页") {
-                      self.$router.push({path: "/bus_register/new"})
+                      self.$router.push({path: "/bus_register/new"});
                     }
-                  }, 1000)
+                  }, 1000);
                 } else {                    // 送审
-                  self.active = self.active + 1
-                  self.currentView = step
+                  self.active = self.active + 1;
+                  self.currentView = step;
                 }
-                self.$store.commit("V_FLAG", false)
+                self.$store.commit("V_FLAG", false);
               }
-            })
+            });
         }
       },
 
       // 上一步
       previous_step: function(step) {
-        var self = this
+        var self = this;
         if (self.active === 3) {
-          self.active = self.active - 1
-          self.currentView = "qualificationInfo"
+          self.active = self.active - 1;
+          self.currentView = "qualificationInfo";
         } else if (self.active === 2) {
-          self.active = self.active - 1
-          self.currentView = "basicInfo"
+          self.active = self.active - 1;
+          self.currentView = "basicInfo";
         }
       }
     },
@@ -177,7 +177,7 @@
       submitSuccess,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

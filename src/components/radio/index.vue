@@ -9,11 +9,8 @@
   export default{
     props: {
       selected: Boolean
-    },
-    data() {
-      return {}
     }
-  }
+  };
 </script>
 
 <style scoped>

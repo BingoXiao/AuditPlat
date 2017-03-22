@@ -109,14 +109,15 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import datePicker from "../../../components/search/datePicker/index"
-  import inputSearch from "../../../components/search/input/index"
-  import selectSearch from "../../../components/search/select/index"
-  import bdList from "../../../components/search/BDlist/index"
-  import dialogTips from "../../../components/dialogTips/index.vue"
-  import {modalHide} from "../../../common/common"
-  import {BDAPPLY_TABLE_URL, BDAPPLY_LIST_URL, BDAPPLY_ASSIGN_URL} from "../../../common/interface"
+  import alasql from "alasql";
+  import datePicker from "../../../components/search/datePicker/index";
+  import inputSearch from "../../../components/search/input/index";
+  import selectSearch from "../../../components/search/select/index";
+  import bdList from "../../../components/search/BDlist/index";
+  import dialogTips from "../../../components/dialogTips/index.vue";
+  import {modalHide} from "../../../common/common";
+  import {BDAPPLY_TABLE_URL, BDAPPLY_LIST_URL,
+    BDAPPLY_ASSIGN_URL} from "../../../common/interface";
 
   export default{
     data() {
@@ -151,114 +152,116 @@
           tips: "分配成功！",
           tipsVisible: false
         }
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.BDlist()
+      var self = this;
+      self.BDlist();
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取BD列表 */
       BDlist: function() {
-        var self = this
+        var self = this;
         self.$http.get(BDAPPLY_LIST_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            self.search.BDlist = datas    // BD列表（模态框和筛选栏）
+            var datas = response.body.content;
+            self.search.BDlist = datas;    // BD列表（模态框和筛选栏）
           }
-        })
+        });
       },
 
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(BDAPPLY_TABLE_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY submit_time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE applynum LIKE '%" + self.search.applynum + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE applynum LIKE '%" +
+          self.search.applynum + "%'";
         if (self.search.status !== "") {    // 状态
-          rules += " AND status = ?"
+          rules += " AND status = ?";
         }
         if (self.search.bd !== "") {    // bd
-          rules += " AND bd LIKE '%" + self.search.bd + "%'"
+          rules += " AND bd LIKE '%" + self.search.bd + "%'";
         }
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
       /* 清空筛选 */
       rulesReset: function() {
-        var self = this
-        self.$refs.dateRange.reset()
-        self.$refs.applynum.reset()
-        self.$refs.bd.reset()
-        self.$refs.status.reset()
-        self.currentPage = 1
+        var self = this;
+        self.$refs.dateRange.reset();
+        self.$refs.applynum.reset();
+        self.$refs.bd.reset();
+        self.$refs.status.reset();
+        self.currentPage = 1;
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       /* 表格数据选择 */
       distributeBD: function(row) {
-        var self = this
-        self.dialog.BDvisible = true
-        self.table.applynum = row.applynum
-        self.dialog.BD = row.bd
+        var self = this;
+        self.dialog.BDvisible = true;
+        self.table.applynum = row.applynum;
+        self.dialog.BD = row.bd;
       },
 
       /* 模态框操作 选择要分配得BD */
       chooseBD: function(value) {
-        var self = this
-        self.dialog.BD = value
+        var self = this;
+        self.dialog.BD = value;
       },
 
       /* 分配任务 */
       BDassignment: function() {
-        var self = this
-        var formData = new FormData()
+        var self = this;
+        var formData = new FormData();
         if (self.dialog.BD !== "") {
-          formData.append("applynum", self.table.applynum)
-          formData.append("bd_id", self.dialog.BD)
+          formData.append("applynum", self.table.applynum);
+          formData.append("bd_id", self.dialog.BD);
         } else {
-          return false
+          return false;
         }
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
@@ -266,18 +269,18 @@
         self.$http.post(BDAPPLY_ASSIGN_URL, formData)
           .then(function(response) {
             if (response.body.success) {
-              self.dialog.BDvisible = false
-              self.dialog.tipsVisible = true
+              self.dialog.BDvisible = false;
+              self.dialog.tipsVisible = true;
               modalHide(function() {
-                self.dialog.tipsVisible = false
+                self.dialog.tipsVisible = false;
                 for (let i = 0; i < self.tableDatas.length; i++) {
                   if (self.tableDatas[i].applynum === self.table.applynum) {
-                    self.tableDatas[i].bd = self.$refs.bd.selectedLabel
+                    self.tableDatas[i].bd = self.$refs.bd.selectedLabel;
                   }
                 }
-              })
+              });
             }
-          })
+          });
       }
     },
     components: {
@@ -287,7 +290,7 @@
       dialogTips,
       bdList
     }
-  }
+  };
 </script>
 
 <style scoped>

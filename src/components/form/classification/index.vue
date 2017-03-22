@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import {CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../common/interface"
+  import {CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../common/interface";
 
   export default{
     props: {
@@ -62,128 +62,128 @@
         sm_list: [],
         error: "",
         flag: true
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.get_lg_list()
+      var self = this;
+      self.get_lg_list();
     },
     watch: {
       options: function() {
-        var self = this
+        var self = this;
         if (self.options.length > 0) {
-          self.flag = false
-          self.lg_value = parseInt(self.options[0])
+          self.flag = false;
+          self.lg_value = parseInt(self.options[0]);
         }
       }
     },
     methods: {
       clear_error: function(flag, color) {
-        var self = this
+        var self = this;
         if (flag) {
-          self.error = ""
+          self.error = "";
         } else {
-          self.error = "请选择商家分类"
+          self.error = "请选择商家分类";
         }
-        document.getElementsByName("lclass")[0].style.borderColor = color
-        document.getElementsByName("mclass")[0].style.borderColor = color
-        document.getElementsByName("sclass")[0].style.borderColor = color
+        document.getElementsByName("lclass")[0].style.borderColor = color;
+        document.getElementsByName("mclass")[0].style.borderColor = color;
+        document.getElementsByName("sclass")[0].style.borderColor = color;
       },
 
       /* 获取合作行业列表 */
       get_lg_list: function() {
-        var self = this
+        var self = this;
         self.$http.get(CATEGORY_URL).then(function(response) {
           if (response.body.success) {
-            self.lg_list = response.body.content
+            self.lg_list = response.body.content;
           }
-        })
+        });
       },
 
       /* 获取品类列表 */
       md_http: function(value) {
-        var self = this
-        self.smallVisible = true
-        self.md_value = ""
+        var self = this;
+        self.smallVisible = true;
+        self.md_value = "";
         self.$http.get(LCLASS_URL + "?lclass_id=" + value).then(function(response) {
           if (response.body.success) {
-            self.md_list = response.body.content
+            self.md_list = response.body.content;
             if (!self.flag) {
-              self.md_value = parseInt(self.options[1])
+              self.md_value = parseInt(self.options[1]);
             }
           }
-        })
+        });
       },
       get_md_list: function(value) {
-        var self = this
+        var self = this;
         if (value) {
-          self.md_http(value)
+          self.md_http(value);
         }
-        self.clear_error(true, "rgb(191, 203, 217)")
+        self.clear_error(true, "rgb(191, 203, 217)");
       },
 
       /* 获取子类别列表 */
       sm_http: function(value) {
-        var self = this
-        self.sm_value = ""
+        var self = this;
+        self.sm_value = "";
         self.$http.get(SCLASS_URL + "?mclass_id=" + value).then(function(response) {
           if (response.body.success) {
-            var list = response.body.content
+            var list = response.body.content;
             if (!list.length) {
-              self.smallVisible = false
-              self.sm_list = ""
+              self.smallVisible = false;
+              self.sm_list = "";
             } else {
-              self.smallVisible = true
-              self.sm_list = response.body.content
+              self.smallVisible = true;
+              self.sm_list = response.body.content;
 
               if (!self.flag) {
-                self.sm_value = parseInt(self.options[2])
-                self.flag = true
+                self.sm_value = parseInt(self.options[2]);
+                self.flag = true;
               }
             }
           }
-        })
+        });
       },
       get_sm_list: function(value) {
-        var self = this
+        var self = this;
         if (value) {
-          self.sm_http(value)
+          self.sm_http(value);
         }
-        self.clear_error(true, "rgb(191, 203, 217)")
+        self.clear_error(true, "rgb(191, 203, 217)");
       },
 
       /* 子类别数据改变时 */
       get_sm_data: function(value) {
-        this.clear_error(true, "rgb(191, 203, 217)")
+        this.clear_error(true, "rgb(191, 203, 217)");
       },
 
       /* 分类验证 */
       classValidate: function() {
-        var self = this
+        var self = this;
         if (self.lg_value === "") {
-          self.clear_error(false, "#ff4949")
+          self.clear_error(false, "#ff4949");
         } else {
           if (self.md_value === "") {
-            self.error = "请选择商家分类"
-            document.getElementsByName("mclass")[0].style.borderColor = "#ff4949"
-            document.getElementsByName("sclass")[0].style.borderColor = "#ff4949"
+            self.error = "请选择商家分类";
+            document.getElementsByName("mclass")[0].style.borderColor = "#ff4949";
+            document.getElementsByName("sclass")[0].style.borderColor = "#ff4949";
           } else {
             if (self.sm_list.length > 0 && self.sm_value === "") {
-              self.error = "请选择商家分类"
-              document.getElementsByName("sclass")[0].style.borderColor = "#ff4949"
+              self.error = "请选择商家分类";
+              document.getElementsByName("sclass")[0].style.borderColor = "#ff4949";
             } else {
-              self.clear_error(true, "rgb(191, 203, 217)")
+              self.clear_error(true, "rgb(191, 203, 217)");
             }
           }
         }
 
         if (!self.error) {
-          var value = [self.lg_value, self.md_value, self.sm_value]
-          self.$emit("classValidate", "class", value, true)
+          var value = [self.lg_value, self.md_value, self.sm_value];
+          self.$emit("classValidate", "class", value, true);
         }
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

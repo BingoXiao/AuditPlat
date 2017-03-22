@@ -14,10 +14,10 @@
 </template>
 
 <script>
-  import tabComponent from "../../../components/tabs/router/index"
-  import myCoupons from "./myCoupons/index"
-  import addNewCoupons from "./addNewCoupons/index"
-  import specifiedStores from "./specified_stores/index"
+  import tabComponent from "../../../components/tabs/router/index";
+  import myCoupons from "./myCoupons/index";
+  import addNewCoupons from "./addNewCoupons/index";
+  import specifiedStores from "./specified_stores/index";
 
   export default {
     data() {
@@ -33,41 +33,41 @@
           }
         ],
         view: ""
-      }
+      };
     },
     // 在渲染该组件的对应路由被 confirm 前调用
     // 不！能！获取组件实例 `this`
     // 因为当钩子执行前，组件实例还没被创建
     beforeRouteEnter(to, from, next) {
       if (to.path === "/coupons_manage/:type") {
-        next({path: "/coupons_manage/my_coupons"})
+        next({path: "/coupons_manage/my_coupons"});
       } else {
-        next()
+        next();
       }
     },
     // 在当前路由改变，但是该组件被复用时调用
     // 可以访问组件实例 `this`
     beforeRouteUpdate(to, from, next) {
       if (to.path === "/coupons_manage/:type") {
-        next({path: "/coupons_manage/my_coupons"})
+        next({path: "/coupons_manage/my_coupons"});
       } else {
-        next()
+        next();
       }
-      this.tabChange()
+      this.tabChange();
     },
     mounted() {
-      var self = this
-      self.tabChange()
+      var self = this;
+      self.tabChange();
     },
     methods: {
       // tab选择组件显示
       tabChange: function(name) {
-        var self = this
-        var type = self.$route.params.type
+        var self = this;
+        var type = self.$route.params.type;
         if (type === "my_coupons") {
-          self.view = "myCoupons"
+          self.view = "myCoupons";
         } else if (type === "add_new_coupons") {
-          self.view = "addNewCoupons"
+          self.view = "addNewCoupons";
         }
       }
     },
@@ -77,7 +77,7 @@
       addNewCoupons,
       specifiedStores
     }
-  }
+  };
 </script>
 
 <style scoped>

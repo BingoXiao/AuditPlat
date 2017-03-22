@@ -128,9 +128,9 @@
 </template>
 
 <script>
-  import uploadImage from "../../../../../components/form/uploadImg/index"
-  import bankSelect from "../../../../../components/form/bank/index"
-  import {isName, isPhone, isbankNumber, isLicNumber, getUrlParameters} from "../../../../../common/common"
+  import uploadImage from "../../../../../components/form/uploadImg/index";
+  import bankSelect from "../../../../../components/form/bank/index";
+  import {isName, isPhone, isbankNumber, isLicNumber, getUrlParameters} from "../../../../../common/common";
 
   export default{
     props: {
@@ -139,40 +139,40 @@
     data() {
       // 银行卡号
       var validateBankAcc = (rule, value, callback) => {
-        var BankAcc = isbankNumber(value)
+        var BankAcc = isbankNumber(value);
         if (!BankAcc.flag) {
-          callback(new Error(BankAcc.error))
+          callback(new Error(BankAcc.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       // 财务联系人
       var validateName = (rule, value, callback) => {
-        var Name = isName(value)
+        var Name = isName(value);
         if (!Name.flag) {
-          callback(new Error(Name.error))
+          callback(new Error(Name.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       // 财务联系人手机
       var validatePhone = (rule, value, callback) => {
-        var Phone = isPhone(value)
+        var Phone = isPhone(value);
         if (!Phone.flag) {
-          callback(new Error(Phone.error))
+          callback(new Error(Phone.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       // 证件号码
       var validateIDNum = (rule, value, callback) => {
-        var IDNum = isLicNumber(value, "证件号码")
+        var IDNum = isLicNumber(value, "证件号码");
         if (!IDNum.flag) {
-          callback(new Error(IDNum.error))
+          callback(new Error(IDNum.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       return {
         moduleV: {      // 模块验证
           bank: false   // 银行(框)
@@ -246,43 +246,43 @@
             { validator: validateIDNum, trigger: "blur" }
           ]
         }
-      }
+      };
     },
     watch: {
       filling: function() {
-        var self = this
-        var bankinfo = self.filling.bankinfo
-        var userinfo = self.filling.userinfo
+        var self = this;
+        var bankinfo = self.filling.bankinfo;
+        var userinfo = self.filling.userinfo;
         if (bankinfo) {
           if (bankinfo.person_or_company_name) {   // 有银行信息
-            self.checkForm.bankRadio = "hasBank"
-            self.checkForm.account_type = bankinfo.account_type                        // 银行账户
-            self.checkForm.person_or_company_name = bankinfo.person_or_company_name    // 开户名
-            var arr = []
-            arr[0] = bankinfo.admiprovince_id      // 开户行所在省
-            arr[1] = bankinfo.admicity_id          // 开户行所在市
-            arr[2] = bankinfo.bank_id              // 银行名称
-            arr[3] = bankinfo.branch_id            // 开户行名称（0表示自定义）
-            arr[4] = bankinfo.custom_branch        // 自定义开户行名称
-            self.checkForm.bank = arr
-            self.checkForm.bank_account = bankinfo.bank_account                        // 银行卡号
-            self.checkForm.billing_account_name = bankinfo.billing_account_name        // 财务联系人
-            self.checkForm.billing_account_tel = bankinfo.billing_account_tel          // 财务联系人手机
+            self.checkForm.bankRadio = "hasBank";
+            self.checkForm.account_type = bankinfo.account_type;                        // 银行账户
+            self.checkForm.person_or_company_name = bankinfo.person_or_company_name;    // 开户名
+            var arr = [];
+            arr[0] = bankinfo.admiprovince_id;      // 开户行所在省
+            arr[1] = bankinfo.admicity_id;          // 开户行所在市
+            arr[2] = bankinfo.bank_id;              // 银行名称
+            arr[3] = bankinfo.branch_id;            // 开户行名称（0表示自定义）
+            arr[4] = bankinfo.custom_branch;        // 自定义开户行名称
+            self.checkForm.bank = arr;
+            self.checkForm.bank_account = bankinfo.bank_account;                        // 银行卡号
+            self.checkForm.billing_account_name = bankinfo.billing_account_name;        // 财务联系人
+            self.checkForm.billing_account_tel = bankinfo.billing_account_tel;          // 财务联系人手机
           }
         }
         if (userinfo) {
           if (userinfo.card_code) {         // 有身份信息
-            self.IDForm.IDRadio = "hasID"
-            self.IDForm.cert_type = userinfo.cert_type    // 证件类型
-            self.IDForm.real_name = userinfo.real_name    // 真实姓名
-            self.IDForm.card_code = userinfo.card_code    // 证件号码
+            self.IDForm.IDRadio = "hasID";
+            self.IDForm.cert_type = userinfo.cert_type;    // 证件类型
+            self.IDForm.real_name = userinfo.real_name;    // 真实姓名
+            self.IDForm.card_code = userinfo.card_code;    // 证件号码
             if (userinfo.cert_type === "PASSPORT") {
-              self.IDForm.card_all_url = userinfo.card_front_url  // 护照
-              self.IDForm.cardImg = false
+              self.IDForm.card_all_url = userinfo.card_front_url;  // 护照
+              self.IDForm.cardImg = false;
             } else {
-              self.IDForm.cardImg = true
-              self.IDForm.card_front_url = userinfo.card_front_url  // 其他
-              self.IDForm.card_back_url = userinfo.card_back_url
+              self.IDForm.cardImg = true;
+              self.IDForm.card_front_url = userinfo.card_front_url;  // 其他
+              self.IDForm.card_back_url = userinfo.card_back_url;
             }
           }
         }
@@ -291,69 +291,69 @@
     methods: {
       // 结款信息单选按钮改变事件
       bankRadio_change: function() {
-        this.checkFormFlag = false
+        this.checkFormFlag = false;
       },
       // 身份信息单选按钮改变事件
       IDRadio_change: function() {
-        this.IDFormFlag = false
+        this.IDFormFlag = false;
       },
       // 证件类型改变时
       change_card: function(value) {
-        var self = this
+        var self = this;
         if (value === "PASSPORT") {
-          self.IDForm.cardImg = false
+          self.IDForm.cardImg = false;
         } else {
-          self.IDForm.cardImg = true
+          self.IDForm.cardImg = true;
           if (value === "ID_CARD") {
-            self.IDForm.card_front_url_sample = require("../../../../../assets/register/3.png")
-            self.IDForm.card_back_url_sample = require("../../../../../assets/register/4.png")
+            self.IDForm.card_front_url_sample = require("../../../../../assets/register/3.png");
+            self.IDForm.card_back_url_sample = require("../../../../../assets/register/4.png");
           } else if (value === "HK_MACAO_CARD") {
-            self.IDForm.card_front_url_sample = require("../../../../../assets/register/5.png")
-            self.IDForm.card_back_url_sample = require("../../../../../assets/register/6.png")
+            self.IDForm.card_front_url_sample = require("../../../../../assets/register/5.png");
+            self.IDForm.card_back_url_sample = require("../../../../../assets/register/6.png");
           } else if (value === "TAIWAN_CARD") {
-            self.IDForm.card_front_url_sample = require("../../../../../assets/register/7.png")
-            self.IDForm.card_back_url_sample = require("../../../../../assets/register/8.png")
+            self.IDForm.card_front_url_sample = require("../../../../../assets/register/7.png");
+            self.IDForm.card_back_url_sample = require("../../../../../assets/register/8.png");
           }
         }
       },
       // 模块验证及数据返回
       module_res: function(name, value, flag) {
-        var self = this
-        self.moduleV[name] = flag
-        self.checkForm[name] = value
+        var self = this;
+        self.moduleV[name] = flag;
+        self.checkForm[name] = value;
       },
       // 图片数据返回
       addFormData: function(value, name) {
-        var self = this
-        self.IDForm[name] = value
+        var self = this;
+        self.IDForm[name] = value;
       },
       // 银行信息验证
       checkFormV: function() {
-        var self = this
-        self.$refs.bank_children.bankValidate()
+        var self = this;
+        self.$refs.bank_children.bankValidate();
         self.$refs.checkForm.validate((valid) => {
           if (valid && self.moduleV.bank) {
-            self.checkFormFlag = true
+            self.checkFormFlag = true;
           }
-        })
+        });
       },
       // 身份信息验证
       IDFormV: function() {
-        var self = this
-        var imageFlag = false
+        var self = this;
+        var imageFlag = false;
         if (self.IDForm.cert_type === "PASSPORT") {
-          self.$refs.card_all.validate()
-          imageFlag = self.IDForm.card_all_url
+          self.$refs.card_all.validate();
+          imageFlag = self.IDForm.card_all_url;
         } else {
-          self.$refs.card_front.validate()
-          self.$refs.card_back.validate()
-          imageFlag = self.IDForm.card_front_url && self.IDForm.card_back_url
+          self.$refs.card_front.validate();
+          self.$refs.card_back.validate();
+          imageFlag = self.IDForm.card_front_url && self.IDForm.card_back_url;
         }
         self.$refs.IDForm.validate((valid) => {
           if (valid && imageFlag) {
-            self.IDFormFlag = true
+            self.IDFormFlag = true;
           }
-        })
+        });
       },
       /* 表单重置 */
 //      resetForm: function() {
@@ -361,7 +361,7 @@
 //      },
       // 结款信息验证
       checkValidate: function(flag) {
-        var self = this
+        var self = this;
         var formData = {
           step: "BANK",
           "applynum": getUrlParameters(window.location.hash, "id"),
@@ -385,42 +385,42 @@
             "card_front_url": "",  // 正面照片
             "card_back_url": ""    // 背面照片
           }
-        }
+        };
         if (self.checkForm.bankRadio === "hasBank") {   // 有银行信息
-          self.checkFormV()
-          formData.bankinfo.account_type = self.checkForm.account_type
-          formData.bankinfo.admiprovince_id = self.checkForm.bank[0]
-          formData.bankinfo.admicity_id = self.checkForm.bank[1]
-          formData.bankinfo.bank_id = self.checkForm.bank[2]
-          formData.bankinfo.branch_id = self.checkForm.bank[3] + ""
+          self.checkFormV();
+          formData.bankinfo.account_type = self.checkForm.account_type;
+          formData.bankinfo.admiprovince_id = self.checkForm.bank[0];
+          formData.bankinfo.admicity_id = self.checkForm.bank[1];
+          formData.bankinfo.bank_id = self.checkForm.bank[2];
+          formData.bankinfo.branch_id = self.checkForm.bank[3] + "";
           if (parseInt(self.checkForm.bank[3]) === 0) {  // 自定义支行
-            formData.bankinfo.custom_branch = self.checkForm.bank[4]
+            formData.bankinfo.custom_branch = self.checkForm.bank[4];
           }
-          formData.bankinfo.person_or_company_name = self.checkForm.person_or_company_name
-          formData.bankinfo.bank_account = self.checkForm.bank_account
-          formData.bankinfo.billing_account_name = self.checkForm.billing_account_name
-          formData.bankinfo.billing_account_tel = self.checkForm.billing_account_tel
+          formData.bankinfo.person_or_company_name = self.checkForm.person_or_company_name;
+          formData.bankinfo.bank_account = self.checkForm.bank_account;
+          formData.bankinfo.billing_account_name = self.checkForm.billing_account_name;
+          formData.bankinfo.billing_account_tel = self.checkForm.billing_account_tel;
         } else {
-          self.checkFormFlag = true
+          self.checkFormFlag = true;
         }
         if (self.IDForm.IDRadio === "hasID") {      // 有身份信息
-          self.IDFormV()
-          formData.userinfo.real_name = self.IDForm.real_name
-          formData.userinfo.cert_type = self.IDForm.cert_type
-          formData.userinfo.card_code = self.IDForm.card_code
+          self.IDFormV();
+          formData.userinfo.real_name = self.IDForm.real_name;
+          formData.userinfo.cert_type = self.IDForm.cert_type;
+          formData.userinfo.card_code = self.IDForm.card_code;
           if (self.IDForm.cert_type === "PASSPORT") {
-            formData.userinfo.card_front_url = self.IDForm.card_all_url
+            formData.userinfo.card_front_url = self.IDForm.card_all_url;
           } else {
-            formData.userinfo.card_front_url = self.IDForm.card_front_url
+            formData.userinfo.card_front_url = self.IDForm.card_front_url;
           }
-          formData.userinfo.card_back_url = self.IDForm.card_back_url
+          formData.userinfo.card_back_url = self.IDForm.card_back_url;
         } else {
-          self.IDFormFlag = true
+          self.IDFormFlag = true;
         }
         // 验证判断
         if (self.checkFormFlag && self.IDFormFlag) {
-          self.$store.commit("FORM_DATA", formData)
-          self.$store.commit("V_FLAG", true)
+          self.$store.commit("FORM_DATA", formData);
+          self.$store.commit("V_FLAG", true);
         }
       }
     },
@@ -428,7 +428,7 @@
       uploadImage,
       bankSelect
     }
-  }
+  };
 </script>
 
 <style scoped>

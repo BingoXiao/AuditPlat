@@ -1,30 +1,30 @@
-import Login from "../pages/login/index"
-import Main from "../pages/main"
-import EDITPWD from "../pages/editPassword/editPwd"
-import Setting from "../pages/Setting/index"
-import BusApply from "../pages/BD/bus_apply/index"
-import BusRegister from "../pages/BD/bus_register/index"
-import New from "../pages/BD/bus_register/new/index"
-import Branch from "../pages/BD/bus_register/branch/index"
-import Apply from "../pages/BD/bus_register/apply/index"
-import BusList from "../pages/BD/bus_list/index"
-import BLView from "../pages/BD/bus_list/view/index"
-import BusReview from "../pages/Review/bus_review/index"
-import ApplyReview from "../pages/Review/bus_review/apply/index"
-import EditReview from "../pages/Review/bus_review/modify/index"
-import ProjectReview from "../pages/Review/project_review/index"
-import ProjectContent from "../pages/Review/project_review/inner/index"
-import wholeShops from "../pages/Review/project_review/wholeShops/index"
-import AuditReview from "../pages/Review/audit_review/index"
-import bankAccountContent from "../pages/Review/audit_review/bank_account/bank_account_view/index"
-import ProjectList from "../pages/PM/project_list/index"
-import ProjectListContent from "../pages/PM/project_list/content/index"
-import SystemNotice from "../pages/BM/system_notice/index"
-import TipsOff from "../pages/BM/tip_off/index"
-import CouponsManage from "../pages/AM/coupons_manage/index"
-import AddActivity from "../pages/AM/add_activity/index"
-import ActivityList from "../pages/AM/activity_list/index"
-import CenterRegister from "../pages/center_register/index"
+import Login from "../pages/login/index";
+import Main from "../pages/main";
+import EDITPWD from "../pages/editPassword/editPwd";
+import Setting from "../pages/Setting/index";
+import BusApply from "../pages/BD/bus_apply/index";
+import BusRegister from "../pages/BD/bus_register/index";
+import New from "../pages/BD/bus_register/new/index";
+import Branch from "../pages/BD/bus_register/branch/index";
+import Apply from "../pages/BD/bus_register/apply/index";
+import BusList from "../pages/BD/bus_list/index";
+import BLView from "../pages/BD/bus_list/view/index";
+import BusReview from "../pages/Review/bus_review/index";
+import ApplyReview from "../pages/Review/bus_review/apply/index";
+import EditReview from "../pages/Review/bus_review/modify/index";
+import ProjectReview from "../pages/Review/project_review/index";
+import ProjectContent from "../pages/Review/project_review/inner/index";
+import wholeShops from "../pages/Review/project_review/wholeShops/index";
+import AuditReview from "../pages/Review/audit_review/index";
+import bankAccountContent from "../pages/Review/audit_review/bank_account/bank_account_view/index";
+import ProjectList from "../pages/PM/project_list/index";
+import ProjectListContent from "../pages/PM/project_list/content/index";
+import SystemNotice from "../pages/BM/system_notice/index";
+import TipsOff from "../pages/BM/tip_off/index";
+import CouponsManage from "../pages/AM/coupons_manage/index";
+import AddActivity from "../pages/AM/add_activity/index";
+import ActivityList from "../pages/AM/activity_list/index";
+import CenterRegister from "../pages/center_register/index";
 
 const routes = [
   {
@@ -323,6 +323,6 @@ const routes = [
     hidden: true,
     redirect: {path: "/login"}
   }
-]
+];
 
-export default routes
+export default routes;

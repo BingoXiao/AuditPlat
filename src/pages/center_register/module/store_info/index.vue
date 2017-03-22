@@ -23,9 +23,9 @@
 </template>
 
 <script>
-  import busAddress from "../../../../components/form/address/index"
-  import busClassification from "../../../../components/form/classification/index"
-  import telComponent from "../../../../components/form/tel/index"
+  import busAddress from "../../../../components/form/address/index";
+  import busClassification from "../../../../components/form/classification/index";
+  import telComponent from "../../../../components/form/tel/index";
 
   export default{
     data() {
@@ -46,20 +46,20 @@
             {required: true, message: "请填写门店名称", trigger: "blur"}
           ]
         }
-      }
+      };
     },
     methods: {
       // 模块验证结果及取值
       module_res: function(name, value, flag) {
-        var self = this
-        self.moduleV[name] = flag      // 返回模块验证结果
-        self.basicForm[name] = value   // 返回模块数据
+        var self = this;
+        self.moduleV[name] = flag;     // 返回模块验证结果
+        self.basicForm[name] = value;   // 返回模块数据
       },
       // 基本信息验证
       storeValidate: function() {
-        var self = this
-        self.$refs.tel_children.telValidate()            // 座机验证
-        self.$refs.address_children.addressValidate()    // 地址验证
+        var self = this;
+        self.$refs.tel_children.telValidate();            // 座机验证
+        self.$refs.address_children.addressValidate();    // 地址验证
         self.$refs.basicForm.validate((valid) => {
           if (valid && self.moduleV.tel && self.moduleV.address) {
             var businfo = {
@@ -71,11 +71,11 @@
               "city_near_id": self.basicForm.address.selectArr[3], // 所属商圈
               "address_details": self.basicForm.address.detail, // 详细地址
               "address_point": self.basicForm.address.point     // 百度地图坐标
-            }
-            self.$store.commit("V_FLAG", true)
-            self.$emit("storeValidate", true, businfo)
+            };
+            self.$store.commit("V_FLAG", true);
+            self.$emit("storeValidate", true, businfo);
           }
-        })
+        });
       }
     },
     components: {
@@ -83,7 +83,7 @@
       busClassification,
       telComponent
     }
-  }
+  };
 </script>
 
 <style scoped>

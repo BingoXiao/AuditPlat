@@ -118,11 +118,11 @@
 </template>
 
 <script>
-  import radioCheck from "../../../../../components/radio/index.vue"
-  import showImage from "../../../../../components/form/previewImg/index.vue"
+  import radioCheck from "../../../../../components/radio/index.vue";
+  import showImage from "../../../../../components/form/previewImg/index.vue";
   import {BANK_PROVINCES_URL, BANK_CITIES_URL,
-    BANKS_URL, SUBBANKS_URL} from "../../../../../common/interface"
-  import {getValue} from "../../../../../common/common"
+    BANKS_URL, SUBBANKS_URL} from "../../../../../common/interface";
+  import {getValue} from "../../../../../common/common";
 
   export default{
     props: {
@@ -159,87 +159,87 @@
           card_front_url: "",    // 证件正面照
           card_back_url: ""      // 证件背面照
         }
-      }
+      };
     },
     watch: {
       Bank: function() {
-        var self = this
-        var bank = self.Bank
+        var self = this;
+        var bank = self.Bank;
         if (bank.bank_account) {
-          self.checkForm.bankRadio = true      // 有无银行信息
+          self.checkForm.bankRadio = true;     // 有无银行信息
           // 银行省、市、银行、支行
-          self.get_admiprovince(bank.admiprovince_id, bank.admicity_id, bank.bank_id, bank.branch_id, bank.custom_branch)
-          self.checkForm.account_type = bank.account_type                       // 银行账户类型
-          self.checkForm.person_or_company_name = bank.person_or_company_name   // 开户名
-          self.checkForm.bank_account = bank.bank_account                       // 银行卡号
-          self.checkForm.billing_account_name = bank.billing_account_name       // 财务联系人
-          self.checkForm.billing_account_tel = bank.billing_account_tel         // 财务联系人电话
+          self.get_admiprovince(bank.admiprovince_id, bank.admicity_id, bank.bank_id, bank.branch_id, bank.custom_branch);
+          self.checkForm.account_type = bank.account_type;                       // 银行账户类型
+          self.checkForm.person_or_company_name = bank.person_or_company_name;   // 开户名
+          self.checkForm.bank_account = bank.bank_account;                       // 银行卡号
+          self.checkForm.billing_account_name = bank.billing_account_name;       // 财务联系人
+          self.checkForm.billing_account_tel = bank.billing_account_tel;         // 财务联系人电话
         }
       },
       ID: function() {
-        var self = this
-        var id = self.ID
+        var self = this;
+        var id = self.ID;
         if (id.card_code) {
-          self.IDForm.IDRadio = true
+          self.IDForm.IDRadio = true;
           var cert = {
             "ID_CARD": "身份证",
             "HK_MACAO_CARD": "港澳通行证",
             "TAIWAN_CARD": "台胞证",
             "PASSPORT": "护照"
-          }
-          self.IDForm.cert_type = cert[id.cert_type]
-          self.IDForm.real_name = id.real_name     // 真实姓名
-          self.IDForm.card_code = id.card_code      // 证件号码
-          self.IDForm.card_front_url = id.card_front_url   // 证件正面照
-          self.IDForm.card_back_url = id.card_back_url     // 证件背面照
+          };
+          self.IDForm.cert_type = cert[id.cert_type];
+          self.IDForm.real_name = id.real_name;      // 真实姓名
+          self.IDForm.card_code = id.card_code;      // 证件号码
+          self.IDForm.card_front_url = id.card_front_url;   // 证件正面照
+          self.IDForm.card_back_url = id.card_back_url;     // 证件背面照
         }
       }
     },
     methods: {
       /* 获取银行省、银行列表 id、name */
       get_admiprovince: function(admiprovince, admicity, bank, branch, custom) {
-        var self = this
+        var self = this;
         self.$http.get(BANK_PROVINCES_URL).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
-            self.checkForm.bank.admiprovince = getValue(arr, admiprovince, "id", "name")
-            self.get_admicity(admiprovince, admicity, bank, branch, custom)
+            let arr = response.body.content;
+            self.checkForm.bank.admiprovince = getValue(arr, admiprovince, "id", "name");
+            self.get_admicity(admiprovince, admicity, bank, branch, custom);
           }
-        })
+        });
       },
       get_admicity: function(admiprovince, admicity, bank, branch, custom) {
-        var self = this
+        var self = this;
         self.$http.get(BANK_CITIES_URL + "?admiprovince_id=" + admiprovince).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
-            self.checkForm.bank.admicity = getValue(arr, admicity, "id", "name")
-            self.get_bank(admicity, bank, branch, custom)
+            let arr = response.body.content;
+            self.checkForm.bank.admicity = getValue(arr, admicity, "id", "name");
+            self.get_bank(admicity, bank, branch, custom);
           }
-        })
+        });
       },
       get_bank: function(admicity, bank, branch, custom) {
-        var self = this
+        var self = this;
         self.$http.get(BANKS_URL).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
-            self.checkForm.bank.bank = getValue(arr, bank, "bank_id", "bank_name")
-            self.get_branch(admicity, bank, branch, custom)
+            let arr = response.body.content;
+            self.checkForm.bank.bank = getValue(arr, bank, "bank_id", "bank_name");
+            self.get_branch(admicity, bank, branch, custom);
           }
-        })
+        });
       },
       get_branch: function(admicity, bank, branch, custom) {
-        var self = this
+        var self = this;
         if (parseInt(branch) === 0) {
-          self.checkForm.bank.branchFlag = false
-          self.checkForm.bank.custom_branch = custom + "（自定义）"
+          self.checkForm.bank.branchFlag = false;
+          self.checkForm.bank.custom_branch = custom + "（自定义）";
         } else {
-          self.checkForm.bank.branchFlag = true
+          self.checkForm.bank.branchFlag = true;
           self.$http.get(SUBBANKS_URL + "?bank_id=" + bank + "&admicity_id=" + admicity).then(function(response) {
             if (response.body.success) {
-              let arr = response.body.content
-              self.checkForm.bank.branch = getValue(arr, branch, "subbank_id", "subbank_name")
+              let arr = response.body.content;
+              self.checkForm.bank.branch = getValue(arr, branch, "subbank_id", "subbank_name");
             }
-          })
+          });
         }
       }
     },
@@ -247,7 +247,7 @@
       radioCheck,
       showImage
     }
-  }
+  };
 </script>
 
 <style scoped>

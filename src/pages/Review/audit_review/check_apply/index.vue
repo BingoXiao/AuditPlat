@@ -71,12 +71,12 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import inputSearch from "../../../../components/search/input/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
-  import {modalHide} from "../../../../common/common"
-  import {CHECKVERIFY_APPLY_URL, CHECKVERIFY_APPLY_TODYDL_URL,
-    EXCEL_UPLOAD_URL, CHECKVERIFY_SUCCESS_SEARCH_URL} from "../../../../common/interface"
+  import alasql from "alasql";
+  import inputSearch from "../../../../components/search/input/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
+  import {modalHide} from "../../../../common/common";
+  import {CHECKVERIFY_APPLY_URL, CHECKVERIFY_APPLY_TODYDL_URL, EXCEL_UPLOAD_URL,
+    CHECKVERIFY_SUCCESS_SEARCH_URL} from "../../../../common/interface";
 
   export default {
     props: {
@@ -99,136 +99,137 @@
         isRight: true,       // 提示框
         tips: "",
         tipsVisible: false
-      }
+      };
     },
     mounted() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(CHECKVERIFY_APPLY_URL + "?type=V").then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY submit_time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'";
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
       /* 清空筛选 */
       rulesReset: function() {
-        var self = this
-        self.$refs.account.reset()
-        self.currentPage = 1
+        var self = this;
+        self.$refs.account.reset();
+        self.currentPage = 1;
       },
 
       /* 每页条数改变时 */
       pageSizesChange: function(size) {
-        var self = this
-        self.pageSize = size
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.pageSize = size;
+        self.fillTable(self.totalDatas);
       },
 
       /* 获取选中项 */
       getSelectedArr: function(selection) {
-        var self = this
-        var arr = []
+        var self = this;
+        var arr = [];
         for (let i = 0; i < selection.length; i++) {
-          arr.push(selection[i].applynum)
+          arr.push(selection[i].applynum);
         }
-        self.selectArr = arr
+        self.selectArr = arr;
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       /* 下载结款明细 */
       download: function() {
-        var self = this
-        var arr = JSON.stringify(self.selectArr)
-        window.open(CHECKVERIFY_APPLY_TODYDL_URL + "?applynums=" + arr, "_self")
+        var self = this;
+        var arr = JSON.stringify(self.selectArr);
+        window.open(CHECKVERIFY_APPLY_TODYDL_URL + "?applynums=" + arr, "_self");
       },
       /* 上传结款信息 */
       handleChange(file, fileList) {
-        var self = this
-        var ext = file.name.toUpperCase()
-        var extStart = ext.lastIndexOf(".")
-        var type = ext.substring(extStart, ext.length).toUpperCase()
+        var self = this;
+        var ext = file.name.toUpperCase();
+        var extStart = ext.lastIndexOf(".");
+        var type = ext.substring(extStart, ext.length).toUpperCase();
         if (type !== ".XLS" && type !== ".XLSX" && type !== ".XLSB" && type !== ".XLSM" && type !== ".XLST") {
-          self.isRight = false
-          self.tips = "请上传excel文件！"
-          self.tipsVisible = true
+          self.isRight = false;
+          self.tips = "请上传excel文件！";
+          self.tipsVisible = true;
           modalHide(function() {
-            self.tipsVisible = false
-          })
-          return false
+            self.tipsVisible = false;
+          });
+          return false;
         } else {
-          return file.name
+          return file.name;
         }
       },
       // 上传成功
       handleSuccess: function(response, file, fileList) {
-        var self = this
+        var self = this;
         if (response.success) {
-          self.isRight = true
-          self.tips = "上传文件成功！"
-          self.tipsVisible = true
+          self.isRight = true;
+          self.tips = "上传文件成功！";
+          self.tipsVisible = true;
           modalHide(function() {
-            self.tipsVisible = false
-          })
+            self.tipsVisible = false;
+          });
         }
       },
       // 结款成功（失败）
       checkPass: function(flag) {
-        var self = this
-        var formData = new FormData()
-        formData.append("flag", flag)
-        formData.append("applynums[]", self.selectArr)
-        var title = "是否确定选择账号结款成功？"
+        var self = this;
+        var formData = new FormData();
+        formData.append("flag", flag);
+        formData.append("applynums[]", self.selectArr);
+        var title = "是否确定选择账号结款成功？";
         if (flag === "F") {
-          title = "是否确定选择账号结款失败？"
+          title = "是否确定选择账号结款失败？";
         }
         if (self.selectArr.length < 1) {
-          self.isRight = false
-          self.tips = "请选择结款商家！"
-          self.tipsVisible = true
+          self.isRight = false;
+          self.tips = "请选择结款商家！";
+          self.tipsVisible = true;
           modalHide(function() {
-            self.tipsVisible = false
-          })
+            self.tipsVisible = false;
+          });
         } else {
           self.$confirm(title, "提示", {
             confirmButtonText: "确定",
@@ -238,19 +239,19 @@
             self.$http.post(CHECKVERIFY_SUCCESS_SEARCH_URL, formData)
             .then(function(response) {
               if (response.body.success) {
-                self.isRight = true
-                self.tips = "操作成功！"
-                self.tipsVisible = true
+                self.isRight = true;
+                self.tips = "操作成功！";
+                self.tipsVisible = true;
                 modalHide(function() {
-                  self.tipsVisible = false
+                  self.tipsVisible = false;
                   self.getTables(function(datas) {
-                    self.rulesReset()
-                    self.fillTable(datas)
-                  })
-                })
+                    self.rulesReset();
+                    self.fillTable(datas);
+                  });
+                });
               }
-            })
-          })
+            });
+          });
         }
       }
     },
@@ -258,7 +259,7 @@
       inputSearch,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

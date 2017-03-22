@@ -63,11 +63,11 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import inputSearch from "../../../components/search/input/index"
-  import selectSearch from "../../../components/search/select/index"
-  import classifySearch from "../../../components/search/classify/index"
-  import {BUSLIST_TABLE_URL, BUSLIST_DOWNLOAD_URL} from "../../../common/interface"
+  import alasql from "alasql";
+  import inputSearch from "../../../components/search/input/index";
+  import selectSearch from "../../../components/search/select/index";
+  import classifySearch from "../../../components/search/classify/index";
+  import {BUSLIST_TABLE_URL, BUSLIST_DOWNLOAD_URL} from "../../../common/interface";
 
   export default {
     data() {
@@ -114,86 +114,87 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted: function() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(BUSLIST_TABLE_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY number ASC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE number LIKE '%" + self.search.number + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE number LIKE '%" + self.search.number + "%'";
         if (self.search.status !== "") {    // 状态
-          rules += " AND status = ?"
+          rules += " AND status = ?";
         }
         if (self.search.class !== "") {    // 分类
-          rules += " AND `class` LIKE '%" + self.search.class + "%'"
+          rules += " AND `class` LIKE '%" + self.search.class + "%'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
       /* 清空筛选 */
       rulesReset: function() {
-        var self = this
-        self.$refs.class.reset()
-        self.$refs.number.reset()
-        self.$refs.status.reset()
-        self.currentPage = 1
+        var self = this;
+        self.$refs.class.reset();
+        self.$refs.number.reset();
+        self.$refs.status.reset();
+        self.currentPage = 1;
       },
 
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       // 查看
       viewBus: function(row) {
-        var self = this
-        self.table.bususer_id = row.bususer_id
+        var self = this;
+        self.table.bususer_id = row.bususer_id;
         self.$router.push({path: "bus_list/view#id=" +
-        row.bususer_id + "&account=" + row.account})
+        row.bususer_id + "&account=" + row.account});
       },
       // 下载商家列表
       download: function() {
-        var href = BUSLIST_DOWNLOAD_URL
-        var otherWindow = window.open(href, "_self")
-        otherWindow.opener = null
+        var href = BUSLIST_DOWNLOAD_URL;
+        var otherWindow = window.open(href, "_self");
+        otherWindow.opener = null;
       }
     },
     components: {
@@ -201,7 +202,7 @@
       selectSearch,
       classifySearch
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -21,17 +21,17 @@
     data() {
       return {
         value: ""
-      }
+      };
     },
     methods: {
       reset: function() {
-        var self = this
-        self.value = ""
+        var self = this;
+        self.value = "";
       },
       getRules: function(value) {
-        var self = this
-        self.$emit("getRules", self.name, value)
+        var self = this;
+        self.$emit("getRules", self.name, value);
       }
     }
-  }
+  };
 </script>

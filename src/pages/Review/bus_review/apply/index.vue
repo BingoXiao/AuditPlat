@@ -93,13 +93,13 @@
 </template>
 
 <script>
-  import showBasicInfo from "../module/showBasicInfo/index"
-  import showBlInfo from "../../../BD/bus_list/module/showBlInfo/index"
-  import showSlInfo from "../../../BD/bus_list/module/showSlInfo/index"
-  import showCheckInfo from "../../../BD/bus_register/module/show_check_info/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
-  import {BDREGISTER_EDITFILLING_URL, BDVERIFY_APPLYPASS_URL} from "../../../../common/interface"
-  import {modalHide, getUrlParameters} from "../../../../common/common"
+  import showBasicInfo from "../module/showBasicInfo/index";
+  import showBlInfo from "../../../BD/bus_list/module/showBlInfo/index";
+  import showSlInfo from "../../../BD/bus_list/module/showSlInfo/index";
+  import showCheckInfo from "../../../BD/bus_register/module/show_check_info/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
+  import {BDREGISTER_EDITFILLING_URL, BDVERIFY_APPLYPASS_URL} from "../../../../common/interface";
+  import {modalHide, getUrlParameters} from "../../../../common/common";
 
   export default{
     data() {
@@ -122,78 +122,78 @@
         tips: "驳回成功！",
         tipsVisible: false,
         textarea: ""
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.get_info()
+      var self = this;
+      self.get_info();
       if (self.$route.name === "商家申请审核") {
-        self.showBtn = true
+        self.showBtn = true;
       } else {
-        self.showBtn = false
+        self.showBtn = false;
       }
     },
     methods: {
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function(name) {
-        this.currentView = name
+        this.currentView = name;
       },
       // 获取信息
       get_info: function(busId) {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         self.$http.get(BDREGISTER_EDITFILLING_URL + "?applynum=" + id)
           .then(function(response) {
             if (response.body.success) {
-              var data = response.body.content
-              self.filling = data
-              self.bankInfo = data.bankinfo
-              self.idInfo = data.userinfo
-              self.blInfo = data.blinfo
-              self.slInfo = data.slinfo
-              self.shopName = data.userinfo.account       // 店名
-              self.applynum = getUrlParameters(window.location.hash, "id")       // 审编号
-              self.bd = data.applyinfo.bd
-              self.reason = data.applyinfo.reject_reason || ""
+              var data = response.body.content;
+              self.filling = data;
+              self.bankInfo = data.bankinfo;
+              self.idInfo = data.userinfo;
+              self.blInfo = data.blinfo;
+              self.slInfo = data.slinfo;
+              self.shopName = data.userinfo.account;     // 店名
+              self.applynum = getUrlParameters(window.location.hash, "id");       // 审编号
+              self.bd = data.applyinfo.bd;
+              self.reason = data.applyinfo.reject_reason || "";
             }
-          })
+          });
       },
       // 返回商家列表
       backTo: function() {
-        var self = this
-        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
-        self.$router.push({path: htmlSrc})
+        var self = this;
+        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"));
+        self.$router.push({path: htmlSrc});
       },
       // 驳回选择理由
       radioChange: function() {
-        var self = this
-        self.error = ""
+        var self = this;
+        self.error = "";
       },
       // 审核
       pass: function(flag) {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
-        var formdata = {}
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
+        var formdata = {};
         if (flag) {   // 通过
           formdata = {
             flag: flag,
             applynum: id,
             reject_reason: ""
-          }
-          self.tips = "审核成功！"
+          };
+          self.tips = "审核成功！";
         } else {   // 驳回
           formdata = {
             flag: flag,
             applynum: id,
             reject_reason: self.rejectReason
-          }
+          };
           if (self.rejectReason === "其他(请填写)") {
             if (self.textarea) {
-              formdata.reject_reason = self.textarea
-              self.error = ""
-              self.tips = "发送成功"
+              formdata.reject_reason = self.textarea;
+              self.error = "";
+              self.tips = "发送成功";
             } else {
-              self.error = "请选择驳回原因"
+              self.error = "请选择驳回原因";
             }
           }
         }
@@ -203,15 +203,15 @@
             {emulateJSON: true})
             .then(function(response) {
               if (response.body.success) {
-                self.passDialog = false
-                self.rejectDialog = false
-                self.tipsVisible = true
+                self.passDialog = false;
+                self.rejectDialog = false;
+                self.tipsVisible = true;
                 modalHide(function() {
-                  self.tipsVisible = false
-                  self.$router.push({path: "/bus_review/bus_apply"})
-                })
+                  self.tipsVisible = false;
+                  self.$router.push({path: "/bus_review/bus_apply"});
+                });
               }
-            })
+            });
         }
       }
     },
@@ -222,7 +222,7 @@
       showCheckInfo,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -64,11 +64,11 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import selectSearch from "../../../components/search/select/index"
-  import dialogTips from "../../../components/dialogTips/index.vue"
-  import {modalHide} from "../../../common/common"
-  import {COMPAINTS_TABLE_URL, COMPAINTS_SUBMIT_URL} from "../../../common/interface"
+  import alasql from "alasql";
+  import selectSearch from "../../../components/search/select/index";
+  import dialogTips from "../../../components/dialogTips/index.vue";
+  import {modalHide} from "../../../common/common";
+  import {COMPAINTS_TABLE_URL, COMPAINTS_SUBMIT_URL} from "../../../common/interface";
 
   export default {
     data() {
@@ -106,105 +106,117 @@
         isRight: true,       // 提示框
         tips: "操作成功！",
         tipsVisible: false
-      }
+      };
     },
     mounted() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(COMPAINTS_TABLE_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE rank LIKE '%" + self.search.ranking + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE rank LIKE '%" + self.search.ranking + "%'";
         if (self.search.status !== "") {    // 状态
-          rules += " AND status = ?"
+          rules += " AND status = ?";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
 
       /* 改变当前页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        this.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        this.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       /* 每页条数改变时 */
       pageSizesChange: function(size) {
-        var self = this
-        this.pageSize = size
-        self.fillTable(self.totalDatas)
+        var self = this;
+        this.pageSize = size;
+        self.fillTable(self.totalDatas);
       },
 
       /* 获取选中项 */
       getSelectedArr: function(selection) {
-        var self = this
-        var arr = []
+        var self = this;
+        var arr = [];
         for (let i = 0; i < selection.length; i++) {
-          arr.push(selection[i].id)
+          arr.push(selection[i].id);
         }
-        self.selectArr = arr
+        self.selectArr = arr;
       },
 
       // 处理
       processed: function(status) {
-        var self = this
-        var formData = new FormData()
+        var self = this;
+        var formData = new FormData();
         if (self.selectArr.length < 1) {
-          self.isRight = false
-          self.tips = "请选择商家！"
-          self.tipsVisible = true
+          self.isRight = false;
+          self.tips = "请选择商家！";
+          self.tipsVisible = true;
           modalHide(function() {
-            self.tipsVisible = false
-          })
+            self.tipsVisible = false;
+          });
         } else {
-          self.isRight = true
-          formData.append("ids[]", self.selectArr)
-          formData.append("status", status)    // 已处理"HANDLED"，未处理UNHANDLED
+          self.isRight = true;
+          formData.append("ids[]", self.selectArr);
+          formData.append("status", status);    // 已处理"HANDLED"，未处理UNHANDLED
           self.$http.post(COMPAINTS_SUBMIT_URL, formData)
             .then(function(response) {
               if (response.data.success) {
-                self.tipsVisible = true
+                self.tipsVisible = true;
                 modalHide(function() {
-                  self.tipsVisible = false
-                  self.getTables()
-                })
+                  self.tipsVisible = false;
+                  var state = "未处理";
+                  for (let i = 0; i < self.selectArr.length; i++) {
+                    for (let j = 0; j < self.totalDatas.length; j++) {
+                      if (self.totalDatas[j].id === self.selectArr[i]) {
+                        if (status === "HANDLED") {
+                          state = "已处理";
+                        }
+                        self.totalDatas[j].status = state;
+                        continue;
+                      }
+                    }
+                  }
+                });
               }
-            })
+            });
         }
       }
     },
@@ -212,7 +224,7 @@
       selectSearch,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

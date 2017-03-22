@@ -11,11 +11,11 @@
 </template>
 
 <script>
-  import leftSlide from "../components/leftSlide/index"
+  import leftSlide from "../components/leftSlide/index";
 
   export default{
     components: {
       leftSlide
     }
-  }
+  };
 </script>

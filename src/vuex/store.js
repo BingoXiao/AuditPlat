@@ -1,7 +1,7 @@
-import Vue from "vue"
-import Vuex from "vuex"
+import Vue from "vue";
+import Vuex from "vuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
@@ -31,33 +31,33 @@ const store = new Vuex.Store({
   },
   mutations: {
     USER_ID(state, status) {
-      state.user_id = status
+      state.user_id = status;
     },
     USER_NAME(state, status) {
-      state.user_name = status
+      state.user_name = status;
     },
     AUTH_LOGIN(state, status) {
-      state.auth_login = status
+      state.auth_login = status;
     },
     USER_DATA(state, perms) {
-      state.user_data = perms
+      state.user_data = perms;
     },
     FORM_DATA(state, perms) {
-      state.form_data = perms
+      state.form_data = perms;
     },
     V_FLAG(state, perms) {
-      state.vflag = perms
+      state.vflag = perms;
     },
     USER_PHONE(state, perms) {
-      state.userPhone = perms
+      state.userPhone = perms;
     },
     BUS_ACCOUNT(state, perms) {
-      state.busAccount = perms
+      state.busAccount = perms;
     }
   }
-})
+});
 
 
-export default store
+export default store;
 
 

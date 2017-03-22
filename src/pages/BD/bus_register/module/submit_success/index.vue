@@ -31,10 +31,10 @@
   export default{
     methods: {
       BackTo: function() {
-        this.$router.push({path: "/bus_register/new"})
+        this.$router.push({path: "/bus_register/new"});
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -60,10 +60,10 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import inputSearch from "../../../../components/search/input/index"
-  import datePicker from "../../../../components/search/datePicker/index"
-  import {CHECKVERIFY_APPLY_URL, CHECKVERIFY_RECORD_DOWNLOAD_URL} from "../../../../common/interface"
+  import alasql from "alasql";
+  import inputSearch from "../../../../components/search/input/index";
+  import datePicker from "../../../../components/search/datePicker/index";
+  import {CHECKVERIFY_APPLY_URL, CHECKVERIFY_RECORD_DOWNLOAD_URL} from "../../../../common/interface";
 
   export default {
     props: {
@@ -82,92 +82,93 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(CHECKVERIFY_APPLY_URL + "?type=H").then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
-            func(datas)
+            var datas = response.body.content;
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY submit_time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
-        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'"
+        var self = this;
+        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'";
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       },
 
       /* 每页条数改变时 */
       pageSizesChange: function(size) {
-        this.pageSize = size
-        var self = this
-        self.fillTable(self.totalDatas)
+        this.pageSize = size;
+        var self = this;
+        self.fillTable(self.totalDatas);
       },
 
       /* 获取选中项 */
       getSelectedArr: function(selection) {
-        var self = this
-        var arr = []
+        var self = this;
+        var arr = [];
         for (let i = 0; i < selection.length; i++) {
-          arr.push(selection[i].applynum)
+          arr.push(selection[i].applynum);
         }
-        self.selectArr = arr
+        self.selectArr = arr;
       },
       /* 下载结款明细 */
       download: function() {
-        var self = this
-        var arr = JSON.stringify(self.selectArr)
-        window.open(CHECKVERIFY_RECORD_DOWNLOAD_URL + "?applynums=" + arr, "_self")
+        var self = this;
+        var arr = JSON.stringify(self.selectArr);
+        window.open(CHECKVERIFY_RECORD_DOWNLOAD_URL + "?applynums=" + arr, "_self");
       }
     },
     components: {
       inputSearch,
       datePicker
     }
-  }
+  };
 </script>
 
 <style scoped>

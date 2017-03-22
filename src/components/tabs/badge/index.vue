@@ -25,24 +25,24 @@
     data() {
       return {
         active: ""
-      }
+      };
     },
     mounted() {
-      this.active = this.which
+      this.active = this.which;
     },
     watch: {
       which: function() {
-        this.active = this.which
+        this.active = this.which;
       }
     },
     methods: {
       toggle(key) {
-        var self = this
-        self.active = key
-        self.$emit("toggle", key)
+        var self = this;
+        self.active = key;
+        self.$emit("toggle", key);
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

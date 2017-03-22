@@ -31,11 +31,11 @@
 </template>
 
 <script>
-  import stepsComponent from "../../components/steps/index"
-  import storeInfo from "./module/store_info/index"
-  import coopInfo from "./module/coop_info/index"
-  import submitSuccess from "./module/submit_success/index"
-  import {CNTER_REGISTER} from "../../common/interface"
+  import stepsComponent from "../../components/steps/index";
+  import storeInfo from "./module/store_info/index";
+  import coopInfo from "./module/coop_info/index";
+  import submitSuccess from "./module/submit_success/index";
+  import {CNTER_REGISTER} from "../../common/interface";
 
   export default{
     data() {
@@ -60,30 +60,30 @@
           blinfo: {},
           slinfo: {}
         }
-      }
+      };
     },
     methods: {
       // 获取数据
       get_formDatas: function(flag, datas) {
-        var self = this
+        var self = this;
         if (flag) {   // 门店信息
-          self.formDatas.businfo = datas
+          self.formDatas.businfo = datas;
         } else {      // 合作信息
-          self.formDatas.userinfo = datas.userinfo
-          self.formDatas.blinfo = datas.blinfo
-          self.formDatas.slinfo = datas.slinfo
-          self.$set(self.formDatas.businfo, "group_buying_info", datas.businfo.group_buying_info)   // 团购
-          self.$set(self.formDatas.businfo, "cost_per_person", datas.businfo.cost_per_person)       // 人均
-          self.$set(self.formDatas.businfo, "sale_per_month", datas.businfo.sale_per_month)         // 月销售额
+          self.formDatas.userinfo = datas.userinfo;
+          self.formDatas.blinfo = datas.blinfo;
+          self.formDatas.slinfo = datas.slinfo;
+          self.$set(self.formDatas.businfo, "group_buying_info", datas.businfo.group_buying_info);   // 团购
+          self.$set(self.formDatas.businfo, "cost_per_person", datas.businfo.cost_per_person);       // 人均
+          self.$set(self.formDatas.businfo, "sale_per_month", datas.businfo.sale_per_month);         // 月销售额
         }
       },
       // 下一步
       next_step: function(step) {
-        var self = this
+        var self = this;
         if (step === "coopInfo") {
-          self.$refs.storeChild.storeValidate()
+          self.$refs.storeChild.storeValidate();
         } else if (step === "submitSuccess") {
-          self.$refs.coopChild.coopValidate()
+          self.$refs.coopChild.coopValidate();
         }
         if (self.$store.state.vflag) {    // 验证成功
           if (step === "submitSuccess") {  // 提交数据
@@ -92,25 +92,25 @@
               {emulateJSON: true})
               .then(function(response) {
                 if (response.body.success) {
-                  self.active = self.active + 1
-                  self.currentView = step
-                  self.$store.commit("V_FLAG", false)
+                  self.active = self.active + 1;
+                  self.currentView = step;
+                  self.$store.commit("V_FLAG", false);
                 }
-              })
+              });
           } else {
-            self.currentView = step
-            self.active = self.active + 1
-            self.$store.commit("V_FLAG", false)
+            self.currentView = step;
+            self.active = self.active + 1;
+            self.$store.commit("V_FLAG", false);
           }
         }
       },
 
       // 上一步
       previous_step: function() {
-        var self = this
+        var self = this;
         if (self.active === 2) {
-          self.active = self.active - 1
-          self.currentView = "storeInfo"
+          self.active = self.active - 1;
+          self.currentView = "storeInfo";
         }
       }
     },
@@ -120,7 +120,7 @@
       coopInfo,
       submitSuccess
     }
-  }
+  };
 </script>
 
 <style scoped>

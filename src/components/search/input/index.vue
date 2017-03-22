@@ -16,19 +16,19 @@
     data() {
       return {
         inputValue: ""
-      }
+      };
     },
     methods: {
       reset: function() {
-        var self = this
-        self.inputValue = ""
+        var self = this;
+        self.inputValue = "";
       },
       getRules: function() {
-        var self = this
-        self.$emit("getRules", self.name, self.inputValue)
+        var self = this;
+        self.$emit("getRules", self.name, self.inputValue);
       }
     }
-  }
+  };
 </script>
 
 <style>

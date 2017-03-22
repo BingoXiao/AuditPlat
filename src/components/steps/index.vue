@@ -50,32 +50,32 @@
       active: Number    // 激活index
     },
     computed: {
-      step1: function() {
-        var self = this
-        return self.steps[0]
+      step1: function() {   // step1（单数会有offset)
+        var self = this;
+        return self.steps[0];
       },
       steps_content: function() {
-        var self = this
-        var arr = []
+        var self = this;
+        var arr = [];
         for (let i = 1; i < self.steps.length; i++) {
-          arr.push(self.steps[i])
+          arr.push(self.steps[i]);
         }
-        return arr
+        return arr;
       },
       steps_span: function() {
-        var self = this
-        return parseInt(24 / self.steps.length)
+        var self = this;
+        return parseInt(24 / self.steps.length);
       },
       steps_offset: function() {
-        var self = this
+        var self = this;
         if (parseInt(24 % self.steps.length) > 0) {
-          return (24 % self.steps.length) / 2
+          return (24 % self.steps.length) / 2;
         } else {
-          return 0
+          return 0;
         }
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

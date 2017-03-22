@@ -44,10 +44,10 @@
 </template>
 
 <script>
-  import busAddress from "../../../../../components/form/address/index"
-  import busClassification from "../../../../../components/form/classification/index"
-  import telComponent from "../../../../../components/form/tel/index"
-  import {isName, isPhone, getUrlParameters} from "../../../../../common/common"
+  import busAddress from "../../../../../components/form/address/index";
+  import busClassification from "../../../../../components/form/classification/index";
+  import telComponent from "../../../../../components/form/tel/index";
+  import {isName, isPhone, getUrlParameters} from "../../../../../common/common";
 
   export default{
     props: {
@@ -58,22 +58,22 @@
     data() {
       // 商家姓名
       var nameV = (rule, value, callback) => {
-        var Name = isName(value)
+        var Name = isName(value);
         if (!Name.flag) {
-          callback(new Error(Name.error))
+          callback(new Error(Name.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       // 商家手机
       var phoneV = (rule, value, callback) => {
-        var Phone = isPhone(value)
+        var Phone = isPhone(value);
         if (!Phone.flag) {
-          callback(new Error(Phone.error))
+          callback(new Error(Phone.error));
         } else {
-          callback()
+          callback();
         }
-      }
+      };
       return {
         moduleV: {         // 模块验证结果
           class: false,    // 分类
@@ -99,44 +99,44 @@
             {required: true, message: "请填写门店名称", trigger: "blur"}
           ]
         }
-      }
+      };
     },
     watch: {
       filling: function() {
-        var self = this
-        var businfo = self.filling.businfo
-        self.basicForm.busname = businfo.busname      // 门店名称
-        self.basicForm.tel = businfo.tel              // 门店名称
-        var classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id
-        self.basicForm.class = classArr.split(",")    // 分类
+        var self = this;
+        var businfo = self.filling.businfo;
+        self.basicForm.busname = businfo.busname;     // 门店名称
+        self.basicForm.tel = businfo.tel;             // 门店名称
+        var classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id;
+        self.basicForm.class = classArr.split(",");    // 分类
         var addArr = businfo.province_id + "," + businfo.city_id + "," +
-          businfo.district_id + "," + businfo.city_near_id
-        self.$set(self.basicForm.address, "selectArr", addArr.split(","))      // 地址（下拉框）
-        self.$set(self.basicForm.address, "detail", businfo.address_details)   // 详细地址
-        self.$set(self.basicForm.address, "point", businfo.address_point)      // 地址坐标
+          businfo.district_id + "," + businfo.city_near_id;
+        self.$set(self.basicForm.address, "selectArr", addArr.split(","));      // 地址（下拉框）
+        self.$set(self.basicForm.address, "detail", businfo.address_details);   // 详细地址
+        self.$set(self.basicForm.address, "point", businfo.address_point);      // 地址坐标
       },
       name: function() {
-        var self = this
-        self.basicForm.name = self.name          // 商家姓名
+        var self = this;
+        self.basicForm.name = self.name;          // 商家姓名
       },
       phonenum: function() {
-        var self = this
-        self.basicForm.phonenum = self.phonenum  // 商家手机
+        var self = this;
+        self.basicForm.phonenum = self.phonenum;  // 商家手机
       }
     },
     methods: {
       // 模块验证结果及取值
       module_res: function(name, value, flag) {
-        var self = this
-        self.moduleV[name] = flag      // 返回模块验证结果
-        self.basicForm[name] = value   // 返回模块数据
+        var self = this;
+        self.moduleV[name] = flag;      // 返回模块验证结果
+        self.basicForm[name] = value;   // 返回模块数据
       },
       // 基本信息验证
       basicValidate: function() {
-        var self = this
-        self.$refs.bus_class_children.classValidate()    // 分类验证
-        self.$refs.tel_children.telValidate()            // 座机验证
-        self.$refs.address_children.addressValidate()    // 地址验证
+        var self = this;
+        self.$refs.bus_class_children.classValidate();    // 分类验证
+        self.$refs.tel_children.telValidate();            // 座机验证
+        self.$refs.address_children.addressValidate();    // 地址验证
         self.$refs.basicForm.validate((valid) => {
           if (valid && self.moduleV.class && self.moduleV.tel && self.moduleV.address) {
             var formData = {
@@ -159,19 +159,19 @@
                 "mclass_id": self.basicForm.class[1],             // 二级分类
                 "sclass_id": self.basicForm.class[2]              // 三级分类
               }
-            }
-            var id = getUrlParameters(window.location.hash, "id")
+            };
+            var id = getUrlParameters(window.location.hash, "id");
             if (id) {
-              formData.applynum = id
+              formData.applynum = id;
             }
             if (self.$route.name === "分店注册详情页") {
-              formData.userinfo.account = self.$store.state.busAccount
+              formData.userinfo.account = self.$store.state.busAccount;
             }
-            self.$store.commit("FORM_DATA", formData)
-            self.$store.commit("V_FLAG", true)
-            self.$store.commit("USER_PHONE", self.basicForm.phonenum)
+            self.$store.commit("FORM_DATA", formData);
+            self.$store.commit("V_FLAG", true);
+            self.$store.commit("USER_PHONE", self.basicForm.phonenum);
           }
-        })
+        });
       }
     },
     components: {
@@ -179,7 +179,7 @@
       busClassification,
       telComponent
     }
-  }
+  };
 </script>
 
 <style scoped>

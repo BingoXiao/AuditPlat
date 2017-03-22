@@ -163,51 +163,51 @@
 </template>
 
 <script>
-  import tabBadgeComponent from "../../../../components/tabs/badge/index"
-  import inputSearch from "../../../../components/search/input/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
+  import tabBadgeComponent from "../../../../components/tabs/badge/index";
+  import inputSearch from "../../../../components/search/input/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
   import {EVENTS_CMSEARCHSHOPS_URL, EVENTS_CMADDSHOPS_URL,
-    EVENTS_CMEDIT_URL, EVENTS_CMGETINFO_URL} from "../../../../common/interface"
-  import {getUrlParameters, modalHide} from "../../../../common/common"
+    EVENTS_CMEDIT_URL, EVENTS_CMGETINFO_URL} from "../../../../common/interface";
+  import {getUrlParameters, modalHide} from "../../../../common/common";
 
   export default{
     data() {
       var numberValidate = (rule, value, callback) => {
         if (!value) {
-          return callback(new Error("请输入满减金额"))
+          return callback(new Error("请输入满减金额"));
         } else {
           if (!Number.isInteger(value)) {
-            callback(new Error("请输入数字值"))
+            callback(new Error("请输入数字值"));
           } else {
-            callback()
+            callback();
           }
         }
-      }
+      };
       return {
         pickerOptions: {
           shortcuts: [{
             text: "最近一周",
             onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-              picker.$emit("pick", [start, end])
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
             }
           }, {
             text: "最近一个月",
             onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-              picker.$emit("pick", [start, end])
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
             }
           }, {
             text: "最近三个月",
             onClick(picker) {
-              const end = new Date()
-              const start = new Date()
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-              picker.$emit("pick", [start, end])
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
             }
           }]
         },
@@ -262,155 +262,155 @@
           pageSize: 10,             // 每页显示条目个数
           currentPage: 1            // 当前页
         }
-      }
+      };
     },
     mounted() {
-      var self = this
-      var id = getUrlParameters(window.location.hash, "id")
+      var self = this;
+      var id = getUrlParameters(window.location.hash, "id");
       if (id) {  // 修改（获取优惠券信息）
-        self.urlID = id
-        self.getCouponInfo(id)
+        self.urlID = id;
+        self.getCouponInfo(id);
       } else {
-        self.urlID = ""
+        self.urlID = "";
       }
-      self.getWholeTables()
+      self.getWholeTables();
     },
     methods: {
       // 错误提示
       errorTip: function(name, flag) {
-        var err = name + "Error"
-        var item = this.$refs[name].$el.children[1]
+        var err = name + "Error";
+        var item = this.$refs[name].$el.children[1];
         if (flag) {
-          this.couponinfo[err] = true
-          item.style.borderColor = "#ff4949"
+          this.couponinfo[err] = true;
+          item.style.borderColor = "#ff4949";
         } else {
-          this.couponinfo[err] = false
-          item.style.borderColor = "rgb(191, 203, 217)"
+          this.couponinfo[err] = false;
+          item.style.borderColor = "rgb(191, 203, 217)";
         }
       },
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function(name) {
-        var self = this
-        self.which = name
+        var self = this;
+        self.which = name;
         if (name === "selectedStores") {
-          self.getSelectedTables()
+          self.getSelectedTables();
         }
       },
       // 获取优惠券信息（修改）
       getCouponInfo: function(id) {
         function getHours(time) {   // 设置返回时间
-          var arr = time.split(":")
-          var res = new Date()
-          res.setHours(arr[0])
-          res.setMinutes(arr[1])
-          res.setSeconds(arr[2])
-          return res
+          var arr = time.split(":");
+          var res = new Date();
+          res.setHours(arr[0]);
+          res.setMinutes(arr[1]);
+          res.setSeconds(arr[2]);
+          return res;
         }
-        var self = this
+        var self = this;
         self.$http.get(EVENTS_CMGETINFO_URL(id)).then(function(response) {
           if (response.body.success) {
-            var couponinfo = response.body.content.couponinfo
-            var blist = response.body.content.blist
+            var couponinfo = response.body.content.couponinfo;
+            var blist = response.body.content.blist;
             if (blist.length > 0) {
-              self.storeRadio = "someStores"
+              self.storeRadio = "someStores";
               for (let i = 0; i < blist.length; i++) {
-                self.selected.idArr.push(blist[i].bus_id)
+                self.selected.idArr.push(blist[i].bus_id);
               }
-              self.selected.totalDatas = blist    // 指定门店
-              self.number = blist.length
-              self.getSelectedTables()
+              self.selected.totalDatas = blist;    // 指定门店
+              self.number = blist.length;
+              self.getSelectedTables();
             }
-            self.couponinfo.type = couponinfo.type   // 类型
-            self.couponinfo.name = couponinfo.name   // 名称
-            self.couponinfo.amount_full = couponinfo.amount_full   // 满减
-            self.couponinfo.amount_cut = couponinfo.amount_cut     // 满减
+            self.couponinfo.type = couponinfo.type;   // 类型
+            self.couponinfo.name = couponinfo.name;   // 名称
+            self.couponinfo.amount_full = couponinfo.amount_full;   // 满减
+            self.couponinfo.amount_cut = couponinfo.amount_cut;     // 满减
             if (!couponinfo.provide_starttime) {     // 发放时间
-              self.couponinfo.provideRadio = "wholeHour"
+              self.couponinfo.provideRadio = "wholeHour";
             } else {
-              self.couponinfo.provideRadio = "hours"
-              self.couponinfo.provideTime = [getHours(couponinfo.provide_starttime), getHours(couponinfo.provide_endtime)]
+              self.couponinfo.provideRadio = "hours";
+              self.couponinfo.provideTime = [getHours(couponinfo.provide_starttime), getHours(couponinfo.provide_endtime)];
             }
             if (!couponinfo.valid_startdate) {  // 有效日期
-              self.couponinfo.validRadio = "today"
+              self.couponinfo.validRadio = "today";
             } else {
-              self.couponinfo.validRadio = "dates"
-              self.couponinfo.validDates = [new Date(couponinfo.valid_startdate), new Date(couponinfo.valid_enddate)]
+              self.couponinfo.validRadio = "dates";
+              self.couponinfo.validDates = [new Date(couponinfo.valid_startdate), new Date(couponinfo.valid_enddate)];
             }
           }
-        })
+        });
       },
       /* 获取已选门店（表格） */
       getSelectedTables: function() {
-        var self = this
-        var datas = self.selected.totalDatas
+        var self = this;
+        var datas = self.selected.totalDatas;
         self.selected.tableDatas = datas.slice((self.selected.currentPage - 1) *
-          self.selected.pageSize, self.selected.currentPage * self.selected.pageSize)
-        self.selected.totalItems = parseInt(datas.length)
+          self.selected.pageSize, self.selected.currentPage * self.selected.pageSize);
+        self.selected.totalItems = parseInt(datas.length);
       },
       /* 获取门店搜索（表格） */
       getWholeTables: function() {
-        var self = this
+        var self = this;
         self.$http.get(EVENTS_CMSEARCHSHOPS_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content.buses
+            var datas = response.body.content.buses;
             self.whole.tableDatas = datas.slice((self.whole.currentPage - 1) *
-              self.whole.pageSize, self.whole.currentPage * self.whole.pageSize)
-            self.whole.totalItems = parseInt(datas.length)
+              self.whole.pageSize, self.whole.currentPage * self.whole.pageSize);
+            self.whole.totalItems = parseInt(datas.length);
           }
-        })
+        });
       },
       // 选择门店（搜索按钮）
       search: function() {
-        var self = this
-        self.storeRadio = "someStores"
-        self.which = "storesSearch"
+        var self = this;
+        self.storeRadio = "someStores";
+        self.which = "storesSearch";
       },
       // 添加门店
       addStore: function(row) {
-        var self = this
-        var arr = self.selected.idArr
+        var self = this;
+        var arr = self.selected.idArr;
         if (arr.length < 1) {
-          self.selected.idArr.push(row.bus_id)
-          self.selected.totalDatas.push(row)
+          self.selected.idArr.push(row.bus_id);
+          self.selected.totalDatas.push(row);
         } else {
           for (let i = 0; i < arr.length; i++) {
             if (arr[i] === row.bus_id) {
-              break
+              break;
             } else {
               if (i === arr.length - 1) {
-                self.selected.idArr.push(row.bus_id)
-                self.selected.totalDatas.push(row)
+                self.selected.idArr.push(row.bus_id);
+                self.selected.totalDatas.push(row);
               }
             }
           }
         }
-        self.number = self.selected.totalDatas.length
+        self.number = self.selected.totalDatas.length;
       },
       // 删除门店
       deleteStore: function(row) {
-        var self = this
-        var arr = self.selected.idArr
+        var self = this;
+        var arr = self.selected.idArr;
         for (let i = 0; i < arr.length; i++) {
           if (arr[i] === row.bus_id) {
-            self.selected.idArr.splice(i, 1)
-            self.selected.totalDatas.splice(i, 1)
-            self.number = self.selected.totalDatas.length
-            break
+            self.selected.idArr.splice(i, 1);
+            self.selected.totalDatas.splice(i, 1);
+            self.number = self.selected.totalDatas.length;
+            break;
           }
         }
         for (let i = 0; i < self.selected.tableDatas.length; i++) {
           if (self.selected.tableDatas[i].bus_id === row.bus_id) {
-            self.selected.tableDatas.splice(i, 1)
+            self.selected.tableDatas.splice(i, 1);
           }
         }
         if (self.number % 10 === 0) {    // 删除到一页的最后一条，返回上一页
-          self.currentPage = self.currentPage - 1
-          self.handleSelectedChange()
+          self.currentPage = self.currentPage - 1;
+          self.handleSelectedChange();
         }
       },
       // 新增优惠券
       addCoupon: function() {
-        var self = this
+        var self = this;
         var datas = {
           "type": self.couponinfo.type,  // 类型
           "name": self.couponinfo.name,       // 名称
@@ -421,69 +421,69 @@
           "valid_startdate": "",
           "valid_enddate": "",
           "bus_ids": []
-        }
+        };
         if (self.couponinfo.provideRadio === "wholeHour") {   // 发放时间
-          self.errorTip("time", false)
+          self.errorTip("time", false);
         } else {
           if (self.couponinfo.provideTime[0] === "") {
-            self.errorTip("time", true)
+            self.errorTip("time", true);
           } else {
-            self.errorTip("time", false)
-            let timeFrom = new Date(self.couponinfo.provideTime[0])
-            let timeTo = new Date(self.couponinfo.provideTime[1])
-            datas.provide_starttime = timeFrom.getHours() + ":" + timeFrom.getMinutes() + ":" + timeFrom.getSeconds()
-            datas.provide_endtime = timeTo.getHours() + ":" + timeTo.getMinutes() + ":" + timeTo.getSeconds()
+            self.errorTip("time", false);
+            let timeFrom = new Date(self.couponinfo.provideTime[0]);
+            let timeTo = new Date(self.couponinfo.provideTime[1]);
+            datas.provide_starttime = timeFrom.getHours() + ":" + timeFrom.getMinutes() + ":" + timeFrom.getSeconds();
+            datas.provide_endtime = timeTo.getHours() + ":" + timeTo.getMinutes() + ":" + timeTo.getSeconds();
           }
         }
         if (self.couponinfo.validRadio === "today") {   // 有效日期
-          self.errorTip("date", false)
+          self.errorTip("date", false);
         } else {
           if (self.couponinfo.validDates[0] === "") {
-            self.errorTip("date", true)
+            self.errorTip("date", true);
           } else {
-            self.errorTip("date", false)
-            let dateFrom = new Date(self.couponinfo.validDates[0])
-            let dateTo = new Date(self.couponinfo.validDates[1])
-            datas.valid_startdate = dateFrom.getFullYear() + "-" + (dateFrom.getMonth() + 1) + "-" + dateFrom.getDate()
-            datas.valid_enddate = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate()
+            self.errorTip("date", false);
+            let dateFrom = new Date(self.couponinfo.validDates[0]);
+            let dateTo = new Date(self.couponinfo.validDates[1]);
+            datas.valid_startdate = dateFrom.getFullYear() + "-" + (dateFrom.getMonth() + 1) + "-" + dateFrom.getDate();
+            datas.valid_enddate = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate();
           }
         }
         if (self.storeRadio === "someStores") {  // 已选门店
-          datas.bus_ids = self.selected.idArr
+          datas.bus_ids = self.selected.idArr;
         }
         self.$refs.couponinfo.validate((valid) => {
           if (valid && !self.couponinfo.timeError && !self.couponinfo.dateError) {
-            var id = getUrlParameters(window.location.hash, "id")
-            var url = EVENTS_CMEDIT_URL(id)   // 修改
-            self.tips = "修改优惠券成功！"
+            var id = getUrlParameters(window.location.hash, "id");
+            var url = EVENTS_CMEDIT_URL(id);   // 修改
+            self.tips = "修改优惠券成功！";
             if (!id) {   // 新增
-              self.tips = "新增优惠券成功！"
-              url = EVENTS_CMADDSHOPS_URL
+              self.tips = "新增优惠券成功！";
+              url = EVENTS_CMADDSHOPS_URL;
             }
             self.$http.post(url, JSON.stringify(datas), {emulateJSON: true})
               .then(function(response) {
                 if (response.body.success) {
-                  self.tipsVisible = true
+                  self.tipsVisible = true;
                   modalHide(function() {
-                    self.tipsVisible = false
-                    self.$router.push({path: "/coupons_manage/my_coupons"})
-                  })
+                    self.tipsVisible = false;
+                    self.$router.push({path: "/coupons_manage/my_coupons"});
+                  });
                 }
-              })
+              });
           } else {
-            return false
+            return false;
           }
-        })
+        });
       },
       /* 改变当前页 */
       handleSelectedChange(currentPage) {
-        this.selected.currentPage = currentPage
-        this.getSelectedTables()
+        this.selected.currentPage = currentPage;
+        this.getSelectedTables();
       },
       /* 改变当前页 */
       handleWholeChange(currentPage) {
-        this.whole.currentPage = currentPage
-        this.getWholeTables()
+        this.whole.currentPage = currentPage;
+        this.getWholeTables();
       }
     },
     components: {
@@ -491,5 +491,5 @@
       inputSearch,
       dialogTips
     }
-  }
+  };
 </script>

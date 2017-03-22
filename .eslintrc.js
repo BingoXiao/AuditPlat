@@ -60,7 +60,7 @@ module.exports = {
     // 要求或禁止块内填充
     "padded-blocks": ["error", { "blocks": "never" }],
     // 要求或禁止使用分号代替
-    "semi": ["error", "never"],
+    "semi": ["error", "always"],
     // 禁用不必要的分号
     "no-extra-semi": 1,
     // 禁用不必要的转义

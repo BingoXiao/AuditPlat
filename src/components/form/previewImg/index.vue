@@ -33,18 +33,18 @@
         http: "https://shopmanage-dev.jinmailife.com",
         dialogVisible: false,   // 查看大图片
         coverVisible: false     // 放大层
-      }
+      };
     },
     computed: {
       // 图片展示
       image: function() {
-        var self = this
+        var self = this;
         if (self.imgSrc !== "") {
-          return self.http + self.imgSrc
+          return self.http + self.imgSrc;
         }
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

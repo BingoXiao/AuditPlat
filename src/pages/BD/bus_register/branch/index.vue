@@ -57,16 +57,16 @@
 </template>
 
 <script>
-  import stepsComponent from "../../../../components/steps/index"
-  import busSearch from "../module/bus_search/index"
-  import basicInfo from "../module/basic_info/index"
-  import qualificationInfo from "../module/qualification_info/index"
-  import showCheckInfo from "../module/show_check_info/index"
-  import submitSuccess from "../module/submit_success/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
+  import stepsComponent from "../../../../components/steps/index";
+  import busSearch from "../module/bus_search/index";
+  import basicInfo from "../module/basic_info/index";
+  import qualificationInfo from "../module/qualification_info/index";
+  import showCheckInfo from "../module/show_check_info/index";
+  import submitSuccess from "../module/submit_success/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
   import {BDREGISTER_BRAEDITFILLING_URL, BDREGISTER_BRAREGISTER_URL, BUSLIST_BASIC_URL,
-    BUSLIST_ID_URL, BUSLIST_SETTLER_URL} from "../../../../common/interface"
-  import {getUrlParameters, modalHide} from "../../../../common/common"
+    BUSLIST_ID_URL, BUSLIST_SETTLER_URL} from "../../../../common/interface";
+  import {getUrlParameters, modalHide} from "../../../../common/common";
 
   export default{
     data() {
@@ -101,75 +101,75 @@
             index: 5,
             title: "送审成功"
           }]
-      }
+      };
     },
     mounted() {
-      this.getBranchInfo()
+      this.getBranchInfo();
     },
     methods: {
       // 获取分店注册信息
       getBranchInfo: function() {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         if (id) {       // （修改）有填充信息
           self.$http.get(BDREGISTER_BRAEDITFILLING_URL + "?applynum=" + id)
             .then(function(response) {
               if (response.body.success) {
-                self.filling = response.body.content
-                self.PAN.name = response.body.content.userinfo.name
-                self.PAN.phonenum = response.body.content.userinfo.phonenum
+                self.filling = response.body.content;
+                self.PAN.name = response.body.content.userinfo.name;
+                self.PAN.phonenum = response.body.content.userinfo.phonenum;
               }
-            })
+            });
         }
       },
       // 商家搜索 获取主账号信息
       getPAN: function(busID) {
-        var self = this
+        var self = this;
         self.$http.get(BUSLIST_BASIC_URL + "?bus_id=" + busID).then(function(response) {
           if (response.body.success) {
-            let userInfo = response.body.content.userinfo
-            self.PAN.name = userInfo.name
-            self.PAN.phonenum = userInfo.phonenum
+            let userInfo = response.body.content.userinfo;
+            self.PAN.name = userInfo.name;
+            self.PAN.phonenum = userInfo.phonenum;
           }
-        })
+        });
       },
       // 获取结款信息和身份信息
       getCheck: function(busAcc) {
-        var self = this
+        var self = this;
         // 获取银行信息
         self.$http.get(BUSLIST_SETTLER_URL + "?account=" + busAcc).then(function(response) {
           if (response.body.success) {
-            self.Bank = response.body.content
+            self.Bank = response.body.content;
           }
-        })
+        });
         // 获取身份信息
         self.$http.get(BUSLIST_ID_URL + "?account=" + busAcc).then(function(response) {
           if (response.body.success) {
-            self.ID = response.body.content
+            self.ID = response.body.content;
           }
-        })
+        });
       },
       // 下一步
       next_step: function(step, flag) {
-        var self = this
+        var self = this;
         if (self.active === 1) {          // 商家搜索验证
           self.$refs.busSearch.busValidate(function() {
-            self.active = self.active + 1
-            self.currentView = step
-          })
+            self.active = self.active + 1;
+            self.currentView = step;
+          });
         } else {
           if (self.active === 2) {   // 基本信息验证
-            self.$refs.basicChild.basicValidate()
+            self.$refs.basicChild.basicValidate();
           } else if (self.active === 3) {   // 资质信息验证
-            self.$refs.quaChild.quaValidate()
+            self.$refs.quaChild.quaValidate();
           } else if (self.active === 4) {   // 结款信息验证
             var formData = {
               "step": "LAST",
               "applynum": getUrlParameters(window.location.hash, "id"),
               "type": flag   // 送审为"VERIFYING"，保存为"HANDLING"
-            }
-            self.$store.commit("V_FLAG", true)
-            self.$store.commit("FORM_DATA", formData)
+            };
+            self.$store.commit("V_FLAG", true);
+            self.$store.commit("FORM_DATA", formData);
           }
 
           if (self.$store.state.vflag) {    // 验证成功
@@ -179,36 +179,36 @@
               .then(function(response) {
                 if (response.body.success) {
                   if (!getUrlParameters(window.location.hash, "id")) {
-                    window.location.hash += "#id=" + response.body.content.applynum
+                    window.location.hash += "#id=" + response.body.content.applynum;
                   }
                   if (step === "save") {       // 保存
-                    self.saveVisible = true
+                    self.saveVisible = true;
                     modalHide(function() {
-                      self.saveVisible = false
-                      self.$router.push({path: "/bus_register/branch"})
-                    }, 1000)
+                      self.saveVisible = false;
+                      self.$router.push({path: "/bus_register/branch"});
+                    }, 1000);
                   } else {                    // 送审
-                    self.active = self.active + 1
-                    self.currentView = step
+                    self.active = self.active + 1;
+                    self.currentView = step;
                   }
-                  self.$store.commit("V_FLAG", false)
+                  self.$store.commit("V_FLAG", false);
                 }
-              })
+              });
           }
         }
       },
       // 上一步
       previous_step: function(step) {
-        var self = this
+        var self = this;
         if (self.active === 4) {
-          self.active = self.active - 1
-          self.currentView = "qualificationInfo"
+          self.active = self.active - 1;
+          self.currentView = "qualificationInfo";
         } else if (self.active === 3) {
-          self.active = self.active - 1
-          self.currentView = "basicInfo"
+          self.active = self.active - 1;
+          self.currentView = "basicInfo";
         } else if (self.active === 2) {
-          self.active = self.active - 1
-          self.currentView = "busSearch"
+          self.active = self.active - 1;
+          self.currentView = "busSearch";
         }
       }
     },
@@ -221,7 +221,7 @@
       submitSuccess,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

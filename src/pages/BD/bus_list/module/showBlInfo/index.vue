@@ -31,8 +31,8 @@
 </template>
 
 <script>
-  import showImage from "../../../../../components/form/previewImg/index.vue"
-  import radioCheck from "../../../../../components/radio/index.vue"
+  import showImage from "../../../../../components/form/previewImg/index.vue";
+  import radioCheck from "../../../../../components/radio/index.vue";
 
   export default{
     props: {
@@ -46,22 +46,22 @@
         blRadio: true,       // 有效期
         bl_expire: "",     // 营业执照有效期
         bl_address: ""     // 营业执照地址
-      }
+      };
     },
     watch: {
       filling: function() {
-        var self = this
-        var blinfo = self.filling
-        self.bl_account = blinfo.bl_account
-        self.bl_image_url = blinfo.bl_image_url
-        self.bl_name = blinfo.bl_name
-        self.bl_address = blinfo.bl_address
+        var self = this;
+        var blinfo = self.filling;
+        self.bl_account = blinfo.bl_account;
+        self.bl_image_url = blinfo.bl_image_url;
+        self.bl_name = blinfo.bl_name;
+        self.bl_address = blinfo.bl_address;
         if (self.bl_expire) {
-          self.blRadio = false
-          self.bl_expire = blinfo.bl_expire
+          self.blRadio = false;
+          self.bl_expire = blinfo.bl_expire;
         } else {
-          self.blRadio = true
-          self.bl_expire = "无"
+          self.blRadio = true;
+          self.bl_expire = "无";
         }
       }
     },
@@ -69,7 +69,7 @@
       showImage,
       radioCheck
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -79,12 +79,12 @@
 </template>
 
 <script>
-  import alasql from "alasql"
-  import datePicker from "../../../components/search/datePicker/index"
-  import inputSearch from "../../../components/search/input/index"
-  import selectSearch from "../../../components/search/select/index"
-  import classifySearch from "../../../components/search/classify/index"
-  import {PROLIST_TABLE_URL} from "../../../common/interface"
+  import alasql from "alasql";
+  import datePicker from "../../../components/search/datePicker/index";
+  import inputSearch from "../../../components/search/input/index";
+  import selectSearch from "../../../components/search/select/index";
+  import classifySearch from "../../../components/search/classify/index";
+  import {PROLIST_TABLE_URL} from "../../../common/interface";
 
   export default {
     data() {
@@ -122,86 +122,87 @@
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1            // 当前页
-      }
+      };
     },
     mounted: function() {
-      var self = this
+      var self = this;
       self.getTables(function(datas) {
-        self.fillTable(datas)
-      })
+        self.fillTable(datas);
+      });
     },
     methods: {
       /* 获取数据（表格） */
       getTables: function(func) {
-        var self = this
-        self.loading = true
+        var self = this;
+        self.loading = true;
         self.$http.get(PROLIST_TABLE_URL).then(function(response) {
           if (response.body.success) {
-            var datas = response.body.content
+            var datas = response.body.content;
             for (let i = 0; i < datas.length; i++) {
-              var item = datas[i]
-              item.bus_names = item.bus_names.split(" ")  // 门店名称
-              item.class = item.class.split(" ")          // 项目分类
+              var item = datas[i];
+              item.bus_names = item.bus_names.split(" ");  // 门店名称
+              item.class = item.class.split(" ");          // 项目分类
               for (let i = 0; i < item.class.length - 1; i++) {
-                item.class[i] = item.class[i] + " > "
+                item.class[i] = item.class[i] + " > ";
               }
             }
-            func(datas)
+            func(datas);
           }
-        })
+        });
       },
       /* 填充（表格） */
-      fillTable: function(datas) {
-        var self = this
-        self.totalDatas = datas
-        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-        self.totalItems = parseInt(datas.length)
+      fillTable: function(data) {
+        var self = this;
+        var datas = alasql("SELECT * FROM ? ORDER BY submit_time DESC", [data]);
+        self.totalDatas = datas;
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
+        self.totalItems = parseInt(datas.length);
         setTimeout(function() {
-          self.loading = false
-        })
+          self.loading = false;
+        });
       },
 
       /* 获取过滤条件 */
       getFilterRules: function(name, value) {
-        var self = this
-        self.search[name] = value
+        var self = this;
+        self.search[name] = value;
       },
       /* 过滤 */
       filterTable: function() {
-        var self = this
+        var self = this;
         var rules = "SELECT * FROM ? WHERE (bus_names LIKE '%" + self.search.name + "%'" +
-          " OR name LIKE '%" + self.search.name + "%')"
+          " OR name LIKE '%" + self.search.name + "%')";
         if (self.search.status !== "") {    // 状态
-          rules += " AND status = ?"
+          rules += " AND status = ?";
         }
         if (self.search.typein !== "") {    // 项目类型
-          rules += " AND item_type LIKE '%" + self.search.typein + "%'"
+          rules += " AND item_type LIKE '%" + self.search.typein + "%'";
         }
         if (self.search.class !== "") {    // 分类
-          rules += " AND `class` LIKE '%" + self.search.class + "%'"
+          rules += " AND `class` LIKE '%" + self.search.class + "%'";
         }
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'";
         }
         self.getTables(function(datas) {
-          var res = alasql(rules, [datas, self.search.status])
-          self.currentPage = 1
-          self.fillTable(res)
-        })
+          var res = alasql(rules, [datas, self.search.status]);
+          self.currentPage = 1;
+          self.fillTable(res);
+        });
       },
 
       /* 查看 */
       viewInfo: function(row) {
-        var self = this
-        self.$router.push({path: self.$route.path + "/content#id=" + row.item_id})
+        var self = this;
+        self.$router.push({path: self.$route.path + "/content#id=" + row.item_id});
       },
 
       /* 翻页 */
       handleCurrentChange(currentPage) {
-        var self = this
-        self.currentPage = currentPage
-        self.fillTable(self.totalDatas)
+        var self = this;
+        self.currentPage = currentPage;
+        self.fillTable(self.totalDatas);
       }
     },
     components: {
@@ -210,7 +211,7 @@
       selectSearch,
       classifySearch
     }
-  }
+  };
 </script>
 
 <style scoped>

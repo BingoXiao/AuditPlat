@@ -9,12 +9,12 @@
 </template>
 
 <script>
-  import headerMenu from "./components/headerMenu/index"
+  import headerMenu from "./components/headerMenu/index";
 
   export default{
     name: "app",
     components: {
       headerMenu
     }
-  }
+  };
 </script>

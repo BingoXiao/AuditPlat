@@ -47,7 +47,7 @@
 </template>
 
 <script>
-  import {TEMP_PHOTOS_URL} from "../../../common/interface"
+  import {TEMP_PHOTOS_URL} from "../../../common/interface";
 
   export default{
     props: {
@@ -63,20 +63,20 @@
         image: "",                     // 当前图片
         error: "",                     // 上传错误标志
         dialogVisible: false           // 预览图片
-      }
+      };
     },
     watch: {
       // 图片展示
       imgFill: function() {
-        var self = this
+        var self = this;
         if (self.imgFill.length > 0) {
           for (let i = 0; i < self.imgFill.length; i++) {
             if (self.imgFill[i] !== "") {
               let obj = {
                 coverVisible: false,
                 image: self.imgFill[i]
-              }
-              self.imageObject.push(obj)
+              };
+              self.imageObject.push(obj);
             }
           }
         }
@@ -85,50 +85,50 @@
     methods: {
       // 上传图片前验证
       beforeUpload(file) {
-        var self = this
-        const isJPG = (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png")
-        const isLt2M = file.size / 1024 / 1024 < 2
+        var self = this;
+        const isJPG = (file.type === "image/jpeg" || file.type === "image/jpg" || file.type === "image/png");
+        const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isJPG || !isLt2M) {
-          self.error = "请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）"
+          self.error = "请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）";
         } else {
-          self.error = ""
+          self.error = "";
         }
-        return isJPG && isLt2M
+        return isJPG && isLt2M;
       },
       // 上传成功（返回父组件相关信息）
       handleSuccess(res, file) {
-        var self = this
+        var self = this;
         let obj = {
           "coverVisible": false,
           "image": res.content.url
-        }
-        self.error = ""
-        self.imageObject.push(obj)
+        };
+        self.error = "";
+        self.imageObject.push(obj);
       },
       // 预览图片
       viewImg: function(index) {
-        var self = this
-        self.dialogVisible = true
-        self.image = self.imageObject[index].image
+        var self = this;
+        self.dialogVisible = true;
+        self.image = self.imageObject[index].image;
       },
       // 文件列表移除文件
       deleteImg: function(index) {
-        var self = this
+        var self = this;
         // 注释：该方法会改变原始数组
-        self.imageObject.splice(index, 1)
+        self.imageObject.splice(index, 1);
       },
       // 返回图片列表
       get_image_list: function() {
-        var self = this
-        let arr = ["", "", ""]
+        var self = this;
+        let arr = ["", "", ""];
         for (let i = 0; i < self.imageObject.length; i++) {
-          arr[i] = self.imageObject[i].image
+          arr[i] = self.imageObject[i].image;
         }
         // 图片url 及 对应名称
-        self.$emit("get_image_list", arr, "consImage")
+        self.$emit("get_image_list", arr, "consImage");
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -196,13 +196,13 @@
 </template>
 
 <script>
-  import BMap from "BMap"
-  import openHour from "../../../../components/form/openHour/index"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
-  import {BDVERIFY_FILLING_URL, BDVERIFY_EDITPASS_URL} from "../../../../common/interface"
-  import {modalHide, compareArrData, compareObjArrData, getUrlParameters} from "../../../../common/common"
+  import BMap from "BMap";
+  import openHour from "../../../../components/form/openHour/index";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
+  import {BDVERIFY_FILLING_URL, BDVERIFY_EDITPASS_URL} from "../../../../common/interface";
+  import {modalHide, compareArrData, compareObjArrData, getUrlParameters} from "../../../../common/common";
 
-  let map, point, marker
+  let map, point, marker;
   export default{
     data() {
       return {
@@ -256,152 +256,152 @@
         tips: "驳回成功！",
         tipsVisible: false,
         textarea: ""
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.get_info()
+      var self = this;
+      self.get_info();
       if (self.$route.name === "商家信息修改") {
-        self.showBtn = true
+        self.showBtn = true;
       } else {
-        self.showBtn = false
+        self.showBtn = false;
       }
       // 百度地图API功能
-      map = new BMap.Map("allmap")
-      point = new BMap.Point(114.025974, 22.546054)
-      marker = new BMap.Marker(point)  // 创建标注
-      map.centerAndZoom(point, 18)
+      map = new BMap.Map("allmap");
+      point = new BMap.Point(114.025974, 22.546054);
+      marker = new BMap.Marker(point);               // 创建标注
+      map.centerAndZoom(point, 18);
 
       // 根据提供的坐标点显示位置
       if (self.$store.state.map_point) {
-        let pp = self.$store.state.map_point
-        let str = pp.split(",")
-        let newPoint = new BMap.Point(str[0], str[1])
-        marker = new BMap.Marker(newPoint)  // 创建标注
-        map.clearOverlays()
-        map.panTo(newPoint)
-        map.addOverlay(marker)       // 将标注添加到地图中
+        let pp = self.$store.state.map_point;
+        let str = pp.split(",");
+        let newPoint = new BMap.Point(str[0], str[1]);
+        marker = new BMap.Marker(newPoint);  // 创建标注
+        map.clearOverlays();
+        map.panTo(newPoint);
+        map.addOverlay(marker);       // 将标注添加到地图中
       }
       window.local = new BMap.LocalSearch(map, {
         renderOptions: {map: map}
-      })
+      });
     },
     methods: {
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function(name) {
-        this.currentView = name
+        this.currentView = name;
       },
       // 获取信息
       get_info: function() {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         self.$http.get(BDVERIFY_FILLING_URL + "?item_id=" + id)
           .then(function(response) {
             if (response.body.success) {
-              var data = response.body.content
-              var resNew = data.data
-              var resOld = data.old_data
-              self.reject_reason = data.iteminfo.reject_reason
-              var userinfo = data.userinfo
-              self.shopName = userinfo.account     // 店名
-              self.applynum = getUrlParameters(window.location.hash, "applynum")       // 审编号
-              self.name = userinfo.name            // 负责人姓名
-              self.phonenum = userinfo.phonenum    // 负责人手机
-              self.resNew.name = resNew.name       // 新门店名称
-              if (resOld.name) {                   // 旧门店名称
-                self.resOld.name = resOld.name
+              var data = response.body.content;
+              var resNew = data.data;
+              var resOld = data.old_data;
+              self.reject_reason = data.iteminfo.reject_reason;
+              var userinfo = data.userinfo;
+              self.shopName = userinfo.account;     // 店名
+              self.applynum = getUrlParameters(window.location.hash, "applynum");       // 审编号
+              self.name = userinfo.name;            // 负责人姓名
+              self.phonenum = userinfo.phonenum;    // 负责人手机
+              self.resNew.name = resNew.name;       // 新门店名称
+              if (resOld.name) {                    // 旧门店名称
+                self.resOld.name = resOld.name;
               } else {
-                self.resOld.name = resNew.name
+                self.resOld.name = resNew.name;
               }
               for (let i = 1; i <= 5; i++) {     // 新电话
                 if (resNew["tel_" + i]) {
-                  self.resNew.tel.push(resNew["tel_" + i])
+                  self.resNew.tel.push(resNew["tel_" + i]);
                 }
               }
               for (let i = 1; i <= 5; i++) {     // 旧电话
                 if (resOld["tel_" + i]) {
-                  self.resOld.tel.push(resOld["tel_" + i])
+                  self.resOld.tel.push(resOld["tel_" + i]);
                 }
               }
-              self.telFlag = !compareArrData(self.resOld.tel, self.resNew.tel)
-              self.resNew.province_name = resNew.province_name    // 新地址
-              self.resNew.city_name = resNew.city_name
-              self.resNew.district_name = resNew.district_name
-              self.resNew.circle_name = resNew.circle_name
-              self.resOld.province_name = resOld.province_name   // 旧地址
-              self.resOld.city_name = resOld.city_name
-              self.resOld.district_name = resOld.district_name
-              self.resOld.circle_name = resOld.circle_name
+              self.telFlag = !compareArrData(self.resOld.tel, self.resNew.tel);
+              self.resNew.province_name = resNew.province_name;    // 新地址
+              self.resNew.city_name = resNew.city_name;
+              self.resNew.district_name = resNew.district_name;
+              self.resNew.circle_name = resNew.circle_name;
+              self.resOld.province_name = resOld.province_name;   // 旧地址
+              self.resOld.city_name = resOld.city_name;
+              self.resOld.district_name = resOld.district_name;
+              self.resOld.circle_name = resOld.circle_name;
               if (resNew.district_name !== resOld.district_name || resNew.circle_name !== resOld.circle_name) {
-                self.addressFlag = true
+                self.addressFlag = true;
               }
-              self.resNew.category_parent_name = resNew.category_parent_name    // 新分类
-              self.resNew.category_name = resNew.category_name    // 新分类
-              self.resOld.category_parent_name = resOld.category_parent_name    // 新分类
-              self.resOld.category_name = resOld.category_name    // 新分类
+              self.resNew.category_parent_name = resNew.category_parent_name;    // 新分类
+              self.resNew.category_name = resNew.category_name;    // 新分类
+              self.resOld.category_parent_name = resOld.category_parent_name;    // 新分类
+              self.resOld.category_name = resOld.category_name;    // 新分类
               if (resNew.category_parent_name !== resOld.category_parent_name || resNew.category_name !== resOld.category_name) {
-                self.classFlag = true
+                self.classFlag = true;
               }
-              self.showLocal(resNew.address_point)   // 地图定位
-              self.resNew.open_hours = resNew.open_hours    // 新营业时间
-              let oldArr = resOld.open_hours    // 旧营业时间
-              let oldTime = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
+              self.showLocal(resNew.address_point);   // 地图定位
+              self.resNew.open_hours = resNew.open_hours;    // 新营业时间
+              let oldArr = resOld.open_hours;    // 旧营业时间;
+              let oldTime = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
               for (let i = 0; i < oldArr.length; i++) {
-                let item = oldArr[i].week.split("")
-                var str = ""
+                let item = oldArr[i].week.split("");
+                var str = "";
                 for (let j = 0; j < item.length; j++) {
                   if (item[j] === "1") {
-                    str += oldTime[j] + "、"
+                    str += oldTime[j] + "、";
                   }
                 }
-                oldArr[i].weekString = str.substr(0, str.length - 1)
+                oldArr[i].weekString = str.substr(0, str.length - 1);
               }
-              self.resOld.open_hours = oldArr
-              self.openFlag = !compareObjArrData(resNew.open_hours, resOld.open_hours)
+              self.resOld.open_hours = oldArr;
+              self.openFlag = !compareObjArrData(resNew.open_hours, resOld.open_hours);
               let running = {
                 "RO": "营业中",
                 "RC": "已关闭",
                 "RE": "筹备中",
                 "RP": "暂停营业"
-              }
-              self.resNew.open_status = running[resNew.running_status]   // 新营业状态
-              self.resOld.open_status = running[resOld.running_status]   // 旧营业状态
-              self.resNew.capita_consumption = resNew.capita_consumption // 新人均
-              self.resOld.capita_consumption = resOld.capita_consumption // 新人均
+              };
+              self.resNew.open_status = running[resNew.running_status];     // 新营业状态
+              self.resOld.open_status = running[resOld.running_status];     // 旧营业状态
+              self.resNew.capita_consumption = resNew.capita_consumption;   // 新人均
+              self.resOld.capita_consumption = resOld.capita_consumption;   // 新人均
             }
-          })
+          });
       },
       // 返回商家列表
       backTo: function() {
-        var self = this
-        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
-        self.$router.push({path: htmlSrc})
+        var self = this;
+        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"));
+        self.$router.push({path: htmlSrc});
       },
       // 驳回选择理由
       radioChange: function() {
-        var self = this
-        self.error = ""
+        var self = this;
+        self.error = "";
       },
       // 审核
       pass: function(flag) {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         var formdata = {
           flag: flag,
           item_id: id,
           reject_reason: ""
-        }
+        };
         if (flag) {   // 通过
-          self.tips = "审核成功"
+          self.tips = "审核成功";
         } else {   // 驳回
-          formdata.reject_reason = self.rejectReason
+          formdata.reject_reason = self.rejectReason;
           if (self.rejectReason === "其他(请填写)") {
             if (self.textarea) {
-              formdata.reject_reason = self.textarea
-              self.error = ""
-              self.tips = "发送成功"
+              formdata.reject_reason = self.textarea;
+              self.error = "";
+              self.tips = "发送成功";
             } else {
-              self.error = "请选择驳回原因"
+              self.error = "请选择驳回原因";
             }
           }
         }
@@ -411,32 +411,32 @@
             {emulateJSON: true})
             .then(function(response) {
               if (response.body.success) {
-                self.passDialog = false
-                self.rejectDialog = false
-                self.tipsVisible = true
+                self.passDialog = false;
+                self.rejectDialog = false;
+                self.tipsVisible = true;
                 modalHide(function() {
-                  self.tipsVisible = false
-                  self.$router.push({path: "/bus_review/bus_apply"})
-                })
+                  self.tipsVisible = false;
+                  self.$router.push({path: "/bus_review/bus_apply"});
+                });
               }
-            })
+            });
         }
       },
       // 根据提供的坐标点显示位置
       showLocal: function(po) {
-        var str = po.split(",")
-        var newPoint = new BMap.Point(str[0], str[1])
-        var marker = new BMap.Marker(newPoint)
-        map.clearOverlays()
-        map.panTo(newPoint)
-        map.addOverlay(marker)
+        var str = po.split(",");
+        var newPoint = new BMap.Point(str[0], str[1]);
+        var marker = new BMap.Marker(newPoint);
+        map.clearOverlays();
+        map.panTo(newPoint);
+        map.addOverlay(marker);
       }
     },
     components: {
       openHour,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

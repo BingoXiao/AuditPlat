@@ -75,14 +75,14 @@
 </template>
 
 <script>
-  import showImage from "../../../../components/form/previewImg/index.vue"
+  import BMap from "BMap";
+  import showImage from "../../../../components/form/previewImg/index.vue";
   import {PROVINCE_URL, CITY_URL, DISTRICT_URL, CITYNEAR_URL,
-    BDREGISTER_APPLFILLING_URL, CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../../common/interface"
-  import BMap from "BMap"
-  import {getValue, getUrlParameters} from "../../../../common/common"
+    BDREGISTER_APPLFILLING_URL, CATEGORY_URL, LCLASS_URL, SCLASS_URL} from "../../../../common/interface";
+  import {getValue, getUrlParameters} from "../../../../common/common";
 
   /* eslint-disable no-unused-vars */
-  let map, point, marker, geoc
+  let map, point, marker, geoc;
   export default{
     data() {
       return {
@@ -104,161 +104,161 @@
         sale_per_month: "",      // 月销售额
         bl_image_url: "",        // 营业执照图片
         sl_image_url: ""         // 许可证图片
-      }
+      };
     },
     mounted() {
-      var self = this
-      let id = getUrlParameters(window.location.hash, "id")
+      var self = this;
+      let id = getUrlParameters(window.location.hash, "id");
       // 百度地图API功能
-      map = new BMap.Map("allmap")
-      point = new BMap.Point(114.025974, 22.546054)
-      marker = new BMap.Marker(point)  // 创建标注
-      map.centerAndZoom(point, 18)
-      geoc = new BMap.Geocoder()
+      map = new BMap.Map("allmap");
+      point = new BMap.Point(114.025974, 22.546054);
+      marker = new BMap.Marker(point);  // 创建标注
+      map.centerAndZoom(point, 18);
+      geoc = new BMap.Geocoder();
 
       // 根据提供的坐标点显示位置
       if (self.$store.state.map_point) {
-        let pp = self.$store.state.map_point
-        let str = pp.split(",")
-        let newPoint = new BMap.Point(str[0], str[1])
-        marker = new BMap.Marker(newPoint)  // 创建标注
-        map.clearOverlays()
-        map.panTo(newPoint)
-        map.addOverlay(marker)       // 将标注添加到地图中
+        let pp = self.$store.state.map_point;
+        let str = pp.split(",");
+        let newPoint = new BMap.Point(str[0], str[1]);
+        marker = new BMap.Marker(newPoint);  // 创建标注
+        map.clearOverlays();
+        map.panTo(newPoint);
+        map.addOverlay(marker);      // 将标注添加到地图中
       }
       window.local = new BMap.LocalSearch(map, {
         renderOptions: {map: map}
-      })
+      });
 
       self.$http.get(BDREGISTER_APPLFILLING_URL + "?applynum=" + id)
         .then(function(response) {
           if (response.body.success) {
-            var userinfo = response.body.content.userinfo
-            var businfo = response.body.content.businfo
-            var blinfo = response.body.content.blinfo
-            var slinfo = response.body.content.slinfo
-            self.name = userinfo.name           // 商家姓名
-            self.phonenum = userinfo.phonenum   // 商家手机
-            self.busname = businfo.busname      // 门店名称
+            var userinfo = response.body.content.userinfo;
+            var businfo = response.body.content.businfo;
+            var blinfo = response.body.content.blinfo;
+            var slinfo = response.body.content.slinfo;
+            self.name = userinfo.name;           // 商家姓名
+            self.phonenum = userinfo.phonenum;    // 商家手机
+            self.busname = businfo.busname;      // 门店名称
             if (businfo.tel) {
-              self.tel = businfo.tel            // 门店名称
+              self.tel = businfo.tel;            // 门店名称
             } else {
-              self.tel = "无"
+              self.tel = "无";
             }
-            self.get_province(businfo.province_id, businfo.city_id, businfo.district_id, businfo.city_near_id)
-            self.address_details = businfo.address_details     // 门店地址
-            self.address_point = businfo.address_point         // 门店坐标
-            self.showLocal(businfo.address_point)
-            self.get_lclass(businfo.lclass_id, businfo.mclass_id, businfo.sclass_id)
-            self.group_buying_info = businfo.group_buying_info // 团购内容
-            self.cost_per_person = businfo.cost_per_person     // 人均
-            self.sale_per_month = businfo.sale_per_month       // 月销售额
+            self.get_province(businfo.province_id, businfo.city_id, businfo.district_id, businfo.city_near_id);
+            self.address_details = businfo.address_details;     // 门店地址
+            self.address_point = businfo.address_point;         // 门店坐标
+            self.showLocal(businfo.address_point);
+            self.get_lclass(businfo.lclass_id, businfo.mclass_id, businfo.sclass_id);
+            self.group_buying_info = businfo.group_buying_info; // 团购内容
+            self.cost_per_person = businfo.cost_per_person;     // 人均
+            self.sale_per_month = businfo.sale_per_month;       // 月销售额
             if (blinfo.bl_image_url) {
-              self.bl_image_url = blinfo.bl_image_url
+              self.bl_image_url = blinfo.bl_image_url;
             }
             if (slinfo.sl_image_url) {
-              self.sl_image_url = slinfo.sl_image_url
+              self.sl_image_url = slinfo.sl_image_url;
             }
           }
-        })
+        });
     },
     methods: {
       /* 获取省列表 */
       get_province: function(province, city, district, cityNear) {
-        var self = this
+        var self = this;
         self.$http.get(PROVINCE_URL).then(function(response) {
           if (response.body.success) {
-            var arr = response.body.content
-            self.province = getValue(arr, province, "id", "name")
-            self.get_city(province, city, district, cityNear)
+            var arr = response.body.content;
+            self.province = getValue(arr, province, "id", "name");
+            self.get_city(province, city, district, cityNear);
           }
-        })
+        });
       },
       /* 获取市列表 */
       get_city: function(province, city, district, cityNear) {
-        var self = this
+        var self = this;
         self.$http.get(CITY_URL + "?province_id=" + province).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
+            let arr = response.body.content;
             if (!self.flag) {
-              self.city = getValue(arr, city, "id", "name")
-              self.get_district(city, district, cityNear)
+              self.city = getValue(arr, city, "id", "name");
+              self.get_district(city, district, cityNear);
             }
           }
-        })
+        });
       },
       /* 获取区/县列表 */
       get_district: function(city, district, cityNear) {
-        var self = this
-        self.district_value = ""
-        self.city_near_value = ""
+        var self = this;
+        self.district_value = "";
+        self.city_near_value = "";
         self.$http.get(DISTRICT_URL + "?city_id=" + city).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
-            self.district = getValue(arr, district, "id", "name")
-            self.get_city_near(district, cityNear)
+            let arr = response.body.content;
+            self.district = getValue(arr, district, "id", "name");
+            self.get_city_near(district, cityNear);
           }
-        })
+        });
       },
       /* 获取商圈列表 */
       get_city_near: function(district, cityNear) {
-        var self = this
-        self.city_near_value = ""
+        var self = this;
+        self.city_near_value = "";
         self.$http.get(CITYNEAR_URL + "?district_id=" + district).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
-            self.city_near = getValue(arr, cityNear, "id", "name")
+            let arr = response.body.content;
+            self.city_near = getValue(arr, cityNear, "id", "name");
           }
-        })
+        });
       },
       // 根据提供的坐标点显示位置
       showLocal: function(po) {
-        var str = po.split(",")
-        var newPoint = new BMap.Point(str[0], str[1])
-        var marker = new BMap.Marker(newPoint)
-        map.clearOverlays()
-        map.panTo(newPoint)
-        map.addOverlay(marker)
+        var str = po.split(",");
+        var newPoint = new BMap.Point(str[0], str[1]);
+        var marker = new BMap.Marker(newPoint);
+        map.clearOverlays();
+        map.panTo(newPoint);
+        map.addOverlay(marker);
       },
       // 获取分类
       get_lclass: function(lclass, mclass, sclass) {
-        var self = this
+        var self = this;
         self.$http.get(CATEGORY_URL).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
-            self.lclass = getValue(arr, lclass, "id", "name")
-            self.get_md_class(lclass, mclass, sclass)
+            let arr = response.body.content;
+            self.lclass = getValue(arr, lclass, "id", "name");
+            self.get_md_class(lclass, mclass, sclass);
           }
-        })
+        });
       },
       // 二级分类
       get_md_class: function(lclass, mclass, sclass) {
-        var self = this
+        var self = this;
         self.$http.get(LCLASS_URL + "?lclass_id=" + lclass).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
-            self.md_class = getValue(arr, mclass, "id", "name")
-            self.get_sm_class(mclass, sclass)
+            let arr = response.body.content;
+            self.md_class = getValue(arr, mclass, "id", "name");
+            self.get_sm_class(mclass, sclass);
           }
-        })
+        });
       },
       // 三级分类
       get_sm_class: function(mclass, sclass) {
-        var self = this
+        var self = this;
         self.$http.get(SCLASS_URL + "?mclass_id=" + mclass).then(function(response) {
           if (response.body.success) {
-            let arr = response.body.content
+            let arr = response.body.content;
             if (arr.length > 0) {
-              self.sm_class = "> " + getValue(arr, sclass, "id", "name")
+              self.sm_class = "> " + getValue(arr, sclass, "id", "name");
             }
           }
-        })
+        });
       }
     },
     components: {
       showImage
     }
-  }
+  };
 </script>
 
 <style scoped>

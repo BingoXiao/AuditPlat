@@ -12,19 +12,19 @@
 <script>
   export default{
     props: {
-      isRight: Boolean,
-      tips: String,
-      tipsVisible: Boolean
+      isRight: Boolean,     // 操作成功的icon(true),错误icon（false）
+      tips: String,         // 提示语句
+      tipsVisible: Boolean  // 显示与否
     },
     computed: {
       activeColor: function() {
-        var self = this
+        var self = this;
         if (self.isRight) {
-          return "#13CE66"
+          return "#13CE66";
         }
       }
     }
-  }
+  };
 </script>
 
 <style scoped>

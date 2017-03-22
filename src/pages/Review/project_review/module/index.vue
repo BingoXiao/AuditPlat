@@ -622,10 +622,10 @@
 </template>
 
 <script>
-  import radioCheck from "../../../../components/radio/index.vue"
-  import dialogTips from "../../../../components/dialogTips/index.vue"
-  import {PROVERIFY_FILLING_URL, PROVERIFY_PASS_URL, FESTIVALS_URL} from "../../../../common/interface"
-  import {modalHide, getUrlParameters, compareFestival} from "../../../../common/common"
+  import radioCheck from "../../../../components/radio/index.vue";
+  import dialogTips from "../../../../components/dialogTips/index.vue";
+  import {PROVERIFY_FILLING_URL, PROVERIFY_PASS_URL, FESTIVALS_URL} from "../../../../common/interface";
+  import {modalHide, getUrlParameters, compareFestival} from "../../../../common/common";
 
   export default{
     data() {
@@ -779,131 +779,132 @@
         isRight: true,       // 提示框
         tips: "操作成功！",
         tipsVisible: false
-      }
+      };
     },
     mounted() {
-      var self = this
-      self.get_festivals()
-      self.get_info()
+      var self = this;
+      self.get_festivals();
+      self.get_info();
       if (self.$route.name === "项目审核记录") {
-        self.showBtn = false
+        self.showBtn = false;
       } else {
-        self.showBtn = true
+        self.showBtn = true;
       }
     },
     methods: {
       /* 获取节加入 */
       get_festivals: function() {
-        var self = this
+        var self = this;
         self.$http.get(FESTIVALS_URL)
           .then(function(response) {
             if (response.body.success) {
-              self.festivals = response.body.content
+              self.festivals = response.body.content;
             }
-          })
+          });
       },
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function(name) {
-        this.currentView = name
+        this.currentView = name;
       },
       // 获取信息
       get_info: function() {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         self.$http.get(PROVERIFY_FILLING_URL + "?item_id=" + id)
           .then(function(response) {
             if (response.body.success) {
-              var data = response.body.content.data
-              var rules = data.rules
+              var data = response.body.content.data;
+              var rules = data.rules;
               for (let j = 0; j < data.shops.length; j++) {     // 新电话
-                let item = data.shops[j]
-                let str = ""
+                let item = data.shops[j];
+                let str = "";
                 for (let i = 1; i <= 5; i++) {
                   if (item["tel_" + i]) {
-                    str += item["tel_" + i] + ","
+                    str += item["tel_" + i] + ",";
                   }
                 }
-                item.tel = str.split(",")
+                item.tel = str.split(",");
               }
-              self.shopTable = data.shops
+              self.shopTable = data.shops;
               if (self.shopTable.length > 5) {   // 查看更多门店
-                self.moreShops = true
+                self.moreShops = true;
               }
-              self.data.category_parent_name = data.category_parent_name   // 二级分类
-              self.data.category_name = data.category_name       // 三级分类
-              self.data.commission = data.commission             // 佣金比例
-              self.data.photos = data.photos                     // 佣金比例
-              self.data.name = data.name                         // 项目名称
-              self.data.recommend_use_people_number = data.recommend_use_people_number   // 用餐人数
-              self.data.foods = data.foods         // 菜单组合
-              self.data.total = data.total      // 原价
-              self.data.price = data.price      // 优惠价
-              self.data.jm_price = data.jm_price    // 结算价
-              self.data.manual_billing_cycle = data.manual_billing_cycle    // 手动结算周期
-              self.data.auto_billing_cycle = data.auto_billing_cycle        // 自动结算周期
+              self.data.category_parent_name = data.category_parent_name;   // 二级分类
+              self.data.category_name = data.category_name;       // 三级分类
+              self.data.commission = data.commission;             // 佣金比例
+              self.data.photos = data.photos;                      // 佣金比例
+              self.data.name = data.name;                         // 项目名称
+              self.data.recommend_use_people_number = data.recommend_use_people_number;   // 用餐人数
+              self.data.foods = data.foods;         // 菜单组合
+              self.data.total = data.total;      // 原价
+              self.data.price = data.price;      // 优惠价
+              self.data.jm_price = data.jm_price;    // 结算价
+              self.data.manual_billing_cycle = data.manual_billing_cycle;    // 手动结算周期
+              self.data.auto_billing_cycle = data.auto_billing_cycle;        // 自动结算周期
               // 购买须知
-              self.data.rules = rules
+              self.data.rules = rules;
               // 不可用日期
               if (rules.exclude_use_date.index === 1) {
-                var weekDisabled = rules.exclude_use_date.info_1.week.split("")
-                var week = []
+                var weekDisabled = rules.exclude_use_date.info_1.week.split("");
+                var week = [];
                 for (let i = 0; i < weekDisabled.length; i++) {
                   if (weekDisabled[i] === "1") {
-                    week.push(i + "")
+                    week.push(i + "");
                   }
                 }
-                self.data.rules.exclude_use_date.info_1.week = week
-                var dateDiabled = rules.exclude_use_date.info_1.dates
+                self.data.rules.exclude_use_date.info_1.week = week;
+                var dateDiabled = rules.exclude_use_date.info_1.dates;
                 for (let i = 0; i < dateDiabled.length; i++) {
-                  self.data.rules.exclude_use_date.info_1.dates[i].festival = compareFestival(self.festivals, dateDiabled[i].begin, dateDiabled[i].end)
+                  self.data.rules.exclude_use_date.info_1.dates[i].festival =
+                    compareFestival(self.festivals, dateDiabled[i].begin, dateDiabled[i].end);
                 }
               }
             }
-          })
+          });
       },
       // 查看更多门店
       get_more_shops: function() {
-        var href, otherWindow
-        let id = getUrlParameters(window.location.hash, "id")
-        href = "#/project/wholeShops#id=" + id
+        var href, otherWindow;
+        let id = getUrlParameters(window.location.hash, "id");
+        href = "#/project/wholeShops#id=" + id;
         otherWindow = window.open(href, "",
           "height=500, width=860, top=" + (screen.height - 500) / 2 + ",left=" + (screen.width - 800) / 2 + ",alwaysRaised=yes," +
-          "toolbar=no,menubar=no,location=no,status=no")
-        otherWindow.opener = null
+          "toolbar=no,menubar=no,location=no,status=no");
+        otherWindow.opener = null;
       },
       // 返回商家列表
       backTo: function() {
-        var self = this
-        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
-        self.$router.push({path: htmlSrc})
+        var self = this;
+        var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"));
+        self.$router.push({path: htmlSrc});
       },
       // 驳回选择理由
       radioChange: function() {
-        var self = this
-        self.error = ""
+        var self = this;
+        self.error = "";
       },
       // 审核
       pass: function(flag) {
-        var self = this
-        let id = getUrlParameters(window.location.hash, "id")
+        var self = this;
+        let id = getUrlParameters(window.location.hash, "id");
         var formdata = {
           flag: flag,
           item_id: id,
           reject_reason: "",
           manual_billing_cycle: self.data.manual_billing_cycle,
           auto_billing_cycle: self.data.auto_billing_cycle
-        }
+        };
         if (flag) {   // 通过
-          self.tips = "审核成功"
+          self.tips = "审核成功";
         } else {   // 驳回
-          self.tips = "驳回成功"
-          formdata.reject_reason = self.rejectReason
+          self.tips = "驳回成功";
+          formdata.reject_reason = self.rejectReason;
           if (self.rejectReason === "其他(请填写)") {
             if (self.textarea) {
-              formdata.reject_reason = self.textarea
-              self.error = ""
+              formdata.reject_reason = self.textarea;
+              self.error = "";
             } else {
-              self.error = "请选择驳回原因"
+              self.error = "请选择驳回原因";
             }
           }
         }
@@ -913,16 +914,16 @@
             {emulateJSON: true})
             .then(function(response) {
               if (response.body.success) {
-                self.passDialog = false
-                self.rejectDialog = false
-                self.tipsVisible = true
+                self.passDialog = false;
+                self.rejectDialog = false;
+                self.tipsVisible = true;
                 modalHide(function() {
-                  self.tipsVisible = false
-                  var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"))
-                  self.$router.push({path: htmlSrc})
-                })
+                  self.tipsVisible = false;
+                  var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"));
+                  self.$router.push({path: htmlSrc});
+                });
               }
-            })
+            });
         }
       }
     },
@@ -930,7 +931,7 @@
       radioCheck,
       dialogTips
     }
-  }
+  };
 </script>
 
 <style scoped>

@@ -6,11 +6,18 @@
       <el-row>
         <el-form :inline="true" label-width="60px">
           <el-form-item label="日期：">
-            <date-picker></date-picker>
+            <date-picker ref="dateRange" name="dateRange"
+                         v-on:getRules="getFilterRules"></date-picker>
           </el-form-item>
 
           <el-form-item label="商家账号：" label-width="100px">
-            <input-search></input-search>
+            <input-search ref="account" name="account"
+                          v-on:getRules="getFilterRules"></input-search>
+          </el-form-item>
+
+          <el-form-item label="" label-width="10px">
+            <el-button type="primary" size="small" icon="search"
+                       @click="filterTable">查询</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -53,6 +60,7 @@
 </template>
 
 <script>
+  import alasql from "alasql"
   import inputSearch from "../../../../components/search/input/index"
   import datePicker from "../../../../components/search/datePicker/index"
   import {CHECKVERIFY_APPLY_URL, CHECKVERIFY_RECORD_DOWNLOAD_URL} from "../../../../common/interface"
@@ -65,6 +73,11 @@
       return {
         loading: false,
         selectArr: [],            // 选中数组
+        search: {         // 搜索栏
+          name: "",       // 账号
+          dateRange: []   // 日期
+        },
+        totalDatas: [],           // 表格总数据
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
@@ -72,35 +85,66 @@
       }
     },
     mounted() {
-      this.getTables()
+      var self = this
+      self.getTables(function(datas) {
+        self.fillTable(datas)
+      })
     },
     methods: {
       /* 获取数据（表格） */
-      getTables: function() {
+      getTables: function(func) {
         var self = this
         self.loading = true
         self.$http.get(CHECKVERIFY_APPLY_URL + "?type=H").then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
-            setTimeout(function() {
-              self.loading = false
-            })
+            func(datas)
           }
         })
       },
+      /* 填充（表格） */
+      fillTable: function(datas) {
+        var self = this
+        self.totalDatas = datas
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
+        self.totalItems = parseInt(datas.length)
+        setTimeout(function() {
+          self.loading = false
+        })
+      },
 
-      /* 改变当前页 */
+      /* 获取过滤条件 */
+      getFilterRules: function(name, value) {
+        var self = this
+        self.search[name] = value
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this
+        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'"
+        if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
+          rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +
+            " AND submit_time <= '" + self.search.dateRange[1] + " 23:59:59'"
+        }
+        self.getTables(function(datas) {
+          var res = alasql(rules, [datas, self.search.status])
+          self.currentPage = 1
+          self.fillTable(res)
+        })
+      },
+
+      /* 翻页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        var self = this
+        self.currentPage = currentPage
+        self.fillTable(self.totalDatas)
       },
 
       /* 每页条数改变时 */
       pageSizesChange: function(size) {
         this.pageSize = size
-        this.getTables()
+        var self = this
+        self.fillTable(self.totalDatas)
       },
 
       /* 获取选中项 */

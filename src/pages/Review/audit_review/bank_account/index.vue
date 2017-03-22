@@ -6,7 +6,13 @@
       <el-row>
         <el-form :inline="true" label-width="85px">
           <el-form-item label="商家账号：">
-            <input-search></input-search>
+            <input-search name="account"
+                          v-on:getRules="getFilterRules"></input-search>
+          </el-form-item>
+
+          <el-form-item label="" label-width="10px">
+            <el-button type="primary" size="small" icon="search"
+                       @click="filterTable">查询</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -18,9 +24,9 @@
                 highlight-current-row style="width: 100%;"
                 row-key="item_id">
         <el-table-column prop="num" label="商家编号" align="center" min-width="100px"></el-table-column>
-        <el-table-column prop="account" label="BD联系人" align="center" min-width="130px"></el-table-column>
-        <el-table-column prop="bd_info" label="商家账号" align="center" min-width="160px"></el-table-column>
-        <el-table-column prop="peer_operation_type" label="状态" align="center" min-width="100px"></el-table-column>
+        <el-table-column prop="account" label="商家账号" align="center" min-width="130px"></el-table-column>
+        <el-table-column prop="bd_info" label="BD联系人" align="center" min-width="160px"></el-table-column>
+        <el-table-column prop="status" label="状态" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="submit_time" label="提交时间" align="center" min-width="180px"></el-table-column>
         <el-table-column label="操作" align="center" min-width="100px">
           <template scope="scope">
@@ -44,6 +50,7 @@
 </template>
 
 <script>
+  import alasql from "alasql"
   import inputSearch from "../../../../components/search/input/index"
   import {CHECKVERIFY_BANKEDIT_URL} from "../../../../common/interface"
 
@@ -54,6 +61,10 @@
     data() {
       return {
         loading: false,
+        search: {         // 搜索栏
+          account: ""        // 账号
+        },
+        totalDatas: [],           // 表格总数据
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
@@ -61,29 +72,55 @@
       }
     },
     mounted() {
-      this.getTables()
+      var self = this
+      self.getTables(function(datas) {
+        self.fillTable(datas)
+      })
     },
     methods: {
       /* 获取数据（表格） */
-      getTables: function() {
+      getTables: function(func) {
         var self = this
         self.loading = true
         self.$http.get(CHECKVERIFY_BANKEDIT_URL + "?type=V").then(function(response) {
           if (response.body.success) {
             var datas = response.body.content
-            self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
-            self.totalItems = parseInt(datas.length)
-            setTimeout(function() {
-              self.loading = false
-            })
+            func(datas)
           }
+        })
+      },
+      /* 填充（表格） */
+      fillTable: function(datas) {
+        var self = this
+        self.totalDatas = datas
+        self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize)
+        self.totalItems = parseInt(datas.length)
+        setTimeout(function() {
+          self.loading = false
+        })
+      },
+
+      /* 获取过滤条件 */
+      getFilterRules: function(name, value) {
+        var self = this
+        self.search[name] = value
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this
+        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'"
+        self.getTables(function(datas) {
+          var res = alasql(rules, [datas])
+          self.currentPage = 1
+          self.fillTable(res)
         })
       },
 
       /* 每页条数改变时 */
       pageSizesChange: function(size) {
-        this.pageSize = size
-        this.getTables()
+        var self = this
+        self.pageSize = size
+        self.fillTable(self.totalDatas)
       },
 
       /* 获取选中项 */
@@ -96,10 +133,11 @@
         self.selectArr = arr
       },
 
-      /* 改变当前页 */
+      /* 翻页 */
       handleCurrentChange(currentPage) {
-        this.currentPage = currentPage
-        this.getTables()
+        var self = this
+        self.currentPage = currentPage
+        self.fillTable(self.totalDatas)
       },
 
       // 查看

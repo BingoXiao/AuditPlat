@@ -235,8 +235,8 @@
       /* 过滤 */
       filterTable: function() {
         var self = this
-        var rules = "SELECT * FROM ? WHERE bus_names LIKE '%" + self.search.name + "%'" +
-          " OR name LIKE '%" + self.search.name + "%'"
+        var rules = "SELECT * FROM ? WHERE (bus_names LIKE '%" + self.search.name + "%'" +
+          " OR name LIKE '%" + self.search.name + "%')"
         if (self.search.status !== "") {    // 状态
           rules += " AND status = ?"
         }

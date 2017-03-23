@@ -257,14 +257,14 @@
       /* 查看 */
       viewInfo: function(row) {
         var href, otherWindow;
-        href = "#/bus_register/apply/view#id=" + row.applynum;
+        href = "/bus_register/apply/view#id=" + row.applynum;
         otherWindow = window.open(href);
         otherWindow.opener = null;
       },
       /* 商家申请注册 */
       applyRe: function(row) {
         var href, otherWindow;
-        href = "#/bus_register/new/register#id=" + row.applynum;
+        href = "/bus_register/new/register#id=" + row.applynum;
         otherWindow = window.open(href);
         otherWindow.opener = null;
       },
@@ -275,18 +275,18 @@
         var href, otherWindow;
         if (type === "new") {   // 新店
           if (!row.applynum) {                      // 立即注册
-            href = "#/bus_register/new/register";
+            href = "/bus_register/new/register";
           } else {                                  // 修改
-            href = "#/bus_register/new/register#id=" + row.applynum;
+            href = "/bus_register/new/register#id=" + row.applynum;
           }
         } else if (type === "branch") {               // 分店
           if (!row.applynum) {                       // 立即注册
-            href = "#/bus_register/branch/register";
+            href = "/bus_register/branch/register";
           } else {                                   // 修改
-            href = "#/bus_register/branch/register#id=" + row.applynum;
+            href = "/bus_register/branch/register#id=" + row.applynum;
           }
         } else if (type === "apply") {
-          href = "#/bus_register/apply/register#id=" + row.applynum;
+          href = "/bus_register/apply/register#id=" + row.applynum;
         }
         otherWindow = window.open(href);
         otherWindow.opener = null;

@@ -52,7 +52,7 @@
     },
     data() {
       return {
-        http: "https://shopmanage-dev.jinmailife.com",
+        http: "",
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
         imageUrl: "",                  // 图片的URL
         tipsFlag: true                 // 上传错误标志

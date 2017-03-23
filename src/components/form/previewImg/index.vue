@@ -30,7 +30,7 @@
     },
     data() {
       return {
-        http: "https://shopmanage-dev.jinmailife.com",
+        http: "",
         dialogVisible: false,   // 查看大图片
         coverVisible: false     // 放大层
       };

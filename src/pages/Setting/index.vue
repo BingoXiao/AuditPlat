@@ -49,7 +49,7 @@
         <el-table-column label="已开通服务" align="center" min-width="150px">
           <template scope="scope">
             <span v-for="item in scope.row.service">
-              <i class="iconfont" :class="item"></i>
+              <i class="iconfont" :class="table.perms_icon[item]"></i>
             </span>
           </template>
         </el-table-column>
@@ -164,22 +164,22 @@
 
           <el-form-item label="权限：" prop="perms">
             <el-checkbox-group v-model="editUsersForm.perms">
-              <el-checkbox name="bus_verify" label="icon-kaidianchenggong">
+              <el-checkbox name="bus_verify" label="bus_verify">
                 <i class="iconfont icon-kaidianchenggong"></i> 商家审核
               </el-checkbox>
-              <el-checkbox name="project_verify" label="icon-gendan">
+              <el-checkbox name="project_verify" label="project_verify">
                 <i class="iconfont icon-gendan"></i> 项目审核
               </el-checkbox>
-              <el-checkbox name="checkout_verify" label="icon-shiliangzhinengduixiang">
+              <el-checkbox name="checkout_verify" label="checkout_verify">
                 <i class="iconfont icon-shiliangzhinengduixiang"></i> 结款审核
               </el-checkbox>
-              <el-checkbox name="bus_apply" label="icon-audit" style="margin-left: 0;">
+              <el-checkbox name="bus_apply" label="bus_apply" style="margin-left: 0;">
                 <i class="iconfont icon-audit"></i> 商家申请
               </el-checkbox>
-              <el-checkbox name="bus_register" label="icon-xiangmushu">
+              <el-checkbox name="bus_register" label="bus_register">
                 <i class="iconfont icon-xiangmushu"></i> 商家注册
               </el-checkbox>
-              <el-checkbox name="item_list" label="icon-xiangmu">
+              <el-checkbox name="item_list" label="item_list">
                 <i class="iconfont icon-xiangmu"></i> 项目列表
               </el-checkbox>
             </el-checkbox-group>
@@ -307,6 +307,14 @@
         pageSize: 10,             // 每页显示条目个数
         currentPage: 1,           // 当前页
         table: {                  // 记录表格行数据
+          perms_icon: {        // 权限对应icon图标
+            bus_verify: "icon-kaidianchenggong",     // 商家审核权限
+            project_verify: "icon-gendan",     // 项目审核权限
+            checkout_verify: "icon-shiliangzhinengduixiang",  // 结款审核权限
+            bus_apply: "icon-audit",     // 商家申请权限
+            bus_register: "icon-xiangmushu",     // 商家注册权限
+            item_list: "icon-xiangmu"    // 项目注册权限
+          },
           single: {},       // 单项（表格内）:包含id和冻结状态is_active
           multiple: [],     // 多项（按钮操作）
           name: "",         // 用户姓名
@@ -383,32 +391,20 @@
       /* 填充表格 */
       fillTable: function(data) {
         var self = this;
-        var datas = alasql("SELECT * FROM ? ORDER BY id ASC", [data]);
-        self.totalDatas = datas;
-        for (var i = 0; i < datas.length; i++) {
-          var item = datas[i];
-          var service = [];
-          /* 已开通服务 */
-          if (item.bus_verify) {   // 商家审核权限
-            service.push("icon-kaidianchenggong");
+        for (let i = 0; i < data.length; i++) {
+          let arr = [];
+          for (var p in data[i]) {
+            if (p === "bus_verify" || p === "project_verify" || p === "checkout_verify" ||
+              p === "bus_apply" || p === "bus_register" || p === "item_list") {
+              arr.push(p);
+            } else {
+              continue;
+            }
           }
-          if (item.project_verify) {  // 项目审核权限
-            service.push("icon-gendan");
-          }
-          if (item.checkout_verify) {  // 结款审核权限
-            service.push("icon-shiliangzhinengduixiang");
-          }
-          if (item.bus_apply) {  // 商家申请权限
-            service.push("icon-audit");
-          }
-          if (item.bus_register) {  // 商家注册权限
-            service.push("icon-xiangmushu");
-          }
-          if (item.item_list) {  // 项目注册权限
-            service.push("icon-xiangmu");
-          }
-          datas[i].service = service;
+          data[i].service = arr;
         }
+        var datas = alasql("SELECT * FROM ? ORDER BY id DESC", [data]);
+        self.totalDatas = datas;
         self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize, self.currentPage * self.pageSize);
         self.totalItems = parseInt(datas.length);
         setTimeout(function() {
@@ -462,7 +458,7 @@
           };
         } else {
           self.table.multiple = [];
-          self.table.single = [];
+          self.table.single = {};
         }
       },
 
@@ -471,14 +467,15 @@
         var self = this;
         var form = document.getElementById("addUsersform");
         var formData = new FormData(form);
-        var arr = ["bus_verify", "bus_verify", "project_verify", "checkout_verify",
-          "bus_apply", "bus_register", "item_list"];
-        for (let j = 0; j < arr.length; j++) {
-          formData.set(arr[j], "0");
+        for (let key in self.table.perms_icon) {
+          formData.set(key, "0");
         }
         for (let i = 0; i < self.addUsersForm.perms.length; i++) {
           formData.set(self.addUsersForm.perms[i], "1");
         }
+//        for (var pair of formData.entries()) {
+//          console.log(pair[0] + ", " + pair[1]);
+//        }
         self.$refs[formName].validate((valid) => {
           if (valid) {
             self.$http.post(ACCOUNTS_ADD_URL, formData).then(function(response) {
@@ -519,62 +516,36 @@
         var self = this;
         var form = document.getElementById("editUsersForm");
         var formData = new FormData(form);
-        var aa = [];
-        var arr = ["bus_verify", "bus_verify", "project_verify", "checkout_verify",
-          "bus_apply", "bus_register", "item_list"];
-        for (let p of formData.entries()) {
-          aa.push(p[0]);
+        for (let key in self.table.perms_icon) {
+          formData.set(key, "0");
         }
-        for (let j = 0; j < arr.length; j++) {
-          formData.set(arr[j], "0");
-        }
-        for (let i = 0; i < aa.length; i++) {
-          formData.set(aa[i], "1");
+        for (let i = 0; i < self.editUsersForm.perms.length; i++) {
+          formData.set(self.editUsersForm.perms[i], "1");
         }
         formData.set("id", self.table.single.id);
 //        for (var pair of formData.entries()) {
-//          console.log(pair[0] + ", " + pair[1])
+//          console.log(pair[0] + ", " + pair[1]);
 //        }
         self.$refs[formName].validate((valid) => {
           if (valid) {
             self.$http.post(ACCOUNTS_EDITINFO_URL, formData).then(function(response) {
               if (response.body.success) {
+                var newPerms = self.editUsersForm.perms;
                 self.dialog.editUsersVisible = false;
                 self.dialog.isRight = true;
                 self.dialog.tips = "修改成功！";
                 self.dialog.tipsVisible = true;
                 modalHide(function() {
                   self.dialog.tipsVisible = false;
-                  var bb = {};
-                  for (let i = 0; i < aa.length; i++) {
-                    bb[aa[i]] = 1;
-                  }
                   for (let i = 0; i < self.tableDatas.length; i++) {
                     var item = self.tableDatas[i];
                     if (self.table.single.id === item.id) {   // 修改权限
-                      let ser = [];
-                      for (let j = 0; j < arr.length; j++) {
-                        delete item[arr[j]];
+                      for (let aa in self.table.perms_icon) {
+                        delete item[aa];
                       }
-                      if (bb.bus_verify) {   // 商家审核权限
-                        item.bus_verify = 1;
+                      for (let k = 0; k < newPerms.length; k++) {
+                        item[newPerms[k]] = "1";
                       }
-                      if (bb.project_verify) { // 项目审核权限
-                        item.project_verify = 1;
-                      }
-                      if (bb.checkout_verify) {  // 结款审核权限
-                        item.checkout_verify = 1;
-                      }
-                      if (bb.bus_apply) { // 商家申请权限
-                        item.bus_apply = 1;
-                      }
-                      if (bb.bus_register) {  // 商家注册权限
-                        item.bus_apply = 1;
-                      }
-                      if (bb.item_list) {  // 项目注册权限
-                        item.item_list = 1;
-                      }
-                      item.service = ser;
                       break;
                     }
                   }
@@ -630,18 +601,16 @@
         // flag 表示冻结（0）还是启用(1)
         var self = this;
         var formData = new FormData();
-        if (row.length > 0 || row.id) {      // 有选中项
-          if (type === "multiple") {    // 按钮操作
-            let arr = [];
-            for (let i = 0; i < row.length; i++) {
-              arr.push(row[i].id);
-              formData.append("ids[]", row[i].id);
-            }
-            formData.set("flag", flag);
-          } else {    // 表格操作
-            formData.append("ids[]", row.id);
-            formData.append("flag", row.is_active ? 1 : 0);
+        if (type === "multiple" && row.length > 0) {    // 按钮操作
+          let arr = [];
+          for (let i = 0; i < row.length; i++) {
+            arr.push(row[i].id);
+            formData.append("ids[]", row[i].id);
           }
+          formData.set("flag", flag);
+        } else if (type === "single" && Boolean(row.id)) {    // 表格操作
+          formData.append("ids[]", row.id);
+          formData.append("flag", row.is_active ? 1 : 0);
         } else {  // 无选中账户，操作提示错误
           self.dialog.isRight = false;
           self.dialog.tips = "请选择需要（冻结/启用）的账户！";
@@ -665,7 +634,7 @@
                   }
                 }
               }
-            } else {   // 表格操作(操作成功后改变选中组中对应状态)
+            } else if (type === "single") {   // 表格操作(操作成功后改变选中组中对应状态)
               for (let i = 0; i < self.table.multiple.length; i++) {
                 if (self.table.multiple[i].id === row.id) {
                   self.table.multiple[i].is_active = (flag === "1");

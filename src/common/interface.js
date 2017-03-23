@@ -1,5 +1,5 @@
 const HOST_URL = "https://shopmanage-dev.jinmailife.com";
-// const HOST_URL = "https://shopmanage-test.jinmailife.com";
+//const HOST_URL = "https://shopmanage-test.jinmailife.com";
 
 // 登录 post
 const ACCOUNTS_LOGIN_URL = HOST_URL + "/account-manage/login/";

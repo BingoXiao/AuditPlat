@@ -23,9 +23,9 @@ Vue.use(ElementUI);
 // Resource
 Vue.use(VueResource);
 
-
 // 创建路由
 const router = new VueRouter({
+  mode: "history",
   routes: routes
 });
 
@@ -101,13 +101,16 @@ Vue.http.interceptors.push(function(request, next) {
         type: "warning"
       }).then(() => {
       }).catch(() => {
+        store.commit("AUTH_LOGIN", false);
+        clearCookie("REMEMBER");
+        router.push("/login");
       });
     } else {   // 请求成功
       if (!response.body.success) {     // success:false
         if (response.body.error_info === "logout") {    // 自动登出
           store.commit("AUTH_LOGIN", false);
           clearCookie("REMEMBER");
-          router.replace("/login");
+          router.push("/login");
         } else if (response.body.error_info !== "") {
           Vue.prototype.$confirm(response.body.error_info, "提示", {
             showCancelButton: false,

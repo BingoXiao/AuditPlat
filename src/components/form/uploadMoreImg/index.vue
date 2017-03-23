@@ -57,7 +57,7 @@
     },
     data() {
       return {
-        http: "https://shopmanage-dev.jinmailife.com",
+        http: "",
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
         imageObject: [],               // 图片组合
         image: "",                     // 当前图片

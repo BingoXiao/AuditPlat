@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="80d35c5f-fa3e-47a1-9d3a-20c74f199c0d" name="shopmanage-dev" url="http://shopmanage-dev.jinmailife.com">
+        <fileTransfer host="shopmanage-dev.jinmailife.com" port="22" rootFolder="/var/www/" accessType="SFTP" username="root">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

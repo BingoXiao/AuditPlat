@@ -17,8 +17,8 @@
         <el-row style="padding-top: 10px;">
           <tab-component :tabs="tabs" :which="which" v-on:toggle="tabChange"></tab-component>
           <div class="braSwitch">
-            <span>切换分店：</span>
-            <el-select v-model="branch" @change="changeBranch">
+            <span style="position: relative;vertical-align:top;top:4px;">切换分店：</span>
+            <el-select v-model="branch" @change="changeBranch" size="small">
               <el-option
                 v-for="item in branches"
                 :value="item.bus_id"
@@ -186,7 +186,7 @@
 <style scoped>
   .braSwitch {
     position: absolute;
-    top: 0;
+    top: 10px;
     right: 0;
     font-size: 14px;
   }

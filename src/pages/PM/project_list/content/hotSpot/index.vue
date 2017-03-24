@@ -27,10 +27,10 @@
   import {getUrlParameters, modalHide} from "../../../../../common/common";
   import {PROLIST_JM_URL, PROLIST_JMDATA_URL} from "../../../../../common/interface";
 
+  let editor;
   export default{
     data() {
       return {
-        editor: null,
         data: "",     // 脉点
         spotVisible: false,  // 预览
         isRight: true,       // 提示框
@@ -40,13 +40,13 @@
     },
     mounted() {
       var self = this;
-      var id = getUrlParameters(window.location.hash, "id");
       CKEDITOR.replace("editor2", {height: "300px", width: "100%", toolbar: "Full"});
-      self.editor = CKEDITOR.instances.editor2;
+      editor = CKEDITOR.instances.editor2;
+      var id = getUrlParameters(window.location.hash, "id");
       self.$http.get(PROLIST_JMDATA_URL + "?item_id=" + id)
         .then(function(response) {
           if (response.body.success) {
-            self.editor.setData(response.body.content);
+            editor.setData(response.body.content);
             self.data = response.body.content;
           }
         });
@@ -77,7 +77,7 @@
             self.tips = "上线成功！";
           }
           formData.set("item_id", getUrlParameters(window.location.hash, "id"));
-          formData.set("data", self.editor.getData());
+          formData.set("data", editor.getData());
           formData.set("type", type);
           self.$http.post(PROLIST_JM_URL, formData).then(function(response) {
             if (response.body.success) {
@@ -92,8 +92,8 @@
       // 获取脉点
       getData: function() {
         var self = this;
-        self.data = self.editor.getData();
-//        self.$emit("getData", self.editor.getData())
+        self.data = editor.getData();
+        self.$emit("getData", editor.getData());
       }
     },
     components: {

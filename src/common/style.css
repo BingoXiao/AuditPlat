@@ -79,6 +79,7 @@ button {
 .errorTips {
   position: absolute;
   top: 42px;
+  left: 0;
   font-size: 13px;
   color: #ff4949;
 }
@@ -175,7 +176,7 @@ button {
 }
 
 .allmap{
-  width: 100%;
+  width: 90%;
   min-width: 920px;
   margin: auto;
   height: 400px;

@@ -1,560 +1,605 @@
 <template>
   <div>
-    <el-form ref="basicForm" label-width="100px">
-            <h3 class="formTitle">门店信息</h3>
-            <el-row>
-              <el-col :span="21">
-                <el-table :data="shopTable" border highlight-current-row style="width: 100%;">
-                  <el-table-column prop="name" label="门店名称" align="center"></el-table-column>
-                  <el-table-column label="门店图" align="center">
-                    <template scope="scope">
-                      <p>
-                        <img :src="scope.row.logo" alt="" style="width:80px;height:80px;">
-                      </p>
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="address" label="门店地址" align="center"></el-table-column>
-                  <el-table-column label="门店电话" align="center">
-                    <template scope="scope">
-                      <div v-for="item in scope.row.tel">{{item}}</div>
-                    </template>
-                  </el-table-column>
-                </el-table>
-                <el-row v-if="moreShops" style="margin-top:13px;font-size: 14px;">
-                  <el-col :span="2" :offset="22" style="text-align: right;">
-                    <b style="cursor: pointer" @click="get_more_shops">更多>></b>
-                  </el-col>
-                </el-row>
+    <el-form :model="data" :rules="formRules" ref="form" label-width="100px">
+      <h3 class="formTitle">门店信息</h3>
+      <el-row>
+        <el-col :span="21">
+          <el-table :data="shopTable" border highlight-current-row style="width: 100%;">
+            <el-table-column prop="name" label="门店名称" align="center"></el-table-column>
+            <el-table-column label="门店图" align="center">
+              <template scope="scope">
+                <p>
+                  <img :src="scope.row.logo" alt="" style="width:80px;height:80px;">
+                </p>
+              </template>
+            </el-table-column>
+            <el-table-column prop="address" label="门店地址" align="center"></el-table-column>
+            <el-table-column label="门店电话" align="center">
+              <template scope="scope">
+                <div v-for="item in scope.row.tel">{{item}}</div>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-row v-if="moreShops" style="margin-top:13px;font-size: 14px;">
+            <el-col :span="2" :offset="22" style="text-align: right;">
+              <b style="cursor: pointer" @click="get_more_shops">更多>></b>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
+
+      <h3 class="formTitle">项目信息</h3>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item label="项目分类：">
+            <div class="info">美食 > {{data.category_parent_name}}
+              <span v-if="data.category_name"> > </span>
+              {{data.category_name}}
+            </div>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="佣金比例：" prop="commission">
+            <el-row v-if="!showBtn">
+              <span class="info">{{data.commission}}</span>
+            </el-row>
+            <el-row v-else>
+              <el-col :span="8">
+                <el-input v-model="data.commission" :disabled="commissionLock"></el-input>
+              </el-col>
+              <el-col :span="2">
+                &emsp;
+                <span v-show="commissionLock" class="iconfont icon-suoding"
+                      @click="commissionLock = !commissionLock"></span>
+              <span v-show="!commissionLock" class="iconfont icon-jiesuo"
+                    @click="commissionLock = !commissionLock"></span>
               </el-col>
             </el-row>
 
-            <h3 class="formTitle">项目信息</h3>
-            <el-row>
-              <el-col :span="10">
-                <el-form-item label="项目分类：">
-                  <div class="info">美食 > {{data.category_parent_name}}
-                    <span v-if="data.category_name"> > </span>
-                    {{data.category_name}}
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="佣金比例：">
-                  <span class="info">{{data.commission}}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-            <el-form-item label="项目图片：">
-            <span v-for="item in data.photos" class="info" style="margin-right:20px">
-              <img :src="item" alt="" style="width:140px;height: 140px;">
-            </span>
-            </el-form-item>
+      <el-form-item label="项目图片：">
+      <span v-for="item in data.photos" class="info" style="margin-right:20px">
+        <img :src="item" alt="" style="width:140px;height: 140px;">
+      </span>
+      </el-form-item>
 
-            <el-row>
-              <el-col :span="10">
-                <el-form-item label="项目名称：">
-                  <span class="info">{{data.name}}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="用餐人数：">
-                  <span class="info">{{data.recommend_use_people_number}}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
+      <el-row>
+        <el-col :span="10">
+          <el-form-item label="项目名称：">
+            <span class="info">{{data.name}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="用餐人数：">
+            <span class="info">{{data.recommend_use_people_number}}</span>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-            <el-form-item label="菜单组合：" style="margin-bottom: 0"></el-form-item>
-            <el-form-item label-width="18px">
-              <el-col :span="21">
-                <el-row class="myTable">
-                  <el-col :span="24" v-for="obj in data.foods" class="dishes">
-                    <el-row class="tableHead">
-                      <div class="headContent">
-                        <span>{{obj.name}}&emsp;</span>
-                        <span v-if="obj.choose" class="avilable">{{obj.choose}}</span>
-                        <span v-if="obj.choose !== '全部可用' && obj.can_repeat"> (可重复选) </span>
-                      </div>
-                    </el-row>
-                    <el-row v-for="item in obj.items" class="tableContent">
-                      <el-col :span="8">{{item.name}}</el-col>
-                      <el-col :span="8" style="text-align: center">￥ {{item.price}} / {{item.unit_name}}</el-col>
-                      <el-col :span="8" style="text-align: right">{{item.count}}</el-col>
-                    </el-row>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-form-item>
-
-            <el-row>
-              <el-col :span="6">
-                <el-form-item label="原价：" label-width="70px">
-                  <span class="info">{{data.total}}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="优惠价：">
-                  <span class="info">{{data.price}}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="结算价：">
-                  <span class="info">{{data.jm_price}}</span>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <h3 class="formTitle">购买须知</h3>
-            <el-form-item label="项目有效期" style="margin-bottom: 0"></el-form-item>
-            <el-form-item label-width="18px">
-              <el-col :span="21">
-                <table class="myTable">
-                  <tbody>
-                  <tr>
-                    <td>
-                      <strong class="text-stress">* </strong>团购券有效期
-                    </td>
-                    <td style="padding-bottom: 0">
-                      <el-row>
-                        <radio-check :selected="data.rules.expire_date.index===0">
-                          <span>自上线之日起
-                            <span class="showbox">
-                               <span v-if="data.rules.expire_date.info_0">
-                              {{data.rules.expire_date.info_0.number}}
-                              </span>
-                            </span>个月
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.expire_date.index===1">
-                          <span>自上线之日起
-                            <span class="showbox">
-                              <span v-if="data.rules.expire_date.info_1">
-                                {{data.rules.expire_date.info_1.number}}
-                              </span>
-                            </span>天
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.expire_date.index===2">
-                          <span>自上线之日起至
-                            <span class="showbox">
-                              <span v-if="data.rules.expire_date.info_2">
-                                {{data.rules.expire_date.info_2.end_date}}
-                              </span>
-                            </span>23:59:59
-                          </span>
-                        </radio-check>
-                        <br/>
-                        <small> 团购券有效期是指可接待团购用户的有效期</small>
-                      </el-row>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-center" tabindex="2">
-                      <strong class="text-stress">* </strong>不可用日期
-                    </td>
-                    <td>
-                      <el-col :span="6">
-                        <radio-check :selected="data.rules.exclude_use_date.index===0">
-                          <span>所有日期都可用</span>
-                        </radio-check>
-                      </el-col>
-
-                      <el-col :span="8">
-                        <radio-check :selected="data.rules.exclude_use_date.index===1">
-                          <span>部分日期可用</span>
-                        </radio-check>
-                      </el-col>
-
-                      <el-col :span="24" class="myTable" v-if="data.rules.exclude_use_date.index===1"
-                              style="padding:5px 20px;margin-top:20px">
-                        <span style="font-size:14px;">指定每周不可用时间：</span>
-                        <el-row>
-                          <el-checkbox-group v-model="data.rules.exclude_use_date.info_1.week">
-                            <el-checkbox label="0" disabled>周一</el-checkbox>
-                            <el-checkbox label="1" disabled>周二</el-checkbox>
-                            <el-checkbox label="2" disabled>周三</el-checkbox>
-                            <el-checkbox label="3" disabled>周四</el-checkbox>
-                            <el-checkbox label="4" disabled>周五</el-checkbox>
-                            <el-checkbox label="5" disabled>周六</el-checkbox>
-                            <el-checkbox label="6" disabled>周日</el-checkbox>
-                          </el-checkbox-group>
-                        </el-row>
-                        <el-row v-for="item in data.rules.exclude_use_date.info_1.dates">
-                          <span class="showbox">{{item.begin}} </span>
-                          至<span class="showbox">{{item.end}}</span>
-                          <span v-if="item.festival">( {{item.festival}} )</span>
-                        </el-row>
-                      </el-col>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-center" tabindex="3">
-                      <strong class="text-stress">* </strong>
-                      是否支持自动延长团购券有效期
-                    </td>
-                    <td>
-                      <el-col :span="8">
-                        <radio-check :selected="data.rules.expire_date_auto_extend.index===0">
-                          <span>是，默认每次延期30天</span>
-                        </radio-check>
-                      </el-col>
-                      <el-col :span="8">
-                        <radio-check :selected="data.rules.expire_date_auto_extend.index===1">
-                          <span>否，不支持</span>
-                        </radio-check>
-                      </el-col>
-                      <br/>
-                      <small>
-                        提示：当您选择“是”的时候，系统将默认每30天自动延期；如选择“否”则该项目不会自动延期，如要延期只能手动延期
-                      </small>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </el-col>
-            </el-form-item>
-
-            <el-form-item label="消费时间" label-width="85px" style="margin-bottom: 0"></el-form-item>
-            <el-form-item label-width="18px">
-              <el-col :span="21">
-                <table class="myTable">
-                  <tbody>
-                  <tr>
-                    <td class="text-center" tabindex="4">
-                      <strong class="text-stress">*</strong>使用时间
-                    </td>
-                    <td>
-                      <el-col :span="5">
-                        <radio-check :selected="data.rules.use_time.index===0">
-                          <span>24小时</span>
-                        </radio-check>
-                      </el-col>
-                      <el-col :span="8">
-                        <radio-check :selected="data.rules.use_time.index===1">
-                          <span>部分时间可使用</span>
-                        </radio-check>
-                      </el-col>
-                      <el-col :span="24" class="myTable" v-if="data.rules.use_time.index===1"
-                              style="padding:5px 20px;margin-top:20px">
-                        <div>
-                          <span style="font-size:14px;">指定可用时间：</span>
-                          <el-row v-for="item in data.rules.use_time.info_1.dates">
-                            <span class="showbox">{{item.begin_hour}} 点 {{item.begin_minute}}</span>
-                            至<span class="showbox">{{item.end_hour}} 点 {{item.end_minute}}</span>
-                          </el-row>
-                        </div>
-                        <div>
-                          <span style="font-size:14px;">特殊情况说明：</span>
-                          <el-row>
-                            <span v-if="data.rules.use_time.note">( {{data.rules.use_time.note}} )</span>
-                          </el-row>
-                        </div>
-                      </el-col>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-center" tabindex="5">
-                      <strong class="text-stress">*</strong> 是否预约
-                    </td>
-                    <td>
-                      <el-row>
-                        <radio-check :selected="data.rules.reservation.index===0">
-                          <span>无需预约，消费高峰时可能需要等位</span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.reservation.index===1">
-                          <span>提前
-                            <span class="showbox">
-                               <span v-if="data.rules.reservation.info_1">
-                                 {{data.rules.reservation.info_1.day}}
-                                </span>
-                            </span>天
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.reservation.index===2">
-                          <span>提前
-                            <span class="showbox">
-                               <span v-if="data.rules.reservation.info_2">
-                                 {{data.rules.expire_date.info_2.hour}}
-                                </span>
-                            </span>天
-                          </span>
-                        </radio-check>
-                      </el-row>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-center" tabindex="6">
-                      <strong class="text-stress">*</strong> 推荐用餐类型
-                      <br>
-                      (多选)
-                    </td>
-                    <td id="recommend_use_date">
-                      <el-checkbox-group v-model="data.rules.recommend_use_date.indexs">
-                        <el-checkbox :label="0" disabled>早餐</el-checkbox>
-                        <el-checkbox :label="1" disabled>午餐</el-checkbox>
-                        <el-checkbox :label="2" disabled>晚餐</el-checkbox>
-                        <el-checkbox :label="3" disabled>下午茶</el-checkbox>
-                        <el-checkbox :label="4" disabled>夜宵</el-checkbox>
-                      </el-checkbox-group>
-                      <small>
-                        提示：该字段用来推荐消费者用餐类型，方便消费者快速筛选。不用来限制消费者使用时间。
-                      </small>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </el-col>
-            </el-form-item>
-
-            <el-form-item label="团购约定" label-width="85px" style="margin-bottom: 0"></el-form-item>
-            <el-form-item label-width="18px">
-              <el-col :span="21">
-                <table class="myTable">
-                  <tbody>
-                  <tr>
-                    <td class="text-center" tabindex="7">
-                      <strong class="text-stress">*</strong> 是否限购团购券
-                    </td>
-                    <td>
-                      <el-col :span="4">
-                        <radio-check :selected="data.rules.buy_limit_number.index===0">
-                          <span>不限</span>
-                        </radio-check>
-                      </el-col>
-                      <el-col :span="18">
-                        <radio-check :selected="data.rules.buy_limit_number.index===1">
-                          <span>是，每人限购
-                            <span class="showbox">
-                               <span v-if="data.rules.buy_limit_number.info_1">
-                                 {{data.rules.buy_limit_number.info_1.number}}
-                                </span>
-                            </span>张
-                          </span>
-                        </radio-check>
-                      </el-col>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-center" tabindex="8">
-                      <strong class="text-stress">*</strong> 是否限用团购券
-                    </td>
-                    <td>
-                      <el-row>
-                        <radio-check :selected="data.rules.use_limit.index===0">
-                          <span>不限</span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.use_limit.index===1">
-                          <span>是，每人限用
-                            <span class="showbox">
-                               <span v-if="data.rules.use_limit.info_1">
-                                 {{data.rules.use_limit.info_1.number}}
-                                </span>
-                            </span>张
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.use_limit.index===2">
-                          <span>是，每桌限用
-                            <span class="showbox">
-                               <span v-if="data.rules.use_limit.info_2">
-                                 {{data.rules.use_limit.info_2.number}}
-                                </span>
-                            </span>张
-                          </span>
-                        </radio-check>
-                      </el-row>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-center" tabindex="9">
-                      <strong class="text-stress">*</strong> 是否限制使用人数
-                    </td>
-                    <td class="td_indent">
-                      <el-row>
-                        <radio-check :selected="data.rules.use_limit_people_number.index===0">
-                          <span>不限</span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.use_limit_people_number.index===1">
-                          <span>是，每张限
-                            <span class="showbox">
-                               <span v-if="data.rules.use_limit_people_number.info_1">
-                                 {{data.rules.use_limit_people_number.info_1.people}}
-                                </span>
-                            </span>人使用，身高
-                             <span class="showbox">
-                               <span v-if="data.rules.use_limit_people_number.info_1">
-                                 {{data.rules.use_limit_people_number.info_1.height}}
-                                </span>
-                            </span>米以上儿童计入人数
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.use_limit_people_number.index===2">
-                          <span>是，每张限
-                            <span class="showbox">
-                               <span v-if="data.rules.use_limit_people_number.info_2">
-                                 {{data.rules.use_limit_people_number.info_2.people}}
-                                </span>
-                            </span>人使用，不论是否儿童均计入人数
-                          </span>
-                        </radio-check>
-                      </el-row>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </el-col>
-            </el-form-item>
-
-            <el-form-item label="品类特有约定" label-width="110px" style="margin-bottom: 0"></el-form-item>
-            <el-form-item label-width="18px">
-              <el-col :span="21">
-                <table class="myTable">
-                  <tbody>
-                  <tr>
-                    <td class="text-center" tabindex="10">
-                      <strong class="text-stress">*</strong> 是否可以免费打包
-                    </td>
-                    <td class="td_indent">
-                      <el-row>
-                        <radio-check :selected="data.rules.packing_info.index===0">
-                          <span>是，免费打包</span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.packing_info.index===1">
-                          <span>否，需支付打包费
-                            <span class="showbox">
-                               <span v-if="data.rules.packing_info.info_1">
-                                 {{data.rules.packing_info.info_1.price}}
-                                </span>
-                            </span>元/盒
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.packing_info.index===2">
-                          <span>否，需支付打包费
-                            <span class="showbox">
-                               <span v-if="data.rules.packing_info.info_2">
-                                 {{data.rules.packing_info.info_2.price}}
-                                </span>
-                            </span>元/袋
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.packing_info.index===3">
-                          <span>打包带免费，打包盒收费标准为
-                            <span class="showbox">
-                               <span v-if="data.rules.packing_info.info_3">
-                                 {{data.rules.packing_info.info_3.price}}
-                                </span>
-                            </span>元/盒
-                          </span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.packing_info.index===4">
-                          <span>可以打包，打包费详情咨询商家</span>
-                        </radio-check>
-                      </el-row>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="text-center" tabindex="11">
-                      <strong class="text-stress">*</strong> 堂食外带约定
-                    </td>
-                    <td>
-                      <el-row>
-                        <radio-check :selected="data.rules.packing_limit.index===0">
-                          <span>堂食外带均可</span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.packing_limit.index===1">
-                          <span>仅限堂食，不提供外带</span>
-                        </radio-check>
-                      </el-row>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <td class="text-center" tabindex="12">
-                      <strong class="text-stress">*</strong> 餐巾纸
-                    </td>
-                    <td>
-                      <el-row>
-                        <radio-check :selected="data.rules.serviette_info.index===0">
-                          <span>免费</span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.serviette_info.index===1">
-                          <span>不提供</span>
-                        </radio-check>
-                      </el-row>
-                      <el-row>
-                        <radio-check :selected="data.rules.serviette_info.index===2">
-                          <span>
-                            <span class="showbox">
-                               <span v-if="data.rules.serviette_info.info_2">
-                                 {{data.rules.serviette_info.info_2.price}}
-                                </span>
-                            </span>元/份
-                          </span>
-                        </radio-check>
-                      </el-row>
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </el-col>
-            </el-form-item>
-
-            <el-form-item label="其他补充条款" label-width="110px" style="margin-bottom: 0"></el-form-item>
-            <el-form-item label-width="18px">
-              <el-col :span="21" class="textarea">
-                <div v-if="data.rules.other_info.info" class="textareaInfo">
-                  {{data.rules.other_info.info.info}}
+      <el-form-item label="菜单组合：" style="margin-bottom: 0"></el-form-item>
+      <el-form-item label-width="18px">
+        <el-col :span="21">
+          <el-row class="myTable">
+            <el-col :span="24" v-for="obj in data.foods" class="dishes">
+              <el-row class="tableHead">
+                <div class="headContent">
+                  <span>{{obj.name}}&emsp;</span>
+                  <span v-if="obj.choose" class="avilable">{{obj.choose}}</span>
+                  <span v-if="obj.choose !== '全部可用' && obj.can_repeat"> (可重复选) </span>
                 </div>
-              </el-col>
-              </el-input>
-            </el-form-item>
+              </el-row>
+              <el-row v-for="item in obj.items" class="tableContent">
+                <el-col :span="8">{{item.name}}</el-col>
+                <el-col :span="8" style="text-align: center">￥ {{item.price}} / {{item.unit_name}}</el-col>
+                <el-col :span="8" style="text-align: right">{{item.count}}</el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-form-item>
 
-            <el-row>
-              <el-col :span="10">
-                <el-form-item label="手动结算周期：" label-width="130px">
-                  <span class="info">{{data.manual_billing_cycle}} 天</span>
-                </el-form-item>
+      <el-row>
+        <el-col :span="6">
+          <el-form-item label="原价：" label-width="70px">
+            <span class="info">{{data.total}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="优惠价：">
+            <span class="info">{{data.price}}</span>
+          </el-form-item>
+        </el-col>
+        <el-col :span="6">
+          <el-form-item label="结算价：">
+            <span class="info">{{data.jm_price}}</span>
+          </el-form-item>
+        </el-col>
+      </el-row>
+
+      <h3 class="formTitle">购买须知</h3>
+      <el-form-item label="项目有效期" style="margin-bottom: 0"></el-form-item>
+      <el-form-item label-width="18px">
+        <el-col :span="21">
+          <table class="myTable">
+            <tbody>
+            <tr>
+              <td>
+                <strong class="text-stress">* </strong>团购券有效期
+              </td>
+              <td style="padding-bottom: 0">
+                <el-row>
+                  <radio-check :selected="data.rules.expire_date.index===0">
+                    <span>自上线之日起
+                      <span class="showbox">
+                         <span v-if="data.rules.expire_date.info_0">
+                        {{data.rules.expire_date.info_0.number}}
+                        </span>
+                      </span>个月
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.expire_date.index===1">
+                    <span>自上线之日起
+                      <span class="showbox">
+                        <span v-if="data.rules.expire_date.info_1">
+                          {{data.rules.expire_date.info_1.number}}
+                        </span>
+                      </span>天
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.expire_date.index===2">
+                    <span>自上线之日起至
+                      <span class="showbox">
+                        <span v-if="data.rules.expire_date.info_2">
+                          {{data.rules.expire_date.info_2.end_date}}
+                        </span>
+                      </span>23:59:59
+                    </span>
+                  </radio-check>
+                  <br/>
+                  <small> 团购券有效期是指可接待团购用户的有效期</small>
+                </el-row>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center" tabindex="2">
+                <strong class="text-stress">* </strong>不可用日期
+              </td>
+              <td>
+                <el-col :span="6">
+                  <radio-check :selected="data.rules.exclude_use_date.index===0">
+                    <span>所有日期都可用</span>
+                  </radio-check>
+                </el-col>
+
+                <el-col :span="8">
+                  <radio-check :selected="data.rules.exclude_use_date.index===1">
+                    <span>部分日期可用</span>
+                  </radio-check>
+                </el-col>
+
+                <el-col :span="24" class="myTable" v-if="data.rules.exclude_use_date.index===1"
+                        style="padding:5px 20px;margin-top:20px">
+                  <span style="font-size:14px;">指定每周不可用时间：</span>
+                  <el-row>
+                    <el-checkbox-group v-model="data.rules.exclude_use_date.info_1.week">
+                      <el-checkbox label="0" disabled>周一</el-checkbox>
+                      <el-checkbox label="1" disabled>周二</el-checkbox>
+                      <el-checkbox label="2" disabled>周三</el-checkbox>
+                      <el-checkbox label="3" disabled>周四</el-checkbox>
+                      <el-checkbox label="4" disabled>周五</el-checkbox>
+                      <el-checkbox label="5" disabled>周六</el-checkbox>
+                      <el-checkbox label="6" disabled>周日</el-checkbox>
+                    </el-checkbox-group>
+                  </el-row>
+                  <el-row v-for="item in data.rules.exclude_use_date.info_1.dates">
+                    <span class="showbox">{{item.begin}} </span>
+                    至<span class="showbox">{{item.end}}</span>
+                    <span v-if="item.festival">( {{item.festival}} )</span>
+                  </el-row>
+                </el-col>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center" tabindex="3">
+                <strong class="text-stress">* </strong>
+                是否支持自动延长团购券有效期
+              </td>
+              <td>
+                <el-col :span="8">
+                  <radio-check :selected="data.rules.expire_date_auto_extend.index===0">
+                    <span>是，默认每次延期30天</span>
+                  </radio-check>
+                </el-col>
+                <el-col :span="8">
+                  <radio-check :selected="data.rules.expire_date_auto_extend.index===1">
+                    <span>否，不支持</span>
+                  </radio-check>
+                </el-col>
+                <br/>
+                <small>
+                  提示：当您选择“是”的时候，系统将默认每30天自动延期；如选择“否”则该项目不会自动延期，如要延期只能手动延期
+                </small>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </el-col>
+      </el-form-item>
+
+      <el-form-item label="消费时间" label-width="85px" style="margin-bottom: 0"></el-form-item>
+      <el-form-item label-width="18px">
+        <el-col :span="21">
+          <table class="myTable">
+            <tbody>
+            <tr>
+              <td class="text-center" tabindex="4">
+                <strong class="text-stress">*</strong>使用时间
+              </td>
+              <td>
+                <el-col :span="5">
+                  <radio-check :selected="data.rules.use_time.index===0">
+                    <span>24小时</span>
+                  </radio-check>
+                </el-col>
+                <el-col :span="8">
+                  <radio-check :selected="data.rules.use_time.index===1">
+                    <span>部分时间可使用</span>
+                  </radio-check>
+                </el-col>
+                <el-col :span="24" class="myTable" v-if="data.rules.use_time.index===1"
+                        style="padding:5px 20px;margin-top:20px">
+                  <div>
+                    <span style="font-size:14px;">指定可用时间：</span>
+                    <el-row v-for="item in data.rules.use_time.info_1.dates">
+                      <span class="showbox">{{item.begin_hour}} 点 {{item.begin_minute}}</span>
+                      至<span class="showbox">{{item.end_hour}} 点 {{item.end_minute}}</span>
+                    </el-row>
+                  </div>
+                  <div>
+                    <span style="font-size:14px;">特殊情况说明：</span>
+                    <el-row>
+                      <span v-if="data.rules.use_time.note">( {{data.rules.use_time.note}} )</span>
+                    </el-row>
+                  </div>
+                </el-col>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center" tabindex="5">
+                <strong class="text-stress">*</strong> 是否预约
+              </td>
+              <td>
+                <el-row>
+                  <radio-check :selected="data.rules.reservation.index===0">
+                    <span>无需预约，消费高峰时可能需要等位</span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.reservation.index===1">
+                    <span>提前
+                      <span class="showbox">
+                         <span v-if="data.rules.reservation.info_1">
+                           {{data.rules.reservation.info_1.day}}
+                          </span>
+                      </span>天
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.reservation.index===2">
+                    <span>提前
+                      <span class="showbox">
+                         <span v-if="data.rules.reservation.info_2">
+                           {{data.rules.expire_date.info_2.hour}}
+                          </span>
+                      </span>天
+                    </span>
+                  </radio-check>
+                </el-row>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center" tabindex="6">
+                <strong class="text-stress">*</strong> 推荐用餐类型
+                <br>
+                (多选)
+              </td>
+              <td id="recommend_use_date">
+                <el-checkbox-group v-model="data.rules.recommend_use_date.indexs">
+                  <el-checkbox :label="0" disabled>早餐</el-checkbox>
+                  <el-checkbox :label="1" disabled>午餐</el-checkbox>
+                  <el-checkbox :label="2" disabled>晚餐</el-checkbox>
+                  <el-checkbox :label="3" disabled>下午茶</el-checkbox>
+                  <el-checkbox :label="4" disabled>夜宵</el-checkbox>
+                </el-checkbox-group>
+                <small>
+                  提示：该字段用来推荐消费者用餐类型，方便消费者快速筛选。不用来限制消费者使用时间。
+                </small>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </el-col>
+      </el-form-item>
+
+      <el-form-item label="团购约定" label-width="85px" style="margin-bottom: 0"></el-form-item>
+      <el-form-item label-width="18px">
+        <el-col :span="21">
+          <table class="myTable">
+            <tbody>
+            <tr>
+              <td class="text-center" tabindex="7">
+                <strong class="text-stress">*</strong> 是否限购团购券
+              </td>
+              <td>
+                <el-col :span="4">
+                  <radio-check :selected="data.rules.buy_limit_number.index===0">
+                    <span>不限</span>
+                  </radio-check>
+                </el-col>
+                <el-col :span="18">
+                  <radio-check :selected="data.rules.buy_limit_number.index===1">
+                    <span>是，每人限购
+                      <span class="showbox">
+                         <span v-if="data.rules.buy_limit_number.info_1">
+                           {{data.rules.buy_limit_number.info_1.number}}
+                          </span>
+                      </span>张
+                    </span>
+                  </radio-check>
+                </el-col>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center" tabindex="8">
+                <strong class="text-stress">*</strong> 是否限用团购券
+              </td>
+              <td>
+                <el-row>
+                  <radio-check :selected="data.rules.use_limit.index===0">
+                    <span>不限</span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.use_limit.index===1">
+                    <span>是，每人限用
+                      <span class="showbox">
+                         <span v-if="data.rules.use_limit.info_1">
+                           {{data.rules.use_limit.info_1.number}}
+                          </span>
+                      </span>张
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.use_limit.index===2">
+                    <span>是，每桌限用
+                      <span class="showbox">
+                         <span v-if="data.rules.use_limit.info_2">
+                           {{data.rules.use_limit.info_2.number}}
+                          </span>
+                      </span>张
+                    </span>
+                  </radio-check>
+                </el-row>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center" tabindex="9">
+                <strong class="text-stress">*</strong> 是否限制使用人数
+              </td>
+              <td class="td_indent">
+                <el-row>
+                  <radio-check :selected="data.rules.use_limit_people_number.index===0">
+                    <span>不限</span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.use_limit_people_number.index===1">
+                    <span>是，每张限
+                      <span class="showbox">
+                         <span v-if="data.rules.use_limit_people_number.info_1">
+                           {{data.rules.use_limit_people_number.info_1.people}}
+                          </span>
+                      </span>人使用，身高
+                       <span class="showbox">
+                         <span v-if="data.rules.use_limit_people_number.info_1">
+                           {{data.rules.use_limit_people_number.info_1.height}}
+                          </span>
+                      </span>米以上儿童计入人数
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.use_limit_people_number.index===2">
+                    <span>是，每张限
+                      <span class="showbox">
+                         <span v-if="data.rules.use_limit_people_number.info_2">
+                           {{data.rules.use_limit_people_number.info_2.people}}
+                          </span>
+                      </span>人使用，不论是否儿童均计入人数
+                    </span>
+                  </radio-check>
+                </el-row>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </el-col>
+      </el-form-item>
+
+      <el-form-item label="品类特有约定" label-width="110px" style="margin-bottom: 0"></el-form-item>
+      <el-form-item label-width="18px">
+        <el-col :span="21">
+          <table class="myTable">
+            <tbody>
+            <tr>
+              <td class="text-center" tabindex="10">
+                <strong class="text-stress">*</strong> 是否可以免费打包
+              </td>
+              <td class="td_indent">
+                <el-row>
+                  <radio-check :selected="data.rules.packing_info.index===0">
+                    <span>是，免费打包</span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.packing_info.index===1">
+                    <span>否，需支付打包费
+                      <span class="showbox">
+                         <span v-if="data.rules.packing_info.info_1">
+                           {{data.rules.packing_info.info_1.price}}
+                          </span>
+                      </span>元/盒
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.packing_info.index===2">
+                    <span>否，需支付打包费
+                      <span class="showbox">
+                         <span v-if="data.rules.packing_info.info_2">
+                           {{data.rules.packing_info.info_2.price}}
+                          </span>
+                      </span>元/袋
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.packing_info.index===3">
+                    <span>打包带免费，打包盒收费标准为
+                      <span class="showbox">
+                         <span v-if="data.rules.packing_info.info_3">
+                           {{data.rules.packing_info.info_3.price}}
+                          </span>
+                      </span>元/盒
+                    </span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.packing_info.index===4">
+                    <span>可以打包，打包费详情咨询商家</span>
+                  </radio-check>
+                </el-row>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center" tabindex="11">
+                <strong class="text-stress">*</strong> 堂食外带约定
+              </td>
+              <td>
+                <el-row>
+                  <radio-check :selected="data.rules.packing_limit.index===0">
+                    <span>堂食外带均可</span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.packing_limit.index===1">
+                    <span>仅限堂食，不提供外带</span>
+                  </radio-check>
+                </el-row>
+              </td>
+            </tr>
+
+            <tr>
+              <td class="text-center" tabindex="12">
+                <strong class="text-stress">*</strong> 餐巾纸
+              </td>
+              <td>
+                <el-row>
+                  <radio-check :selected="data.rules.serviette_info.index===0">
+                    <span>免费</span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.serviette_info.index===1">
+                    <span>不提供</span>
+                  </radio-check>
+                </el-row>
+                <el-row>
+                  <radio-check :selected="data.rules.serviette_info.index===2">
+                    <span>
+                      <span class="showbox">
+                         <span v-if="data.rules.serviette_info.info_2">
+                           {{data.rules.serviette_info.info_2.price}}
+                          </span>
+                      </span>元/份
+                    </span>
+                  </radio-check>
+                </el-row>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </el-col>
+      </el-form-item>
+
+      <el-form-item label="其他补充条款" label-width="110px" style="margin-bottom: 0"></el-form-item>
+      <el-form-item label-width="18px">
+        <el-col :span="21" class="textarea">
+          <div v-if="data.rules.other_info.info" class="textareaInfo">
+            {{data.rules.other_info.info.info}}
+          </div>
+        </el-col>
+        </el-input>
+      </el-form-item>
+
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="手动结算周期：" label-width="130px"
+                        prop="manual_billing_cycle">
+            <el-row v-if="!showBtn">
+              <span class="info">{{data.manual_billing_cycle}}</span>
+            </el-row>
+            <el-row v-else>
+              <el-col :span="8">
+                <el-input v-model="data.manual_billing_cycle" :disabled="manualLock"></el-input>
               </el-col>
-              <el-col :span="12">
-                <el-form-item label="自动结算周期：" label-width="130px">
-                  <span class="info">{{data.auto_billing_cycle}} 天</span>
-                </el-form-item>
+              <el-col :span="8">
+                &emsp;天
+              <span v-show="manualLock" class="iconfont icon-suoding"
+                    @click="manualLock = !manualLock"></span>
+              <span v-show="!manualLock" class="iconfont icon-jiesuo"
+                    @click="manualLock = !manualLock"></span>
               </el-col>
             </el-row>
-          </el-form>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="自动结算周期：" label-width="130px"
+                        prop="auto_billing_cycle">
+            <el-row v-if="!showBtn">
+              <span class="info">{{data.auto_billing_cycle}}</span>
+            </el-row>
+            <el-row v-else>
+              <el-col :span="8">
+                <el-input v-model="data.auto_billing_cycle" :disabled="autoLock"></el-input>
+              </el-col>
+              <el-col :span="8">
+                &emsp;天
+              <span v-show="autoLock" class="iconfont icon-suoding"
+                    @click="autoLock = !autoLock"></span>
+              <span v-show="!autoLock" class="iconfont icon-jiesuo"
+                    @click="autoLock = !autoLock"></span>
+              </el-col>
+            </el-row>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
 
     <el-row class="buttonGroup" style="text-align: left;margin-left:16px;">
       <el-button v-if="showBtn" type="primary" size="large"
-                 @click="passDialog = true">&emsp;通 过&emsp;</el-button>
+                 @click="showdialog('pass')">&emsp;通 过&emsp;</el-button>
       <el-button v-if="showBtn" type="danger" size="large"
-                 @click="rejectDialog = true">&emsp;驳 回&emsp;</el-button>
+                 @click="showdialog('reject')">&emsp;驳 回&emsp;</el-button>
       <el-button type="primary" size="large" @click="backTo">&emsp;返 回&emsp;</el-button>
     </el-row>
 
@@ -625,10 +670,38 @@
   import radioCheck from "../../../../components/radio/index.vue";
   import dialogTips from "../../../../components/dialogTips/index.vue";
   import {PROVERIFY_FILLING_URL, PROVERIFY_PASS_URL, FESTIVALS_URL} from "../../../../common/interface";
-  import {modalHide, getUrlParameters, compareFestival} from "../../../../common/common";
+  import {modalHide, getUrlParameters, compareFestival,
+    iscommision, isInteger} from "../../../../common/common";
 
   export default{
     data() {
+      // 佣金比例
+      var commissionValidate = (rule, value, callback) => {
+        var commission = iscommision(value);
+        if (!commission.flag) {
+          callback(new Error(commission.error));
+        } else {
+          callback();
+        }
+      };
+      // 自动结算周期
+      var autoV = (rule, value, callback) => {
+        var auto = isInteger(value, "自动结算周期");
+        if (!auto.flag) {
+          callback(new Error(auto.error));
+        } else {
+          callback();
+        }
+      };
+      // 手动结算周期
+      var manualV = (rule, value, callback) => {
+        var manual = isInteger(value, "手动结算周期");
+        if (!manual.flag) {
+          callback(new Error(manual.error));
+        } else {
+          callback();
+        }
+      };
       return {
         showBtn: false,      // 是否显示审核和驳回按钮
         shopName: "",        // 商家名称
@@ -771,6 +844,20 @@
             }
           }
         },
+        commissionLock: true,
+        manualLock: true,
+        formRules: {
+          commission: [
+            {validator: commissionValidate, trigger: "blur"}
+          ],
+          manual_billing_cycle: [
+            {validator: manualV, trigger: "blur"}
+          ],
+          auto_billing_cycle: [
+            {validator: autoV, trigger: "blur"}
+          ]
+        },
+        autoLock: true,
         error: "",
         rejectReason: "图文不符",    // 驳回原因
         textarea: "",
@@ -883,6 +970,19 @@
         var self = this;
         self.error = "";
       },
+      // 显示通过（驳回）模态框
+      showdialog: function(flag) {
+        var self = this;
+        self.$refs.form.validate((valid) => {
+          if (valid) {
+            if (flag === "pass") {
+              self.passDialog = true;
+            } else if (flag === "reject") {
+              self.rejectDialog = true;
+            }
+          }
+        });
+      },
       // 审核
       pass: function(flag) {
         var self = this;
@@ -891,6 +991,7 @@
           flag: flag,
           item_id: id,
           reject_reason: "",
+          commission: self.data.commission,
           manual_billing_cycle: self.data.manual_billing_cycle,
           auto_billing_cycle: self.data.auto_billing_cycle
         };
@@ -982,5 +1083,8 @@
   .tableContent{
     font-size: 13px;
     padding: 0 30px;
+  }
+  .icon-suoding, .icon-jiesuo{
+    cursor: pointer;
   }
 </style>

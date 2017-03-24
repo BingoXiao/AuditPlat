@@ -28,17 +28,17 @@ function setCookie(cookieName, value, days) {
 }
 // 读取cookie
 function getCookie(cookieName) {
-  var acookie = document.cookie.split("; ");
-  for (var i = 0; i < acookie.length; i++) {
-    var arr = acookie[i].split("=");
-    if (cookieName === arr[0]) {
+  var res = null;
+  var cook = document.cookie.split(";");
+  for (var i = 0; i < cook.length; i++) {
+    let arr = cook[i].split("=");
+    if (cookieName === arr[0].replace(/(^\s*)|(\s*$)/g, "")) {
       if (arr.length > 1) {
-        return unescape(arr[1]);
+        res = arr[1];
       }
-    } else {
-      return null;
     }
   }
+  return res;
 }
 // 删除cookie
 function clearCookie(cookieName) {
@@ -246,7 +246,43 @@ function isSalePerMonth(value) {
   }
   return obj;
 }
+// 佣金比例
+function iscommision(value) {
+  var obj = {};
+  if (value === "") {
+    obj = {flag: false, error: "请填写佣金比例"};
+  } else {
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: "请填写佣金比例"};
+    } else {
+      if (!(/^\d{1,}$|^(\d{1,})\.(\d{1,})$/.test(value))) {
+        obj = {flag: false, error: "佣金比例必须为数字"};
+      } else {
+        obj = {flag: true, error: ""};
+      }
+    }
+  }
+  return obj;
+}
 
+// 整数
+function isInteger(value, title) {
+  var obj = {};
+  if (value === "") {
+    obj = {flag: false, error: "请填写" + title};
+  } else {
+    if (/^\s+$/.test(value)) {
+      obj = {flag: false, error: "请填写" + title};
+    } else {
+      if (!(/^\d{1,}$/.test(value))) {
+        obj = {flag: false, error: title + "必须为数字"};
+      } else {
+        obj = {flag: true, error: ""};
+      }
+    }
+  }
+  return obj;
+}
 
 /* 模态框 */
 function modalHide(fun) {
@@ -283,7 +319,6 @@ function compareArrData(arr1, arr2) {
   }
   return flag;
 }
-
 // 数据对比（对象数组）
 function compareObjArrData(arr1, arr2) {
   var flag = false;
@@ -321,6 +356,8 @@ module.exports = {
   isbankNumber,
   isCostPerPerson,
   isSalePerMonth,
+  iscommision,
+  isInteger,
   modalHide,
   compareArrData,
   compareObjArrData,

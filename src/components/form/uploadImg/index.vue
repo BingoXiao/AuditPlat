@@ -10,6 +10,7 @@
         :action="upload_url"
         :show-file-list="false"
         :on-success="handleSuccess"
+        :on-error="handleError"
         :before-upload="beforeUpload">
         <div ref="upload_tips" class="upload_tips">
           <div class="el-upload__text">{{imgName}}</div>
@@ -32,7 +33,7 @@
     </div>
     <!--错误提示-->
     <div v-else class="imgTips" :style="{height: imgHeight + 'px'}">
-      <div>请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）</div>
+      <div>{{tipError}}</div>
     </div>
   </el-col>
 </template>
@@ -52,9 +53,9 @@
     },
     data() {
       return {
-        http: "",
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
         imageUrl: "",                  // 图片的URL
+        tipError: "请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）",
         tipsFlag: true                 // 上传错误标志
       };
     },
@@ -63,8 +64,8 @@
       imgFill: function() {
         var self = this;
         if (self.imgFill !== "") {
+          self.imageUrl = self.imgFill;
           self.$refs.upload_tips.style.display = "none";
-          self.imageUrl = self.http + self.imgFill;
         }
       }
     },
@@ -85,6 +86,7 @@
         const isLt2M = file.size / 1024 / 1024 < 2;
 
         if (!isJPG || !isLt2M) {
+          self.tipError = "请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）";
           if (self.imageUrl !== "") {
             self.tipsFlag = false;
             setTimeout(function() {
@@ -105,6 +107,15 @@
         self.imageUrl = "" + file.url;
         // 图片url 及 对应名称
         self.$emit("handleSuccess", res.content.url, self.suffix_name);
+      },
+      // 上传失败
+      handleError(res, file) {
+        var self = this;
+        self.tipError = "上传图片失败，请重试！";
+        self.tipsFlag = false;
+        setTimeout(function() {
+          self.tipsFlag = true;
+        }, 2000);
       }
     }
   };

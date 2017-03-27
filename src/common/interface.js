@@ -247,6 +247,7 @@ const COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/";
 const CNTER_REGISTER = HOST_URL + "/register/save-bus/";
 
 exports = module.exports = {
+  HOST_URL,
   ACCOUNTS_LOGIN_URL,
   AUTO_LOGIN_URL,
   ACCOUNTS_PASSWORD_URL,

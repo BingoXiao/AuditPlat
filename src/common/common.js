@@ -3,7 +3,7 @@ function getUrlParameters(path, name) {
   var str = path.split("/");
   var ss = str[str.length - 1];
   var hash = ss.split("#");
-  var res = hash[hash.length - 1];
+  var res = decodeURI(hash[hash.length - 1]);
   // 构造一个含有目标参数的正则表达式对象
   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
   var r = res.match(reg);

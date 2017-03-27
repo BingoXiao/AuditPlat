@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="80d35c5f-fa3e-47a1-9d3a-20c74f199c0d" name="shopmanage-dev" url="http://shopmanage-dev.jinmailife.com">
-        <fileTransfer host="shopmanage-dev.jinmailife.com" port="22" rootFolder="/var/www/static_news" accessType="SFTP" password="dfe0dfc3dfc4dfc7dfcbdfc3df9bdf9cdf92" username="root">
+        <fileTransfer host="shopmanage-dev.jinmailife.com" port="22" rootFolder="/var/www/static" accessType="SFTP" password="dfe0dfc3dfc4dfc7dfcbdfc3df9bdf9cdf92" username="root">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" />
           </advancedOptions>

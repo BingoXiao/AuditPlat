@@ -25,7 +25,9 @@
           </el-col>
           <el-col :span="12" style="text-align: right;">
             <el-button type="primary" @click="download">下载当日任务</el-button>
-            <el-upload :action="upload_url" class="myupload"
+            <el-upload :action="upload_url"
+                       name="daily_tasks"
+                       class="myupload"
                        :before-upload="handleChange"
                        :on-success="handleSuccess"
                        style="border: none;width:150px;vertical-align:top;">
@@ -206,7 +208,7 @@
         var self = this;
         if (response.success) {
           self.isRight = true;
-          self.tips = "上传文件成功！";
+          self.tips = "文件上传成功！";
           self.tipsVisible = true;
           modalHide(function() {
             self.tipsVisible = false;

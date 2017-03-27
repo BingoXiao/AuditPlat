@@ -71,7 +71,8 @@
         var self = this;
         if (self.imgFill.length > 0) {
           for (let i = 0; i < self.imgFill.length; i++) {
-            if (self.imgFill[i] !== "") {
+            let item = self.imgFill[i];
+            if (item !== "") {
               let obj = {
                 coverVisible: false,
                 image: self.imgFill[i]

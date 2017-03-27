@@ -31,7 +31,7 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.path === "/login") {    /* 进入首页 */
-    var remember = getCookie("REMEMBER");
+    let remember = getCookie("REMEMBER");
     if (remember === "1") {   // 自动登陆
       Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
         if (response.body.success) {
@@ -80,6 +80,8 @@ router.beforeEach((to, from, next) => {
             store.commit("USER_NAME", response.body.content.account);
             store.commit("USER_DATA", response.body.content.perms);
             next();
+          } else {   // 清除浏览器数据，刷新
+            next("/login");
           }
         });
       } else {
@@ -103,14 +105,12 @@ Vue.http.interceptors.push(function(request, next) {
       }).catch(() => {
         store.commit("AUTH_LOGIN", false);
         clearCookie("REMEMBER");
-        router.replace("/login");
       });
     } else {   // 请求成功
       if (!response.body.success) {     // success:false
         if (response.body.error_info === "logout") {    // 自动登出
           store.commit("AUTH_LOGIN", false);
           clearCookie("REMEMBER");
-          router.replace("/login");
         } else if (response.body.error_info !== "") {
           Vue.prototype.$confirm(response.body.error_info, "提示", {
             showCancelButton: false,

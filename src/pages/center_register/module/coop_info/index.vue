@@ -50,12 +50,7 @@
             :autosize="{minRows: 8, maxRows: 10}"
             :maxlength="500"
             v-model="quaForm.group_buying_info"
-            placeholder="商家介绍：例如营业面积、本店特色等
- 合作店数：
- 套餐/产品：
- 人均消费：
- 日均可接待量：
- 其他介绍：">
+            style="color: #7c7c7c;">
           </el-input>
         </el-col>
       </el-form-item>
@@ -126,7 +121,12 @@
           phonenum: "",    // 手机
           bl_image_url: "",    // 营业执照照片
           sl_image_url: "",    // 许可证照片
-          group_buying_info: "",        // 团购
+          group_buying_info: `商家介绍：例如营业面积、本店特色等
+ 合作店数：
+ 套餐/产品：
+ 人均消费：
+ 日均可接待量：
+ 其他介绍：`,        // 团购
           cost_per_person: "",  // 人均
           sale_per_month: ""    // 月销售额
         },

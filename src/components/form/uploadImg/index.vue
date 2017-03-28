@@ -16,7 +16,7 @@
           <div class="el-upload__text">{{imgName}}</div>
           <el-button size="small" type="primary">点击上传</el-button>
         </div>
-        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+        <img v-if="imageUrl" :src="imageUrl" :style="{width: imgWidth + 'px', height: imgHeight + 'px'}">
       </el-upload>
     </div>
 
@@ -162,27 +162,5 @@
     height: 100%;
     display: table-cell;
     vertical-align:middle;
-  }
-
-  .avatar {
-    width: 100%;
-    height: 100%;
-  }
-
-  .cover {
-    position: absolute;
-    left: 1px;
-    top: 1px;
-    text-align: center;
-    display: table;
-    background-color:rgba(0, 0, 0, 0.45)
-  }
-
-  .amplify {
-    cursor: pointer;
-    font-size: 26px;
-    color: #a8a8a8;
-    display: table-cell;
-    vertical-align: middle;
   }
 </style>

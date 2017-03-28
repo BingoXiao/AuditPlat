@@ -1,4 +1,4 @@
-const HOST_URL = "https://shopmanage-dev.jinmailife.com";
+const HOST_URL = "https://shopmanagedev.jinmailife.com";
 // const HOST_URL = "https://shopmanage-test.jinmailife.com";
 
 // 登录 post

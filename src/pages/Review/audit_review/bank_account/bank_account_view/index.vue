@@ -59,32 +59,34 @@
               </el-row>
 
 
-              <p style="font-weight: normal" required>身份信息</p>
-              <el-form-item label="上传清晰证件照片：" label-width="160px"></el-form-item>
-              <el-form-item label=" 证件类型：" required>
-                <span class="info">{{cert_type}}</span>
-              </el-form-item>
+              <el-row v-if="real_name">
+                <p style="font-weight: normal" required>身份信息</p>
+                <el-form-item label="上传清晰证件照片：" label-width="160px"></el-form-item>
+                <el-form-item label=" 证件类型：" required>
+                  <span class="info">{{cert_type}}</span>
+                </el-form-item>
 
-              <el-form-item label=" 真实姓名：" required>
-                <span class="info">{{real_name}}</span>
-              </el-form-item>
+                <el-form-item label=" 真实姓名：" required>
+                  <span class="info">{{real_name}}</span>
+                </el-form-item>
 
-              <el-form-item label=" 证件号码：" required>
-                <span class="info">{{card_code}}</span>
-              </el-form-item>
+                <el-form-item label=" 证件号码：" required>
+                  <span class="info">{{card_code}}</span>
+                </el-form-item>
 
-              <el-form-item v-if="card_back" label="" label-width="0" required>
-                <el-col :span="10">
-                  <show-image :imgWidth="220" :imgHeight="140" :imgSrc="card_front"></show-image>
-                </el-col>
-                <el-col :span="12">
-                  <show-image :imgWidth="220" :imgHeight="140" :imgSrc="card_back"></show-image>
-                </el-col>
-              </el-form-item>
+                <el-form-item v-if="card_back" label="" label-width="0" required>
+                  <el-col :span="10">
+                    <show-image :imgWidth="220" :imgHeight="140" :imgSrc="card_front"></show-image>
+                  </el-col>
+                  <el-col :span="12">
+                    <show-image :imgWidth="220" :imgHeight="140" :imgSrc="card_back"></show-image>
+                  </el-col>
+                </el-form-item>
 
-              <el-form-item v-else label="" label-width="0" required>
-                <show-image :imgWidth="220" :imgHeight="280" :imgSrc="card_front"></show-image>
-              </el-form-item>
+                <el-form-item v-else label="" label-width="0" required>
+                  <show-image :imgWidth="220" :imgHeight="280" :imgSrc="card_front"></show-image>
+                </el-form-item>
+              </el-row>
             </el-form>
           </el-col>
         </el-row>

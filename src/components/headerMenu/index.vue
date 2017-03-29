@@ -1,18 +1,25 @@
 <template>
-  <el-row class="head" type="flex" justify="space-around" align="middle">
+  <el-row class="headRow" type="flex" justify="space-around">
     <el-col :span="6">
       <!--商家中心注册-->
-      <router-link to="/center-site/register"
-                   v-if="$route.path === '/center-site/register'">
-        <img src="../../assets/Blogo.png" alt="近脉商家中心"/>
-      </router-link>
-      <router-link to="/login" v-else>
-        <img src="../../assets/logo.png" alt="近脉后台审核中心"/>
-      </router-link>
+      <div class="imgWrapper" v-if="$route.path === '/center-site/register'">
+        <router-link to="/center-site/register" class="link">
+          <img src="../../assets/Blogo.png" alt="近脉商家中心"
+               class="image" style="width:175px;"/>
+        </router-link>
+      </div>
+
+      <!--商家后台审核-->
+      <div class="imgWrapper" v-else>
+        <router-link to="/login" class="link">
+          <img src="../../assets/logo.png" alt="近脉后台审核中心" class="image"/>
+        </router-link>
+      </div>
     </el-col>
 
     <el-col :span="4" :offset="14">
-      <div v-if="$store.state.auth_login && $route.path !== '/center-site/register'" class="topMenu">
+      <div class="topMenu"
+           v-if="$store.state.auth_login && $route.path!=='/center-site/register'">
         <el-popover
           ref="menu"
           placement="bottom"
@@ -92,7 +99,7 @@
 </script>
 
 <style scoped>
-  .head {
+  .headRow {
     width: 100%;
     height: 60px;
     color: #ffffff;
@@ -102,14 +109,24 @@
     text-align: center;
   }
 
-  img {
+  .imgWrapper{
+    line-height: 60px;
+  }
+
+  .link{
+    display: inline-block;
+    vertical-align: middle
+  }
+
+  .image{
     width: 220px;
-    margin-top: 5px;
+    margin-top: 0;
+    vertical-align: middle;
   }
 
   .topMenu {
     position: relative;
-    top: 10px;
+    top: 24px;
   }
 
   .topMenu_ul {

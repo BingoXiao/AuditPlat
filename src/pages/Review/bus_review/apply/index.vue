@@ -151,7 +151,7 @@
               self.idInfo = data.userinfo;
               self.blInfo = data.blinfo;
               self.slInfo = data.slinfo;
-              self.shopName = data.userinfo.account;     // 店名
+              self.shopName = data.businfo.busname;     // 店名
               self.applynum = getUrlParameters(window.location.hash, "id");       // 审编号
               self.bd = data.applyinfo.bd;
               self.reason = data.applyinfo.reject_reason || "";

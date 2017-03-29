@@ -134,8 +134,8 @@
     </el-col>
 
     <el-col :span="24">
-      <el-button type="primary" size="large" @click="submit('SAVE')">保 存</el-button>
-      <el-button type="primary" size="large" @click="submit('SAVE')">立即上线</el-button>
+      <el-button type="primary" size="large" @click="submitActivit('SAVE')">保 存</el-button>
+      <el-button type="primary" size="large" @click="submitActivit('UP')">立即上线</el-button>
     </el-col>
 
     <!--提示-->
@@ -249,6 +249,7 @@
           self.getAddedCoupons();
         }
       },
+
       // 获取活动信息（修改）
       getActivityInfo: function(id) {
         var self = this;
@@ -289,6 +290,7 @@
           }
         });
       },
+
       // 添加优惠券
       addCoupon: function(row) {
         var self = this;
@@ -332,15 +334,16 @@
           self.handleAddedChange();
         }
       },
+
       // 新增优惠券（保存、上线）
-      submit: function(flag) {
+      submitActivit: function(flag) {
         var self = this;
         var datas = {
           "name": self.activityinfo.name,       // 名称
           "startdate": "",
           "enddate": "",
           "coupon_ids": self.added.idArr,
-          "flag": flag           // SAVE 保存  UP 上线
+          "flag": flag            // SAVE 保存  UP 上线
         };
         var dateFrom = new Date(self.activityinfo.date[0]);
         var dateTo = new Date(self.activityinfo.date[1]);
@@ -349,11 +352,16 @@
         self.$refs.activityinfo.validate((valid) => {
           if (valid) {
             let id = getUrlParameters(window.location.hash, "id");
-            let url = EVENTS_EDITEVENT_URL(id);    // 修改
-            self.tips = "修改活动成功！";
-            if (!id) {   // 新增
-              self.tips = "新增活动成功！";
+            let url = "";
+            if (!id) {    // 新增活动
               url = EVENTS_ONLINE_URL;
+            } else {      // 修改活动
+              url = EVENTS_EDITEVENT_URL(id);
+            }
+            if (flag === "UP") {               // 立即上线
+              self.tips = "活动上线成功！";
+            } else if (flag === "SAVE") {      // 保存
+              self.tips = "活动保存成功！";
             }
             self.$http.post(url, JSON.stringify(datas), {emulateJSON: true})
               .then(function(response) {

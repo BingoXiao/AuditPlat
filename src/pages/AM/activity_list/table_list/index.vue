@@ -24,7 +24,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="status" label="状态" align="center" min-width="100px"></el-table-column>
-        <el-table-column label="操作" align="center" min-width="140px">
+        <el-table-column label="操作" align="center" min-width="150px">
           <template scope="scope">
             <el-button size="small" icon="search" class="tableButton"
                        v-if="scope.row.status !== '待上线'"

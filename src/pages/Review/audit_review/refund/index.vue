@@ -58,10 +58,12 @@
       <el-row type="flex" justify="center">
         <el-col :span="21">
           <p style="font-size: 17px">是否退款该团购券 {{token}}</p>
-          <div>
-            <el-input type="textarea" placeholder="请输入退款原因"
-                      v-modal="refund_reason"></el-input>
-          </div>
+          <el-form ref="form" :model="form" :rules="rules" label-width="0">
+            <el-form-item label="" prop="refund_reason">
+              <el-input type="textarea" placeholder="请输入退款原因"
+                        v-model="form.refund_reason"></el-input>
+            </el-form-item>
+          </el-form>
           <br/>
           <div class="buttonGroup" style="margin-bottom:20px">
             <el-button type="primary" size="large"
@@ -93,7 +95,14 @@
         token: "",           // 团购券号码
         tokenInfo: false,     // 显示团购券内容
         status: "",          // 团购券状态
-        refund_reason: "",   // 退款原因
+        form: {
+          refund_reason: ""   // 退款原因
+        },
+        rules: {
+          refund_reason: [
+            {required: true, message: "请输入退款原因", trigger: "blur"}
+          ]
+        },
         refundDialog: false,
         isRight: true,       // 提示框
         tips: "操作成功！",
@@ -111,7 +120,7 @@
       textColor: function() {
         var self = this;
         var res = "#13CE66";
-        if (self.status === "S") {   // 已退款
+        if (self.status === "已退款") {   // 已退款
           res = "#FF4949";
         }
         return res;
@@ -125,13 +134,15 @@
           if (response.body.success) {
             self.tokenInfo = true;
             var datas = response.body.content;
-            self.status = datas.status;     // 团购券状态
             if (datas.status === "S") {    // 已退款
-              self.refundnum = datas.refundnum;          // 项目id
+              self.status = "已退款";     // 团购券状态
               self.consume_time = datas.consume_time;    // 消费时间
               self.billing_time = datas.billing_time;    // 结算时间
+            } else {
+              self.status = "已验证";     // 团购券状态
             }
             // datas.status === "UN" 验证
+            self.refundnum = datas.refundnum;          // 项目id
             self.item = datas.item;        // 项目名称
             self.buy_time = datas.buy_time;        // 购买时间
             self.deserve = datas.deserve;           // 消费者购买金额
@@ -146,21 +157,24 @@
         var formData = new FormData();
         formData.append("token", self.token);
         formData.append("refundnum", self.refundnum);
-        if (self.refund_reason) {
-
-        } else {
-          formData.append("refund_reason", self.refund_reason);
-        }
-        self.$http.post(CHECKVERIFY_REFUND_URL, formData)
-          .then(function(response) {
-            if (response.body.success) {
-              self.refundDialog = false;
-              self.tipsVisible = true;
-              modalHide(function() {
-                self.tipsVisible = false;
+        // 377920761070
+        self.$refs.form.validate((valid) => {
+          if (valid) {
+            formData.append("refund_reason", self.form.refund_reason);
+            self.$http.post(CHECKVERIFY_REFUND_URL, formData)
+              .then(function(response) {
+                if (response.body.success) {
+                  self.isRight = true;
+                  self.tips = "退款成功！";
+                  self.refundDialog = false;
+                  self.tipsVisible = true;
+                  modalHide(function() {
+                    self.tipsVisible = false;
+                  });
+                }
               });
-            }
-          });
+          }
+        });
       }
     },
     components: {

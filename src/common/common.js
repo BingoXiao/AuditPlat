@@ -14,6 +14,16 @@ function getUrlParameters(path, name) {
     return "";
   }
 }
+// 商家中心取数据
+function getParmString(name) {
+  var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+  var r = window.location.search.substr(1).match(reg);
+  if (r !== null) {
+    return unescape(r[2]);
+  } else {
+    return null;
+  }
+}
 
 // 设置cookie属性值
 // cookieName cookie属性名, value cookie属性值, time 时间
@@ -342,6 +352,7 @@ function compareObjArrData(arr1, arr2) {
 
 module.exports = {
   getUrlParameters,
+  getParmString,
   setCookie,
   getCookie,
   clearCookie,

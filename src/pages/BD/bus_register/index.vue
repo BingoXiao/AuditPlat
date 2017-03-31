@@ -54,7 +54,7 @@
         <el-table-column label="状态" align="center" width="150px">
           <template scope="scope">
             <div>{{scope.row.status}}</div>
-            <span v-if="scope.row.reject_reason"
+            <span v-if="scope.row.status==='驳回' && scope.row.reject_reason"
                   style="font-size: 12px;color: #ff4949">{{scope.row.reject_reason}}</span>
           </template>
         </el-table-column>

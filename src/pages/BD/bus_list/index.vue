@@ -34,7 +34,7 @@
     <el-col :span="24">
       <el-table ref="table" :data="tableDatas" v-loading.body="loading"
                 border highlight-current-row style="width: 100%;"
-                row-key="bususer_id">
+                row-key="bus_id">
         <el-table-column prop="number" label="商家编号" align="center" min-width="100px"></el-table-column>
         <el-table-column prop="account" label="商家账号" align="center" min-width="130px"></el-table-column>
         <el-table-column prop="city" label="城市" align="center" min-width="100px"></el-table-column>
@@ -187,8 +187,7 @@
       viewBus: function(row) {
         var self = this;
         self.table.bususer_id = row.bususer_id;
-        self.$router.push({path: "bus_list/view#id=" +
-        row.bususer_id + "&account=" + row.account});
+        self.$router.push({path: "bus_list/view#id=" + row.bus_id + "&account=" + row.account});
       },
       // 下载商家列表
       download: function() {

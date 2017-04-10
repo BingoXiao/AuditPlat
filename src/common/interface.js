@@ -1,6 +1,8 @@
-const HOST_URL = "https://shopmanagedev.jinmailife.com";
-// const HOST_URL = "https://shopmanage-test.jinmailife.com";
-const CENTER_URL = "https://businessdev.jinmailife.com";
+// const HOST_URL = "https://shopmanagedev.jinmailife.com";
+// const CENTER_URL = "https://businessdev.jinmailife.com";
+
+const HOST_URL = "https://shopmanage-test.jinmailife.com";
+const CENTER_URL = "https://business-test.jinmailife.com";
 
 /* 商家中心注册 */
 const CNTER_REGISTER = HOST_URL + "/register/save-bus/";
@@ -248,7 +250,7 @@ const COMPAINTS_TABLE_URL = HOST_URL + "/reports/";
 const COMPAINTS_SUBMIT_URL = HOST_URL + "/reports/put/";
 
 
-exports = module.exports = {
+module.exports = {
   HOST_URL,
   CENTER_URL,
   ACCOUNTS_LOGIN_URL,

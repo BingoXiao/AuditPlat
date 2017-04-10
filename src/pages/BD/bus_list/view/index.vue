@@ -90,7 +90,7 @@
         var self = this;
         let id = getUrlParameters(window.location.hash, "id");
         let acc = getUrlParameters(window.location.hash, "account");
-        self.$http.get(BUSLIST_BRANCH_URL + "?bususer_id=" + id).then(function(response) {
+        self.$http.get(BUSLIST_BRANCH_URL + "?bus_id=" + id).then(function(response) {
           if (response.body.success) {
             self.branches = response.body.content;
             self.branch = (self.branches)[0].bus_id;

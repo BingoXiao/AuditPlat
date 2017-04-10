@@ -28,7 +28,8 @@
 </template>
 
 <script>
-  import {getUrlParameters} from "../../../../common/common";
+  import {getParmString} from "../../../../common/common";
+  import {CENTER_URL} from "../../../../common/interface";
 
   export default{
     data() {
@@ -37,12 +38,14 @@
       };
     },
     mounted() {
-      this.phonenum = getUrlParameters(window.location.hash, "phonenum");
+      var self = this;
+      self.phonenum = getParmString("tel");
     },
     methods: {
       BackTo: function() {
-//        this.$router.push({path: "/bus_register/new"})
-        alert("return!");
+        var otherWindow;
+        otherWindow = window.open(CENTER_URL, "_self");
+        otherWindow.opener = null;
       }
     }
   };

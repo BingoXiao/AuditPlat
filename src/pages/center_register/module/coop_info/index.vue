@@ -73,8 +73,7 @@
 <script>
   import busClassification from "../../../../components/form/classification/index";
   import uploadImage from "../../../../components/form/uploadImg/index";
-  import {isName, isCostPerPerson, isSalePerMonth,
-    getUrlParameters} from "../../../../common/common";
+  import {isName, isCostPerPerson, isSalePerMonth, getParmString} from "../../../../common/common";
 
   export default{
     props: {
@@ -144,7 +143,7 @@
       };
     },
     mounted() {
-      this.quaForm.phonenum = getUrlParameters(window.location.hash, "phonenum");
+      this.quaForm.phonenum = getParmString("tel");
     },
     methods: {
       // 模块验证结果及取值(分类)

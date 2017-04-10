@@ -5,11 +5,13 @@ import VueRouter from "vue-router";
 import routes from "./router/index";
 import store from "./vuex/store";
 import VueResource from "vue-resource";
-// import "element-ui/lib/theme-default/index.css";
+
 import "../theme/index.css";
 import ElementUI from "element-ui";
+
 import "./assets/font/iconfont.css";
 import "./common/style.css";
+
 import App from "App";
 import {AUTO_LOGIN_URL} from "./common/interface";
 import {getCookie, clearCookie} from "./common/common";

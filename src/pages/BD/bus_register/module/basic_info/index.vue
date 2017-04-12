@@ -6,13 +6,13 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="商家姓名：" prop="name" required>
-            <el-input v-model="basicForm.name"></el-input>
+            <el-input v-model="basicForm.name" :maxlength="30"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="7" :offset="1">
           <el-form-item label="商家手机：" prop="phonenum" required>
-            <el-input v-model="basicForm.phonenum"></el-input>
+            <el-input v-model="basicForm.phonenum" :maxlength="11"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -26,7 +26,7 @@
       <h3 class="formTitle">门店信息</h3>
       <el-form-item label="门店名称：" prop="busname" required>
         <el-col :span="14">
-          <el-input v-model="basicForm.busname"></el-input>
+          <el-input v-model="basicForm.busname" :maxlength="30"></el-input>
         </el-col>
       </el-form-item>
 

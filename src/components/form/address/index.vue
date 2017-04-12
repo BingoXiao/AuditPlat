@@ -58,7 +58,7 @@
       <el-col :span="12">
         <el-input v-model="address_detail" name="address_detail"
                   placeholder="填写具体的位置（精确至门牌号），请与执照地址保持一致"
-                  @change="clear_error">
+                  @change="clear_error" :maxlength="200">
         </el-input>
       </el-col>
       <el-col :span="3" :offset="1">

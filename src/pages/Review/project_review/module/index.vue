@@ -45,7 +45,9 @@
             </el-row>
             <el-row v-else>
               <el-col :span="8">
-                <el-input v-model="data.commission" :disabled="commissionLock"></el-input>
+                <el-input v-model="data.commission"
+                          :disabled="commissionLock"
+                          :maxlength="4"></el-input>
               </el-col>
               <el-col :span="2">
                 &emsp;

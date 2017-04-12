@@ -49,7 +49,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_name">
-            <el-input v-model="quaForm.bl_name"></el-input>
+            <el-input v-model="quaForm.bl_name" :maxlength="30"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -60,7 +60,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_account">
-            <el-input v-model="quaForm.bl_account"></el-input>
+            <el-input v-model="quaForm.bl_account" :maxlength="20"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -71,7 +71,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_address">
-            <el-input v-model="quaForm.bl_address"></el-input>
+            <el-input v-model="quaForm.bl_address" :maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -119,7 +119,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_name">
-            <el-input v-model="quaForm.sl_name"></el-input>
+            <el-input v-model="quaForm.sl_name" :maxlength="30"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -130,7 +130,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_code">
-            <el-input v-model="quaForm.sl_code"></el-input>
+            <el-input v-model="quaForm.sl_code" :maxlength="20"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -141,7 +141,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_address">
-            <el-input v-model="quaForm.sl_address"></el-input>
+            <el-input v-model="quaForm.sl_address" :maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-col>

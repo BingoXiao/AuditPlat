@@ -1,10 +1,12 @@
 <template>
   <el-col :span="24">
-    <el-form id="checkForm" :model="checkForm" :rules="checkRules" ref="checkForm"
+    <el-form id="checkForm" :model="checkForm"
+             :rules="checkRules" ref="checkForm"
              label-width="103px" label-position="left">
       <h3 class="formTitle">结款信息</h3>
       <el-form-item label="结款信息:" required>
-        <el-radio-group v-model="checkForm.bankRadio" @change="bankRadio_change">
+        <el-radio-group v-model="checkForm.bankRadio"
+                        @change="bankRadio_change">
           <el-radio label="hasBank">有</el-radio>
           <el-radio label="noBank">无</el-radio>
         </el-radio-group>
@@ -15,7 +17,9 @@
         <el-row>
           <el-col :span="7">
             <el-form-item label="银行账户：" prop="account_type" required>
-              <el-select v-model="checkForm.account_type" placeholder="请选择" :clearable="true">
+              <el-select v-model="checkForm.account_type"
+                         placeholder="请选择"
+                         :clearable="true">
                 <el-option
                   v-for="item in checkForm.account_type_option"
                   :label="item.label"
@@ -26,7 +30,8 @@
           </el-col>
           <el-col :span="8" :offset="1">
             <el-form-item label="开户名：" label-width="90px" prop="person_or_company_name" required>
-              <el-input v-model="checkForm.person_or_company_name"></el-input>
+              <el-input v-model="checkForm.person_or_company_name"
+                        :maxlength="30"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -39,19 +44,22 @@
 
         <el-form-item label="银行卡号：" prop="bank_account" required>
           <el-col :span="12">
-            <el-input v-model="checkForm.bank_account"></el-input>
+            <el-input v-model="checkForm.bank_account"
+                      :maxlength="20"></el-input>
           </el-col>
         </el-form-item>
 
         <el-row>
           <el-col :span="9">
             <el-form-item label="财务联系人：" label-width="120px" prop="billing_account_name" required>
-              <el-input v-model="checkForm.billing_account_name"></el-input>
+              <el-input v-model="checkForm.billing_account_name"
+                        :maxlength="30"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="1">
             <el-form-item label="财务联系人手机：" label-width="150px" prop="billing_account_tel" required>
-              <el-input v-model="checkForm.billing_account_tel"></el-input>
+              <el-input v-model="checkForm.billing_account_tel"
+                        :maxlength="11"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -83,20 +91,26 @@
 
         <el-form-item label="真实姓名：" prop="real_name" required>
           <el-col :span="10">
-            <el-input v-model="IDForm.real_name" placeholder="请填写真实姓名"></el-input>
+            <el-input v-model="IDForm.real_name"
+                      placeholder="请填写真实姓名"
+                      :maxlength="30"></el-input>
           </el-col>
         </el-form-item>
 
         <el-form-item label="证件号码：" prop="card_code" required>
           <el-col :span="10">
-            <el-input v-model="IDForm.card_code" placeholder="请填写证件号码"></el-input>
+            <el-input v-model="IDForm.card_code"
+                      placeholder="请填写证件号码"
+                      :maxlength="18"></el-input>
           </el-col>
         </el-form-item>
 
         <!--身份证、港澳通行证、台胞证-->
         <el-form-item v-show="IDForm.cardImg">
           <el-col :span="24">
-            <upload-image ref="card_front" :imgWidth="220" :imgHeight="140" imgName="个人信息页"
+            <upload-image ref="card_front"
+                          :imgWidth="220" :imgHeight="140"
+                          imgName="个人信息页"
                           :imgFill="IDForm.card_front_url"
                           suffix_name="card_front_url"
                           v-on:handleSuccess="addFormData"

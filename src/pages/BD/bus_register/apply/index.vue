@@ -58,7 +58,7 @@
           </el-form-item>
 
           <el-form-item label="团购内容：">
-            <span class="info">{{group_buying_info}} 元</span>
+            <pre class="info">{{group_buying_info}}</pre>
           </el-form-item>
 
           <el-form-item label="人均：" required>
@@ -262,5 +262,8 @@
 </script>
 
 <style scoped>
-
+  pre.info{
+    border: 1px solid #d7d7d7;
+    padding: 0 15px;
+  }
 </style>

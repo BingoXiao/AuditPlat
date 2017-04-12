@@ -910,9 +910,6 @@
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-input.is-disabled .el-input__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-input.is-disabled .el-input__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -944,9 +941,6 @@
     width: 100%;
 }
 .el-input__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-input__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-input__inner:-ms-input-placeholder {
@@ -1076,9 +1070,6 @@
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-textarea.is-disabled .el-textarea__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-textarea.is-disabled .el-textarea__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -1101,9 +1092,6 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .el-textarea__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-textarea__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-textarea__inner:-ms-input-placeholder {
@@ -1448,9 +1436,6 @@
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-input.is-disabled .el-input__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-input.is-disabled .el-input__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -1482,9 +1467,6 @@
     width: 100%;
 }
 .el-input__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-input__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-input__inner:-ms-input-placeholder {
@@ -1614,9 +1596,6 @@
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-textarea.is-disabled .el-textarea__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-textarea.is-disabled .el-textarea__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -1639,9 +1618,6 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .el-textarea__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-textarea__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-textarea__inner:-ms-input-placeholder {
@@ -2596,9 +2572,6 @@
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-input.is-disabled .el-input__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-input.is-disabled .el-input__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -2630,9 +2603,6 @@
     width: 100%;
 }
 .el-input__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-input__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-input__inner:-ms-input-placeholder {
@@ -2762,9 +2732,6 @@
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-textarea.is-disabled .el-textarea__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-textarea.is-disabled .el-textarea__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -2787,9 +2754,6 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .el-textarea__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-textarea__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-textarea__inner:-ms-input-placeholder {
@@ -6764,9 +6728,6 @@
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-input.is-disabled .el-input__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-input.is-disabled .el-input__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -6798,9 +6759,6 @@
     width: 100%;
 }
 .el-input__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-input__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-input__inner:-ms-input-placeholder {
@@ -6930,9 +6888,6 @@
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-textarea.is-disabled .el-textarea__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-textarea.is-disabled .el-textarea__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -6955,9 +6910,6 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .el-textarea__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-textarea__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-textarea__inner:-ms-input-placeholder {
@@ -8250,9 +8202,6 @@
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-input.is-disabled .el-input__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-input.is-disabled .el-input__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -8284,9 +8233,6 @@
     width: 100%;
 }
 .el-input__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-input__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-input__inner:-ms-input-placeholder {
@@ -8416,9 +8362,6 @@
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-textarea.is-disabled .el-textarea__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-textarea.is-disabled .el-textarea__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -8441,9 +8384,6 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .el-textarea__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-textarea__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-textarea__inner:-ms-input-placeholder {
@@ -9460,9 +9400,6 @@
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-input.is-disabled .el-input__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-input.is-disabled .el-input__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -9494,9 +9431,6 @@
     width: 100%;
 }
 .el-input__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-input__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-input__inner:-ms-input-placeholder {
@@ -9626,9 +9560,6 @@
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-textarea.is-disabled .el-textarea__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-textarea.is-disabled .el-textarea__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -9651,9 +9582,6 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .el-textarea__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-textarea__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-textarea__inner:-ms-input-placeholder {
@@ -12507,9 +12435,6 @@
 .el-input.is-disabled .el-input__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-input.is-disabled .el-input__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-input.is-disabled .el-input__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -12541,9 +12466,6 @@
     width: 100%;
 }
 .el-input__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-input__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-input__inner:-ms-input-placeholder {
@@ -12673,9 +12595,6 @@
 .el-textarea.is-disabled .el-textarea__inner::-webkit-input-placeholder {
     color: rgb(191, 203, 217);
 }
-.el-textarea.is-disabled .el-textarea__inner::-moz-placeholder {
-    color: rgb(191, 203, 217);
-}
 .el-textarea.is-disabled .el-textarea__inner:-ms-input-placeholder {
     color: rgb(191, 203, 217);
 }
@@ -12698,9 +12617,6 @@
     transition: border-color .2s cubic-bezier(.645,.045,.355,1);
 }
 .el-textarea__inner::-webkit-input-placeholder {
-    color: rgb(151, 168, 190);
-}
-.el-textarea__inner::-moz-placeholder {
     color: rgb(151, 168, 190);
 }
 .el-textarea__inner:-ms-input-placeholder {

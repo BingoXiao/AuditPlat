@@ -5,3 +5,4 @@ test/unit/coverage
 test/e2e/reports
 selenium-debug.log
 /node_modules/
+!/node_modules/element-theme-default/

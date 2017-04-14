@@ -88,7 +88,7 @@
         if (self.$store.state.vflag) {    // 验证成功
           if (step === "submitSuccess") {  // 提交数据
             self.$http.post(CNTER_REGISTER,
-              JSON.stringify(self.$store.state.form_data),
+              JSON.stringify(self.formDatas),
               {emulateJSON: true})
               .then(function(response) {
                 if (response.body.success) {

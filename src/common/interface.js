@@ -96,7 +96,7 @@ const BDREGISTER_EDITFILLING_URL = HOST_URL + "/register/pendingverinfo/";
 const BDREGISTER_NEWREGISTER_URL = HOST_URL + "/register/busregister/";
 // 删除新店(分店) post
 const BDREGISTER_DELETE_URL = function(id) {
-  return HOST_URL + "/register/applys/" + id + "/delete/";
+  return `${HOST_URL}/register/applys/${id}/delete/`;
 };
 
 // 分店修改 get
@@ -197,21 +197,21 @@ const EVENTS_CMSEARCHSHOPS_URL = HOST_URL + "/activities/buses/";
 const EVENTS_CMTABLE_URL = HOST_URL + "/activities/coupons/";
 // 查看对应优惠券门店 get
 const EVENTS_CMVIEWSHOPS_URL = function(id) {
-  return HOST_URL + "/activities/coupons/" + id + "/buses/";
+  return `${HOST_URL}/activities/coupons/${id}/buses/`;
 };
 // 删除优惠券 post
 const EVENTS_CMDELETE_URL = function(id) {
-  return HOST_URL + "/activities/coupons/" + id + "/delete/";
+  return `${HOST_URL}/activities/coupons/${id}/delete/`;
 };
 // 新增优惠券（新增）post
 const EVENTS_CMADDSHOPS_URL = HOST_URL + "/activities/coupons/add/";
 // 修改优惠券  post
 const EVENTS_CMEDIT_URL = function(id) {
-  return HOST_URL + "/activities/coupons/" + id + "/update/";
+  return `${HOST_URL}/activities/coupons/${id}/update/`;
 };
 // 获取优惠券信息  get
 const EVENTS_CMGETINFO_URL = function(id) {
-  return HOST_URL + "/activities/coupons/" + id + "/info/";
+  return `${HOST_URL}/activities/coupons/${id}/info/`;
 };
 // 优惠券列表(表格) get
 const EVENTS_CLTABLE_URL = HOST_URL + "/activities/coupons/";
@@ -219,26 +219,26 @@ const EVENTS_CLTABLE_URL = HOST_URL + "/activities/coupons/";
 const EVENTS_ONLINE_URL = HOST_URL + "/activities/add/";
 // 修改活动 post
 var EVENTS_EDITEVENT_URL = function(id) {
-  return HOST_URL + "/activities/" + id + "/update/";
+  return `${HOST_URL}/activities/${id}/update/`;
 };
 // 修改活动（获取信息） get
 const EVENTS_EDITINFO_URL = function(id) {
-  return HOST_URL + "/activities/" + id + "/info/";
+  return `${HOST_URL}/activities/${id}/info/`;
 };
 // 活动列表
 // 表格 get
 const EVENTS_ELTABLE_URL = HOST_URL + "/activities/";
 // 删除活动 post
 const EVENTS_ELDELETE_URL = function(id) {
-  return HOST_URL + "/activities/" + id + "/delete/";
+  return `${HOST_URL}/activities/${id}/delete/`;
 };
 // 下线活动 post
 const EVENTS_OFFLINEINFO_URL = function(id) {
-  return HOST_URL + "/activities/" + id + "/down/";
+  return `${HOST_URL}/activities/${id}/down/`;
 };
 // 查看活动下的券（表格）get
 const EVENTS_VIEWEVENT_URL = function(id) {
-  return HOST_URL + "/activities/" + id + "/coupons/";
+  return `${HOST_URL}/activities/${id}/coupons/`;
 };
 
 

@@ -26,6 +26,13 @@ import AddActivity from "../pages/AM/add_activity/index";
 import ActivityList from "../pages/AM/activity_list/index";
 import CenterRegister from "../pages/center_register/index";
 
+/*
+* path: 路径名称
+* name: 名称
+* hidden: 左边栏是否影藏（login标志影藏）
+* component: 组件，
+* iconCls: 对应图标
+*/
 const routes = [
   {
     path: "/login",

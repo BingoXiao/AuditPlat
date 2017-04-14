@@ -43,7 +43,8 @@
 <script>
   import headerMenu from "../../components/headerMenu/index";
   import {ACCOUNTS_LOGIN_URL} from "../../common/interface";
-  import {setCookie, isAccount, isPassword} from "../../common/common";
+  import {pageToContent, setCookie,
+    isAccount, isPassword} from "../../common/common";
 
   export default {
     data() {
@@ -111,27 +112,8 @@
               }
 
               /* 根据权限进入不同得页面 */
-              if (perms.item_list === 1) { /* 管理员账号 */
-                self.$router.push({path: "/setting"});
-              } else {   /* BD */
-                if (perms.bus_apply === 1 || perms.bus_register === 1) {
-                  if (perms.bus_apply === 1) {
-                    self.$router.push({path: "/bus_apply"});
-                  } else {
-                    self.$router.push({path: "/bus_register/:type"});
-                  }
-                } else {  /* 审核人员 */
-                  if (perms.bus_verify === 1 || perms.checkout_verify === 1 || perms.project_verify === 1) {
-                    if (self.$store.state.user_data.bus_verify === 1) {
-                      self.$router.push({path: "/bus_review/:type"});
-                    } else if (perms.checkout_verify === 1) {
-                      self.$router.push({path: "/checkout_verify/:type"});
-                    } else {
-                      self.$router.push({path: "/project_verify/:type"});
-                    }
-                  }
-                }
-              }
+              let rPath = pageToContent(perms);
+              self.$router.push({path: rPath});
             }
           });
         } else {

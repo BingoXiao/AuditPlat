@@ -14,7 +14,7 @@ import "./common/style.css";
 
 import App from "App";
 import {AUTO_LOGIN_URL} from "./common/interface";
-import {getCookie, clearCookie} from "./common/common";
+import {pageToContent, getCookie, clearCookie} from "./common/common";
 
 // Router
 Vue.use(VueRouter);
@@ -31,50 +31,33 @@ const router = new VueRouter({
   routes: routes
 });
 
+
+// 路由设置
 router.beforeEach((to, from, next) => {
   if (to.path === "/login") {    /* 进入首页 */
     let remember = getCookie("REMEMBER");
-    if (remember === "1") {   // 自动登陆
+    if (remember === "1") {   /* 自动登陆 */
       Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
         if (response.body.success) {
-          /*  记录状态 */
+          /*  记录用户信息 */
           var perms = response.body.content.perms;
           store.commit("USER_ID", response.body.content.id);
           store.commit("USER_NAME", response.body.content.account);
           store.commit("AUTH_LOGIN", true);
           store.commit("USER_DATA", perms);
           /* 根据权限进入不同得页面 */
-          if (perms.item_list === 1) { /* 管理员账号 */
-            next({path: "/setting"});
-          } else {   /* BD */
-            if (perms.bus_apply === 1 || perms.bus_register === 1) {
-              if (perms.bus_apply === 1) {
-                next({path: "/bus_apply"});
-              } else {
-                next({path: "/bus_register/:type"});
-              }
-            } else {  /* 审核人员 */
-              if (perms.bus_verify === 1 || perms.checkout_verify === 1 || perms.project_verify === 1) {
-                if (perms.bus_verify === 1) {
-                  next({path: "/bus_review/:type"});
-                } else if (perms.checkout_verify === 1) {
-                  next({path: "/checkout_verify/:type"});
-                } else {
-                  next({path: "/project_verify/:type"});
-                }
-              }
-            }
-          }
+          let rPath = pageToContent(perms);
+          next({path: rPath});
         }
       });
     } else {
       next();
     }
-  } else {   // 其他页面
-    if (to.path === "/center-site/register") {  // 商家中心注册
+  } else {    /* 其他页面 */
+    if (to.path === "/center-site/register") {  // 商家中心注册（商家中心页面）
       next();
     } else {
-      if (!store.state.auth_login) {   // 未登录状态
+      if (!store.state.auth_login) {   /* 用户是否登录 */
         Vue.http.get(AUTO_LOGIN_URL).then(function(response) {
           if (response.body.success) {
             store.commit("AUTH_LOGIN", true);
@@ -93,26 +76,31 @@ router.beforeEach((to, from, next) => {
   }
 });
 
+
 // http拦截器
 Vue.http.interceptors.push(function(request, next) {
+  if ((request.method).toUpperCase() === "POST") {   // 跨网站攻击设置
+    request.headers.set("X-CSRFToken", getCookie("csrftoken"));
+  }
   next(function(response) {
-    // 请求失败
+    /* 请求失败 */
     if (response.status !== 200) {
       Vue.prototype.$confirm("无法连接,请稍后再试!", "提示", {
         showCancelButton: false,
         showConfirmButton: false,
         closeOnClickModal: false,
         type: "warning"
-      }).then(() => {
-      }).catch(() => {
+      }).then(() => {}).catch(() => {
         store.commit("AUTH_LOGIN", false);
         clearCookie("REMEMBER");
+        router.replace({path: "login"});
       });
-    } else {   // 请求成功
-      if (!response.body.success) {     // success:false
+    } else {   /* 请求成功 */
+      if (!response.body.success) {     // success:false(返回有错误信息)
         if (response.body.error_info === "logout") {    // 自动登出
           store.commit("AUTH_LOGIN", false);
           clearCookie("REMEMBER");
+          router.replace({path: "login"});
         } else if (response.body.error_info !== "") {
           Vue.prototype.$confirm(response.body.error_info, "提示", {
             showCancelButton: false,

@@ -55,7 +55,7 @@
       }
       this.tabChange();
     },
-    mounted() {
+    created() {
       var self = this;
       self.tabChange();
     },

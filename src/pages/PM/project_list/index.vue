@@ -124,7 +124,7 @@
         currentPage: 1            // 当前页
       };
     },
-    mounted: function() {
+    created: function() {
       var self = this;
       self.getTables(function(datas) {
         self.fillTable(datas);

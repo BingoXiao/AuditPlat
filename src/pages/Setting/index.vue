@@ -346,7 +346,8 @@
             { required: true, validator: passwordV, trigger: "blur" }
           ],
           perms: [
-            { type: "array", required: true, max: 5, message: "请至少选择一个权限", trigger: "change" }
+            { type: "array", required: true, message: "至少选择一个权限", trigger: "change" },
+            { type: "array", max: 5, message: "最多选择5个权限", trigger: "change" }
           ]
         },
         editUsersForm: {    // 修改用户资料
@@ -354,7 +355,8 @@
         },
         editUsersRules: {      // 修改用户验证
           perms: [
-            { type: "array", required: true, max: 5, message: "请至少选择一个权限", trigger: "change" }
+            { type: "array", required: true, message: "至少选择一个权限", trigger: "change" },
+            { type: "array", max: 5, message: "最多选择5个权限", trigger: "change" }
           ]
         },
         editPasswordForm: {    // 修改用户密码
@@ -370,7 +372,7 @@
         }
       };
     },
-    mounted: function() {
+    created: function() {
       var self = this;
       self.getTables(function(datas) {
         self.fillTable(datas);

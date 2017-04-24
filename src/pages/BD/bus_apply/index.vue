@@ -154,7 +154,7 @@
         }
       };
     },
-    mounted() {
+    created() {
       var self = this;
       self.BDlist();
       self.getTables(function(datas) {

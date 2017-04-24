@@ -170,7 +170,7 @@
         self.rulesReset();
       });
     },
-    mounted: function() {
+    created: function() {
       var self = this;
       self.getTables(function(datas) {  // APPLY,NEW,BRANCH
         self.totalDatas = datas;

@@ -110,6 +110,10 @@ Vue.http.interceptors.push(function(request, next) {
           }).then(() => {
           }).catch(() => {
           });
+        } else {
+          store.commit("AUTH_LOGIN", false);
+          clearCookie("REMEMBER");
+          router.replace({path: "login"});
         }
       } else {
         return response;

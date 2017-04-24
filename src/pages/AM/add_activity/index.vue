@@ -223,7 +223,7 @@
         }
       };
     },
-    mounted() {
+    created() {
       var self = this;
       var id = getUrlParameters(window.location.hash, "id");
       if (id) {  // 修改（获取已添加优惠券）
@@ -351,28 +351,39 @@
         datas.enddate = dateTo.getFullYear() + "-" + (dateTo.getMonth() + 1) + "-" + dateTo.getDate();
         self.$refs.activityinfo.validate((valid) => {
           if (valid) {
-            let id = getUrlParameters(window.location.hash, "id");
-            let url = "";
-            if (!id) {    // 新增活动
-              url = EVENTS_ONLINE_URL;
-            } else {      // 修改活动
-              url = EVENTS_EDITEVENT_URL(id);
-            }
-            if (flag === "UP") {               // 立即上线
-              self.tips = "活动上线成功！";
-            } else if (flag === "SAVE") {      // 保存
-              self.tips = "活动保存成功！";
-            }
-            self.$http.post(url, JSON.stringify(datas), {emulateJSON: true})
-              .then(function(response) {
-                if (response.body.success) {
-                  self.tipsVisible = true;
-                  modalHide(function() {
-                    self.tipsVisible = false;
-                    self.$router.push({path: "/activity_list/all"});
-                  });
-                }
+            if (self.number < 1) {   // 未选择优惠券
+              self.tipsVisible = true;
+              self.isRight = false;
+              self.tips = "请选择优惠券！";
+              modalHide(function() {
+                self.tipsVisible = false;
               });
+            } else {
+              let id = getUrlParameters(window.location.hash, "id");
+              let url = "";
+              if (!id) {    // 新增活动
+                url = EVENTS_ONLINE_URL;
+              } else {      // 修改活动
+                url = EVENTS_EDITEVENT_URL(id);
+              }
+              if (flag === "UP") {               // 立即上线
+                self.isRight = true;
+                self.tips = "活动上线成功！";
+              } else if (flag === "SAVE") {      // 保存
+                self.isRight = true;
+                self.tips = "活动保存成功！";
+              }
+              self.$http.post(url, JSON.stringify(datas), {emulateJSON: true})
+                .then(function(response) {
+                  if (response.body.success) {
+                    self.tipsVisible = true;
+                    modalHide(function() {
+                      self.tipsVisible = false;
+                      self.$router.push({path: "/activity_list/all"});
+                    });
+                  }
+                });
+            }
           } else {
             return false;
           }

@@ -234,6 +234,7 @@ function isLicNumber(value, title) {
   return obj;
 }
 /* 营业执照,餐饮许可证地址 */
+/* eslint-disable no-useless-escape */
 function isLicAdd(value, title) {
   var obj = {};
   if (value === "") {
@@ -242,7 +243,7 @@ function isLicAdd(value, title) {
     if (/^\s+$/.test(value)) {
       obj = {flag: false, error: title + "地址" + "格式不正确"};
     } else {
-      if (!(/^[a-zA-Z\u4e00-\u9fa5\d]{1,}$/.test(value))) {
+      if (!(/^[a-zA-Z\u4e00-\u9fa5\d\(\)]{1,}$/.test(value))) {
         obj = {flag: false, error: title + "地址" + "格式不正确"};
       } else {
         obj = {flag: true, error: ""};
@@ -342,7 +343,10 @@ function isInteger(value, title) {
 
 
 /* 模态框
-* fun: 执行函数
+* fun: 执行函数；
+* isRight: 正确还是错误标志（true为正确标志，false为错误标志）；
+* tips: 提示信息；
+* visible: 显示与否（true为显示，false为隐藏）
 */
 function modalHide(fun) {
   setTimeout(fun, 2000);

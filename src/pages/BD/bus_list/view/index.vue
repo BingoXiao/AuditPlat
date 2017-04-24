@@ -90,6 +90,7 @@
         var self = this;
         let id = getUrlParameters(window.location.hash, "id");
         let acc = getUrlParameters(window.location.hash, "account");
+        self.get_acc_info(acc);
         self.$http.get(BUSLIST_BRANCH_URL + "?bus_id=" + id).then(function(response) {
           if (response.body.success) {
             self.branches = response.body.content;
@@ -98,20 +99,24 @@
           }
         });
       },
-      // 获取商家列表信息
-      get_buslist_info: function(busId, acc) {
+      // 获取和主账号相关的信息
+      get_acc_info: function(acc) {
         var self = this;
-        self.get_basic_info(busId);
-        self.get_bl_info(busId);
-        self.get_sl_info(busId);
         self.get_bank_info(acc);
         self.get_id_info(acc);
         self.get_contract_info(acc);
       },
+      // 获取商家列表信息
+      get_buslist_info: function(busId) {
+        var self = this;
+        self.get_basic_info(busId);
+        self.get_bl_info(busId);
+        self.get_sl_info(busId);
+      },
       // 改变分店
       changeBranch: function(value) {
         var self = this;
-        self.get_buslist_info(value, self.busAccount);
+        self.get_buslist_info(value);
       },
       // 获取基本信息
       get_basic_info: function(busId) {

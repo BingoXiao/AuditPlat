@@ -71,7 +71,7 @@
         currentPage: 1            // 当前页
       };
     },
-    mounted() {
+    created() {
       var self = this;
       self.getTables(function(datas) {
         self.fillTable(datas);

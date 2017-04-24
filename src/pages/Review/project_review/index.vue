@@ -174,7 +174,7 @@
         self.fillTable(datas);
       });
     },
-    mounted: function() {
+    created: function() {
       var self = this;
       self.getTables(function(datas) {
         self.fillTable(datas);

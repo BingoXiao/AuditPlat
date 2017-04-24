@@ -119,7 +119,7 @@
       }
       this.getTables();
     },
-    mounted: function() {
+    created: function() {
       this.getTables();  // APPLY,NEW,BRANCH
     },
     methods: {

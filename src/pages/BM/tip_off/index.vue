@@ -108,7 +108,7 @@
         tipsVisible: false
       };
     },
-    mounted() {
+    created() {
       var self = this;
       self.getTables(function(datas) {
         self.fillTable(datas);

@@ -133,7 +133,7 @@
         self.fillTable(datas);
       });
     },
-    mounted() {
+    created() {
       var self = this;
       self.getTables(function(datas) {
         self.fillTable(datas);

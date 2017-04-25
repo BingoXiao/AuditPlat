@@ -2,19 +2,19 @@
   <el-row>
     <!--筛选栏-->
     <el-col :span="24" class="toolbar">
-      <el-form :inline="true" label-width="70px">
-        <el-form-item label="申请号：">
-          <input-search ref="number" name="number"
+      <el-form :inline="true" label-width="90px">
+        <el-form-item label="商家账号：">
+          <input-search ref="accout" name="account"
                         v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
 
-        <el-form-item class="select" label="状态：">
+        <el-form-item class="select" label="状态：" label-width="70px">
           <select-search ref="status" name="status"
                          :options="search.state"
                          v-on:getRules="getFilterRules"></select-search>
         </el-form-item>
 
-        <el-form-item label="商家分类：" label-width="100px">
+        <el-form-item label="商家分类：">
           <classify-search ref="class" name="class"
                            v-on:getRules="getFilterRules"></classify-search>
         </el-form-item>
@@ -24,7 +24,7 @@
                      @click="filterTable">查询</el-button>
         </el-form-item>
 
-        <el-form-item style="float: right">
+        <el-form-item style="float: right" label="" label-width="10px">
           <el-button type="primary" @click="download">下载列表</el-button>
         </el-form-item>
       </el-form>
@@ -88,7 +88,7 @@
           }
         ],
         search: {                 // 搜索栏
-          number: "",   // 申请号
+          account: "",   // 申请号
           status: "",     // 状态
           class: "",      // 分类
           state: [                // 状态列表
@@ -154,7 +154,7 @@
       /* 过滤 */
       filterTable: function() {
         var self = this;
-        var rules = "SELECT * FROM ? WHERE number LIKE '%" + self.search.number + "%'";
+        var rules = "SELECT * FROM ? WHERE account LIKE '%" + self.search.account + "%'";
         if (self.search.status !== "") {    // 状态
           rules += " AND status = ?";
         }
@@ -171,7 +171,7 @@
       rulesReset: function() {
         var self = this;
         self.$refs.class.reset();
-        self.$refs.number.reset();
+        self.$refs.account.reset();
         self.$refs.status.reset();
         self.currentPage = 1;
       },

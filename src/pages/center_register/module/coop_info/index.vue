@@ -118,6 +118,7 @@
         quaForm: {
           name: "",        // 姓名
           phonenum: "",    // 手机
+          class: [],       // 分类
           bl_image_url: "",    // 营业执照照片
           sl_image_url: "",    // 许可证照片
           group_buying_info: `商家介绍：例如营业面积、本店特色等
@@ -154,7 +155,8 @@
       },
       // 获取子模块数据（图片）
       addFormData: function(value, name) {
-        this.quaForm[name] = value;
+        var self = this;
+        self.quaForm[name] = value;
       },
       // 资质信息验证
       coopValidate: function() {
@@ -174,9 +176,12 @@
                 "sl_image_url": self.quaForm.sl_image_url
               },
               businfo: {
-                group_buying_info: self.quaForm.group_buying_info,        // 团购
-                cost_per_person: self.quaForm.cost_per_person,   // 人均
-                sale_per_month: self.quaForm.sale_per_month      // 月销售额
+                "lclass_id": self.quaForm.class[0],             // 一级分类
+                "mclass_id": self.quaForm.class[1],             // 二级分类
+                "sclass_id": self.quaForm.class[2],             // 三级分类
+                "group_buying_info": self.quaForm.group_buying_info,   // 团购
+                "cost_per_person": self.quaForm.cost_per_person,   // 人均
+                "sale_per_month": self.quaForm.sale_per_month      // 月销售额
               }
             };
             self.$store.commit("V_FLAG", true);

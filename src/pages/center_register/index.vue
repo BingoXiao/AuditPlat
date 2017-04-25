@@ -75,6 +75,9 @@
           self.$set(self.formDatas.businfo, "group_buying_info", datas.businfo.group_buying_info);   // 团购
           self.$set(self.formDatas.businfo, "cost_per_person", datas.businfo.cost_per_person);       // 人均
           self.$set(self.formDatas.businfo, "sale_per_month", datas.businfo.sale_per_month);         // 月销售额
+          self.$set(self.formDatas.businfo, "lclass_id", datas.businfo.lclass_id);   // 团购
+          self.$set(self.formDatas.businfo, "mclass_id", datas.businfo.mclass_id);       // 人均
+          self.$set(self.formDatas.businfo, "sclass_id", datas.businfo.sclass_id);         // 月销售额
         }
       },
       // 下一步

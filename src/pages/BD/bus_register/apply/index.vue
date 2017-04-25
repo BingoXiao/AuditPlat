@@ -37,7 +37,6 @@
             <small class="map_tips">
               为了更快的通过审核，请在地图上精确的标记您的位置
             </small>
-
             <div class="map_wrapper">
               <div id="allmap" class="allmap"></div>
               <div class="mapCover"></div>
@@ -65,7 +64,7 @@
             <span class="info">{{cost_per_person}} 元</span>
           </el-form-item>
 
-          <el-form-item label="月销售额：" required>
+          <el-form-item label="月销售额：" v-if="sale_per_month">
             <span class="info">{{sale_per_month}} 元/月</span>
           </el-form-item>
         </el-form>

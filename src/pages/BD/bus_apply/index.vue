@@ -258,29 +258,37 @@
         var self = this;
         var formData = new FormData();
         if (self.dialog.BD !== "") {
-          formData.append("applynum", self.table.applynum);
-          formData.append("bd_id", self.dialog.BD);
+          if (typeof self.dialog.BD === "number") {
+            formData.append("applynum", self.table.applynum);
+            formData.append("bd_id", self.dialog.BD);
+            self.$http.post(BDAPPLY_ASSIGN_URL, formData)
+              .then(function(response) {
+                if (response.body.success) {
+                  self.dialog.BDvisible = false;
+                  self.dialog.tipsVisible = true;
+                  modalHide(function() {
+                    self.dialog.tipsVisible = false;
+                    for (let i = 0; i < self.tableDatas.length; i++) {
+                      if (self.tableDatas[i].applynum === self.table.applynum) {
+                        self.tableDatas[i].bd = self.$refs.bd.selectedLabel;
+                      }
+                    }
+                  });
+                }
+              });
+          } else {
+            self.dialog.BDvisible = false;
+            self.dialog.tipsVisible = true;
+            modalHide(function() {
+              self.dialog.tipsVisible = false;
+            });
+          }
         } else {
           return false;
         }
 //        for (var pair of formData.entries()) {
 //          console.log(pair[0] + ", " + pair[1])
 //        }
-        self.$http.post(BDAPPLY_ASSIGN_URL, formData)
-          .then(function(response) {
-            if (response.body.success) {
-              self.dialog.BDvisible = false;
-              self.dialog.tipsVisible = true;
-              modalHide(function() {
-                self.dialog.tipsVisible = false;
-                for (let i = 0; i < self.tableDatas.length; i++) {
-                  if (self.tableDatas[i].applynum === self.table.applynum) {
-                    self.tableDatas[i].bd = self.$refs.bd.selectedLabel;
-                  }
-                }
-              });
-            }
-          });
       }
     },
     components: {

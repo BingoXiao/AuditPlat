@@ -49,7 +49,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_name">
-            <el-input v-model="quaForm.bl_name" :maxlength="30"></el-input>
+            <el-input v-model="quaForm.bl_name" :maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -119,7 +119,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_name">
-            <el-input v-model="quaForm.sl_name" :maxlength="30"></el-input>
+            <el-input v-model="quaForm.sl_name" :maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-col>

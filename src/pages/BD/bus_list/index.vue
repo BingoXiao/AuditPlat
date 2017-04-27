@@ -90,7 +90,7 @@
         search: {                 // 搜索栏
           account: "",   // 申请号
           status: "",     // 状态
-          class: "",      // 分类
+          class: [],      // 分类
           state: [                // 状态列表
             {
               value: "筹备中",
@@ -158,8 +158,12 @@
         if (self.search.status !== "") {    // 状态
           rules += " AND status = ?";
         }
-        if (self.search.class !== "") {    // 分类
-          rules += " AND `class` LIKE '%" + self.search.class + "%'";
+        if (self.search.class.length > 0) {    // 分类
+          if (self.search.class.length < 2) {
+            rules += " AND `class` LIKE '%" + self.search.class[0] + "%'";
+          } else {
+            rules += " AND `class` LIKE '%" + self.search.class[0] + ">" + self.search.class[1] + "%'";
+          }
         }
         self.getTables(function(datas) {
           var res = alasql(rules, [datas, self.search.status]);

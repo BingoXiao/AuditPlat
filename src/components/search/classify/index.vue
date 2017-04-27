@@ -115,11 +115,15 @@
             }
           });
         }
-        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel);
+        self.$emit("getRules", self.name, [self.$refs.mdlist.selectedLabel]);
       },
       get_sm_data: function(value) {
         var self = this;
-        self.$emit("getRules", self.name, self.$refs.mdlist.selectedLabel + self.$refs.smlist.selectedLabel);
+        if (value) {
+          self.$emit("getRules", self.name, [self.$refs.mdlist.selectedLabel, self.$refs.smlist.selectedLabel]);
+        } else {
+          self.$emit("getRules", self.name, [self.$refs.mdlist.selectedLabel]);
+        }
       },
       reset: function() {
         var self = this;

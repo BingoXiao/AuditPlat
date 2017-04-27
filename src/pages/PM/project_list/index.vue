@@ -95,7 +95,7 @@
           placeholder: "门店名称/项目名称",
           dateRange: [],   // 日期
           status: "",      // 状态
-          class: "",       // 分类
+          class: [],       // 分类
           typein: "",      // 项目类型
           state: [                // 状态列表
             {
@@ -143,7 +143,7 @@
               item.bus_names = item.bus_names.split(" ");  // 门店名称
               item.class = item.class.split(" ");          // 项目分类
               for (let i = 0; i < item.class.length - 1; i++) {
-                item.class[i] = item.class[i] + " > ";
+                item.class[i] = item.class[i] + ">";
               }
             }
             func(datas);
@@ -178,8 +178,12 @@
         if (self.search.typein !== "") {    // 项目类型
           rules += " AND item_type LIKE '%" + self.search.typein + "%'";
         }
-        if (self.search.class !== "") {    // 分类
-          rules += " AND `class` LIKE '%" + self.search.class + "%'";
+        if (self.search.class.length > 0) {    // 分类
+          if (self.search.class.length < 2) {
+            rules += " AND `class` LIKE '%" + self.search.class[0] + "%'";
+          } else {
+            rules += " AND `class` LIKE '%" + self.search.class[1] + "%'";
+          }
         }
         if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
           rules += "AND submit_time >= '" + self.search.dateRange[0] + " 00:00:00'" +

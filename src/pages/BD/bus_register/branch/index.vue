@@ -62,7 +62,7 @@
   import basicInfo from "../module/basic_info/index";
   import qualificationInfo from "../module/qualification_info/index";
   import showCheckInfo from "../module/show_check_info/index";
-  import submitSuccess from "../module/submit_success/index";
+  import submitSuccess from "../module/submit_success_branch/index";
   import dialogTips from "../../../../components/dialogTips/index.vue";
   import {BDREGISTER_BRAEDITFILLING_URL, BDREGISTER_BRAREGISTER_URL, BUSLIST_BASIC_URL,
     BUSLIST_ID_URL, BUSLIST_SETTLER_URL} from "../../../../common/interface";

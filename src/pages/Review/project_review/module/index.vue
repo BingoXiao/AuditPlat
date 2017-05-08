@@ -63,8 +63,10 @@
       </el-row>
 
       <el-form-item label="项目图片：">
-      <span v-for="item in data.photos" class="info" style="margin-right:20px">
-        <img :src="item" alt="" style="width:140px;height: 140px;">
+      <span v-for="item in data.photos" class="info" style="margin-right:20px;">
+        <img :src="item" alt=""
+             style="width:187px; height: 140px;
+             display:inline-block;margin-top:11px;">
       </span>
       </el-form-item>
 

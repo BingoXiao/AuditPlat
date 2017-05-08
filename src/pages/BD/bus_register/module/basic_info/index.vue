@@ -23,6 +23,15 @@
                             v-on:classValidate="module_res"></bus-classification>
       </el-form-item>
 
+      <!--商家属性-->
+      <el-form-item label="商家属性:" required>
+        <el-radio-group v-model="basicForm.type"
+                        :disabled="$route.path === '/bus_register/branch/register'">
+          <el-radio label="A">A类</el-radio>
+          <el-radio label="B">B类</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
       <h3 class="formTitle">门店信息</h3>
       <el-form-item label="门店名称：" prop="busname" required>
         <el-col :span="14">
@@ -53,7 +62,8 @@
     props: {
       filling: Object,     // 信息填充
       name: String,
-      phonenum: String
+      phonenum: String,
+      type: String
     },
     data() {
       // 商家姓名
@@ -81,6 +91,7 @@
           address: false   // 地址
         },
         basicForm: {
+          type: "A",       // 类型
           name: "",        // 姓名
           phonenum: "",    // 手机
           busname: "",     // 门店名称
@@ -105,8 +116,9 @@
       filling: function() {
         var self = this;
         var businfo = self.filling.businfo;
+        self.basicForm.type = businfo.type;    // 商家分类
         self.basicForm.busname = businfo.busname;     // 门店名称
-        self.basicForm.tel = businfo.tel;             // 门店名称
+        self.basicForm.tel = businfo.tel;             // 门店座机
         var classArr = businfo.lclass_id + "," + businfo.mclass_id + "," + businfo.sclass_id;
         self.basicForm.class = classArr.split(",");    // 分类
         var addArr = businfo.province_id + "," + businfo.city_id + "," +
@@ -122,6 +134,10 @@
       phonenum: function() {
         var self = this;
         self.basicForm.phonenum = self.phonenum;  // 商家手机
+      },
+      type: function() {
+        var self = this;
+        self.basicForm.type = self.type;          // 商家属性
       }
     },
     methods: {
@@ -147,7 +163,8 @@
                 "phonenum": self.basicForm.phonenum     // 商家手机
               },
               "businfo": {
-                "tel": self.basicForm.tel,                          // 店铺座机
+                "type": self.basicForm.type,            // 商家分类
+                "tel": self.basicForm.tel,              // 店铺座机
                 "busname": self.basicForm.busname,      // 店铺名称
                 "province_id": self.basicForm.address.selectArr[0],  // 所在省
                 "city_id": self.basicForm.address.selectArr[1],      // 所在城市

@@ -69,7 +69,7 @@ function setCookie(cookieName, value, days) {
   if (days) {
     var date = new Date();
     date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    document.cookie = cookieName + "=" + value + ";expires=" + date.toUTCString();
+    document.cookie = cookieName + "=" + encodeURIComponent(value) + ";expires=" + date.toUTCString();
   } else {
     document.cookie = cookieName + "=" + value;
   }
@@ -83,7 +83,7 @@ function getCookie(cookieName) {
     let arr = cook[i].split("=");
     if (cookieName === arr[0].replace(/(^\s*)|(\s*$)/g, "")) {
       if (arr.length > 1) {
-        res = arr[1];
+        res = decodeURIComponent(arr[1]);
       }
     }
   }

@@ -15,8 +15,11 @@
 
       <!--基本信息-->
       <el-col :span="20" :offset="2" v-show="currentView === 'basicInfo'">
-        <basic-info ref="basicChild" :filling="filling"
-                    :name="PAN.name" :phonenum="PAN.phonenum"></basic-info>
+        <basic-info ref="basicChild"
+                    :filling="filling"
+                    :name="PAN.name"
+                    :phonenum="PAN.phonenum"
+                    :type="PAN.type"></basic-info>
         <el-col :span="24" class="bottomButton" style="padding-left: 20px;">
           <el-button size="large" type="primary" @click="previous_step('busSearch')">上一步</el-button>
           <el-button size="large" type="primary" @click="next_step('qualificationInfo')">下一步</el-button>
@@ -76,7 +79,8 @@
         ID: {},               // 身份信息填充
         PAN: {                // 主账号
           name: "",           // 商家姓名
-          phonenum: ""        // 商家手机
+          phonenum: "",       // 商家手机
+          type: ""            // 商家属性（分店）
         },
         flag: false,          // 验证结果反馈
         isRight: true,       // 保存提示提示框
@@ -118,6 +122,7 @@
                 self.filling = response.body.content;
                 self.PAN.name = response.body.content.userinfo.name;
                 self.PAN.phonenum = response.body.content.userinfo.phonenum;
+                self.PAN.type = response.body.content.businfo.type;
               }
             });
         }
@@ -128,8 +133,10 @@
         self.$http.get(BUSLIST_BASIC_URL + "?bus_id=" + busID).then(function(response) {
           if (response.body.success) {
             let userInfo = response.body.content.userinfo;
+            let busInfo = response.body.content.businfo;
             self.PAN.name = userInfo.name;
             self.PAN.phonenum = userInfo.phonenum;
+            self.PAN.type = busInfo.type;
           }
         });
       },

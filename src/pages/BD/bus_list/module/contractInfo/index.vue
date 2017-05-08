@@ -24,7 +24,7 @@
       <el-form-item label="合同图片：" required>
         <el-col :span="24">
           <span style="font-size:10px;" :style="{color: error}">
-            （图片最多上传三张，文件大小不超过2M，文件格式为bmp\png\jpeg\jpg\jpg或gif）
+            （图片最多上传三张，文件大小不超过2M，文件格式为jpg\jpeg\png）
           </span>
         </el-col>
         <el-col :span="24">

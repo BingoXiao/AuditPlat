@@ -19,7 +19,7 @@
                          v-on:getRules="getFilterRules"></select-search>
         </el-form-item>
 
-        <el-form-item class="select" label="状态：">
+        <el-form-item class="select" label="状态：" label-width="60px">
           <select-search name="status"
                          :options="search.state"
                          v-on:getRules="getFilterRules"></select-search>

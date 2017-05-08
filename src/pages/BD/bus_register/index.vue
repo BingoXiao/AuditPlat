@@ -14,8 +14,8 @@
                        v-on:getRules="getFilterRules"></date-picker>
         </el-form-item>
 
-        <el-form-item label="申请号：" label-width="80px">
-          <input-search ref="applynum" name="applynum"
+        <el-form-item label="商家名稱：" label-width="100px">
+          <input-search ref="busname" name="busname"
                         v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
 
@@ -120,7 +120,7 @@
         ],
         search: {         // 搜索栏
           dateRange: [],  // 日期
-          applynum: "",   // 申请号
+          busname: "",    // 商家名称
           status: "",     // 状态
           bd: "",         // BD
           state: [               // 状态列表
@@ -220,7 +220,7 @@
       /* 过滤 */
       filterTable: function() {
         var self = this;
-        var rules = "SELECT * FROM ? WHERE applynum LIKE '%" + self.search.applynum + "%'";
+        var rules = "SELECT * FROM ? WHERE busname LIKE '%" + self.search.busname + "%'";
         if (self.search.status !== "") {    // 状态
           rules += " AND status = ?";
         }
@@ -241,7 +241,7 @@
       rulesReset: function() {
         var self = this;
         self.$refs.dateRange.reset();
-        self.$refs.applynum.reset();
+        self.$refs.busname.reset();
         self.$refs.bd.reset();
         self.$refs.status.reset();
         self.currentPage = 1;

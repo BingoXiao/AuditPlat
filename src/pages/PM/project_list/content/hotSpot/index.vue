@@ -84,6 +84,7 @@
               self.tipsVisible = true;
               modalHide(function() {
                 self.tipsVisible = false;
+                self.$router.push({path: "/project_list"});
               });
             }
           });

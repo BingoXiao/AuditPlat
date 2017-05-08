@@ -14,8 +14,18 @@
         </el-form-item>
       </el-col>
     </el-row>
+
     <el-form-item label="商家分类：" required>
       <span class="info">{{lclass}} > {{md_class}} {{sm_class}}</span>
+    </el-form-item>
+
+    <el-form-item label="商家属性：" required>
+      <el-col :span="3">
+        <radio-check :selected="type==='A'"><span>A类</span></radio-check>
+      </el-col>
+      <el-col :span="3">
+        <radio-check :selected="type==='B'"><span>B类</span></radio-check>
+      </el-col>
     </el-form-item>
 
     <h3 class="formTitle">门店信息</h3>
@@ -62,6 +72,7 @@
 <script>
   import BMap from "BMap";
   import showImage from "../../../../../components/form/previewImg/index.vue";
+  import radioCheck from "../../../../../components/radio/index.vue";
   import {PROVINCE_URL, CITY_URL, DISTRICT_URL, CITYNEAR_URL, CATEGORY_URL,
     LCLASS_URL, SCLASS_URL} from "../../../../../common/interface";
   import {getValue} from "../../../../../common/common";
@@ -74,6 +85,7 @@
     data() {
       return {
         tipsVisible: false,
+        type: "",          // 分类
         name: "",          // 姓名
         phonenum: "",      // 手机
         busname: "",       // 门店名称
@@ -121,6 +133,7 @@
         var businfo = self.filling.businfo;
         self.name = userinfo.name;
         self.phonenum = userinfo.phonenum;
+        self.type = businfo.type;
         self.busname = businfo.busname;      // 门店名称
         self.tel = businfo.tel;              // 门店座机
         if (businfo.tel) {
@@ -232,6 +245,7 @@
       }
     },
     components: {
+      radioCheck,
       showImage
     }
   };

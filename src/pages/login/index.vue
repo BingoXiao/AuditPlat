@@ -108,7 +108,7 @@
 
               /* 自动登录 */
               if (self.checked) {
-                setCookie("REMEMBER", "1", 30);
+                setCookie("REMEMBER", "1", 10);
               }
 
               /* 根据权限进入不同得页面 */

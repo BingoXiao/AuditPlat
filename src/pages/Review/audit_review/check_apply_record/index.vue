@@ -6,12 +6,12 @@
       <el-row>
         <el-form :inline="true" label-width="60px">
           <el-form-item label="日期：">
-            <date-picker ref="dateRange" name="dateRange"
+            <date-picker name="dateRange"
                          v-on:getRules="getFilterRules"></date-picker>
           </el-form-item>
 
           <el-form-item label="商家账号：" label-width="100px">
-            <input-search ref="account" name="account"
+            <input-search name="account"
                           v-on:getRules="getFilterRules"></input-search>
           </el-form-item>
 
@@ -74,7 +74,7 @@
         loading: false,
         selectArr: [],            // 选中数组
         search: {         // 搜索栏
-          name: "",       // 账号
+          account: "",       // 账号
           dateRange: []   // 日期
         },
         totalDatas: [],           // 表格总数据

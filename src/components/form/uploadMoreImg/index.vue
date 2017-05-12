@@ -26,6 +26,7 @@
         :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
         name="image"
         accept="image/png,image/jpeg,image/jpg"
+        :headers="headers"
         :action="upload_url"
         :show-file-list="false"
         :on-success="handleSuccess"
@@ -48,6 +49,7 @@
 
 <script>
   import {TEMP_PHOTOS_URL} from "../../../common/interface";
+  import {getCookie} from "../../../common/common";
 
   export default{
     props: {
@@ -59,6 +61,9 @@
       return {
         http: "",
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
+        headers: {                     // 请求头
+          "X-CSRFToken": getCookie("csrftoken")
+        },
         imageObject: [],               // 图片组合
         image: "",                     // 当前图片
         error: "",                     // 上传错误标志

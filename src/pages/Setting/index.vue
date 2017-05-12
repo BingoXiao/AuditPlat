@@ -105,7 +105,7 @@
       <div class="modal">
         <br/><br/>
         <el-form id="addUsersform" :model="addUsersForm" ref="addUsersForm"
-                 :rules="addUsersRules" label-width="67px">
+                 :rules="addUsersRules" label-width="80px">
           <el-form-item label="姓名：" prop="name">
             <el-input v-model="addUsersForm.name" name="name"></el-input>
           </el-form-item>

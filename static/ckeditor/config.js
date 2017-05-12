@@ -24,6 +24,8 @@ CKEDITOR.editorConfig = function (config) {
             ['Undo', 'Redo', '-', 'Copy']
         ];
 
+    //图片预览区域显示内容
+    config.image_previewText=' ';
 
     //项目列表 脉点
     config.toolbar = 'Full';
@@ -64,4 +66,17 @@ CKEDITOR.editorConfig = function (config) {
 
     //编辑器中回车产生的标签
     config.enterMode = CKEDITOR.ENTER_BR;
+
+    // Enable a limited set of text formats:
+    config.format_tags = 'div';
+
+    config.format_div = {
+      element: "div",
+      styles: {
+        padding: "0 20px"
+      },
+      attributes: {
+        class: "normalDiv"
+      }
+    };
 };

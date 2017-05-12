@@ -71,7 +71,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_address">
-            <el-input v-model="quaForm.bl_address" :maxlength="100"></el-input>
+            <el-input v-model="quaForm.bl_address" :maxlength="200"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -141,7 +141,7 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_address">
-            <el-input v-model="quaForm.sl_address" :maxlength="100"></el-input>
+            <el-input v-model="quaForm.sl_address" :maxlength="200"></el-input>
           </el-form-item>
         </el-col>
       </el-col>

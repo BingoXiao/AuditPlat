@@ -7,6 +7,7 @@
         :style="{width: imgWidth + 'px', height: imgHeight + 'px'}"
         name="image"
         accept="image/png,image/jpeg,image/jpg"
+        :headers="headers"
         :action="upload_url"
         :show-file-list="false"
         :on-success="handleSuccess"
@@ -40,6 +41,7 @@
 
 <script>
   import {TEMP_PHOTOS_URL} from "../../../common/interface";
+  import {getCookie} from "../../../common/common";
 
   export default{
     props: {
@@ -53,6 +55,9 @@
     },
     data() {
       return {
+        headers: {        // 请求头
+          "X-CSRFToken": getCookie("csrftoken")
+        },
         upload_url: TEMP_PHOTOS_URL,   // 上传地址
         imageUrl: "",                  // 图片的URL
         tipError: "请上传小于2M的图片（仅支持JPG、JPEG、PNG格式）",

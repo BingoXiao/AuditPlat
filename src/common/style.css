@@ -199,11 +199,23 @@ button {
 .jinmai .el-dialog{
   width:310px;
   height:550px;
+  margin: 0;
+  padding:0;
+  text-align: justify;
   background-color:white;
   word-wrap:break-word;
   overflow: auto;
 }
 .jinmai .el-dialog__header{
-  padding-top: 40px;
-  padding-right: 20px;
+  font-size: 13px;
+  padding-top: 30px;
+  padding-right: 10px;
+  background-color: #3c3c3c;
+}
+.jinmai .el-dialog__title{
+  display: none;
+}
+.jinmai .el-dialog__body{
+  margin: 0;
+  padding:0;
 }

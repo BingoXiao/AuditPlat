@@ -76,7 +76,7 @@ function setCookie(cookieName, value, days) {
 }
 /* 读取cookie */
 function getCookie(cookieName) {
-  var res = null;
+  var res = "";
   var where = document.cookie;
   var cook = where.split(";");
   for (var i = 0; i < cook.length; i++) {

@@ -3,8 +3,8 @@ const HOST_URL = "https://shopmanagedev.jinmailife.com";
 const CENTER_URL = "https://businessdev.jinmailife.com";
 */
 
-const HOST_URL = "https://shopmanage-test.jinmailife.com";
-const CENTER_URL = "https://business-test.jinmailife.com";
+const HOST_URL = "https://shopmanage.jinmailife.com";
+const CENTER_URL = "https://business.jinmailife.com";
 
 
 /* 商家中心注册 */

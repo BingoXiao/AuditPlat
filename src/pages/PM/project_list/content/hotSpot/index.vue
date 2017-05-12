@@ -24,10 +24,10 @@
 <script>
   import CKEDITOR from "CKEDITOR";
   import dialogTips from "../../../../../components/dialogTips/index.vue";
-  import {getUrlParameters, modalHide} from "../../../../../common/common";
+  import {getCookie, getUrlParameters, modalHide} from "../../../../../common/common";
   import {PROLIST_JM_URL, PROLIST_JMDATA_URL} from "../../../../../common/interface";
 
-  let editor;
+  var editor = null;
   export default{
     data() {
       return {
@@ -40,16 +40,23 @@
     },
     mounted() {
       var self = this;
+      var id = getUrlParameters(window.location.hash, "id");
       CKEDITOR.replace("editor2", {height: "300px", width: "100%", toolbar: "Full"});
       editor = CKEDITOR.instances.editor2;
-      var id = getUrlParameters(window.location.hash, "id");
-      self.$http.get(PROLIST_JMDATA_URL + "?item_id=" + id)
-        .then(function(response) {
-          if (response.body.success) {
-            editor.setData(response.body.content);
-            self.data = response.body.content;
-          }
-        });
+      self.showSpot(id); // 展示脉点内容
+      // 对话框显示后（跨网站攻击：表单插入csrfToken）
+      editor.on("dialogShow", function(ev) {
+        var dialogName = ev.data._.name;
+        if (dialogName === "image") {
+          var iframea = document.getElementsByClassName("cke_dialog_ui_input_file")[1].contentWindow;
+          var form = iframea.document.getElementsByTagName("form")[0];
+          var csrf = document.createElement("input");
+          csrf.setAttribute("type", "hidden");
+          csrf.setAttribute("name", "csrfmiddlewaretoken");
+          csrf.value = getCookie("csrftoken");
+          form.insertBefore(csrf, form.childNodes[0]);
+        }
+      });
     },
     methods: {
       // 预览图
@@ -57,6 +64,20 @@
         var self = this;
         self.spotVisible = true;
         self.getData();
+      },
+      // 设置并展示脉点内容
+      showSpot: function(id) {
+        var self = this;
+        self.$http.get(PROLIST_JMDATA_URL + "?item_id=" + id)
+          .then(function(response) {
+            if (response.body.success) {
+              self.data = response.body.content;
+              // 实例构建完成后
+              editor.on("instanceReady", function(ev) {
+                editor.setData(response.body.content);
+              });
+            }
+          });
       },
       // 保存脉点
       saveSpot: function(type) {
@@ -94,7 +115,7 @@
       getData: function() {
         var self = this;
         self.data = editor.getData();
-        self.$emit("getData", editor.getData());
+//        self.$emit("getData", editor.getData());
       }
     },
     components: {

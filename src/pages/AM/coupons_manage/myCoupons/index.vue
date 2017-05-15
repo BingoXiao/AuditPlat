@@ -25,15 +25,9 @@
       <el-table ref="table" :data="tableDatas" v-loading.body="loading"
                 border row-key="id" style="width: 100%;"
                 highlight-current-row>
-        <el-table-column prop="create_datetime" label="创建时间" align="center" min-width="130px"></el-table-column>
-        <el-table-column prop="type" label="类型" align="center" min-width="100px"></el-table-column>
-        <el-table-column prop="name" label="名称" align="center" min-width="120px"></el-table-column>
-        <el-table-column label="优惠" align="center" min-width="150px">
-          <template scope="scope">
-            <span>满 {{scope.row.amount_full}} 元 减 {{scope.row.amount_cut}} 元</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="门店" align="center" min-width="110px">
+        <el-table-column prop="name" label="优惠券名称" align="center" min-width="120px"></el-table-column>
+        <el-table-column prop="type" label="类别" align="center" min-width="100px"></el-table-column>
+        <el-table-column label="适用范围" align="center" min-width="110px">
           <template scope="scope">
             <span v-if="scope.row.buses[0]==='全平台通用'">{{scope.row.buses[0]}}</span>
             <span v-else>
@@ -45,6 +39,12 @@
             </span>
           </template>
         </el-table-column>
+        <el-table-column label="优惠金额" align="center" min-width="150px">
+          <template scope="scope">
+            <span>满 {{scope.row.amount_full}} 元 减 {{scope.row.amount_cut}} 元</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="create_datetime" label="有效时间" align="center" min-width="130px"></el-table-column>
         <el-table-column label="操作" align="center" min-width="160px">
           <template scope="scope">
             <el-button size="small" icon="edit" class="tableButton"

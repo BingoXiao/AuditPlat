@@ -219,3 +219,20 @@ button {
   margin: 0;
   padding:0;
 }
+
+/* 优惠券管理 */
+.form_valid{
+  margin-bottom: 10px;
+}
+.form_valid_days .el-form-item__error{
+  left: 23px;
+}
+.form_valid_dates .el-form-item__error{
+  left: 98px;
+}
+.form_sCategory .el-form-item__error{
+  left: 83px;
+}
+.form_shop_category .el-radio-group{
+  line-height: 2.7;
+}

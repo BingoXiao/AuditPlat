@@ -25,6 +25,13 @@
           </el-col>
         </el-form-item>
 
+        <el-form-item label="领取次数：" required>
+          <el-radio-group v-model="activityinfo.get_times" required>
+            <el-radio label="E">一次/天</el-radio>
+            <el-radio label="O">仅一次</el-radio>
+          </el-radio-group>
+        </el-form-item>
+
         <el-form-item label="优惠券选择："></el-form-item>
       </el-form>
     </el-col>
@@ -190,7 +197,8 @@
         tipsVisible: false,
         activityinfo: {
           name: "",   // 活动名称
-          date: []   // 日期
+          date: [],   // 日期
+          get_times: "E"  // 领取次数
         },
         rules: {
           date: [
@@ -207,7 +215,7 @@
         which: "addedCoupons",
         onBadge: "addedCoupons",
         number: 0,
-        added: {         // 已选门店
+        added: {         // 已选优惠券
           idArr: [],                // 门店id数组
           totalDatas: [],           // 表格总数据
           tableDatas: [],           // 表格每页显示数据
@@ -215,7 +223,7 @@
           pageSize: 10,             // 每页显示条目个数
           currentPage: 1            // 当前页
         },
-        list: {         // 已选门店
+        list: {         // 已选优惠券
           tableDatas: [],           // 表格每页显示数据
           totalItems: 0,            // 总条目数
           pageSize: 10,             // 每页显示条目个数
@@ -264,9 +272,8 @@
               self.added.idArr.push(clist[i].id);
             }
             self.activityinfo.name = activityinfo.name;   // 名称
-            self.activityinfo.validRadio = "dates";
-            self.activityinfo.date = [new Date(activityinfo.startdate),
-              new Date(activityinfo.enddate)];
+            self.activityinfo.date = [new Date(activityinfo.startdate), new Date(activityinfo.enddate)];  // 日期
+            self.activityinfo.get_times = activityinfo.get_times;  // 领取次数
           }
         });
       },
@@ -340,8 +347,9 @@
         var self = this;
         var datas = {
           "name": self.activityinfo.name,       // 名称
-          "startdate": "",
+          "startdate": "",   // 日期
           "enddate": "",
+          "get_times": self.activityinfo.get_times,  // 领取次数
           "coupon_ids": self.added.idArr,
           "flag": flag            // SAVE 保存  UP 上线
         };

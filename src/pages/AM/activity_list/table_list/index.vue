@@ -18,6 +18,12 @@
             <div v-for="item in scope.row.coupons">{{item}}</div>
           </template>
         </el-table-column>
+        <el-table-column label="领取次数" align="center" min-width="100px">
+          <template scope="scope">
+            <div v-if="scope.row.get_times==='E'">1次/天</div>
+            <div v-else>仅一次</div>
+          </template>
+        </el-table-column>
         <el-table-column label="累计抵用金额" align="center" min-width="130px">
           <template scope="scope">
             <span>{{scope.row.amount}}元</span>

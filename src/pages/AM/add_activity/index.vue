@@ -61,14 +61,8 @@
             </el-table-column>
             <el-table-column label="门店" align="center" min-width="110px">
               <template scope="scope">
-                <span v-if="scope.row.buses[0]==='全部门店'">{{scope.row.buses[0]}}</span>
-                <span v-else>
-                  <el-tooltip class="item" effect="dark" content="查看门店信息" placement="bottom">
-                    <el-button type="text">
-                      <span>指定门店( {{scope.row.buses.length}} 家 )</span>
-                    </el-button>
-                  </el-tooltip>
-                </span>
+                <span v-if="scope.row.buses[0]">指定门店( {{scope.row.buses.length}} 家 )</span>
+                <span v-else>全平台通用</span>
               </template>
             </el-table-column>
             <el-table-column label="有效时间" align="center" min-width="160px">
@@ -109,14 +103,8 @@
             </el-table-column>
             <el-table-column label="门店" align="center" min-width="110px">
               <template scope="scope">
-                <span v-if="scope.row.buses[0]==='全部门店'">{{scope.row.buses[0]}}</span>
-                <span v-else>
-                  <el-tooltip class="item" effect="dark" content="查看门店信息" placement="bottom">
-                    <el-button type="text">
-                      <span>指定门店( {{scope.row.buses.length}} 家 )</span>
-                    </el-button>
-                  </el-tooltip>
-                </span>
+                <span v-if="scope.row.buses[0]">指定门店( {{scope.row.buses.length}} 家 )</span>
+                <span v-else>全平台通用</span>
               </template>
             </el-table-column>
             <el-table-column label="有效时间" align="center" min-width="160px">

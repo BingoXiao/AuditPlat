@@ -44,7 +44,12 @@
             <span>满 {{scope.row.amount_full}} 元 减 {{scope.row.amount_cut}} 元</span>
           </template>
         </el-table-column>
-        <el-table-column prop="create_datetime" label="有效时间" align="center" min-width="130px"></el-table-column>
+        <el-table-column label="有效时间" align="center" min-width="140px">
+          <template scope="scope">
+            <span v-if="scope.row.valid_days">{{scope.row.valid_days}} 天</span>
+            <span v-else>{{scope.row.valid_startdate}} 至 {{scope.row.valid_enddate}}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="操作" align="center" min-width="160px">
           <template scope="scope">
             <el-button size="small" icon="edit" class="tableButton"

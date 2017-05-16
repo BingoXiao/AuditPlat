@@ -375,14 +375,6 @@
       },
       // 获取优惠券信息（修改）
       getCouponInfo: function(id) {
-        function getHours(time) {   // 设置返回时间
-          var arr = time.split(":");
-          var res = new Date();
-          res.setHours(arr[0]);
-          res.setMinutes(arr[1]);
-          res.setSeconds(arr[2]);
-          return res;
-        }
         var self = this;
         self.$http.get(EVENTS_CMGETINFO_URL(id)).then(function(response) {
           if (response.body.success) {
@@ -411,7 +403,7 @@
             } else {
               if (couponinfo.shop_category) {
                 self.storeRadio = "shop_category";  // 选择品类
-                self.couponinfo.shop_category = couponinfo.shop_category;
+                self.couponinfo.shop_category = parseInt(couponinfo.shop_category);
               } else {
                 self.storeRadio = "wholeStores";   // 全平台通用
               }

@@ -1,7 +1,20 @@
+/*
+* login: 后台审核登录首页；
+* editPassword: 后台审核账户修改密码；
+* AM: 活动管理;
+* BD: BD;
+* BM: 商家管理;
+* PM: 项目管理;
+* Reiew: 审核;
+* Setting: 系统设置;
+* center_register: 商家中心注册;
+*/
 
+/* 开发服务器域名 */
 const HOST_URL = "https://shopmanagedev.jinmailife.com";
 const CENTER_URL = "https://businessdev.jinmailife.com";
 
+/* 生产服务器域名 */
 /*
 const HOST_URL = "https://shopmanage.jinmailife.com";
 const CENTER_URL = "https://business.jinmailife.com";

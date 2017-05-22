@@ -2,12 +2,16 @@
   <div class="tabs">
     <div class="tabs_header">
       <ul class="tabs_panel">
-        <li class="tabs_item" v-for="(value, key) in tabs"
-            @click="toggle(key)" :class="{active: key==active}">
-          <el-badge :value="number" class="badgeItem" v-if="key===onBadge">
+        <li v-for="(value, key) in tabs"
+            @click="toggle(key)"
+            class="tabs_item" :class="{active: key==active}">
+          <el-badge v-if="key===onBadge"
+                    :value="number"
+                    class="badgeItem">
             <span class="inner">{{value}}</span>
           </el-badge>
-          <span class="inner" v-if="key!==onBadge">{{value}}</span>
+          <span v-if="key!==onBadge"
+                class="inner">{{value}}</span>
         </li>
       </ul>
     </div>
@@ -36,7 +40,7 @@
       }
     },
     methods: {
-      toggle(key) {
+      toggle: function(key) {
         var self = this;
         self.active = key;
         self.$emit("toggle", key);
@@ -46,8 +50,6 @@
 </script>
 
 <style scoped>
-  .tabs {
-  }
   .tabs_header {
     border-bottom: 1px solid #020202;
     padding: 0;
@@ -67,7 +69,6 @@
   }
   .tabs_item{
     float: left;
-    cursor: pointer;
     color: rgb(255, 255, 255);
     background-color: #020202;
     margin-right: 20px;
@@ -77,6 +78,7 @@
     border-top-right-radius: 3px;
   }
   .tabs_item .inner{
+    cursor: pointer;
     text-decoration: none;
     padding: 9px 30px 10px 30px;
   }

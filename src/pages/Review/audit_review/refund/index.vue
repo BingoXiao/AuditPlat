@@ -134,12 +134,12 @@
           if (response.body.success) {
             self.tokenInfo = true;
             var datas = response.body.content;
-            if (datas.status === "S") {    // 已退款
+            if (datas.status === "退款成功") {    // 已退款S
               self.status = "已退款";     // 团购券状态
               self.consume_time = datas.consume_time;    // 消费时间
               self.billing_time = datas.billing_time;    // 结算时间
             } else {
-              self.status = "已验证";     // 团购券状态
+              self.status = "已退款";     // 团购券状态
             }
             // datas.status === "UN" 验证
             self.refundnum = datas.refundnum;          // 项目id

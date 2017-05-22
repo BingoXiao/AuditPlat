@@ -2,13 +2,8 @@
   <el-row>
     <!--筛选栏-->
     <el-col :span="24" class="toolbar">
-      <el-form :inline="true" label-width="60px">
-        <el-form-item label="日期：">
-          <date-picker ref="dateRange" name="dateRange"
-                       v-on:getRules="getFilterRules"></date-picker>
-        </el-form-item>
-
-        <el-form-item label="优惠券名称：" label-width="120px">
+      <el-form :inline="true" label-width="100px">
+        <el-form-item label="优惠券名称：">
           <input-search ref="coupon" name="coupon"
                         v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
@@ -22,35 +17,18 @@
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" v-loading.body="loading"
-                border row-key="id" style="width: 100%;"
+      <el-table ref="table" v-loading.body="loading"
+                :data="tableDatas" row-key="id"
+                border style="width: 100%;"
                 highlight-current-row>
         <el-table-column prop="name" label="优惠券名称" align="center" min-width="120px"></el-table-column>
         <el-table-column prop="type" label="类别" align="center" min-width="100px"></el-table-column>
-        <el-table-column label="适用范围" align="center" min-width="110px">
-          <template scope="scope">
-            <span v-if="scope.row.buses[0]==='全平台通用'">{{scope.row.buses[0]}}</span>
-            <span v-else>
-              <el-tooltip class="item" effect="dark" content="查看门店信息" placement="bottom">
-                <el-button type="text" @click="viewStores(scope.row)">
-                  <span>指定门店( {{scope.row.buses.length}} 家 )</span>
-                </el-button>
-              </el-tooltip>
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="优惠金额" align="center" min-width="150px">
+        <el-table-column label="优惠金额" align="center" min-width="160px">
           <template scope="scope">
             <span>满 {{scope.row.amount_full}} 元 减 {{scope.row.amount_cut}} 元</span>
           </template>
         </el-table-column>
-        <el-table-column label="有效时间" align="center" min-width="140px">
-          <template scope="scope">
-            <span v-if="scope.row.valid_days">{{scope.row.valid_days}} 天</span>
-            <span v-else>{{scope.row.valid_startdate}} 至 {{scope.row.valid_enddate}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" min-width="160px">
+        <el-table-column label="操作" align="center" min-width="200px">
           <template scope="scope">
             <el-button size="small" icon="edit" class="tableButton"
                        @click="editCoupon(scope.row)"> 修改</el-button>
@@ -78,7 +56,6 @@
 
 <script>
   import alasql from "alasql";
-  import datePicker from "../../../../components/search/datePicker/index";
   import inputSearch from "../../../../components/search/input/index";
   import dialogTips from "../../../../components/dialogTips/index.vue";
   import {EVENTS_CMTABLE_URL, EVENTS_CMDELETE_URL} from "../../../../common/interface";
@@ -89,7 +66,6 @@
       return {
         loading: false,
         search: {         // 搜索栏
-          dateRange: [],  // 日期
           coupon: ""      // 优惠券名称
         },
         totalDatas: [],           // 表格总数据
@@ -123,7 +99,7 @@
       /* 填充（表格） */
       fillTable: function(data) {
         var self = this;
-        var datas = alasql("SELECT * FROM ? ORDER BY create_datetime DESC", [data]);
+        var datas = alasql("SELECT * FROM ? ORDER BY name ASC", [data]);
         self.totalDatas = datas;
         self.tableDatas = datas.slice((self.currentPage - 1) * self.pageSize,
           self.currentPage * self.pageSize);
@@ -142,10 +118,6 @@
       filterTable: function() {
         var self = this;
         var rules = "SELECT * FROM ? WHERE name LIKE '%" + self.search.coupon + "%'";
-        if (self.search.dateRange[0] && self.search.dateRange[0] !== "") {     // 日期
-          rules += "AND create_datetime >= '" + self.search.dateRange[0] + " 00:00:00'" +
-            " AND create_datetime <= '" + self.search.dateRange[1] + " 23:59:59'";
-        }
         self.getTables(function(datas) {
           var res = alasql(rules, [datas, self.search.status]);
           self.currentPage = 1;
@@ -155,7 +127,6 @@
       /* 清空筛选 */
       rulesReset: function() {
         var self = this;
-        self.$refs.dateRange.reset();
         self.$refs.coupon.reset();
         self.currentPage = 1;
       },
@@ -201,7 +172,6 @@
       }
     },
     components: {
-      datePicker,
       inputSearch,
       dialogTips
     }

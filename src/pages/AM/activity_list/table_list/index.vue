@@ -139,7 +139,7 @@
           "online": "UP",
           "offline": "DOWN"
         };
-        var type = arr[self.$route.params.type];
+        var type = arr[self.$route.params.type] || "ALL";
         self.$http.get(EVENTS_ELTABLE_URL + "?type=" + type).then(function(response) {
           if (response.body.success) {
             var datas = alasql("SELECT * FROM ? ORDER BY create_datetime DESC", [response.body.content.alist]);

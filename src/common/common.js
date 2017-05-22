@@ -243,7 +243,7 @@ function isLicAdd(value, title) {
     if (/^\s+$/.test(value)) {
       obj = {flag: false, error: title + "地址" + "格式不正确"};
     } else {
-      if (!(/^[a-zA-Z\u4e00-\u9fa5\d\(\)]{1,}$/.test(value))) {
+      if (!(/^[a-zA-Z\u4e00-\u9fa5\d\(\)-]{1,}$/.test(value))) {
         obj = {flag: false, error: title + "地址" + "格式不正确"};
       } else {
         obj = {flag: true, error: ""};

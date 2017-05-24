@@ -41,7 +41,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -66,9 +66,6 @@
       };
       return {
         urlID: "",       // url ID(按钮显示)
-        isRight: true,       // 保存提示提示框
-        tips: "",
-        tipsVisible: false,
         couponinfo: {
           name: "",           // 优惠券名称
           type: "DISCOUNT",   // 优惠券类别:DISCOUNT,DATING
@@ -85,7 +82,8 @@
           amount_cut: [
             {validator: numberValidate, trigger: "blur"}
           ]
-        }
+        },
+        tips: ""  // 模态框信息提示
       };
     },
     mounted() {
@@ -133,9 +131,12 @@
             self.$http.post(url, JSON.stringify(datas), {emulateJSON: true})
               .then(function(response) {
                 if (response.body.success) {
-                  self.tipsVisible = true;
+                  self.$refs.resNL.show({
+                    isRight: true,
+                    tips: self.tips
+                  });
                   modalHide(function() {
-                    self.tipsVisible = false;
+                    self.$refs.resNL.hide();
                     self.$router.push({path: "/coupons_manage/my_coupons"});
                   });
                 }

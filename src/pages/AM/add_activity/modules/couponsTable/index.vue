@@ -95,7 +95,7 @@
           },
           onBadge: "selectedCoupons",
           number: 0,
-          which: ""
+          which: "wholeCoupons"
         },
         selected: {         // 已选优惠券
           idArr: [],                // 优惠券id数组
@@ -115,13 +115,20 @@
     },
     created() {
       var self = this;
-      self.coupons.which = self.table;
-      self.selected.totalDatas = self.datas;
-      self.selected.totalItems = self.datas.length;
-      for (let i = 0; i < self.datas.length; i++) {
-        self.selected.idArr.push(self.datas[i].id);
-      }
       self.refreshTables();
+    },
+    watch: {
+      datas: function() {
+        var self = this;
+        if (self.datas.length > 0) {
+          self.selected.totalDatas = self.datas;
+          self.coupons.number = self.datas.length;
+          for (let i = 0; i < self.datas.length; i++) {
+            self.selected.idArr.push(self.datas[i].id);
+          }
+          self.tabChange(self.table);
+        }
+      }
     },
     methods: {
       /* tab改变时，表格内容切换(父子组件通信) */

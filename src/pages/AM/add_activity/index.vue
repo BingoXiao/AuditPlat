@@ -89,7 +89,7 @@
         </el-form-item>
 
         <el-form-item label="适用范围：" required class="form_shop_category">
-          <el-radio-group v-model="storeRadio" @change="selectShops">
+          <el-radio-group v-model="storeRadio">
             <el-row>
               <el-col :span="5">
                 <el-radio label="wholeStores">全平台通用</el-radio>
@@ -137,7 +137,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -221,16 +221,12 @@
           "add_activity": "新增活动"
         },
         whichTop: "add_activity",
-        isRight: true,       // 保存提示提示框
-        tips: "",
-        tipsVisible: false,
         activityinfo: {
           date: [],   // 发放日期
           name: "",   // 活动名称
           photo: "",  // 活动图片
           get_times: "E",  // 领取次数
           promotion_type: "N",    // 促销类型
-          buses_name: [],
           promotion_type_options: [
             {
               label: "新用户",
@@ -269,12 +265,13 @@
         storeRadio: "wholeStores",   // 适用范围（wholeStores,shop_category,someStores）
         shops: {
           "tableDatas": [],  // 已选商家表格数据
-          "table": "selectedStores"  // 商家表格显示
+          "table": "storesSearch"  // 商家表格显示
         },
         coupons: {
           "tableDatas": [],  // 已选优惠券表格数据
-          "table": "selectedCoupons"  // 优惠券表格显示
-        }
+          "table": "wholeCoupons"  // 优惠券表格显示
+        },
+        tips: ""   // 模态框提示信息
       };
     },
     created() {
@@ -295,7 +292,7 @@
       }
     },
     methods: {
-      // 获取子模块数据
+      // 获取子模块数据(图片)
       addFormData: function(value, name) {
         this.activityinfo[name] = value;
       },
@@ -308,24 +305,15 @@
           }
         });
       },
-      // 适用范围（选择商家）
-      selectShops: function() {
-        var self = this;
-        if (self.storeRadio === "someStores") {
-          self.shops.table = "storesSearch";
-        }
-      },
       // 获取活动信息（修改）
       getActivityInfo: function(id) {
         var self = this;
         self.$http.get(EVENTS_EDITINFO_URL(id)).then(function(response) {
           if (response.body.success) {
             var activityinfo = response.body.content.activityinfo;
-            var blist = response.body.content.blist;
-            var clist = response.body.content.clist;
-            self.coupons.datas = clist;   // 已选优惠券表格数据
-            self.activityinfo.name = activityinfo.name;   // 活动名称
             self.activityinfo.date = [new Date(activityinfo.startdate), new Date(activityinfo.enddate)];  // 发放日期
+            self.activityinfo.name = activityinfo.name;   // 活动名称
+            self.activityinfo.photo = activityinfo.photo;   // 活动图片
             self.activityinfo.get_times = activityinfo.get_times;  // 领取次数
             self.activityinfo.promotion_type = activityinfo.promotion_type;   // 促销类型
             if (activityinfo.valid_days) {  // 有效时间(天数)
@@ -341,11 +329,14 @@
             } else {
               if (activityinfo.buses_name.length > 0) {   // 选择商家
                 self.storeRadio = "someStores";
-                self.shops.tableDatas = blist;    // 指定商家表格数据
+                self.shops.tableDatas = response.body.content.blist;    // 指定商家表格数据
+                self.shops.table = "selectedStores";
               } else {
                 self.storeRadio = "wholeStores";   // 全平台通用
               }
             }
+            self.coupons.tableDatas = response.body.content.clist;  // 已选优惠券表格数据
+            self.coupons.table = "selectedCoupons";
           }
         });
       },
@@ -388,11 +379,12 @@
             if (self.storeRadio === "someStores") {
               datas.bus_ids = self.$refs.shopsTable.returnBusIds();
               if (datas.bus_ids.length < 1) {
-                self.tipsVisible = true;
-                self.isRight = false;
-                self.tips = "请选择商家！";
+                self.$refs.resNL.show({
+                  isRight: false,
+                  tips: "请选择商家！"
+                });
                 modalHide(function() {
-                  self.tipsVisible = false;
+                  self.$refs.resNL.hide();
                 });
               }
             } else if (self.storeRadio === "shop_category") {  // 选择品类
@@ -403,11 +395,12 @@
             if (self.storeRadio !== "someStores" || (self.storeRadio === "someStores" && datas.bus_ids.length > 0)) {
               datas.coupon_ids = self.$refs.couponsTable.returnIds();
               if (datas.coupon_ids.length < 1) {
-                self.tipsVisible = true;
-                self.isRight = false;
-                self.tips = "请选择优惠券！";
+                self.$refs.resNL.show({
+                  isRight: false,
+                  tips: "请选择优惠券！"
+                });
                 modalHide(function() {
-                  self.tipsVisible = false;
+                  self.$refs.resNL.hide();
                 });
               } else {
                 let id = getUrlParameters(window.location.hash, "id");
@@ -418,19 +411,20 @@
                   url = EVENTS_EDITEVENT_URL(id);
                 }
                 if (flag === "UP") {               // 立即上线
-                  self.isRight = true;
                   self.tips = "活动上线成功！";
                 } else if (flag === "SAVE") {      // 保存
-                  self.isRight = true;
                   self.tips = "活动保存成功！";
                 }
 //                console.log(datas);
                 self.$http.post(url, JSON.stringify(datas), {emulateJSON: true})
                   .then(function(response) {
                     if (response.body.success) {
-                      self.tipsVisible = true;
+                      self.$refs.resNL.show({
+                        isRight: true,
+                        tips: self.tips
+                      });
                       modalHide(function() {
-                        self.tipsVisible = false;
+                        self.$refs.resNL.hide();
                         self.$router.push({path: "/activity_list/all"});
                       });
                     }

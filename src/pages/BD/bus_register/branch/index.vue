@@ -55,7 +55,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -83,9 +83,6 @@
           type: ""            // 商家属性（分店）
         },
         flag: false,          // 验证结果反馈
-        isRight: true,       // 保存提示提示框
-        tips: "保存成功！",
-        tipsVisible: false,
         active: 1,                 // 激活步骤
         currentView: "busSearch",  // 当前步骤
         steps: [                   // 步骤条
@@ -189,9 +186,12 @@
                     window.location.hash += "#id=" + response.body.content.applynum;
                   }
                   if (step === "save") {       // 保存
-                    self.saveVisible = true;
+                    self.$refs.resNL.show({
+                      isRight: true,
+                      tips: "保存成功！"
+                    });
                     modalHide(function() {
-                      self.saveVisible = false;
+                      self.$refs.resNL.hide();
                       self.$router.push({path: "/bus_register/branch"});
                     }, 1000);
                   } else {                    // 送审

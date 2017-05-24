@@ -75,7 +75,7 @@
     </el-dialog>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-col>
 </template>
 
@@ -104,9 +104,6 @@
           ]
         },
         refundDialog: false,
-        isRight: true,       // 提示框
-        tips: "操作成功！",
-        tipsVisible: false,
         item: "",       // 项目名称
         refundnum: "",  // 项目id
         buy_time: "",   // 购买时间
@@ -164,12 +161,13 @@
             self.$http.post(CHECKVERIFY_REFUND_URL, formData)
               .then(function(response) {
                 if (response.body.success) {
-                  self.isRight = true;
-                  self.tips = "退款成功！";
                   self.refundDialog = false;
-                  self.tipsVisible = true;
+                  self.$refs.resNL.show({
+                    isRight: true,
+                    tips: "退款成功！"
+                  });
                   modalHide(function() {
-                    self.tipsVisible = false;
+                    self.$refs.resNL.hide();
                   });
                 }
               });

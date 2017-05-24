@@ -261,10 +261,10 @@
         otherWindow = window.open(href);
         otherWindow.opener = null;
       },
-      /* 商家申请注册 */
+      /* 商家申请(注册) */
       applyRe: function(row) {
         var href, otherWindow;
-        href = "/bus_register/new/register#id=" + row.applynum;
+        href = "/bus_register/apply/register#id=" + row.applynum;
         otherWindow = window.open(href);
         otherWindow.opener = null;
       },
@@ -286,7 +286,7 @@
             href = "/bus_register/branch/register#id=" + row.applynum;
           }
         } else if (type === "apply") {
-          href = "/bus_register/apply/register#id=" + row.applynum;
+          href = "/bus_register/new/register#id=" + row.applynum;
         }
         otherWindow = window.open(href);
         otherWindow.opener = null;

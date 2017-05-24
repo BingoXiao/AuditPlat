@@ -85,7 +85,7 @@
 
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-col>
 </template>
 
@@ -126,9 +126,6 @@
         openLock: true,
         busDisable: false,
         openDisable: false,
-        isRight: true,       // 保存提示提示框
-        tips: "页面详情修改成功！",
-        tipsVisible: false,
         basicForm: {
           name: "",          // 姓名
           phonenum: ""       // 手机
@@ -316,9 +313,12 @@
               self.$http.post(BUSLIST_SUBMIT_URL, formData)
               .then(function(response) {
                 if (response.data.success) {
-                  self.tipsVisible = true;
+                  self.$refs.resNL.show({
+                    isRight: true,
+                    tips: "提交成功！"
+                  });
                   modalHide(function() {
-                    self.tipsVisible = false;
+                    self.$refs.resNL.hide();
                   });
                 }
               });

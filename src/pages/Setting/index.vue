@@ -4,12 +4,14 @@
     <el-col :span="24" class="toolbar">
       <el-form :inline="true" label-width="85px">
         <el-form-item label="用户账号：">
-          <input-search ref="account" name="account"
+          <input-search ref="account"
+                        name="account"
                         v-on:getRules="getFilterRules"></input-search>
         </el-form-item>
 
         <el-form-item label="状态：" class="select">
-          <select-search ref="state" name="status"
+          <select-search ref="state"
+                         name="status"
                          :options="search.state"
                          v-on:getRules="getFilterRules"></select-search>
         </el-form-item>
@@ -39,11 +41,14 @@
     <!--表格-->
     <el-col :span="24">
       <br/>
-      <el-table ref="table" border highlight-current-row v-loading.body="loading"
-                :data="tableDatas" row-key="id" style="width: 100%"
+      <el-table ref="table"
+                border highlight-current-row
+                v-loading.body="loading"
+                style="width: 100%"
+                :data="tableDatas"
+                row-key="id"
                 @selection-change="selectUsers">
-        <el-table-column type="selection" min-width="130px"
-                         :reserve-selection="true"></el-table-column>
+        <el-table-column type="selection" min-width="130px" :reserve-selection="true"></el-table-column>
         <el-table-column prop="name" label="姓名" align="center"  min-width="130px"></el-table-column>
         <el-table-column prop="account" label="用户账号" align="center" min-width="100px"></el-table-column>
         <el-table-column label="已开通服务" align="center" min-width="150px">
@@ -58,21 +63,23 @@
             <el-switch v-model="scope.row.is_active"
                        on-color="#020202"
                        off-color="#C0CCDA"
-                       @change="freezeUsers(scope.row, 'single')"></el-switch>
+                       @change="freezeUsers(scope.row, 'single', scope.row.is_active)"></el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="操作" align="center" min-width="150px">
+        <el-table-column label="操作" align="center" min-width="120px">
           <template scope="scope">
             <el-row>
               <el-col :span="4" :offset="6">
                 <el-tooltip content="修改资料" effect="dark" placement="bottom">
-                  <el-button type="text" icon="edit"
+                  <el-button type="text"
+                             icon="edit"
                              @click="editUsersVisible(scope.row)"></el-button>
                 </el-tooltip>
               </el-col>
               <el-col :span="4">
                 <el-tooltip content="修改密码" effect="dark" placement="bottom">
-                  <el-button type="text" @click="editPasswordVisible(scope.row)">
+                  <el-button type="text"
+                             @click="editPasswordVisible(scope.row)">
                     <i class="iconfont icon-yaochi-copy"
                        style="font-weight: bold;font-size:15px;"></i>
                   </el-button>
@@ -80,7 +87,9 @@
               </el-col>
               <el-col :span="4">
                 <el-tooltip content="删除" effect="dark" placement="bottom">
-                  <el-button type="text" icon="delete2" @click="deleteUsers(scope.row, 'single')"></el-button>
+                  <el-button type="text"
+                             icon="delete2"
+                             @click="deleteUsers(scope.row, 'single')"></el-button>
                 </el-tooltip>
               </el-col>
             </el-row>
@@ -100,12 +109,17 @@
     </el-col>
 
     <!--添加用户-->
-    <el-dialog title="添加用户" v-model="dialog.addUsersVisible"
-               :close-on-click-modal="false" @close="resetForm('addUsersForm')">
+    <el-dialog title="添加用户"
+               v-model="dialog.addUsersVisible"
+               :close-on-click-modal="false"
+               @close="resetForm('addUsersForm')">
       <div class="modal">
         <br/><br/>
-        <el-form id="addUsersform" :model="addUsersForm" ref="addUsersForm"
-                 :rules="addUsersRules" label-width="80px">
+        <el-form id="addUsersform"
+                 :model="addUsersForm"
+                 ref="addUsersForm"
+                 :rules="addUsersRules"
+                 label-width="80px">
           <el-form-item label="姓名：" prop="name">
             <el-input v-model="addUsersForm.name" name="name"></el-input>
           </el-form-item>
@@ -144,20 +158,26 @@
         </el-form>
         <br/>
         <el-row type="justify" align="center">
-          <el-button type="primary" @click="addUsers('addUsersForm')"
-                     style="padding: 10px 30px;">添 加
+          <el-button type="primary"
+                     style="padding: 10px 30px;"
+                     @click="addUsers('addUsersForm')">添 加
           </el-button>
         </el-row>
       </div>
     </el-dialog>
 
     <!--修改用户资料-->
-    <el-dialog title="修改资料" v-model="dialog.editUsersVisible"
-               :close-on-click-modal="false" @close="resetForm('editUsersForm')">
+    <el-dialog title="修改资料"
+               v-model="dialog.editUsersVisible"
+               :close-on-click-modal="false"
+               @close="resetForm('editUsersForm')">
       <div class="modal">
         <br/><br/>
-        <el-form id="editUsersForm" :model="editUsersForm" ref="editUsersForm"
-                 :rules="editUsersRules" label-width="70px">
+        <el-form id="editUsersForm"
+                 :model="editUsersForm"
+                 ref="editUsersForm"
+                 :rules="editUsersRules"
+                 label-width="70px">
           <el-form-item label="姓名："  class="label_left">
             <span>{{table.name}}</span>
           </el-form-item>
@@ -187,19 +207,26 @@
         </el-form>
         <br/>
         <el-row type="justify" align="center">
-          <el-button type="primary" @click="editUsersInfo('editUsersForm')"
-                     style="padding: 10px 30px;">修 改</el-button>
+          <el-button type="primary"
+                     style="padding: 10px 30px;"
+                     @click="editUsersInfo('editUsersForm')">修 改</el-button>
         </el-row>
       </div>
     </el-dialog>
 
     <!--修改用户密码-->
-    <el-dialog title="忘记密码" size="tiny" v-model="dialog.editPasswordVisible"
-               :close-on-click-modal="false" @close="resetForm('editPasswordForm')">
+    <el-dialog title="忘记密码"
+               size="tiny"
+               v-model="dialog.editPasswordVisible"
+               :close-on-click-modal="false"
+               @close="resetForm('editPasswordForm')">
       <div class="modal">
         <br/><br/>
-        <el-form id="editPasswordForm" :model="editPasswordForm" ref="editPasswordForm"
-                 :rules="editPasswordRules" label-width="96px">
+        <el-form id="editPasswordForm"
+                 ref="editPasswordForm"
+                 :model="editPasswordForm"
+                 :rules="editPasswordRules"
+                 label-width="96px">
           <el-form-item label="姓名：" class="label_left">
             <span>{{table.name}}</span>
           </el-form-item>
@@ -210,26 +237,28 @@
 
           <!--新密码-->
           <el-form-item label="新密码：" prop="newPwd">
-            <el-input type="password" v-model="editPasswordForm.newPwd"
+            <el-input type="password"
+                      v-model="editPasswordForm.newPwd"
                       name="password"></el-input>
           </el-form-item>
 
           <!--确认密码-->
           <el-form-item label="确认密码：" prop="confirmPwd">
-            <el-input type="password" v-model="editPasswordForm.confirmPwd"></el-input>
+            <el-input type="password"
+                      v-model="editPasswordForm.confirmPwd"></el-input>
           </el-form-item>
         </el-form>
         <br/>
         <el-row type="justify" align="center">
-          <el-button type="primary" @click="editUsersPassword('editPasswordForm')"
-                     style="padding: 10px 30px;">修 改
-          </el-button>
+          <el-button type="primary"
+                     style="padding: 10px 30px;"
+                     @click="editUsersPassword('editPasswordForm')">修 改</el-button>
         </el-row>
       </div>
     </el-dialog>
 
     <!--提示-->
-    <dialogTips :isRight="dialog.isRight" :tips="dialog.tips" :tipsVisible="dialog.tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -324,16 +353,13 @@
         dialog: {                          // 模态框标志
           addUsersVisible: false,          // 添加用户
           editUsersVisible: false,         // 修改用户资料
-          editPasswordVisible: false,      // 修改用户密码
-          isRight: true,
-          tips: "",
-          tipsVisible: false
+          editPasswordVisible: false       // 修改用户密码
         },
-        addUsersForm: {           // 添加用户
-          name: "",
-          account: "",
-          password: "",
-          perms: []
+        addUsersForm: {     // 添加用户
+          name: "",         // 姓名
+          account: "",      // 账号
+          password: "",     // 密码
+          perms: []         // 权限
         },
         addUsersRules: {     // 添加用户验证
           name: [
@@ -351,7 +377,7 @@
           ]
         },
         editUsersForm: {    // 修改用户资料
-          perms: []
+          perms: []         // 权限
         },
         editUsersRules: {      // 修改用户验证
           perms: [
@@ -360,7 +386,7 @@
           ]
         },
         editPasswordForm: {    // 修改用户密码
-          newPwd: ""
+          newPwd: ""   // 新密码
         },
         editPasswordRules: {     // 修改用户密码验证
           newPwd: [
@@ -379,7 +405,7 @@
       });
     },
     methods: {
-      /* 获取用户数据（表格） */
+      /* 获取表格数据（账号信息） */
       getTables: function(func) {
         var self = this;
         self.loading = true;
@@ -399,8 +425,6 @@
             if (p === "bus_verify" || p === "project_verify" || p === "checkout_verify" ||
               p === "bus_apply" || p === "bus_register" || p === "item_list") {
               arr.push(p);
-            } else {
-              continue;
             }
           }
           data[i].service = arr;
@@ -483,11 +507,12 @@
             self.$http.post(ACCOUNTS_ADD_URL, formData).then(function(response) {
               if (response.body.success) {
                 self.dialog.addUsersVisible = false;
-                self.dialog.isRight = true;
-                self.dialog.tips = "添加成功！";
-                self.dialog.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: "添加成功！"
+                });
                 modalHide(function() {
-                  self.dialog.tipsVisible = false;
+                  self.$refs.resNL.hide();
                   self.getTables(function(datas) {
                     self.fillTable(datas);
                     self.rulesReset();
@@ -534,11 +559,12 @@
               if (response.body.success) {
                 var newPerms = self.editUsersForm.perms;
                 self.dialog.editUsersVisible = false;
-                self.dialog.isRight = true;
-                self.dialog.tips = "修改成功！";
-                self.dialog.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: "修改成功！"
+                });
                 modalHide(function() {
-                  self.dialog.tipsVisible = false;
+                  self.$refs.resNL.hide();
                   for (let i = 0; i < self.tableDatas.length; i++) {
                     var item = self.tableDatas[i];
                     if (self.table.single.id === item.id) {   // 修改权限
@@ -582,11 +608,12 @@
             self.$http.post(ACCOUNTS_EDITPWD_URL, formData).then(function(response) {
               if (response.body.success) {
                 self.dialog.editPasswordVisible = false;
-                self.dialog.isRight = true;
-                self.dialog.tips = "修改成功！";
-                self.dialog.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: "修改成功！"
+                });
                 modalHide(function() {
-                  self.dialog.tipsVisible = false;
+                  self.$refs.resNL.hide();
                 });
               }
             });
@@ -614,11 +641,12 @@
           formData.append("ids[]", row.id);
           formData.append("flag", row.is_active ? 1 : 0);
         } else {  // 无选中账户，操作提示错误
-          self.dialog.isRight = false;
-          self.dialog.tips = "请选择需要（冻结/启用）的账户！";
-          self.dialog.tipsVisible = true;
+          self.$refs.resNL.show({
+            isRight: false,
+            tips: "请选择需要（冻结/启用）的账户！"
+          });
           modalHide(function() {
-            self.dialog.tipsVisible = false;
+            self.$refs.resNL.hide();
           });
           return false;
         }
@@ -629,18 +657,19 @@
           if (response.body.success) {  // 操作成功
             if (type === "multiple") {     // 按钮操作改变冻结状态
               for (let i = 0; i < row.length; i++) {
+                row[i].is_active = (flag === "1");
                 for (let j = 0; j < self.tableDatas.length; j++) {
                   if (self.tableDatas[j].id === row[i].id) {
                     self.tableDatas[j].is_active = (flag === "1");
-                    continue;
                   }
                 }
               }
-            } else if (type === "single") {   // 表格操作(操作成功后改变选中组中对应状态)
-              for (let i = 0; i < self.table.multiple.length; i++) {
-                if (self.table.multiple[i].id === row.id) {
-                  self.table.multiple[i].is_active = (flag === "1");
-                  break;
+            } else {   // 表格操作(操作成功后改变选中组中对应状态)
+              if (self.table.multiple.length > 0) {
+                for (let i = 0; i < self.table.multiple.length; i++) {
+                  if (self.table.multiple[i].id === row.id) {
+                    self.table.multiple[i].is_active = flag;
+                  }
                 }
               }
             }
@@ -661,11 +690,12 @@
         if (row.length > 0 || row.id) {   // 有选中项
           if (type === "single") {   // 表格内部
             if (row.is_active) {
-              self.dialog.isRight = false;
-              self.dialog.tips = "请先冻结账户！";
-              self.dialog.tipsVisible = true;
+              self.$refs.resNL.show({
+                isRight: false,
+                tips: "请先冻结账户！"
+              });
               modalHide(function() {
-                self.dialog.tipsVisible = false;
+                self.$refs.resNL.hide();
               });
               return false;
             } else {
@@ -681,11 +711,12 @@
             let arr = [];
             for (let i = 0; i < row.length; i++) {
               if (row[i].is_active) {   // 有启用状态
-                self.dialog.isRight = false;
-                self.dialog.tips = "请先冻结账户！";
-                self.dialog.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: "请先冻结账户！"
+                });
                 modalHide(function() {
-                  self.dialog.tipsVisible = false;
+                  self.$refs.resNL.hide();
                 });
                 return false;
               }
@@ -702,11 +733,12 @@
         self.$http.post(ACCOUNTS_DELETE_URL, formData).then(function(response) {
           if (response.body.success) {
             self.dialog.editUsersVisible = false;
-            self.dialog.isRight = true;
-            self.dialog.tips = "删除成功！";
-            self.dialog.tipsVisible = true;
+            self.$refs.resNL.show({
+              isRight: true,
+              tips: "删除成功！"
+            });
             modalHide(function() {
-              self.dialog.tipsVisible = false;
+              self.$refs.resNL.hide();
               self.getTables(function(datas) {
                 self.fillTable(datas);
                 self.rulesReset();

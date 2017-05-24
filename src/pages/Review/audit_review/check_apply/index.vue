@@ -68,7 +68,7 @@
 
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -97,10 +97,7 @@
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
-        currentPage: 1,           // 当前页
-        isRight: true,       // 提示框
-        tips: "",
-        tipsVisible: false
+        currentPage: 1            // 当前页
       };
     },
     created() {
@@ -192,11 +189,12 @@
         var extStart = ext.lastIndexOf(".");
         var type = ext.substring(extStart, ext.length).toUpperCase();
         if (type !== ".XLS" && type !== ".XLSX" && type !== ".XLSB" && type !== ".XLSM" && type !== ".XLST") {
-          self.isRight = false;
-          self.tips = "请上传excel文件！";
-          self.tipsVisible = true;
+          self.$refs.resNL.show({
+            isRight: false,
+            tips: "请上传excel文件！"
+          });
           modalHide(function() {
-            self.tipsVisible = false;
+            self.$refs.resNL.hide();
           });
           return false;
         } else {
@@ -207,11 +205,12 @@
       handleSuccess: function(response, file, fileList) {
         var self = this;
         if (response.success) {
-          self.isRight = true;
-          self.tips = "文件上传成功！";
-          self.tipsVisible = true;
+          self.$refs.resNL.show({
+            isRight: true,
+            tips: "文件上传成功！"
+          });
           modalHide(function() {
-            self.tipsVisible = false;
+            self.$refs.resNL.hide();
           });
         }
       },
@@ -226,11 +225,12 @@
           title = "是否确定选择账号结款失败？";
         }
         if (self.selectArr.length < 1) {
-          self.isRight = false;
-          self.tips = "请选择结款商家！";
-          self.tipsVisible = true;
+          self.$refs.resNL.show({
+            isRight: false,
+            tips: "请选择结款商家！"
+          });
           modalHide(function() {
-            self.tipsVisible = false;
+            self.$refs.resNL.hide();
           });
         } else {
           self.$confirm(title, "提示", {
@@ -241,11 +241,12 @@
             self.$http.post(CHECKVERIFY_SUCCESS_SEARCH_URL, formData)
             .then(function(response) {
               if (response.body.success) {
-                self.isRight = true;
-                self.tips = "操作成功！";
-                self.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: "操作成功！"
+                });
                 modalHide(function() {
-                  self.tipsVisible = false;
+                  self.$refs.resNL.hide();
                   self.getTables(function(datas) {
                     self.rulesReset();
                     self.fillTable(datas);

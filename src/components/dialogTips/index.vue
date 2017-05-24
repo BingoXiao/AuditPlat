@@ -1,7 +1,9 @@
 <template>
   <!--提示-->
-  <el-dialog v-model="tipsVisible" size="tiny"
-             :close-on-click-modal="false" class="tipsModal">
+  <el-dialog v-model="tipsVisible"
+             size="tiny"
+             :close-on-click-modal="false"
+             class="tipsModal">
     <div class="mainTips" style="margin-bottom:40px;">
       <i :class="{'el-icon-circle-check':isRight, 'el-icon-circle-cross':!isRight}"
          :style="{color: activeColor}"></i> {{tips}}
@@ -11,10 +13,12 @@
 
 <script>
   export default{
-    props: {
-      isRight: Boolean,     // 操作成功的icon(true),错误icon（false）
-      tips: String,         // 提示语句
-      tipsVisible: Boolean  // 显示与否
+    data() {
+      return {
+        isRight: false,     // 操作成功的icon(true),错误icon（false）
+        tips: "",           // 提示
+        tipsVisible: false  // 显示与否
+      };
     },
     computed: {
       activeColor: function() {
@@ -22,6 +26,18 @@
         if (self.isRight) {
           return "#13CE66";
         }
+      }
+    },
+    methods: {
+      show: function(obj) {
+        var self = this;
+        self.isRight = obj.isRight;
+        self.tips = obj.tips;
+        self.tipsVisible = true;
+      },
+      hide: function() {
+        var self = this;
+        self.tipsVisible = false;
       }
     }
   };

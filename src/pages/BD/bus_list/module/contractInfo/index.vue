@@ -42,7 +42,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-col>
 </template>
 
@@ -64,9 +64,6 @@
             return time.getTime() < Date.now() - 8.64e7;
           }
         },
-        isRight: true,       // 保存提示提示框
-        tips: "合约保存成功！",
-        tipsVisible: false,
         consForm: {
           name: "",      // 合同名称
           date: "",      // 合同过有效期
@@ -133,9 +130,12 @@
               self.$http.post(BUSLIST_SUBMITCONSTRA_URL, formData)
                 .then(function(response) {
                   if (response.data.success) {
-                    self.tipsVisible = true;
+                    self.$refs.resNL.show({
+                      isRight: true,
+                      tips: "合约修改成功！"
+                    });
                     modalHide(function() {
-                      self.tipsVisible = false;
+                      self.$refs.resNL.hide();
                     });
                   }
                 });

@@ -86,7 +86,7 @@
           },
           number: 0,
           onBadge: "selectedStores",
-          which: ""
+          which: "storesSearch"
         },
         selected: {         // 已选商家（表格）
           idArr: [],                // 商家id数组
@@ -106,11 +106,13 @@
     },
     created() {
       var self = this;
-      self.shops.which = self.table;
-      self.selected.totalDatas = self.datas;
-      self.selected.totalItems = self.datas.length;
-      for (let i = 0; i < self.datas.length; i++) {
-        self.selected.idArr.push(self.datas[i].bus_id);
+      if (self.datas.length > 0) {
+        self.selected.totalDatas = self.datas;
+        self.shops.number = self.datas.length;
+        for (let i = 0; i < self.datas.length; i++) {
+          self.selected.idArr.push(self.datas[i].bus_id);
+        }
+        self.tabChange(self.table);
       }
       self.refreshTables();
     },

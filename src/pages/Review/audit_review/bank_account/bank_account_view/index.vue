@@ -102,7 +102,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -121,9 +121,6 @@
         },
         which: "view",
         showBtn: false,      // 是否显示审核和驳回按钮
-        isRight: true,       // 提示框
-        tips: "操作成功！",
-        tipsVisible: false,
         account: "",           // 商家账号
         items_name: [],        // 项目名称
         billing_account_name: "",     // 财务联系人
@@ -197,9 +194,12 @@
           {emulateJSON: true})
           .then(function(response) {
             if (response.body.success) {
-              self.tipsVisible = true;
+              self.$refs.resNL.show({
+                isRight: true,
+                tips: "操作成功！"
+              });
               modalHide(function() {
-                self.tipsVisible = false;
+                self.$refs.resNL.hide();
                 self.backTo();
               });
             }

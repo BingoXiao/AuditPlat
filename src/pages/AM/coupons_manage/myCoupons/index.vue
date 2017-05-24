@@ -50,7 +50,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -72,10 +72,7 @@
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
-        currentPage: 1,           // 当前页
-        isRight: true,       // 保存提示提示框
-        tips: "删除成功！",
-        tipsVisible: false
+        currentPage: 1            // 当前页
       };
     },
     mounted() {
@@ -158,9 +155,12 @@
         }).then(() => {
           self.$http.post(EVENTS_CMDELETE_URL(row.id)).then(function(response) {
             if (response.body.success) {
-              self.tipsVisible = true;
+              self.$refs.resNL.show({
+                isRight: true,
+                tips: "删除成功！"
+              });
               modalHide(function() {
-                self.tipsVisible = false;
+                self.$refs.resNL.hide();
                 self.getTables(function(datas) {
                   self.fillTable(datas);
                   self.rulesReset();

@@ -21,7 +21,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -40,9 +40,6 @@
         },
         which: "notice",
         editor: null,
-        isRight: true,       // 提示框
-        tips: "操作成功！",
-        tipsVisible: false,
         ruleForm: {
           title: ""          // 标题
         },
@@ -69,22 +66,24 @@
             formData.set("title", self.ruleForm.title);
             self.content = self.editor.getData();         // 获取内容
             if (!self.content) {
-              self.isRight = false;
-              self.tips = "请填写内容！";
-              self.tipsVisible = true;
+              self.$refs.resNL.show({
+                isRight: false,
+                tips: "请填写内容！"
+              });
               modalHide(function() {
-                self.tipsVisible = false;
+                self.$refs.resNL.hide();
               });
             } else {
               var str = (self.content).replace(/<br\s*\/?>/g, "\r\\n").replace(/\s/g, "&nbsp;");
               formData.set("content", str);
-              self.isRight = true;
-              self.tips = "发送成功！";
               self.$http.post(SYSTEMINFO_SUBMIT_URL, formData).then(function(response) {
                 if (response.body.success) {
-                  self.tipsVisible = true;
+                  self.$refs.resNL.show({
+                    isRight: true,
+                    tips: "发送成功！"
+                  });
                   modalHide(function() {
-                    self.tipsVisible = false;
+                    self.$refs.resNL.hide();
                   });
                 }
               });

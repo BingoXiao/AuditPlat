@@ -666,7 +666,7 @@
     </el-dialog>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </div>
 </template>
 
@@ -867,9 +867,7 @@
         textarea: "",
         rejectDialog: false,   // 驳回模态框
         passDialog: false,     // 驳回模态框
-        isRight: true,       // 提示框
-        tips: "操作成功！",
-        tipsVisible: false
+        tips: "操作成功！"      // 模态框提示信息
       };
     },
     mounted() {
@@ -1021,9 +1019,12 @@
               if (response.body.success) {
                 self.passDialog = false;
                 self.rejectDialog = false;
-                self.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: self.tips
+                });
                 modalHide(function() {
-                  self.tipsVisible = false;
+                  self.$refs.resNL.hide();
                   var htmlSrc = self.$route.path.substring(0, self.$route.path.lastIndexOf("/"));
                   self.$router.push({path: htmlSrc});
                 });

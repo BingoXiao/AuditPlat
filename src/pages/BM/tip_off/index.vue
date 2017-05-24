@@ -59,7 +59,7 @@
 
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -102,10 +102,7 @@
         tableDatas: [],           // 表格每页显示数据
         totalItems: 0,            // 总条目数
         pageSize: 10,             // 每页显示条目个数
-        currentPage: 1,           // 当前页
-        isRight: true,       // 提示框
-        tips: "操作成功！",
-        tipsVisible: false
+        currentPage: 1            // 当前页
       };
     },
     created() {
@@ -186,22 +183,25 @@
         var self = this;
         var formData = new FormData();
         if (self.selectArr.length < 1) {
-          self.isRight = false;
-          self.tips = "请选择商家！";
-          self.tipsVisible = true;
+          self.$refs.resNL.show({
+            isRight: false,
+            tips: "请选择商家！"
+          });
           modalHide(function() {
-            self.tipsVisible = false;
+            self.$refs.resNL.hide();
           });
         } else {
-          self.isRight = true;
           formData.append("ids[]", self.selectArr);
           formData.append("status", status);    // 已处理"HANDLED"，未处理UNHANDLED
           self.$http.post(COMPAINTS_SUBMIT_URL, formData)
             .then(function(response) {
               if (response.data.success) {
-                self.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: "操作成功！"
+                });
                 modalHide(function() {
-                  self.tipsVisible = false;
+                  self.$refs.resNL.hide();
                   var state = "未处理";
                   for (let i = 0; i < self.selectArr.length; i++) {
                     for (let j = 0; j < self.totalDatas.length; j++) {

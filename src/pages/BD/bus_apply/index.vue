@@ -104,7 +104,7 @@
     </el-dialog>
 
     <!--提示-->
-    <dialogTips :isRight="dialog.isRight" :tips="dialog.tips" :tipsVisible="dialog.tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -146,11 +146,8 @@
           applynum: ""            // 商家申请号
         },
         dialog: {
-          BDvisible: false,     // 分配任务
-          BD: "",               // BD_id
-          isRight: true,       // 提示框
-          tips: "分配成功！",
-          tipsVisible: false
+          BDvisible: false,   // 分配任务
+          BD: ""              // BD_id
         }
       };
     },
@@ -265,9 +262,12 @@
               .then(function(response) {
                 if (response.body.success) {
                   self.dialog.BDvisible = false;
-                  self.dialog.tipsVisible = true;
+                  self.$refs.resNL.show({
+                    isRight: true,
+                    tips: "分配成功！"
+                  });
                   modalHide(function() {
-                    self.dialog.tipsVisible = false;
+                    self.$refs.resNL.hide();
                     for (let i = 0; i < self.tableDatas.length; i++) {
                       if (self.tableDatas[i].applynum === self.table.applynum) {
                         self.tableDatas[i].bd = self.$refs.bd.selectedLabel;
@@ -278,9 +278,12 @@
               });
           } else {
             self.dialog.BDvisible = false;
-            self.dialog.tipsVisible = true;
+            self.$refs.resNL.show({
+              isRight: true,
+              tips: "分配成功！"
+            });
             modalHide(function() {
-              self.dialog.tipsVisible = false;
+              self.$refs.resNL.hide();
             });
           }
         } else {

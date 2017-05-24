@@ -63,7 +63,7 @@
     </el-col>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -78,9 +78,6 @@
     data() {
       return {
         loading: false,
-        isRight: true,       // 保存提示提示框
-        tips: "",
-        tipsVisible: false,
         tabs: [
           {
             param: "all",
@@ -186,10 +183,12 @@
         }).then(() => {
           self.$http.post(EVENTS_ELDELETE_URL(row.id)).then(function(response) {
             if (response.body.success) {
-              self.tips = "删除活动成功！";
-              self.tipsVisible = true;
+              self.$refs.resNL.show({
+                isRight: true,
+                tips: "删除活动成功！"
+              });
               modalHide(function() {
-                self.tipsVisible = false;
+                self.$refs.resNL.hide();
                 self.getTables();
               });
             }
@@ -206,10 +205,12 @@
         }).then(() => {
           self.$http.post(EVENTS_OFFLINEINFO_URL(row.id)).then(function(response) {
             if (response.body.success) {
-              self.tips = "活动下线成功！";
-              self.tipsVisible = true;
+              self.$refs.resNL.show({
+                isRight: true,
+                tips: "活动下线成功！"
+              });
               modalHide(function() {
-                self.tipsVisible = false;
+                self.$refs.resNL.hide();
                 self.getTables();
               });
             }

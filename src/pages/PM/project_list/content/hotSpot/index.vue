@@ -17,7 +17,7 @@
     </el-dialog>
 
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </div>
 </template>
 
@@ -31,11 +31,9 @@
   export default{
     data() {
       return {
-        data: "",     // 脉点
+        data: "",            // 脉点
         spotVisible: false,  // 预览
-        isRight: true,       // 提示框
-        tips: "",
-        tipsVisible: false
+        tips: ""   // 模态框提示信息
       };
     },
     mounted() {
@@ -85,11 +83,12 @@
         var formData = new FormData();
         self.getData();
         if (!self.data) {
-          self.isRight = false;
-          self.tips = "请填写脉点！";
-          self.tipsVisible = true;
+          self.$refs.resNL.show({
+            isRight: false,
+            tips: "请填写脉点！"
+          });
           modalHide(function() {
-            self.tipsVisible = false;
+            self.$refs.resNL.hide();
           });
         } else {
           if (type === "S") {
@@ -102,9 +101,12 @@
           formData.set("type", type);
           self.$http.post(PROLIST_JM_URL, formData).then(function(response) {
             if (response.body.success) {
-              self.tipsVisible = true;
+              self.$refs.resNL.show({
+                isRight: false,
+                tips: self.tips
+              });
               modalHide(function() {
-                self.tipsVisible = false;
+                self.$refs.resNL.hide();
                 self.$router.push({path: "/project_list"});
               });
             }

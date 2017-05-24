@@ -191,7 +191,7 @@
 
     <!--提示-->
     <!--提示-->
-    <dialogTips :isRight="isRight" :tips="tips" :tipsVisible="tipsVisible"></dialogTips>
+    <dialogTips ref="resNL"></dialogTips>
   </el-row>
 </template>
 
@@ -252,9 +252,7 @@
         rejectReason: "商家信息有误/不真实",
         rejectDialog: false,   // 驳回模态框
         passDialog: false,     // 驳回模态框
-        isRight: true,       // 提示框
-        tips: "驳回成功！",
-        tipsVisible: false,
+        tips: "驳回成功！",     // 模态框消息
         textarea: ""
       };
     },
@@ -413,9 +411,12 @@
               if (response.body.success) {
                 self.passDialog = false;
                 self.rejectDialog = false;
-                self.tipsVisible = true;
+                self.$refs.resNL.show({
+                  isRight: true,
+                  tips: self.tips
+                });
                 modalHide(function() {
-                  self.tipsVisible = false;
+                  self.$refs.resNL.hide();
                   self.$router.push({path: "/bus_review/bus_apply"});
                 });
               }

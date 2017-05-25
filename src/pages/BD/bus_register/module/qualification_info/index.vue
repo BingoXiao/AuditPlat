@@ -4,7 +4,9 @@
              label-width="150px" label-position="top">
       <h3 class="formTitle">资质信息</h3>
       <el-form-item label="门店LOGO照片：" required>
-        <upload-image ref="logo_url" :imgWidth="140" :imgHeight="140" imgName="门店LOGO"
+        <upload-image ref="logo_url"
+                      :imgWidth="140" :imgHeight="140"
+                      imgName="门店LOGO"
                       :imgFill="quaForm.logo_url"
                       suffix_name="logo_url"
                       v-on:handleSuccess="addFormData"
@@ -13,7 +15,9 @@
       </el-form-item>
 
       <el-form-item label="门店招牌照片：" required>
-        <upload-image ref="brand_url" :imgWidth="220" :imgHeight="140" imgName="门店招牌"
+        <upload-image ref="brand_url"
+                      :imgWidth="220" :imgHeight="140"
+                      imgName="门店招牌"
                       :imgFill="quaForm.brand_url"
                       suffix_name="brand_url"
                       v-on:handleSuccess="addFormData"
@@ -22,7 +26,9 @@
       </el-form-item>
 
       <el-form-item label="店内照片：" required>
-        <upload-image ref="indoor_url" :imgWidth="220" :imgHeight="140" imgName="店内照片"
+        <upload-image ref="indoor_url"
+                      :imgWidth="220" :imgHeight="140"
+                      imgName="店内照片"
                       :imgFill="quaForm.indoor_url"
                       suffix_name="indoor_url"
                       v-on:handleSuccess="addFormData"
@@ -34,7 +40,9 @@
 
       <h5>营业执照</h5>
       <el-form-item label="上传清晰营业执照照片：" required>
-        <upload-image ref="bl_image_url" :imgWidth="220" :imgHeight="140" imgName="营业执照"
+        <upload-image ref="bl_image_url"
+                      :imgWidth="220" :imgHeight="140"
+                      imgName="营业执照"
                       :imgFill="quaForm.bl_image_url"
                       suffix_name="bl_image_url"
                       v-on:handleSuccess="addFormData"
@@ -49,7 +57,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_name">
-            <el-input v-model="quaForm.bl_name" :maxlength="100"></el-input>
+            <el-input v-model.trim="quaForm.bl_name"
+                      :maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -60,7 +69,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_account">
-            <el-input v-model="quaForm.bl_account" :maxlength="20"></el-input>
+            <el-input v-model.trim="quaForm.bl_account"
+                      :maxlength="20"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -71,7 +81,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="bl_address">
-            <el-input v-model="quaForm.bl_address" :maxlength="200"></el-input>
+            <el-input v-model.trim="quaForm.bl_address"
+                      :maxlength="200"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -119,7 +130,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_name">
-            <el-input v-model="quaForm.sl_name" :maxlength="100"></el-input>
+            <el-input v-model.trim="quaForm.sl_name"
+                      :maxlength="100"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -130,7 +142,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_code">
-            <el-input v-model="quaForm.sl_code" :maxlength="20"></el-input>
+            <el-input v-model.trim="quaForm.sl_code"
+                      :maxlength="20"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -141,7 +154,8 @@
         </el-col>
         <el-col :span="10">
           <el-form-item required prop="sl_address">
-            <el-input v-model="quaForm.sl_address" :maxlength="200"></el-input>
+            <el-input v-model.trim="quaForm.sl_address"
+                      :maxlength="200"></el-input>
           </el-form-item>
         </el-col>
       </el-col>
@@ -312,11 +326,10 @@
       addFormData: function(value, name) {
         this.quaForm[name] = value;
       },
-      // 获取营业执照到期日期
+      // 获取营业执照到期日期(日期格式转换)
       transform_bl_expire: function(value) {
         this.quaForm.bl_expire_date = value;
         this.error = "";
-        document.getElementById("bl_expire").getElementsByTagName("input")[0].style.borderColor = "rgb(191, 203, 217)";
       },
       // 获取许可证到期日期
       transform_sl_expire: function(value) {
@@ -335,7 +348,6 @@
           self.quaForm.bl_image_url && self.quaForm.sl_image_url;
         if (self.quaForm.bl_expire === "valid" && self.quaForm.bl_expire_date === "") {
           self.error = "请选择营业执照到期日期";
-          document.getElementById("bl_expire").getElementsByTagName("input")[0].style.borderColor = "#ff4949";
         }
         // 其他输入验证
         self.$refs.quaForm.validate((valid) => {

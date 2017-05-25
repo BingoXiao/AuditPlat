@@ -564,7 +564,7 @@
             </el-row>
             <el-row v-else>
               <el-col :span="8">
-                <el-input v-model="data.manual_billing_cycle" :disabled="manualLock"></el-input>
+                <el-input v-model.trim="data.manual_billing_cycle" :disabled="manualLock"></el-input>
               </el-col>
               <el-col :span="8">
                 &emsp;天
@@ -584,7 +584,7 @@
             </el-row>
             <el-row v-else>
               <el-col :span="8">
-                <el-input v-model="data.auto_billing_cycle" :disabled="autoLock"></el-input>
+                <el-input v-model.trim="data.auto_billing_cycle" :disabled="autoLock"></el-input>
               </el-col>
               <el-col :span="8">
                 &emsp;天

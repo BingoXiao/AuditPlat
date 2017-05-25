@@ -7,7 +7,7 @@
         <el-form :inline="true" label-width="100px">
           <el-form-item label="团购券号码：">
             <el-col :span="19">
-              <el-input v-model="token" placeholder="请输入团购券号码"></el-input>
+              <el-input v-model.trim="token" placeholder="请输入团购券号码"></el-input>
             </el-col>
             <el-col :span="4" :offset="1">
               <el-button type="primary" @click="getDatas">&emsp;查 询&emsp;</el-button>
@@ -61,7 +61,7 @@
           <el-form ref="form" :model="form" :rules="rules" label-width="0">
             <el-form-item label="" prop="refund_reason">
               <el-input type="textarea" placeholder="请输入退款原因"
-                        v-model="form.refund_reason"></el-input>
+                        v-model.trim="form.refund_reason"></el-input>
             </el-form-item>
           </el-form>
           <br/>
@@ -127,25 +127,33 @@
       /* 获取数据 */
       getDatas: function() {
         var self = this;
-        self.$http.get(CHECKVERIFY_REFUND_SEARCH_URL + "?token=" + self.token).then(function(response) {
-          if (response.body.success) {
-            self.tokenInfo = true;
-            var datas = response.body.content;
-            if (datas.status === "退款成功") {    // 已退款S
-              self.status = "已退款";     // 团购券状态
-              self.consume_time = datas.consume_time;    // 消费时间
-              self.billing_time = datas.billing_time;    // 结算时间
-            } else {
-              self.status = "已退款";     // 团购券状态
+        if (!self.token) {
+          this.$confirm("请输入团购券号码", "提示", {
+            confirmButtonText: "确定",
+            showCancelButton: false,
+            type: "warning"
+          }).then(() => {}).catch(() => {});
+        } else {
+          self.$http.get(CHECKVERIFY_REFUND_SEARCH_URL + "?token=" + self.token).then(function(response) {
+            if (response.body.success) {
+              self.tokenInfo = true;
+              var datas = response.body.content;
+              if (datas.status === "退款成功") {    // 已退款S
+                self.status = "已退款";     // 团购券状态
+                self.consume_time = datas.consume_time;    // 消费时间
+                self.billing_time = datas.billing_time;    // 结算时间
+              } else {
+                self.status = "已退款";     // 团购券状态
+              }
+              // datas.status === "UN" 验证
+              self.refundnum = datas.refundnum;          // 项目id
+              self.item = datas.item;        // 项目名称
+              self.buy_time = datas.buy_time;        // 购买时间
+              self.deserve = datas.deserve;           // 消费者购买金额
+              self.create_time = datas.create_time;   // 上线日期
             }
-            // datas.status === "UN" 验证
-            self.refundnum = datas.refundnum;          // 项目id
-            self.item = datas.item;        // 项目名称
-            self.buy_time = datas.buy_time;        // 购买时间
-            self.deserve = datas.deserve;           // 消费者购买金额
-            self.create_time = datas.create_time;   // 上线日期
-          }
-        });
+          });
+        }
       },
 
       // 退款
@@ -154,7 +162,6 @@
         var formData = new FormData();
         formData.append("token", self.token);
         formData.append("refundnum", self.refundnum);
-        // 377920761070
         self.$refs.form.validate((valid) => {
           if (valid) {
             formData.append("refund_reason", self.form.refund_reason);

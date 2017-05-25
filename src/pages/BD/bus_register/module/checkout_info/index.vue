@@ -30,7 +30,7 @@
           </el-col>
           <el-col :span="8" :offset="1">
             <el-form-item label="开户名：" label-width="90px" prop="person_or_company_name" required>
-              <el-input v-model="checkForm.person_or_company_name"
+              <el-input v-model.trim="checkForm.person_or_company_name"
                         :maxlength="30"></el-input>
             </el-form-item>
           </el-col>
@@ -44,7 +44,7 @@
 
         <el-form-item label="银行卡号：" prop="bank_account" required>
           <el-col :span="12">
-            <el-input v-model="checkForm.bank_account"
+            <el-input v-model.trim="checkForm.bank_account"
                       :maxlength="20"></el-input>
           </el-col>
         </el-form-item>
@@ -52,13 +52,13 @@
         <el-row>
           <el-col :span="9">
             <el-form-item label="财务联系人：" label-width="120px" prop="billing_account_name" required>
-              <el-input v-model="checkForm.billing_account_name"
+              <el-input v-model.trim="checkForm.billing_account_name"
                         :maxlength="30"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="10" :offset="1">
             <el-form-item label="财务联系人手机：" label-width="150px" prop="billing_account_tel" required>
-              <el-input v-model="checkForm.billing_account_tel"
+              <el-input v-model.trim.number="checkForm.billing_account_tel"
                         :maxlength="11"></el-input>
             </el-form-item>
           </el-col>
@@ -91,7 +91,7 @@
 
         <el-form-item label="真实姓名：" prop="real_name" required>
           <el-col :span="10">
-            <el-input v-model="IDForm.real_name"
+            <el-input v-model.trim="IDForm.real_name"
                       placeholder="请填写真实姓名"
                       :maxlength="30"></el-input>
           </el-col>
@@ -99,7 +99,7 @@
 
         <el-form-item label="证件号码：" prop="card_code" required>
           <el-col :span="10">
-            <el-input v-model="IDForm.card_code"
+            <el-input v-model.trim="IDForm.card_code"
                       placeholder="请填写证件号码"
                       :maxlength="18"></el-input>
           </el-col>

@@ -1,9 +1,9 @@
 <template>
   <el-col :span="24">
     <el-form id="consForm" :model="consForm" :rules="consRules" ref="consForm"
-             label-width="130px">
+             label-width="100px">
       <h3 class="formTitle">商家合约</h3>
-      <el-form-item label="合同有效期：" required prop="date">
+      <el-form-item label="合同有效期：" label-width="115px" prop="date" required>
         <el-col :span="10">
           <el-date-picker
             v-model="consForm.date"
@@ -15,9 +15,9 @@
         </el-col>
       </el-form-item>
 
-      <el-form-item label="合同名称：" required prop="name">
+      <el-form-item label="合同名称：" prop="name" required>
         <el-col :span="10">
-          <el-input v-model="consForm.name" name="name"></el-input>
+          <el-input v-model.trim="consForm.name" name="name" required></el-input>
         </el-col>
       </el-form-item>
 

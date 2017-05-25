@@ -4,8 +4,10 @@
         <el-form-item label="开户行所在省市：" label-width="140px" required>
           <el-col :span="6">
             <el-form-item>
-              <el-select name="admiprovince" placeholder="请选择省"
-                         v-model="admiprovince_value" @change="get_admicity_list">
+              <el-select name="admiprovince"
+                         placeholder="请选择省"
+                         v-model="admiprovince_value"
+                         @change="get_admicity_list">
                 <el-option
                   v-for="item in admiprovince_list"
                   :label="item.name"
@@ -16,8 +18,10 @@
           </el-col>
           <el-col :span="6">
             <el-form-item>
-              <el-select name="admicity" placeholder="--市--"
-                         v-model="admicity_value" @change="get_bank_list">
+              <el-select name="admicity"
+                         placeholder="--市--"
+                         v-model="admicity_value"
+                         @change="get_bank_list">
                 <el-option
                   v-for="item in admicity_list"
                   :label="item.name"
@@ -34,8 +38,10 @@
     <el-col :span="24">
       <el-col :span="8">
         <el-form-item label="银行名称：" required>
-          <el-select name="bank" placeholder="--银行名称--"
-                     v-model="bank_value" @change="get_branch_list">
+          <el-select name="bank"
+                     placeholder="--银行名称--"
+                     v-model="bank_value"
+                     @change="get_branch_list">
             <el-option
               v-for="item in bank_list"
               :label="item.bank_name"
@@ -47,10 +53,15 @@
       <el-col :span="10">
         <el-form-item label="开户行名称：" label-width="120px" required>
           <el-col :span="15">
-            <el-input v-show="branch_flag"  v-model="custom_branch"
-                      name="custom_branch" @change="branchInput"></el-input>
-            <el-select name="branch" placeholder="--开户行名称--"
-                       v-show="!branch_flag" v-model="branch_value" @change="get_branch_data">
+            <el-input v-show="branch_flag"
+                      v-model.trim="custom_branch"
+                      name="custom_branch"
+                      @change="branchInput"></el-input>
+            <el-select name="branch"
+                       placeholder="--开户行名称--"
+                       v-show="!branch_flag"
+                       v-model="branch_value"
+                       @change="get_branch_data">
               <el-option
                 v-for="item in branch_list"
                 :label="item.subbank_name"

@@ -23,16 +23,16 @@
               </template>
             </el-table-column>
             <el-table-column prop="counts" label="数量" align="center" min-width="100px"></el-table-column>
-            <el-table-column label="门店" align="center" min-width="150px">
-              <template scope="scope">
-                <div v-for="item in scope.row.buses">{{item}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column label="有效时间" align="center" min-width="160px">
-              <template scope="scope">
-                <span>{{scope.row.valid_startdate}}~{{scope.row.valid_enddate}}</span>
-              </template>
-            </el-table-column>
+            <!--<el-table-column label="门店" align="center" min-width="150px">-->
+              <!--<template scope="scope">-->
+                <!--<div v-for="item in scope.row.buses">{{item}}</div>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
+            <!--<el-table-column label="有效时间" align="center" min-width="160px">-->
+              <!--<template scope="scope">-->
+                <!--<span>{{scope.row.valid_startdate}}~{{scope.row.valid_enddate}}</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column label="累计抵用金额" align="center" min-width="130px">
               <template scope="scope">
                 <span>{{scope.row.amount}}元</span>

@@ -129,17 +129,13 @@ function isName(value) {
   if (value === "") {
     obj = {flag: false, error: "请输入姓名"};
   } else {
-    if (/^\s+$/.test(value)) {
-      obj = {flag: false, error: "请输入姓名"};
+    if (!(/^[\x21-\x7e\u4e00-\u9fa5]{1,30}$/.test(value))) {
+      obj = {
+        flag: false,
+        error: "姓名为1~30位，且只能包含数字、字母及除空格外的特殊符号"
+      };
     } else {
-      if (!(/^[\x21-\x7e\u4e00-\u9fa5]{1,30}$/.test(value))) {
-        obj = {
-          flag: false,
-          error: "姓名为1~30位，且只能包含数字、字母及除空格外的特殊符号"
-        };
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -150,14 +146,10 @@ function isPhone(value) {
   if (value === "") {
     obj = {flag: false, error: "请填写手机号码"};
   } else {
-    if (/^\s+$/.test(value)) {
-      obj = {flag: false, error: "请填写手机号码"};
+    if (!(/^1\d{10}$/.test(value))) {
+      obj = {flag: false, error: "手机号码格式不正确"};
     } else {
-      if (!(/^1\d{10}$/.test(value))) {
-        obj = {flag: false, error: "手机号码格式不正确"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -203,14 +195,10 @@ function isLicName(value, title) {
   if (value === "") {
     obj = {flag: false, error: "请填写" + title + "名称"};
   } else {
-    if (/^\s+$/.test(value)) {
+    if (!(/^[a-zA-Z\u4e00-\u9fa5\d\(\)]{1,}$/.test(value))) {
       obj = {flag: false, error: "请填写正确的" + title + "名称"};
     } else {
-      if (!(/^[a-zA-Z\u4e00-\u9fa5\d\(\)]{1,}$/.test(value))) {
-        obj = {flag: false, error: "请填写正确的" + title + "名称"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -221,14 +209,10 @@ function isLicNumber(value, title) {
   if (value === "") {
     obj = {flag: false, error: "请填写" + title};
   } else {
-    if (/^\s+$/.test(value)) {
+    if (!(/^[a-zA-Z\d]{1,}$/.test(value))) {
       obj = {flag: false, error: title + "格式不正确"};
     } else {
-      if (!(/^[a-zA-Z\d]{1,}$/.test(value))) {
-        obj = {flag: false, error: title + "格式不正确"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -240,14 +224,10 @@ function isLicAdd(value, title) {
   if (value === "") {
     obj = {flag: false, error: "请填写" + title + "地址"};
   } else {
-    if (/^\s+$/.test(value)) {
+    if (!(/^[a-zA-Z\u4e00-\u9fa5\d\(\)-]{1,}$/.test(value))) {
       obj = {flag: false, error: title + "地址" + "格式不正确"};
     } else {
-      if (!(/^[a-zA-Z\u4e00-\u9fa5\d\(\)-]{1,}$/.test(value))) {
-        obj = {flag: false, error: title + "地址" + "格式不正确"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -259,14 +239,10 @@ function isbankNumber(value) {
   if (value === "") {
     obj = {flag: false, error: "请填写银行卡号"};
   } else {
-    if (/^\s+$/.test(value)) {
+    if (!(/^\d{1,}$/.test(value))) {
       obj = {flag: false, error: "请填写正确的银行卡号"};
     } else {
-      if (!(/^\d{1,}$/.test(value))) {
-        obj = {flag: false, error: "请填写正确的银行卡号"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -278,14 +254,10 @@ function isCostPerPerson(value) {
   if (value === "") {
     obj = {flag: false, error: "请填写人均"};
   } else {
-    if (/^\s+$/.test(value)) {
-      obj = {flag: false, error: "请填写人均"};
+    if (!(/^\d{1,4}$|^(\d{1,4})\.(\d{1,2})$/.test(value))) {
+      obj = {flag: false, error: "人均为不高于4位且最多包含两位小数的数字"};
     } else {
-      if (!(/^\d{1,4}$|^(\d{1,4})\.(\d{1,2})$/.test(value))) {
-        obj = {flag: false, error: "人均为不高于4位且最多包含两位小数的数字"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -293,14 +265,10 @@ function isCostPerPerson(value) {
 /* 月销售额 */
 function isSalePerMonth(value) {
   var obj = {};
-  if (/^\s+$/.test(value)) {
-    obj = {flag: false, error: "请填写月销售额"};
+  if (!(/^\d{1,9}$|^(\d{1,9})\.(\d{1,2})$/.test(value))) {
+    obj = {flag: false, error: "月销售额为不高于9位且最多包含两位小数的数字"};
   } else {
-    if (!(/^\d{1,9}$|^(\d{1,9})\.(\d{1,2})$/.test(value))) {
-      obj = {flag: false, error: "月销售额为不高于9位且最多包含两位小数的数字"};
-    } else {
-      obj = {flag: true, error: ""};
-    }
+    obj = {flag: true, error: ""};
   }
   return obj;
 }
@@ -310,14 +278,10 @@ function iscommision(value) {
   if (value === "") {
     obj = {flag: false, error: "请填写佣金比例"};
   } else {
-    if (/^\s+$/.test(value)) {
-      obj = {flag: false, error: "请填写佣金比例"};
+    if (!(/^\d{1,}$|^(\d{1,})\.(\d{1,})$/.test(value))) {
+      obj = {flag: false, error: "佣金比例必须为数字"};
     } else {
-      if (!(/^\d{1,}$|^(\d{1,})\.(\d{1,})$/.test(value))) {
-        obj = {flag: false, error: "佣金比例必须为数字"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;
@@ -328,14 +292,10 @@ function isInteger(value, title) {
   if (value === "") {
     obj = {flag: false, error: "请填写" + title};
   } else {
-    if (/^\s+$/.test(value)) {
-      obj = {flag: false, error: "请填写" + title};
+    if (!(/^\d{1,}$/.test(value))) {
+      obj = {flag: false, error: title + "必须为整数"};
     } else {
-      if (!(/^\d{1,}$/.test(value))) {
-        obj = {flag: false, error: title + "必须为数字"};
-      } else {
-        obj = {flag: true, error: ""};
-      }
+      obj = {flag: true, error: ""};
     }
   }
   return obj;

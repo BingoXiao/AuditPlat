@@ -1,7 +1,7 @@
 <template>
   <el-input
     size="small"
-    v-model="inputValue"
+    v-model.trim="inputValue"
     :placeholder="placeholder"
     @change="getRules">
   </el-input>

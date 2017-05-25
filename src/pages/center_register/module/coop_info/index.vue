@@ -4,13 +4,13 @@
              ref="quaForm" label-width="100px">
       <el-form-item label="您的姓名：" prop="name" required>
         <el-col :span="8">
-          <el-input v-model="quaForm.name"></el-input>
+          <el-input v-model.trim="quaForm.name"></el-input>
         </el-col>
       </el-form-item>
 
       <el-form-item label="您的手机：" prop="phonenum" required>
         <el-col :span="6">
-          <el-input v-model="quaForm.phonenum" disabled></el-input>
+          <el-input v-model.trim.number="quaForm.phonenum" disabled></el-input>
         </el-col>
       </el-form-item>
 
@@ -57,13 +57,13 @@
 
       <el-form-item label="人均：" prop="cost_per_person" required>
         <el-col :span="6">
-          <el-input v-model="quaForm.cost_per_person"></el-input>
+          <el-input v-model.trim="quaForm.cost_per_person"></el-input>
         </el-col>
       </el-form-item>
 
       <el-form-item label="月销售额：" prop="sale_per_month">
         <el-col :span="6">
-          <el-input v-model="quaForm.sale_per_month"></el-input>
+          <el-input v-model.trim="quaForm.sale_per_month"></el-input>
         </el-col>
       </el-form-item>
     </el-form>

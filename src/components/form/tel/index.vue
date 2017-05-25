@@ -2,22 +2,31 @@
   <el-col :span="24">
     <el-col :span="3">
       <el-form-item>
-        <el-input name="tel1" v-model="tel1" placeholder="区号"
-                  @change="tel1_input" :maxlength="5"></el-input>
+        <el-input name="tel1"
+                  v-model="tel1"
+                  placeholder="区号"
+                  @change="tel1_input"
+                  :maxlength="5"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="1" style="text-align: center">—</el-col>
     <el-col :span="4">
       <el-form-item>
-        <el-input name="tel2" v-model="tel2" placeholder="门店号码"
-                  @change="tel2_input" :maxlength="8"></el-input>
+        <el-input name="tel2"
+                  v-model="tel2"
+                  placeholder="门店号码"
+                  @change="tel2_input"
+                  :maxlength="8"></el-input>
       </el-form-item>
     </el-col>
     <el-col :span="1" style="text-align: center">—</el-col>
     <el-col :span="3">
       <el-form-item>
-        <el-input name="tel3" v-model="tel3" placeholder="分机号"
-                  @change="tel3_input" :maxlength="5"></el-input>
+        <el-input name="tel3"
+                  v-model="tel3"
+                  placeholder="分机号"
+                  @change="tel3_input"
+                  :maxlength="5"></el-input>
       </el-form-item>
     </el-col>
 

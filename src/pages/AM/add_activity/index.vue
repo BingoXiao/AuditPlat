@@ -4,8 +4,11 @@
       <tab-component :tabs="tabsTop" :which="whichTop"></tab-component>
       <br/>
 
-      <el-form :model="activityinfo" :rules="rules" ref="activityinfo"
-               label-width="100px" label-position="left">
+      <el-form :model="activityinfo"
+               :rules="rules"
+               ref="activityinfo"
+               label-width="100px"
+               label-position="left">
         <el-form-item label="发放日期：" label-width="100px" prop="date" required>
           <el-date-picker
             ref="date"
@@ -21,7 +24,7 @@
 
         <el-form-item label="活动名称：" prop="name" required>
           <el-col :span="6">
-            <el-input v-model="activityinfo.name"></el-input>
+            <el-input v-model.trim="activityinfo.name"></el-input>
           </el-col>
         </el-form-item>
 
@@ -52,15 +55,15 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="有效时间：" required class="form_valid">
-          <el-radio-group v-model="activityinfo.validRadio" required>
+        <el-form-item label="有效时间：" class="form_valid" required>
+          <el-radio-group v-model="activityinfo.validRadio" required
+                          @change="validTimeValidate">
             <el-row>
               <el-col :span="6">
-                <el-form-item label="" label-width="0"
-                              class="form_valid_days"
-                              prop="validDays">
+                <el-form-item label="" label-width="0" class="form_valid_days">
                   <el-radio label="days">
-                    <el-input v-model.number="activityinfo.validDays"></el-input>
+                    <el-input v-model.trim.number="activityinfo.validDays"
+                              @blur="validTimeValidate"></el-input>
                     <span> 天 </span>
                   </el-radio>
                 </el-form-item>
@@ -79,8 +82,11 @@
                       type="daterange"
                       placeholder="选择日期范围"
                       :picker-options="pickerOptions"
-                      range-separator="~">
+                      range-separator="~"
+                      @change="validTimeValidate">
                     </el-date-picker>
+                    <span v-if="activityinfo.valid_error"
+                          class="error" style="font-size: 12px;">{{activityinfo.valid_error}}</span>
                   </el-radio>
                 </el-form-item>
               </el-col>
@@ -89,21 +95,25 @@
         </el-form-item>
 
         <el-form-item label="适用范围：" required class="form_shop_category">
-          <el-radio-group v-model="storeRadio">
+          <el-radio-group v-model="storeRadio" @change="shopCategoryValidate">
             <el-row>
               <el-col :span="5">
                 <el-radio label="wholeStores">全平台通用</el-radio>
               </el-col>
               <el-col :span="14">
-                <el-form-item label="" lable-width="0" prop="shop_category" class="form_sCategory">
+                <el-form-item label="" lable-width="0" class="form_sCategory">
                   <el-radio label="shop_category">选择品类
-                    <el-select v-model="activityinfo.shop_category" placeholder="请选择">
+                    <el-select v-model="activityinfo.shop_category"
+                               placeholder="请选择"
+                               @change="shopCategoryValidate">
                       <el-option
                         v-for="item in activityinfo.shop_category_list"
                         :label="item.name"
                         :value="item.id">
                       </el-option>
                     </el-select>
+                    <span v-if="activityinfo.store_error"
+                          class="error" style="font-size: 12px;">{{activityinfo.store_error}}</span>
                   </el-radio>
                 </el-form-item>
               </el-col>
@@ -149,48 +159,15 @@
   import dialogTips from "../../../components/dialogTips/index.vue";
   import {EVENTS_ONLINE_URL, LCLASS_URL, EVENTS_EDITINFO_URL,
     EVENTS_EDITEVENT_URL} from "../../../common/interface";
-  import {getUrlParameters, modalHide} from "../../../common/common";
+  import {getUrlParameters, modalHide, isInteger} from "../../../common/common";
 
   export default {
     data() {
-      var self = this;
-      var daysValidate = (rule, value, callback) => {
-        if (self.activityinfo.validRadio === "days") {
-          if (!value) {
-            return callback(new Error("请输入有效天数"));
-          } else {
-            if (!Number.isInteger(value)) {
-              callback(new Error("请输入数字值"));
-            } else {
-              callback();
-            }
-          }
-        } else {
-          callback();
-        }
-      };
-      var datesValidate = (rule, value, callback) => {
-        if (self.activityinfo.validRadio === "dates") {
-          if (value.length < 1) {
-            return callback(new Error("请输入有效日期"));
-          } else if (new Date(self.activityinfo.date[1]) > new Date(self.activityinfo.validDates[0])) {
-            return callback(new Error("截止日期必须在发放日期之后"));
-          } else {
-            callback();
-          }
-        } else {
-          callback();
-        }
-      };
-      var shopCategoryV = (rule, value, callback) => {
-        if (self.storeRadio === "shop_category" && !value) {
-          return callback(new Error("请选择品类"));
-        } else {
-          callback();
-        }
-      };
       return {
         pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() < Date.now() - 8.64e7;
+          },
           shortcuts: [{
             text: "最近一周",
             onClick(picker) {
@@ -243,7 +220,9 @@
           validDays: null,        // 有效天数
           validDates: [],         // 截止日期：valid_startdate,valid_enddate
           shop_category: "",      // 选择品类
-          shop_category_list: []
+          shop_category_list: [],
+          valid_error: "",   //  有效时间（错误提示）
+          store_error: ""       // 适用范围（错误提示）
         },
         rules: {
           date: [
@@ -251,15 +230,6 @@
           ],
           name: [
             {required: true, message: "请输入活动名称", trigger: "blur"}
-          ],
-          validDays: [
-            {validator: daysValidate, trigger: "blur"}
-          ],
-          validDates: [
-            {validator: datesValidate, trigger: "change"}
-          ],
-          shop_category: [
-            {validator: shopCategoryV, trigger: "change"}
           ]
         },
         storeRadio: "wholeStores",   // 适用范围（wholeStores,shop_category,someStores）
@@ -340,6 +310,37 @@
           }
         });
       },
+
+      // 有效时间验证
+      validTimeValidate: function() {
+        var self = this;
+        if (self.activityinfo.validRadio === "dates") {   // 验证有效时间
+          if (!self.activityinfo.validDates[0]) {
+            self.activityinfo.valid_error = "请输入有效日期";
+          } else if (new Date(self.activityinfo.date[1]) > new Date(self.activityinfo.validDates[0])) {
+            self.activityinfo.valid_error = "截止日期必须在发放日期之后";
+          } else {
+            self.activityinfo.valid_error = "";
+          }
+        } else {
+          let validate = isInteger(self.activityinfo.validDays, "有效天数");
+          self.activityinfo.valid_error = validate.error;
+        }
+      },
+      // 使用范围（选择品类）验证
+      shopCategoryValidate: function() {
+        var self = this;
+        if (self.storeRadio === "shop_category") {   // 验证使用范围（选择品类）
+          if (!self.activityinfo.shop_category) {
+            self.activityinfo.store_error = "请选择品类";
+          } else {
+            self.activityinfo.store_error = "";
+          }
+        } else {
+          self.activityinfo.store_error = "";
+        }
+      },
+
       // 新增优惠券（保存、上线）
       submitActivit: function(flag) {
         var self = this;
@@ -359,8 +360,11 @@
           "flag": flag            // SAVE 保存  UP 上线
         };
         self.$refs.photo.validate();   // 验证图片是否上传
+        self.validTimeValidate();
+        self.shopCategoryValidate();
         self.$refs.activityinfo.validate((valid) => {
-          if (valid && self.activityinfo.photo) {
+          if (valid && self.activityinfo.photo &&
+        (!self.activityinfo.valid_error) && (!self.activityinfo.store_error)) {
           // 发放日期
             var dateFrom = new Date(self.activityinfo.date[0]);
             var dateTo = new Date(self.activityinfo.date[1]);

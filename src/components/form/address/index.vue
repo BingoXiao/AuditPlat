@@ -2,8 +2,10 @@
   <el-row>
     <el-col :span="4">
       <el-form-item>
-        <el-select name="province" placeholder="--省--"
-                   v-model="province_value" @change="get_city_list">
+        <el-select name="province"
+                   placeholder="--省--"
+                   v-model="province_value"
+                   @change="get_city_list">
           <el-option
             v-for="item in province_list"
             :label="item.name"
@@ -15,8 +17,10 @@
 
     <el-col :span="4" class="selectOffset">
       <el-form-item>
-        <el-select name="city" placeholder="--市--"
-                   v-model="city_value" @change="get_district_list">
+        <el-select name="city"
+                   placeholder="--市--"
+                   v-model="city_value"
+                   @change="get_district_list">
           <el-option
             v-for="item in city_list"
             :label="item.name"
@@ -28,8 +32,10 @@
 
     <el-col :span="4" class="selectOffset">
       <el-form-item>
-        <el-select name="district" placeholder="--区/县--"
-                   v-model="district_value" @change="get_city_near_list">
+        <el-select name="district"
+                   placeholder="--区/县--"
+                   v-model="district_value"
+                   @change="get_city_near_list">
           <el-option
             v-for="item in district_list"
             :label="item.name"
@@ -41,8 +47,10 @@
 
     <el-col :span="4" class="selectOffset">
       <el-form-item>
-        <el-select name="city_near" placeholder="--商圈--"
-                   v-model="city_near_value" @change="get_city_near_data">
+        <el-select name="city_near"
+                   placeholder="--商圈--"
+                   v-model="city_near_value"
+                   @change="get_city_near_data">
           <el-option
             v-for="item in city_near_list"
             :label="item.name"
@@ -56,9 +64,11 @@
 
     <el-col :span="24" style="margin-top: 22px">
       <el-col :span="12">
-        <el-input v-model="address_detail" name="address_detail"
+        <el-input v-model.trim="address_detail"
+                  name="address_detail"
                   placeholder="填写具体的位置（精确至门牌号），请与执照地址保持一致"
-                  @change="clear_error" :maxlength="200">
+                  @change="clear_error"
+                  :maxlength="200">
         </el-input>
       </el-col>
       <el-col :span="3" :offset="1">

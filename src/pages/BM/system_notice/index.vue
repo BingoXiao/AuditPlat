@@ -6,7 +6,7 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm"
                label-width="80px">
         <el-form-item label="标题：" prop="title">
-          <el-input v-model="ruleForm.title"></el-input>
+          <el-input v-model.trim="ruleForm.title"></el-input>
         </el-form-item>
 
         <el-form-item label="">

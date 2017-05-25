@@ -5,7 +5,7 @@
                label-width="115px" label-position="left" class="form">
         <el-form-item label="优惠券名称：" required prop="name">
           <el-col :span="7">
-            <el-input v-model="couponinfo.name"></el-input>
+            <el-input v-model.trim="couponinfo.name"></el-input>
           </el-col>
         </el-form-item>
 
@@ -22,7 +22,7 @@
           </el-col>
           <el-col :span="3">
             <el-form-item prop="amount_full">
-              <el-input v-model.number="couponinfo.amount_full"></el-input>
+              <el-input v-model.trim.number="couponinfo.amount_full"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="1" style="text-align: center">
@@ -30,7 +30,7 @@
           </el-col>
           <el-col :span="3">
             <el-form-item prop="amount_cut">
-              <el-input v-model.number="couponinfo.amount_cut"></el-input>
+              <el-input v-model.trim.number="couponinfo.amount_cut"></el-input>
             </el-form-item>
           </el-col>
         </el-form-item>
@@ -58,7 +58,7 @@
           return callback(new Error("请输入满减金额"));
         } else {
           if (!Number.isInteger(value)) {
-            callback(new Error("请输入数字值"));
+            callback(new Error("请输入整数"));
           } else {
             callback();
           }

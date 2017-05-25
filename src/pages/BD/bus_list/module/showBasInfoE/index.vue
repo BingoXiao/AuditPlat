@@ -10,14 +10,16 @@
       <el-row>
         <el-col :span="8">
           <el-form-item label="商家姓名：" prop="name" required>
-            <el-input v-model="basicForm.name" :disabled="busDisable"
+            <el-input v-model.trim="basicForm.name"
+                      :disabled="busDisable"
                       :maxlength="30"></el-input>
           </el-form-item>
         </el-col>
 
         <el-col :span="7" :offset="1">
           <el-form-item label="商家手机：" prop="phonenum" required>
-            <el-input v-model="basicForm.phonenum" :disabled="busDisable"
+            <el-input v-model.trim.number="basicForm.phonenum"
+                      :disabled="busDisable"
                       :maxlength="11"></el-input>
           </el-form-item>
         </el-col>

@@ -2,18 +2,24 @@
   <el-col :span="24" class="toolbar">
     <el-form :inline="true" label-width="90px">
       <el-form-item label="商家搜索：">
-        <el-input v-model="busForm.bus" placeholder="商家账号/商家名称"></el-input>
+        <el-input v-model.trim="busForm.bus"
+                  placeholder="商家账号/商家名称"></el-input>
       </el-form-item>
       <el-form-item label-width="0">
-        <el-button type="primary" icon="search" @click="getTables">搜索</el-button>
+        <el-button type="primary" icon="search"
+                   @click="getTables">搜索</el-button>
       </el-form-item>
     </el-form>
 
     <!--表格-->
     <el-col :span="24">
-      <el-table ref="table" :data="tableDatas" v-loading.body="loading"
-                border highlight-current-row style="width: 100%;"
-                row-key="type" @row-click="getAcc">
+      <el-table ref="table"
+                :data="tableDatas"
+                v-loading.body="loading"
+                border highlight-current-row
+                style="width: 100%;"
+                row-key="type"
+                @row-click="getAcc">
         <el-table-column label="" width="55px">
           <template scope="scope">
             <el-radio v-model="busForm.bus_id"

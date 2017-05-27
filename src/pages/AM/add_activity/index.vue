@@ -34,7 +34,8 @@
                                   :imgWidth="140" :imgHeight="140"
                                   :imgFill="activityinfo.photo"
                                   suffix_name="photo"
-                                  v-on:handleSuccess="addFormData"></upload-image-component>
+                                  v-on:handleSuccess="addFormData">
+          </upload-image-component>
         </el-form-item>
 
         <el-form-item label="领取次数：" required>
@@ -119,7 +120,9 @@
               </el-col>
               <el-col :span="5">
                 <el-radio label="someStores">选择商家
-                  <el-button type="primary" icon="search" size="mini" style="padding:2px 7px;"></el-button>
+                  <span class="busSearch">
+                    <span class="el-icon-search"></span>
+                  </span>
                 </el-radio>
               </el-col>
             </el-row>
@@ -142,8 +145,8 @@
     </el-col>
 
     <el-col :span="24">
-      <el-button type="primary" size="large" @click="submitActivit('SAVE')">保 存</el-button>
-      <el-button type="primary" size="large" @click="submitActivit('UP')">立即上线</el-button>
+      <el-button type="primary" size="large" @click="submitActivity('SAVE')">保 存</el-button>
+      <el-button type="primary" size="large" @click="submitActivity('UP')">立即上线</el-button>
     </el-col>
 
     <!--提示-->
@@ -286,7 +289,7 @@
             self.activityinfo.photo = activityinfo.photo;   // 活动图片
             self.activityinfo.get_times = activityinfo.get_times;  // 领取次数
             self.activityinfo.promotion_type = activityinfo.promotion_type;   // 促销类型
-            if (activityinfo.valid_days) {  // 有效时间(天数)
+            if (activityinfo.valid_days > 0) {  // 有效时间(天数)
               self.activityinfo.validRadio = "days";
               self.activityinfo.validDays = activityinfo.valid_days;
             } else {  // 有效日期
@@ -317,10 +320,11 @@
         if (self.activityinfo.validRadio === "dates") {   // 验证有效时间
           if (!self.activityinfo.validDates[0]) {
             self.activityinfo.valid_error = "请输入有效日期";
-          } else if (new Date(self.activityinfo.date[1]) > new Date(self.activityinfo.validDates[0])) {
-            self.activityinfo.valid_error = "截止日期必须在发放日期之后";
-          } else {
+          } else if (new Date(self.activityinfo.validDates[0]).toLocaleDateString() >= new Date(self.activityinfo.date[0]).toLocaleDateString() &&
+            new Date(self.activityinfo.validDates[1]).toLocaleDateString() >= new Date(self.activityinfo.date[1]).toLocaleDateString()) {
             self.activityinfo.valid_error = "";
+          } else {
+            self.activityinfo.valid_error = "请选择合适的截止日期";
           }
         } else {
           let validate = isInteger(self.activityinfo.validDays, "有效天数");
@@ -342,7 +346,7 @@
       },
 
       // 新增优惠券（保存、上线）
-      submitActivit: function(flag) {
+      submitActivity: function(flag) {
         var self = this;
         var datas = {
           "name": self.activityinfo.name,    // 活动名称
@@ -448,3 +452,13 @@
     }
   };
 </script>
+
+<style scoped>
+  .busSearch{
+    color: #fff;
+    font-size: 10px;
+    background-color: #000;
+    padding: 2px 5px 1px 5px;
+    border-radius: 3px;
+  }
+</style>

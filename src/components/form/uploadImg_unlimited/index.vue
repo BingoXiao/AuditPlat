@@ -97,7 +97,7 @@
   }
 
   .imgTips>div{
-    font-size: 10px;
+    font-size: 12px;
     color: #ff4949;
     display: table-cell;
     vertical-align: middle;

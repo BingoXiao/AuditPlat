@@ -11,14 +11,14 @@
 */
 
 /* 开发服务器域名 */
+/*
 const HOST_URL = "https://shopmanagedev.jinmailife.com";
 const CENTER_URL = "https://businessdev.jinmailife.com";
+*/
 
 /* 生产服务器域名 */
-/*
 const HOST_URL = "https://shopmanage.jinmailife.com";
 const CENTER_URL = "https://business.jinmailife.com";
-*/
 
 /* 商家中心注册 */
 const CNTER_REGISTER = HOST_URL + "/register/save-bus/";

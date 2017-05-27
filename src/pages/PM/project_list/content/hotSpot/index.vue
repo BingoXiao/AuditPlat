@@ -102,7 +102,7 @@
           self.$http.post(PROLIST_JM_URL, formData).then(function(response) {
             if (response.body.success) {
               self.$refs.resNL.show({
-                isRight: false,
+                isRight: true,
                 tips: self.tips
               });
               modalHide(function() {

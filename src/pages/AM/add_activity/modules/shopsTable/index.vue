@@ -7,6 +7,17 @@
                            :onBadge="shops.onBadge"
                            v-on:toggle="tabChange">
       </tab-badge-component>
+
+      <el-row style="margin-bottom: 10px;">
+        <el-col :span="6">
+          <el-input
+            size="small"
+            v-model.trim="shops.search"
+            placeholder="请输入商家名称"
+            @change="filterTable">
+          </el-input>
+        </el-col>
+      </el-row>
     </el-col>
 
     <!--已选商家表格-->
@@ -68,6 +79,7 @@
 </template>
 
 <script>
+  import alasql from "alasql";
   import tabBadgeComponent from "../../../../../components/tabs/badge/index";
   import {EVENTS_CMSEARCHSHOPS_URL} from "../../../../../common/interface";
 
@@ -86,7 +98,8 @@
           },
           number: 0,
           onBadge: "selectedStores",
-          which: "storesSearch"
+          which: "storesSearch",
+          search: ""    // 商家筛选
         },
         selected: {         // 已选商家（表格）
           idArr: [],                // 商家id数组
@@ -120,11 +133,27 @@
       /* tab改变时，表格内容切换(父子组件通信) */
       tabChange: function(name) {
         var self = this;
+        self.shops.search = "";   // 清空过滤条件
         self.shops.which = name;
         if (name === "selectedStores") {  // 已选商家
           self.fillTable("selected", self.selected.totalDatas);
         } else {  // 商家搜索
           self.fillTable("whole", self.whole.totalDatas);
+        }
+      },
+      /* 过滤 */
+      filterTable: function() {
+        var self = this;
+        var ser = self.shops.search;
+        var rules = "SELECT * FROM ? WHERE busname LIKE '%" + ser + "%'";
+        if (self.shops.which === "selectedStores") {  // 已选商家
+          var selectedRes = alasql(rules, [self.selected.totalDatas, ser]);
+          self.selected.currentPage = 1;
+          self.fillTable("selected", selectedRes);
+        } else {  // 商家搜索
+          var wholeRes = alasql(rules, [self.whole.totalDatas, ser]);
+          self.whole.currentPage = 1;
+          self.fillTable("whole", wholeRes);
         }
       },
       /* 填充表格数据 */
